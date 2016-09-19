@@ -50,18 +50,8 @@ classdef HLOImage < OBJImage & SPCHighLevelObject
             end
             
             % create object in StimServer
-            this.mCreateObject(obj.imageFile);
-            
-            %setParams = fieldnames(obj);
-<<<<<<< HEAD
-<<<<<<< master
-            setParams = {'imagePosition','imageAlpha','imageAngle'};
-=======
+            this.mCreateObject(obj.imageFile);            
             setParams = {'position','alpha','angle'};
->>>>>>> local
-=======
-            setParams = {'position','imageAlpha','imageAngle'};
->>>>>>> d2f6ceb814680047dc449958efa4221d02e5877b
             for ki = 1:length(setParams)
                 if ~any(strcmp(setParams{ki},useDefs))
                     this.setParameter(setParams{ki}, obj.(setParams{ki}));
