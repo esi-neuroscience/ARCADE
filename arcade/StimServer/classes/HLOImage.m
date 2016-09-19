@@ -53,7 +53,7 @@ classdef HLOImage < OBJImage & SPCHighLevelObject
             this.mCreateObject(obj.imageFile);
             
             %setParams = fieldnames(obj);
-            setParams = {'imagePosition','imageAlpha','imageAngle'};
+            setParams = {'position','imageAlpha','imageAngle'};
             for ki = 1:length(setParams)
                 if ~any(strcmp(setParams{ki},useDefs))
                     this.setParameter(setParams{ki}, obj.(setParams{ki}));
@@ -66,7 +66,7 @@ classdef HLOImage < OBJImage & SPCHighLevelObject
             switch param
                 case 'visible'
                     this.visible(value);
-                case {'position','imagePosition'}
+                case 'position'
                     this.mSetPosition(value);
                 case {'alpha','imageAlpha'}
                     this.mSetImageAlpha(value);
