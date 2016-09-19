@@ -18,7 +18,7 @@ classdef AUXStimServerGeneral < AUXPipeReadWrite
     methods
         %# set background color 
         function background(this, rgb)
-            this.mWriteCommand(0, [0, rgb]);
+            this.mWriteCommand(0, [0, rgb(:)']);
         end
         %# enable/disable photo-diode 
         function enablePD(this, shown)
