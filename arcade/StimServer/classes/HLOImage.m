@@ -53,7 +53,11 @@ classdef HLOImage < OBJImage & SPCHighLevelObject
             this.mCreateObject(obj.imageFile);
             
             %setParams = fieldnames(obj);
+<<<<<<< master
             setParams = {'imagePosition','imageAlpha','imageAngle'};
+=======
+            setParams = {'position','alpha','angle'};
+>>>>>>> local
             for ki = 1:length(setParams)
                 if ~any(strcmp(setParams{ki},useDefs))
                     this.setParameter(setParams{ki}, obj.(setParams{ki}));
@@ -68,9 +72,9 @@ classdef HLOImage < OBJImage & SPCHighLevelObject
                     this.visible(value);
                 case {'position','imagePosition'}
                     this.mSetPosition(value);
-                case {'alpha','imageAlpha'}
+                case 'alpha'
                     this.mSetImageAlpha(value);
-                case {'angle','imageAngle'}
+                case 'angle'
                     this.mSetImageAngle(value);
                 otherwise
                     error(['Unknown parameter: ', param]);
@@ -87,8 +91,8 @@ classdef HLOImage < OBJImage & SPCHighLevelObject
             def =  [];
             def.position     = [0,0];     % [x,y]     position 
             def.imageFile    = '';        % [string] no default image *required input* 
-            def.imageAlpha   = 255;       % [0...255] global alpha 
-            def.imageAngle   = 0;         % [degrees] float 
+            def.alpha   = 255;       % [0...255] global alpha 
+            def.angle   = 0;         % [degrees] float 
             
             validFiles = {'.png','.jpeg','.jpg','.bmp','.tiff','.tif'};
             fGetExt    = @(fpath) fpath(find(fpath == '.', 1, 'last'):end);
@@ -96,8 +100,8 @@ classdef HLOImage < OBJImage & SPCHighLevelObject
             val =  [];
             val.position    = @(x) isnumeric(x) && isrow(x) && length(x)==2;
             val.imageFile   = @(x) ischar(x) && exist(x,'file')==2 && any(strcmpi(fGetExt(x),validFiles)); 
-            val.imageAlpha  = @(x) isnumeric(x) && isscalar(x) && (x>=0 && x<=255); 
-            val.imageAngle  = @(x) isnumeric(x) && isscalar(x);
+            val.alpha  = @(x) isnumeric(x) && isscalar(x) && (x>=0 && x<=255); 
+            val.angle  = @(x) isnumeric(x) && isscalar(x);
             
             funcName = 'createObject(''Image'',params)';
             this.mStructToInputParser(funcName, def, val);
