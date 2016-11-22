@@ -13,7 +13,7 @@ trl.itiDuration   = 500;
 
 % image 1
 img1 =  [];
-img1.imageFile = 'E:\ARCADE\Tasks\Examples\exampleImage1.bmp';
+img1.imageFile = 'C:\Toolbox\ARCADE\Tasks\Examples\exampleImage1.bmp';
 img1.position = [200 350];
 img1.alpha = 128;
 %img1.angle = 30;
@@ -21,7 +21,7 @@ IMG1 = createNewStimulus('Image', img1);
 
 % image 2
 img2 =  [];
-img2.imageFile = 'E:\ARCADE\Tasks\Examples\exampleImage2.bmp';
+img2.imageFile = 'C:\Toolbox\ARCADE\Tasks\Examples\exampleImage2.bmp';
 img2.position = [300 350];
 img2.alpha = 100;
 
