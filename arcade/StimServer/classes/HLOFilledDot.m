@@ -48,7 +48,7 @@ classdef HLOFilledDot < OBJSymbol & SPCHighLevelObject
             
             % create object in StimServer
             % mCreateObject(this, symType, symSize)
-            this.mCreateObject(1, obj.dotDiameter);
+            this.mCreateObject(1, obj.diameter);
 
             % set position
             if ~any(strcmp('position', useDefs))
@@ -56,8 +56,8 @@ classdef HLOFilledDot < OBJSymbol & SPCHighLevelObject
             end
             
             % set dot color
-            if ~any(strcmp('dotColor', useDefs))
-                this.mSetColor(obj.dotColor);
+            if ~any(strcmp('color', useDefs))
+                this.mSetColor(obj.color);
             end
         end
         
@@ -68,9 +68,9 @@ classdef HLOFilledDot < OBJSymbol & SPCHighLevelObject
                     this.visible(value);
                 case 'position'
                     this.mSetPosition(value);
-                case {'color','dotColor'}
+                case {'color'}
                     this.mSetColor(value);
-                case {'diameter','dotDiameter'}
+                case {'diameter'}
                     this.mSetDiameter(value);
                 otherwise
                     error(['Unknown parameter: ', param]);
@@ -86,13 +86,13 @@ classdef HLOFilledDot < OBJSymbol & SPCHighLevelObject
             %           create defaults
             def =  [];
             def.position           = [0,0];               % [x,y] position
-            def.dotDiameter        = 6;                   % >=1
-            def.dotColor           = [255,255,255,255];   % [r,g,b,w] [0..255]
+            def.diameter           = 6;                   % >=1
+            def.color              = [255,255,255,255];   % [r,g,b,w] [0..255]
             
             val =  [];
-            val.position           = @(x) isnumeric(x) && isrow(x) && length(x)==2;
-            val.dotDiameter        = @(x) isnumeric(x) && isscalar(x) && (x >= 1);
-            val.dotColor           = @(x) isnumeric(x) && isrow(x) && length(x)==4 && all(x>=0 & x<=255);
+            val.position        = @(x) isnumeric(x) && isrow(x) && length(x)==2;
+            val.diameter        = @(x) isnumeric(x) && isscalar(x) && (x >= 1);
+            val.color           = @(x) isnumeric(x) && isrow(x) && length(x)==4 && all(x>=0 & x<=255);
             
             funcName = 'createObject(''FilledDot'',params)';
             this.mStructToInputParser(funcName, def, val);
