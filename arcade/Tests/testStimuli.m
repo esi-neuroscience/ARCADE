@@ -13,7 +13,7 @@ BOTHEYES = 1:4;
 
 %% image on
 img =  [];
-img.imageFile = fullfile(TESTFOLDER, 'test.bmp');
+img.imageFile = fullfile(TESTFOLDER, 'test.png');
 img.position = [0 0];
 img.alpha = 200;
 % img.angle = 200;
