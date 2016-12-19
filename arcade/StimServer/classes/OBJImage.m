@@ -53,14 +53,14 @@ classdef OBJImage < SPCObject
         %# set image orientation
         function mSetImageAngle(this, value)
             % [kk 4 alpha] set orientation of picture. Alpha is a single float specifying the angle in degrees.
-            this.mWriteCommand(this.oKey, [uint8(1), typecast(single(value),'uint8')]); 
+            this.mWriteCommand(this.oKey, [uint8(4), typecast(single(value),'uint8')]); 
             
         end
         
         %# set image rotation (rotate each frame)
         function mAnimateImageRotation(this, value)
             % [kk 2 i] set increment value for picture rotation to i (i = -128 ... 127)
-            this.mWriteCommand(this.oKey, [uint8(1), int8(value)]); 
+            this.mWriteCommand(this.oKey, [uint8(2), int8(value)]); 
         end
     end
 end
