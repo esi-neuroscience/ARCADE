@@ -71,7 +71,7 @@ classdef HLOImage < OBJImage & SPCHighLevelObject
                 case 'angle'
                     this.mSetImageAngle(value);
                 otherwise
-                    error(['Unknown parameter: ', param]);
+                    error(['Unknown parameter: ', param '. Must be ''visible'', ''position'', ''alpha'', ''angle''']);
             end
         end
     end
