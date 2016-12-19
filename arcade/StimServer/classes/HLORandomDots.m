@@ -111,7 +111,7 @@ classdef HLORandomDots < OBJParticleStimulus & SPCHighLevelObject
                     this.mMaskCircle(normedMaskSize);
                     %this.mMaskCircle(0.5);
                 case 'gaussian'
-                    % not coded yet
+                    error('Gaussian mask is not implemented yet');                    
             end
             
         end
@@ -137,6 +137,9 @@ classdef HLORandomDots < OBJParticleStimulus & SPCHighLevelObject
                     this.mSetVelocity(2*value/this.objWidthHeight(1))
                 case {'direction','dotDirection'}
                     this.mSetDirection(value);
+                case 'dotDiameter'
+                    this.mSetDiameter(value);
+
                 otherwise
                     error(['Unknown parameter: ', param]);
             end
