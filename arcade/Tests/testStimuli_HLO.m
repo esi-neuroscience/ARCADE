@@ -1,5 +1,5 @@
 
-
+pauseTime = 1;
 %% initialize StimServer
 StimServer = SGLStimServer.launch;
 StimServerGeneral = SGLStimServerGeneral.launch;
@@ -18,7 +18,12 @@ img.position = [0 0];
 img.alpha = 200;
 % img.angle = 200;
 imageObject = createNewStimulus('Image', img);
+
 imageObject.visible(true);
+pause(pauseTime)
+imageObject.setParameter('alpha', 100);
+pause(pauseTime)
+imageObject.setParameter('angle', 30);
 
 %% image off
 imageObject.visible(false);
@@ -52,6 +57,11 @@ dot.diameter = 100;
 dotObject = createNewStimulus('FilledDot', dot);
 dotObject.visible(true)
 
+pause(pauseTime)
+dotObject.setParameter('diameter', 150);
+pause(pauseTime)
+dotObject.setParameter('position', [300 -100]);
+
 %% filled dot off
 dotObject.visible(false)
 dotObject.delete()
@@ -66,11 +76,32 @@ def.direction      = 90;                 % direction of movement (orthogonal to 
 def.pixelsPerFrame = 3;                 % each frame shift by N pixels
 def.phaseShift     = 0;                 % grating degrees
 def.smoothing      = 2;                 % sinewave == 2, values greater tend to squarewave ~10
-def.maskRadii      = [200 100];               % circle mask [x,y] elliptical
+def.maskRadii      = [200 200];               % circle mask [x,y] elliptical
 def.maskRotation   = 0;                 % degrees
 
 gratingObject = createNewStimulus('MaskedGrating', def);
 gratingObject.visible(true)
+
+
+pause(pauseTime)
+gratingObject.setParameter('color0', [0,0,0,255])
+pause(pauseTime)
+gratingObject.setParameter('color1', [255,255,255,255])
+pause(pauseTime)
+gratingObject.setParameter('pixelsPerCycle', 200)
+pause(pauseTime)
+gratingObject.setParameter('direction', 90)
+pause(pauseTime)
+gratingObject.setParameter('pixelsPerFrame', 0)
+pause(pauseTime)
+gratingObject.setParameter('phaseShift', 90)
+pause(pauseTime)
+gratingObject.setParameter('smoothing', 2);
+pause(pauseTime)
+gratingObject.setParameter('maskRotation', 45);
+pause(pauseTime)
+gratingObject.setParameter('maskRadii', [500 200]);
+
 
 %% masked grating off
 gratingObject.visible(false);
@@ -89,7 +120,7 @@ def.pixelsPerFrame = 3;                 % each frame shift by N pixels
 def.phaseShift     = 0;                 % grating degrees
 def.smoothing      = 2;                 % sinewave == 2, values greater tend to squarewave ~10
 def.maskRadii      = [200 200];               % circle mask [x,y] elliptical
-def.maskRotation   = 0;  
+def.maskRotation   = 0;
 
 defLeft = def;
 defRight = def;
@@ -122,16 +153,49 @@ def =  [];
 def.position           = [0,0];     % [x,y] position             (signed floats)
 def.dotDiameter        = 10;         % pixels
 def.dotColor           = [255,255,255,255];
-def.dotPixelsPerFrame  = 5;         % velocity -> pixelsPerFrame (signed float)
-def.dotDirection       = 180;         % degrees                    (signed float)
-def.dotCoherence       = 0;       % value between [0,1]
+def.dotPixelsPerFrame  = -1;         % velocity -> pixelsPerFrame (signed float)
+def.dotDirection       = 0;         % degrees                    (signed float)
+def.dotCoherence       = 1;       % value between [0,1]
 def.coherenceType      = 'angle';   % 'ratio','angle' [string]
-def.dotNumber          = 100;       %                   [must be an integer >0]
+def.dotNumber          = 10;       %                   [must be an integer >0]
 def.maskType           = 'circle';  % 'square','circle' [string]
-def.maskDiameter       = 500;       % pixels            [must be an integer >0]
+def.maskDiameter       = 10000;       % pixels            [must be an integer >0]
 
 rdpObject = createNewStimulus('RandomDots', def);
 rdpObject.visible(true)
 
+pause(pauseTime);
+rdpObject.setParameter('position', [100,0])
+pause(pauseTime)
+rdpObject.setParameter('dotDiameter', 40)
+pause(pauseTime);
+rdpObject.setParameter('dotColor', [0 255 0 128])
+pause(pauseTime);
+rdpObject.setParameter('dotCoherence', 1)
+pause(pauseTime);
+rdpObject.setParameter('dotDirection', 0)
+pause(pauseTime);
+
+rdpObject.delete();
+% There seems to be a bug here. Dots appear on screen instead of flying in
+
+
+%% static bar
+def =  [];
+def.position      = [0,0];             % [x,y] position
+def.widthHeight   = [500,21];           % pixels >=1
+def.orientation   = 30;                 % degrees
+def.color         = [255,255,255,255]; % rgbw
+barObject = createNewStimulus('StaticBar', def);
+
+barObject.visible(true);
+pause(pauseTime);
+barObject.setParameter('position', [500,0])
+pause(pauseTime);
+barObject.setParameter('orientation', 90)
+pause(pauseTime);
+barObject.setParameter('color', [128 0 0 199])
+pause(pauseTime);
+barObject.setParameter('widthHeight', [128 2])
 
 
