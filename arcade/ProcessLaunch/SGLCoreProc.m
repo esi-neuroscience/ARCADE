@@ -58,6 +58,10 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
                 rewServer   = SGLRewardServer.launch;
                 %# trigger events server
                 eventServer = SGLEventMarkerServer.launch;
+            else
+                delete(MSgui)
+                fclose('all')
+                return    
             end
             
             % Launch Matlab processes for these servers
