@@ -153,13 +153,13 @@ def =  [];
 def.position           = [0,0];     % [x,y] position             (signed floats)
 def.dotDiameter        = 10;         % pixels
 def.dotColor           = [255,255,255,255];
-def.dotPixelsPerFrame  = -1;         % velocity -> pixelsPerFrame (signed float)
+def.dotPixelsPerFrame  = 3;         % velocity -> pixelsPerFrame (signed float)
 def.dotDirection       = 0;         % degrees                    (signed float)
 def.dotCoherence       = 1;       % value between [0,1]
 def.coherenceType      = 'angle';   % 'ratio','angle' [string]
 def.dotNumber          = 10;       %                   [must be an integer >0]
 def.maskType           = 'circle';  % 'square','circle' [string]
-def.maskDiameter       = 10000;       % pixels            [must be an integer >0]
+def.maskDiameter       = 300;       % pixels            [must be an integer >0]
 
 rdpObject = createNewStimulus('RandomDots', def);
 rdpObject.visible(true)
@@ -171,13 +171,11 @@ rdpObject.setParameter('dotDiameter', 40)
 pause(pauseTime);
 rdpObject.setParameter('dotColor', [0 255 0 128])
 pause(pauseTime);
-rdpObject.setParameter('dotCoherence', 1)
-pause(pauseTime);
 rdpObject.setParameter('dotDirection', 0)
 pause(pauseTime);
 
 rdpObject.delete();
-% There seems to be a bug here. Dots appear on screen instead of flying in
+% BUG: dots appear on screen instead of flying into mask
 
 
 %% static bar
@@ -198,4 +196,26 @@ barObject.setParameter('color', [128 0 0 199])
 pause(pauseTime);
 barObject.setParameter('widthHeight', [128 2])
 
+barObject.delete();
+
+%% moving bar
+%           create defaults
+def =  [];
+def.position      = [0,0];             % [x,y] position
+def.widthHeight   = [10,400];           % pixels >=1 for orientation of zero
+def.orientation   = 90;                 % degrees: 0 
+def.color         = [255,255,0,255]; % rgbw
+def.halfTravelPixels   = 100;             % pixels           (must be an integer >=1)
+def.pixelsPerFrame     = 2;               % pixels per frame 
+def.togglePD           = true;            % bool
+def.disableStim        = false;            % bool
+def.repeatPath         = true;
+barObject = createNewStimulus('MovingBar', def);
+barObject.visible(true);
+% BUG: motion is jagged
+% NOTE: motion direction: 0 right, 90 up
+
+%%
+StimServerGeneral.delete()
+StimServer.delete();
 
