@@ -1,0 +1,39 @@
+#ifndef __specstrings_h__
+#pragma once
+#define __specstrings_h__
+#define __format_string
+#define __deref_opt_out_bcount_full(pdwProfileLength)
+#define __inout_bcount_part(l,p)
+#define __deref_inout
+#define __out_ecount_opt(nMaxUserNameSize)
+#define __deref_opt_out
+#define __out_bcount_opt(a)
+#define __out_ecount_part_opt(n, r)
+#define __out_ecount(iMaxLength)
+#define __out_ecount_full(a)
+#define __out_bcount(e)
+#define __deref_out
+#define __inout_opt
+#define __reserved
+#define __in_ecount(nCount)
+#define __in_bcount(nSize)
+#define __callback
+#define __in_ecount_opt(a)
+#define __nullterminated
+#define __nullnullterminated
+#define __out_bcount_part_opt(BufferSize, return)
+#define __out_ecount_part(a,b)
+#define __out_bcount_part(a,b)
+#define __bcount(a)
+#define __in_bcount_opt(a)
+#define __inout_bcount_opt(lpdwBufferLength)
+#define __deref
+#define __in_opt
+#define __in
+#define __out
+#define __out_opt
+#define __inout
+#define __inout_ecount(a)
+#define __null
+#define __typefix(LPTSTR)
+#endif

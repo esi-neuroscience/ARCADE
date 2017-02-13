@@ -1,0 +1,524 @@
+#ifndef _WINNETWK_
+#define _WINNETWK_
+#define WNNC_NET_MSNET 0x10000
+#define WNNC_NET_LANMAN 0x20000
+#define WNNC_NET_NETWARE 0x30000
+#define WNNC_NET_VINES 0x40000
+#define WNNC_NET_10NET 0x50000
+#define WNNC_NET_LOCUS 0x60000
+#define WNNC_NET_SUN_PC_NFS 0x70000
+#define WNNC_NET_LANSTEP 0x80000
+#define WNNC_NET_9TILES 0x90000
+#define WNNC_NET_LANTASTIC 0xa0000
+#define WNNC_NET_AS400 0xb0000
+#define WNNC_NET_FTP_NFS 0xc0000
+#define WNNC_NET_PATHWORKS 0xd0000
+#define WNNC_NET_LIFENET 0xe0000
+#define WNNC_NET_POWERLAN 0xf0000
+#define WNNC_NET_BWNFS 0x100000
+#define WNNC_NET_COGENT 0x110000
+#define WNNC_NET_FARALLON 0x120000
+#define WNNC_NET_APPLETALK 0x130000
+#define WNNC_NET_INTERGRAPH 0x140000
+#define WNNC_NET_SYMFONET 0x150000
+#define WNNC_NET_CLEARCASE 0x160000
+#define WNNC_NET_FRONTIER 0x170000
+#define WNNC_NET_BMC 0x180000
+#define WNNC_NET_DCE 0x190000
+#define WNNC_NET_AVID 0x1a0000
+#define WNNC_NET_DOCUSPACE 0x1b0000
+#define WNNC_NET_MANGOSOFT 0x1c0000
+#define WNNC_NET_SERNET 0x1d0000
+#define WNNC_NET_RIVERFRONT1 0X001E0000
+#define WNNC_NET_RIVERFRONT2 0x1f0000
+#define WNNC_NET_DECORB 0x200000
+#define WNNC_NET_PROTSTOR 0x210000
+#define WNNC_NET_FJ_REDIR 0x220000
+#define WNNC_NET_DISTINCT 0x230000
+#define WNNC_NET_TWINS 0x240000
+#define WNNC_NET_RDR2SAMPLE 0x250000
+#define WNNC_NET_CSC 0x260000
+#define WNNC_NET_3IN1 0x270000
+#define WNNC_NET_EXTENDNET 0x290000
+#define WNNC_NET_STAC 0x2a0000
+#define WNNC_NET_FOXBAT 0x2b0000
+#define WNNC_NET_YAHOO 0x2c0000
+#define WNNC_NET_EXIFS 0x2d0000
+#define WNNC_NET_DAV 0x2e0000
+#define WNNC_NET_KNOWARE 0x2f0000
+#define WNNC_NET_OBJECT_DIRE 0x300000
+#define WNNC_NET_MASFAX 0x310000
+#define WNNC_NET_HOB_NFS 0x320000
+#define WNNC_NET_SHIVA 0x330000
+#define WNNC_NET_IBMAL 0x340000
+#define WNNC_NET_LOCK 0x350000
+#define WNNC_NET_TERMSRV 0x360000
+#define WNNC_NET_SRT 0x370000
+#define WNNC_NET_QUINCY 0x380000
+#define WNNC_CRED_MANAGER 0xffff0000
+#define RESOURCE_CONNECTED 1
+#define RESOURCE_GLOBALNET 2
+#define RESOURCE_REMEMBERED 3
+#if(WINVER >=0x0400)
+#define RESOURCE_RECENT 4
+#define RESOURCE_CONTEXT 5
+#endif 
+#define RESOURCETYPE_ANY 0
+#define RESOURCETYPE_DISK 1
+#define RESOURCETYPE_PRINT 2
+#if(WINVER >=0x0400)
+#define RESOURCETYPE_RESERVED 8
+#endif 
+#define RESOURCETYPE_UNKNOWN 0xffffffff
+#define RESOURCEUSAGE_CONNECTABLE 1
+#define RESOURCEUSAGE_CONTAINER 2
+#if(WINVER >=0x0400)
+#define RESOURCEUSAGE_NOLOCALDEVICE 4
+#define RESOURCEUSAGE_SIBLING 8
+#define RESOURCEUSAGE_ATTACHED 16
+#define RESOURCEUSAGE_ALL (RESOURCEUSAGE_CONNECTABLE|RESOURCEUSAGE_CONTAINER|RESOURCEUSAGE_ATTACHED)
+#endif 
+#define RESOURCEUSAGE_RESERVED 0x80000000
+#define RESOURCEDISPLAYTYPE_GENERIC 0
+#define RESOURCEDISPLAYTYPE_DOMAIN 1
+#define RESOURCEDISPLAYTYPE_SERVER 2
+#define RESOURCEDISPLAYTYPE_SHARE 3
+#define RESOURCEDISPLAYTYPE_FILE 4
+#define RESOURCEDISPLAYTYPE_GROUP 5
+#if(WINVER >=0x0400)
+#define RESOURCEDISPLAYTYPE_NETWORK 6
+#define RESOURCEDISPLAYTYPE_ROOT 7
+#define RESOURCEDISPLAYTYPE_SHAREADMIN 8
+#define RESOURCEDISPLAYTYPE_DIRECTORY 9
+#endif 
+#define RESOURCEDISPLAYTYPE_TREE 10
+#if(WINVER >=0x0400)
+#define RESOURCEDISPLAYTYPE_NDSCONTAINER 11
+#endif 
+typedef struct _NETRESOURCEA {
+	DWORD dwScope;
+	DWORD dwType;
+	DWORD dwDisplayType;
+	DWORD dwUsage;
+	LPSTR lpLocalName;
+	LPSTR lpRemoteName;
+	LPSTR lpComment ;
+	LPSTR lpProvider;
+}NETRESOURCEA,*LPNETRESOURCEA;
+typedef struct _NETRESOURCEW {
+	DWORD dwScope;
+	DWORD dwType;
+	DWORD dwDisplayType;
+	DWORD dwUsage;
+	LPWSTR lpLocalName;
+	LPWSTR lpRemoteName;
+	LPWSTR lpComment ;
+	LPWSTR lpProvider;
+}NETRESOURCEW,*LPNETRESOURCEW;
+#ifdef UNICODE
+typedef NETRESOURCEW NETRESOURCE;
+typedef LPNETRESOURCEW LPNETRESOURCE;
+#else
+typedef NETRESOURCEA NETRESOURCE;
+typedef LPNETRESOURCEA LPNETRESOURCE;
+#endif 
+#define NETPROPERTY_PERSISTENT 1
+#define CONNECT_UPDATE_PROFILE 1
+#define CONNECT_UPDATE_RECENT 2
+#define CONNECT_TEMPORARY 4
+#define CONNECT_INTERACTIVE 8
+#define CONNECT_PROMPT 16
+#define CONNECT_NEED_DRIVE 32
+#if(WINVER >=0x0400)
+#define CONNECT_REFCOUNT 64
+#define CONNECT_REDIRECT 128
+#define CONNECT_LOCALDRIVE 256
+#define CONNECT_CURRENT_MEDIA 512
+#define CONNECT_DEFERRED 1024
+#define CONNECT_RESERVED 0xff000000
+#endif 
+#if(WINVER >=0x0500)
+#define CONNECT_COMMANDLINE 2048
+#define CONNECT_CMD_SAVECRED 0x1000
+#endif 
+DWORD APIENTRY
+WNetAddConnectionA(LPCSTR lpRemoteName,LPCSTR lpPassword,LPCSTR lpLocalName);
+DWORD APIENTRY
+WNetAddConnectionW(LPCWSTR lpRemoteName,LPCWSTR lpPassword,LPCWSTR lpLocalName);
+#ifdef UNICODE
+#define WNetAddConnection WNetAddConnectionW
+#else
+#define WNetAddConnection WNetAddConnectionA
+#endif 
+DWORD APIENTRY
+WNetAddConnection2A(LPNETRESOURCEA lpNetResource,LPCSTR lpPassword,LPCSTR lpUserName,DWORD dwFlags);
+DWORD APIENTRY
+WNetAddConnection2W(LPNETRESOURCEW lpNetResource,LPCWSTR lpPassword,LPCWSTR lpUserName,DWORD dwFlags);
+#ifdef UNICODE
+#define WNetAddConnection2 WNetAddConnection2W
+#else
+#define WNetAddConnection2 WNetAddConnection2A
+#endif 
+DWORD APIENTRY
+WNetAddConnection3A(HWND hwndOwner,LPNETRESOURCEA lpNetResource,LPCSTR lpPassword,LPCSTR lpUserName,DWORD dwFlags);
+DWORD APIENTRY
+WNetAddConnection3W(HWND hwndOwner,LPNETRESOURCEW lpNetResource,LPCWSTR lpPassword,LPCWSTR lpUserName,DWORD dwFlags);
+#ifdef UNICODE
+#define WNetAddConnection3 WNetAddConnection3W
+#else
+#define WNetAddConnection3 WNetAddConnection3A
+#endif 
+DWORD APIENTRY
+WNetCancelConnectionA(LPCSTR lpName,BOOL fForce);
+DWORD APIENTRY
+WNetCancelConnectionW(LPCWSTR lpName,BOOL fForce);
+#ifdef UNICODE
+#define WNetCancelConnection WNetCancelConnectionW
+#else
+#define WNetCancelConnection WNetCancelConnectionA
+#endif 
+DWORD APIENTRY
+WNetCancelConnection2A(LPCSTR lpName,DWORD dwFlags,BOOL fForce);
+DWORD APIENTRY
+WNetCancelConnection2W(LPCWSTR lpName,DWORD dwFlags,BOOL fForce);
+#ifdef UNICODE
+#define WNetCancelConnection2 WNetCancelConnection2W
+#else
+#define WNetCancelConnection2 WNetCancelConnection2A
+#endif 
+DWORD APIENTRY
+WNetGetConnectionA(LPCSTR lpLocalName,LPSTR lpRemoteName,LPDWORD lpnLength);
+DWORD APIENTRY
+WNetGetConnectionW(LPCWSTR lpLocalName,LPWSTR lpRemoteName,LPDWORD lpnLength);
+#ifdef UNICODE
+#define WNetGetConnection WNetGetConnectionW
+#else
+#define WNetGetConnection WNetGetConnectionA
+#endif 
+DWORD APIENTRY
+WNetRestoreConnectionA(HWND hwndParent,LPCSTR lpDevice);
+DWORD APIENTRY
+WNetRestoreConnectionW(HWND hwndParent,LPCWSTR lpDevice);
+#ifdef UNICODE
+#define WNetRestoreConnection WNetRestoreConnectionW
+#else
+#define WNetRestoreConnection WNetRestoreConnectionA
+#endif 
+#if(WINVER >=0x0400)
+DWORD APIENTRY
+WNetUseConnectionA(HWND hwndOwner,LPNETRESOURCEA lpNetResource,LPCSTR lpPassword,LPCSTR lpUserID,DWORD dwFlags,LPSTR lpAccessName,LPDWORD lpBufferSize,LPDWORD lpResult);
+DWORD APIENTRY
+WNetUseConnectionW(HWND hwndOwner,LPNETRESOURCEW lpNetResource,LPCWSTR lpPassword,LPCWSTR lpUserID,DWORD dwFlags,LPWSTR lpAccessName,LPDWORD lpBufferSize,LPDWORD lpResult);
+#ifdef UNICODE
+#define WNetUseConnection WNetUseConnectionW
+#else
+#define WNetUseConnection WNetUseConnectionA
+#endif 
+#endif 
+DWORD APIENTRY
+WNetConnectionDialog(HWND hwnd,DWORD dwType);
+DWORD APIENTRY
+WNetDisconnectDialog(HWND hwnd,DWORD dwType);
+#if(WINVER >=0x0400)
+typedef struct _CONNECTDLGSTRUCTA{
+	DWORD cbStructure; 
+	HWND hwndOwner; 
+	LPNETRESOURCEA lpConnRes;
+	DWORD dwFlags; 
+	DWORD dwDevNum; 
+} CONNECTDLGSTRUCTA,*LPCONNECTDLGSTRUCTA;
+typedef struct _CONNECTDLGSTRUCTW{
+	DWORD cbStructure; 
+	HWND hwndOwner; 
+	LPNETRESOURCEW lpConnRes;
+	DWORD dwFlags; 
+	DWORD dwDevNum; 
+} CONNECTDLGSTRUCTW,*LPCONNECTDLGSTRUCTW;
+#ifdef UNICODE
+typedef CONNECTDLGSTRUCTW CONNECTDLGSTRUCT;
+typedef LPCONNECTDLGSTRUCTW LPCONNECTDLGSTRUCT;
+#else
+typedef CONNECTDLGSTRUCTA CONNECTDLGSTRUCT;
+typedef LPCONNECTDLGSTRUCTA LPCONNECTDLGSTRUCT;
+#endif 
+#define CONNDLG_RO_PATH 1 
+#define CONNDLG_CONN_POINT 2 
+#define CONNDLG_USE_MRU 4 
+#define CONNDLG_HIDE_BOX 8 
+#define CONNDLG_PERSIST 16 
+#define CONNDLG_NOT_PERSIST 32 
+DWORD APIENTRY
+WNetConnectionDialog1A(LPCONNECTDLGSTRUCTA lpConnDlgStruct);
+DWORD APIENTRY
+WNetConnectionDialog1W(LPCONNECTDLGSTRUCTW lpConnDlgStruct);
+#ifdef UNICODE
+#define WNetConnectionDialog1 WNetConnectionDialog1W
+#else
+#define WNetConnectionDialog1 WNetConnectionDialog1A
+#endif 
+typedef struct _DISCDLGSTRUCTA{
+	DWORD cbStructure; 
+	HWND hwndOwner; 
+	LPSTR lpLocalName; 
+	LPSTR lpRemoteName; 
+	DWORD dwFlags; 
+} DISCDLGSTRUCTA,*LPDISCDLGSTRUCTA;
+typedef struct _DISCDLGSTRUCTW{
+	DWORD cbStructure; 
+	HWND hwndOwner; 
+	LPWSTR lpLocalName; 
+	LPWSTR lpRemoteName; 
+	DWORD dwFlags; 
+} DISCDLGSTRUCTW,*LPDISCDLGSTRUCTW;
+#ifdef UNICODE
+typedef DISCDLGSTRUCTW DISCDLGSTRUCT;
+typedef LPDISCDLGSTRUCTW LPDISCDLGSTRUCT;
+#else
+typedef DISCDLGSTRUCTA DISCDLGSTRUCT;
+typedef LPDISCDLGSTRUCTA LPDISCDLGSTRUCT;
+#endif 
+#define DISC_UPDATE_PROFILE 1
+#define DISC_NO_FORCE 64
+DWORD APIENTRY
+WNetDisconnectDialog1A(LPDISCDLGSTRUCTA lpConnDlgStruct);
+DWORD APIENTRY
+WNetDisconnectDialog1W(LPDISCDLGSTRUCTW lpConnDlgStruct);
+#ifdef UNICODE
+#define WNetDisconnectDialog1 WNetDisconnectDialog1W
+#else
+#define WNetDisconnectDialog1 WNetDisconnectDialog1A
+#endif 
+#endif 
+DWORD APIENTRY
+WNetOpenEnumA(DWORD dwScope,DWORD dwType,DWORD dwUsage,LPNETRESOURCEA lpNetResource,LPHANDLE lphEnum);
+DWORD APIENTRY
+WNetOpenEnumW(DWORD dwScope,DWORD dwType,DWORD dwUsage,LPNETRESOURCEW lpNetResource,LPHANDLE lphEnum);
+#ifdef UNICODE
+#define WNetOpenEnum WNetOpenEnumW
+#else
+#define WNetOpenEnum WNetOpenEnumA
+#endif 
+DWORD APIENTRY
+WNetEnumResourceA(HANDLE hEnum,LPDWORD lpcCount,LPVOID lpBuffer,LPDWORD lpBufferSize);
+DWORD APIENTRY
+WNetEnumResourceW(HANDLE hEnum,LPDWORD lpcCount,LPVOID lpBuffer,LPDWORD lpBufferSize);
+#ifdef UNICODE
+#define WNetEnumResource WNetEnumResourceW
+#else
+#define WNetEnumResource WNetEnumResourceA
+#endif 
+DWORD APIENTRY
+WNetCloseEnum(HANDLE hEnum);
+#if(WINVER >=0x0400)
+DWORD APIENTRY
+WNetGetResourceParentA(LPNETRESOURCEA lpNetResource,LPVOID lpBuffer,LPDWORD lpcbBuffer);
+DWORD APIENTRY
+WNetGetResourceParentW(LPNETRESOURCEW lpNetResource,LPVOID lpBuffer,LPDWORD lpcbBuffer);
+#ifdef UNICODE
+#define WNetGetResourceParent WNetGetResourceParentW
+#else
+#define WNetGetResourceParent WNetGetResourceParentA
+#endif 
+DWORD APIENTRY
+WNetGetResourceInformationA(LPNETRESOURCEA lpNetResource,LPVOID lpBuffer,LPDWORD lpcbBuffer,LPSTR *lplpSystem);
+DWORD APIENTRY
+WNetGetResourceInformationW(LPNETRESOURCEW lpNetResource,LPVOID lpBuffer,LPDWORD lpcbBuffer,LPWSTR *lplpSystem);
+#ifdef UNICODE
+#define WNetGetResourceInformation WNetGetResourceInformationW
+#else
+#define WNetGetResourceInformation WNetGetResourceInformationA
+#endif 
+#endif 
+#define UNIVERSAL_NAME_INFO_LEVEL 1
+#define REMOTE_NAME_INFO_LEVEL 2
+typedef struct _UNIVERSAL_NAME_INFOA {
+	LPSTR lpUniversalName;
+}UNIVERSAL_NAME_INFOA,*LPUNIVERSAL_NAME_INFOA;
+typedef struct _UNIVERSAL_NAME_INFOW {
+	LPWSTR lpUniversalName;
+}UNIVERSAL_NAME_INFOW,*LPUNIVERSAL_NAME_INFOW;
+#ifdef UNICODE
+typedef UNIVERSAL_NAME_INFOW UNIVERSAL_NAME_INFO;
+typedef LPUNIVERSAL_NAME_INFOW LPUNIVERSAL_NAME_INFO;
+#else
+typedef UNIVERSAL_NAME_INFOA UNIVERSAL_NAME_INFO;
+typedef LPUNIVERSAL_NAME_INFOA LPUNIVERSAL_NAME_INFO;
+#endif 
+typedef struct _REMOTE_NAME_INFOA {
+	LPSTR lpUniversalName;
+	LPSTR lpConnectionName;
+	LPSTR lpRemainingPath;
+}REMOTE_NAME_INFOA,*LPREMOTE_NAME_INFOA;
+typedef struct _REMOTE_NAME_INFOW {
+	LPWSTR lpUniversalName;
+	LPWSTR lpConnectionName;
+	LPWSTR lpRemainingPath;
+}REMOTE_NAME_INFOW,*LPREMOTE_NAME_INFOW;
+#ifdef UNICODE
+typedef REMOTE_NAME_INFOW REMOTE_NAME_INFO;
+typedef LPREMOTE_NAME_INFOW LPREMOTE_NAME_INFO;
+#else
+typedef REMOTE_NAME_INFOA REMOTE_NAME_INFO;
+typedef LPREMOTE_NAME_INFOA LPREMOTE_NAME_INFO;
+#endif 
+DWORD APIENTRY
+WNetGetUniversalNameA(LPCSTR lpLocalPath,DWORD dwInfoLevel,LPVOID lpBuffer,LPDWORD lpBufferSize);
+DWORD APIENTRY
+WNetGetUniversalNameW(LPCWSTR lpLocalPath,DWORD dwInfoLevel,LPVOID lpBuffer,LPDWORD lpBufferSize);
+#ifdef UNICODE
+#define WNetGetUniversalName WNetGetUniversalNameW
+#else
+#define WNetGetUniversalName WNetGetUniversalNameA
+#endif 
+DWORD APIENTRY
+WNetGetUserA(LPCSTR lpName,LPSTR lpUserName,LPDWORD lpnLength);
+DWORD APIENTRY
+WNetGetUserW(LPCWSTR lpName,LPWSTR lpUserName,LPDWORD lpnLength);
+#ifdef UNICODE
+#define WNetGetUser WNetGetUserW
+#else
+#define WNetGetUser WNetGetUserA
+#endif 
+#if(WINVER >=0x0400)
+#define WNFMT_MULTILINE 1
+#define WNFMT_ABBREVIATED 2
+#define WNFMT_INENUM 16
+#define WNFMT_CONNECTION 32
+#endif 
+#if(WINVER >=0x0400)
+DWORD APIENTRY
+WNetGetProviderNameA(DWORD dwNetType,LPSTR lpProviderName,LPDWORD lpBufferSize);
+DWORD APIENTRY
+WNetGetProviderNameW(DWORD dwNetType,LPWSTR lpProviderName,LPDWORD lpBufferSize);
+#ifdef UNICODE
+#define WNetGetProviderName WNetGetProviderNameW
+#else
+#define WNetGetProviderName WNetGetProviderNameA
+#endif 
+typedef struct _NETINFOSTRUCT{
+	DWORD cbStructure;
+	DWORD dwProviderVersion;
+	DWORD dwStatus;
+	DWORD dwCharacteristics;
+	ULONG_PTR dwHandle;
+	WORD wNetType;
+	DWORD dwPrinters;
+	DWORD dwDrives;
+} NETINFOSTRUCT,*LPNETINFOSTRUCT;
+#define NETINFO_DLL16 1 
+#define NETINFO_DISKRED 4 
+#define NETINFO_PRINTERRED 8 
+DWORD APIENTRY
+WNetGetNetworkInformationA(LPCSTR lpProvider,LPNETINFOSTRUCT lpNetInfoStruct);
+DWORD APIENTRY
+WNetGetNetworkInformationW(LPCWSTR lpProvider,LPNETINFOSTRUCT lpNetInfoStruct);
+#ifdef UNICODE
+#define WNetGetNetworkInformation WNetGetNetworkInformationW
+#else
+#define WNetGetNetworkInformation WNetGetNetworkInformationA
+#endif 
+typedef UINT (FAR PASCAL *PFNGETPROFILEPATHA) (LPCSTR pszUsername,LPSTR pszBuffer,UINT cbBuffer);
+typedef UINT (FAR PASCAL *PFNGETPROFILEPATHW) (LPCWSTR pszUsername,LPWSTR pszBuffer,UINT cbBuffer);
+#ifdef UNICODE
+#define PFNGETPROFILEPATH PFNGETPROFILEPATHW
+#else
+#define PFNGETPROFILEPATH PFNGETPROFILEPATHA
+#endif 
+typedef UINT (FAR PASCAL *PFNRECONCILEPROFILEA) (LPCSTR pszCentralFile,LPCSTR pszLocalFile,DWORD dwFlags);
+typedef UINT (FAR PASCAL *PFNRECONCILEPROFILEW) (LPCWSTR pszCentralFile,LPCWSTR pszLocalFile,DWORD dwFlags);
+#ifdef UNICODE
+#define PFNRECONCILEPROFILE PFNRECONCILEPROFILEW
+#else
+#define PFNRECONCILEPROFILE PFNRECONCILEPROFILEA
+#endif 
+#define RP_LOGON 1 
+#define RP_INIFILE 2 
+typedef BOOL (FAR PASCAL *PFNPROCESSPOLICIESA) (HWND hwnd,LPCSTR pszPath,LPCSTR pszUsername,LPCSTR pszComputerName,DWORD dwFlags);
+typedef BOOL (FAR PASCAL *PFNPROCESSPOLICIESW) (HWND hwnd,LPCWSTR pszPath,LPCWSTR pszUsername,LPCWSTR pszComputerName,DWORD dwFlags);
+#ifdef UNICODE
+#define PFNPROCESSPOLICIES PFNPROCESSPOLICIESW
+#else
+#define PFNPROCESSPOLICIES PFNPROCESSPOLICIESA
+#endif 
+#define PP_DISPLAYERRORS 1 
+#endif 
+DWORD APIENTRY
+WNetGetLastErrorA(LPDWORD lpError,LPSTR lpErrorBuf,DWORD nErrorBufSize,LPSTR lpNameBuf,DWORD nNameBufSize);
+DWORD APIENTRY
+WNetGetLastErrorW(LPDWORD lpError,LPWSTR lpErrorBuf,DWORD nErrorBufSize,LPWSTR lpNameBuf,DWORD nNameBufSize);
+#ifdef UNICODE
+#define WNetGetLastError WNetGetLastErrorW
+#else
+#define WNetGetLastError WNetGetLastErrorA
+#endif 
+#define WN_SUCCESS NO_ERROR
+#define WN_NO_ERROR NO_ERROR
+#define WN_NOT_SUPPORTED ERROR_NOT_SUPPORTED
+#define WN_CANCEL ERROR_CANCELLED
+#define WN_RETRY ERROR_RETRY
+#define WN_NET_ERROR ERROR_UNEXP_NET_ERR
+#define WN_MORE_DATA ERROR_MORE_DATA
+#define WN_BAD_POINTER ERROR_INVALID_ADDRESS
+#define WN_BAD_VALUE ERROR_INVALID_PARAMETER
+#define WN_BAD_USER ERROR_BAD_USERNAME
+#define WN_BAD_PASSWORD ERROR_INVALID_PASSWORD
+#define WN_ACCESS_DENIED ERROR_ACCESS_DENIED
+#define WN_FUNCTION_BUSY ERROR_BUSY
+#define WN_WINDOWS_ERROR ERROR_UNEXP_NET_ERR
+#define WN_OUT_OF_MEMORY ERROR_NOT_ENOUGH_MEMORY
+#define WN_NO_NETWORK ERROR_NO_NETWORK
+#define WN_EXTENDED_ERROR ERROR_EXTENDED_ERROR
+#define WN_BAD_LEVEL ERROR_INVALID_LEVEL
+#define WN_BAD_HANDLE ERROR_INVALID_HANDLE
+#if(WINVER >=0x0400)
+#define WN_NOT_INITIALIZING ERROR_ALREADY_INITIALIZED
+#define WN_NO_MORE_DEVICES ERROR_NO_MORE_DEVICES
+#endif 
+#define WN_NOT_CONNECTED ERROR_NOT_CONNECTED
+#define WN_OPEN_FILES ERROR_OPEN_FILES
+#define WN_DEVICE_IN_USE ERROR_DEVICE_IN_USE
+#define WN_BAD_NETNAME ERROR_BAD_NET_NAME
+#define WN_BAD_LOCALNAME ERROR_BAD_DEVICE
+#define WN_ALREADY_CONNECTED ERROR_ALREADY_ASSIGNED
+#define WN_DEVICE_ERROR ERROR_GEN_FAILURE
+#define WN_CONNECTION_CLOSED ERROR_CONNECTION_UNAVAIL
+#define WN_NO_NET_OR_BAD_PATH ERROR_NO_NET_OR_BAD_PATH
+#define WN_BAD_PROVIDER ERROR_BAD_PROVIDER
+#define WN_CANNOT_OPEN_PROFILE ERROR_CANNOT_OPEN_PROFILE
+#define WN_BAD_PROFILE ERROR_BAD_PROFILE
+#define WN_BAD_DEV_TYPE ERROR_BAD_DEV_TYPE
+#define WN_DEVICE_ALREADY_REMEMBERED ERROR_DEVICE_ALREADY_REMEMBERED
+#define WN_CONNECTED_OTHER_PASSWORD ERROR_CONNECTED_OTHER_PASSWORD
+#if(WINVER >=0x0501)
+#define WN_CONNECTED_OTHER_PASSWORD_DEFAULT ERROR_CONNECTED_OTHER_PASSWORD_DEFAULT
+#endif 
+#define WN_NO_MORE_ENTRIES ERROR_NO_MORE_ITEMS
+#define WN_NOT_CONTAINER ERROR_NOT_CONTAINER
+#if(WINVER >=0x0400)
+#define WN_NOT_AUTHENTICATED ERROR_NOT_AUTHENTICATED
+#define WN_NOT_LOGGED_ON ERROR_NOT_LOGGED_ON
+#define WN_NOT_VALIDATED ERROR_NO_LOGON_SERVERS
+#endif 
+#if(WINVER >=0x0400)
+typedef struct _NETCONNECTINFOSTRUCT{
+	DWORD cbStructure;
+	DWORD dwFlags;
+	DWORD dwSpeed;
+	DWORD dwDelay;
+	DWORD dwOptDataSize;
+} NETCONNECTINFOSTRUCT,*LPNETCONNECTINFOSTRUCT;
+#define WNCON_FORNETCARD 1
+#define WNCON_NOTROUTED 2
+#define WNCON_SLOWLINK 4
+#define WNCON_DYNAMIC 8
+DWORD APIENTRY
+MultinetGetConnectionPerformanceA(LPNETRESOURCEA lpNetResource,LPNETCONNECTINFOSTRUCT lpNetConnectInfoStruct);
+DWORD APIENTRY
+MultinetGetConnectionPerformanceW(LPNETRESOURCEW lpNetResource,LPNETCONNECTINFOSTRUCT lpNetConnectInfoStruct);
+#ifdef UNICODE
+#define MultinetGetConnectionPerformance MultinetGetConnectionPerformanceW
+#else
+#define MultinetGetConnectionPerformance MultinetGetConnectionPerformanceA
+#endif 
+#endif 
+#endif 
