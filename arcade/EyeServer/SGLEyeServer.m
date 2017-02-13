@@ -67,23 +67,21 @@ classdef (Sealed) SGLEyeServer < handle
         %# fetch eye sample
         % return eye position in pixels, and [x_pos, y_pos];
         function eye_pos = mFetchEyePosition(this)
-            persistent nidaqObj volts2pixels
+            persistent nidaqObj
             
             if isempty(nidaqObj) || ~isvalid(nidaqObj)
                 nidaqObj = this.nidaqObj;
             end
             
-            if isempty(volts2pixels)
-                vgain      = [10 10]; % ****** hard-coded at the moment******
-                screensize = [1680 1050];
-                volts2pixels = AUXEyeSignalUnitConverter.volts2pixels(vgain,screensize);
-            end
+            % TODO: parameterize screen gain and size
+            vgain      = [10 10]; % ****** hard-coded at the moment******
+            screensize = [1680 1050];                       
             
             % set eye position
             %this.eye_pos = eyeObj.daqmxReadAnalogF64(1);
             eye_pos = nidaqObj.daqmxReadAnalogF64(1);
             % convert eye position into pixels
-            [xeye,yeye] = volts2pixels(eye_pos(1),eye_pos(2));
+            [xeye,yeye] = volts2pixels(eye_pos(1),eye_pos(2), vgain, screensize);
             eye_pos = [xeye,yeye];
             
         end
