@@ -1,4 +1,4 @@
-classdef (Sealed) SGLSessionArc < MSWindow
+classdef (Sealed) SGLSessionArc
     % [SINGLETON CLASS] STATE ARC
     %   Loop through trials
     %   controls the movement from one trial to another
@@ -76,10 +76,10 @@ classdef (Sealed) SGLSessionArc < MSWindow
             
             % find the control screen
             % how best to handle the name 
-            this.hwnd_ctrl = this.mGetGUIWindow('Control Screen');
+            % this.hwnd_ctrl = this.mGetGUIWindow('Control Screen');
             java.lang.Thread.sleep(20);
             %result = this.mSetActiveWindow(this.hwnd_ctrl);
-            result = this.mSetForegroundWindow(this.hwnd_ctrl);
+            % result = this.mSetForegroundWindow(this.hwnd_ctrl);
             
 
             %** session is running, break point ***
@@ -168,11 +168,11 @@ classdef (Sealed) SGLSessionArc < MSWindow
                 end
             end
         end
-        %# get the hwnd to the GUI window 
-        function hwnd = mGetGUIWindow(this,winName)
-            hwnd = this.mFindWindow('SunAwtFrame',winName);
-        end
-
+        % # get the hwnd to the GUI window 
+        % function hwnd = mGetGUIWindow(this,winName)
+            % hwnd = this.mFindWindow('SunAwtFrame',winName);
+        % end
+% 
     end
     
     methods (Static = true)

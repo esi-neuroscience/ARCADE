@@ -1,4 +1,4 @@
-classdef (Sealed) PauseScreen < AUXEditableVariables & SPCGUIDefinition & AUXWindowControl
+classdef (Sealed) PauseScreen < AUXEditableVariables & SPCGUIDefinition
     % [GUI]
     % resume -> saves cfg
     % cancel -> rejects changes
