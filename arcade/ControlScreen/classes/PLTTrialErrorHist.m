@@ -140,7 +140,7 @@ classdef PLTTrialErrorHist < ABSPlotDefinition & AUXFastHistogram
     end
 end
 
-function [max, iMax] = nanmax(x, varargin)
+function [maximum, iMax] = nanmax(x, varargin)
 x(isnan(x)) = -Inf;
-[max, iMax] = max(x, varargin{:})
+[maximum, iMax] = max(x, varargin{:})
 end
