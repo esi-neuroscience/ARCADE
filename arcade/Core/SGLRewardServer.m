@@ -59,6 +59,7 @@ classdef (Sealed) SGLRewardServer < handle
             % open, time, close 
             t = tic;
             this.mSetRewardBit(1);
+            % TODO: why is this a while loop, not a sleep/pause?
             while toc(t)*1000<rdur
                 %java.lang.Thread.sleep(1);
             end
