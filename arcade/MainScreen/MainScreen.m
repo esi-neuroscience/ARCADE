@@ -268,7 +268,7 @@ classdef (Sealed) MainScreen < MSJavaObjects & MSConfig & MSEditableVariables & 
             addlistener(this,'cfgIsLoaded',@(hObj,evt) this.mCheckRequireds(hObj,evt,reqStrings,btnRunTsk,btnSaveCfg));
             
             % set required listener borders
-            this.mInitRequiredBorders(reqStrings);
+            % this.mInitRequiredBorders(reqStrings);
             
             % RUN TASK
             % -> set callback, resume
