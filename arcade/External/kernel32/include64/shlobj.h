@@ -1,0 +1,2649 @@
+#ifndef _SHLOBJ_H_
+#define _SHLOBJ_H_
+#ifndef _WINRESRC_
+#ifndef _WIN32_IE
+#define _WIN32_IE 1281
+#else
+#if (_WIN32_IE < 1024) && defined(_WIN32_WINNT) && (_WIN32_WINNT >= 1280)
+#error _WIN32_IE setting conflicts with _WIN32_WINNT setting
+#endif
+#endif
+#endif
+#ifndef SNDMSG
+#define SNDMSG SendMessage
+#endif 
+#ifndef WINSHELLAPI
+#define WINSHELLAPI __declspec(dllimport)
+#endif 
+#undef DECLSPEC_IMPORT
+#define DECLSPEC_IMPORT __declspec(dllimport)
+#define SHSTDAPI EXTERN_C __declspec(dllimport) HRESULT 
+#define SHSTDAPI_(type) EXTERN_C __declspec(dllimport) type
+#ifndef SHDOCAPI
+#define SHDOCAPI EXTERN_C DECLSPEC_IMPORT HRESULT STDAPICALLTYPE
+#define SHDOCAPI_(type) EXTERN_C DECLSPEC_IMPORT type STDAPICALLTYPE
+#endif 
+#ifndef SHSTDDOCAPI
+#define SHSTDDOCAPI EXTERN_C DECLSPEC_IMPORT HRESULT STDAPICALLTYPE
+#define SHSTDDOCAPI_(type) EXTERN_C DECLSPEC_IMPORT type STDAPICALLTYPE
+#endif 
+#ifndef BROWSEUIAPI
+#define BROWSEUIAPI EXTERN_C DECLSPEC_IMPORT HRESULT STDAPICALLTYPE
+#define BROWSEUIAPI_(type) EXTERN_C DECLSPEC_IMPORT type STDAPICALLTYPE
+#endif 
+#ifndef SHFOLDERAPI
+#define SHFOLDERAPI EXTERN_C DECLSPEC_IMPORT HRESULT STDAPICALLTYPE
+#endif
+#include <commctrl.h>
+#include <ole2.h>
+#ifndef _PRSHT_H_
+#include <prsht.h>
+#endif
+#ifndef _INC_COMMCTRL
+#include <commctrl.h> 
+#endif
+#ifndef INITGUID
+#include <shlguid.h>
+#endif 
+#include <pshpack1.h> 
+#include <shtypes.h>
+#include <shobjidl.h>
+SHSTDAPI SHGetMalloc(LPMALLOC *);
+SHSTDAPI_(void *) SHAlloc(SIZE_T );
+SHSTDAPI_(void) SHFree(void *);
+#define CMF_NORMAL 0
+#define CMF_DEFAULTONLY 1
+#define CMF_VERBSONLY 2
+#define CMF_EXPLORE 4
+#define CMF_NOVERBS 8
+#define CMF_CANRENAME 16
+#define CMF_NODEFAULT 32
+#define CMF_INCLUDESTATIC 64
+#define CMF_EXTENDEDVERBS 256
+#define CMF_RESERVED 0xffff0000
+#define GCS_VERBA 0
+#define GCS_HELPTEXTA 1
+#define GCS_VALIDATEA 2
+#define GCS_VERBW 4
+#define GCS_HELPTEXTW 5
+#define GCS_VALIDATEW 6
+#define GCS_UNICODE 4
+#ifdef UNICODE
+#define GCS_VERB GCS_VERBW
+#define GCS_HELPTEXT GCS_HELPTEXTW
+#define GCS_VALIDATE GCS_VALIDATEW
+#else
+#define GCS_VERB GCS_VERBA
+#define GCS_HELPTEXT GCS_HELPTEXTA
+#define GCS_VALIDATE GCS_VALIDATEA
+#endif
+#define CMDSTR_NEWFOLDERA "NewFolder"
+#define CMDSTR_VIEWLISTA "ViewList"
+#define CMDSTR_VIEWDETAILSA "ViewDetails"
+#define CMDSTR_NEWFOLDERW L"NewFolder"
+#define CMDSTR_VIEWLISTW L"ViewList"
+#define CMDSTR_VIEWDETAILSW L"ViewDetails"
+#ifdef UNICODE
+#define CMDSTR_NEWFOLDER CMDSTR_NEWFOLDERW
+#define CMDSTR_VIEWLIST CMDSTR_VIEWLISTW
+#define CMDSTR_VIEWDETAILS CMDSTR_VIEWDETAILSW
+#else
+#define CMDSTR_NEWFOLDER CMDSTR_NEWFOLDERA
+#define CMDSTR_VIEWLIST CMDSTR_VIEWLISTA
+#define CMDSTR_VIEWDETAILS CMDSTR_VIEWDETAILSA
+#endif
+#define CMIC_MASK_HOTKEY SEE_MASK_HOTKEY
+#define CMIC_MASK_ICON SEE_MASK_ICON
+#define CMIC_MASK_FLAG_NO_UI SEE_MASK_FLAG_NO_UI
+#define CMIC_MASK_UNICODE SEE_MASK_UNICODE
+#define CMIC_MASK_NO_CONSOLE SEE_MASK_NO_CONSOLE
+#define CMIC_MASK_HASLINKNAME SEE_MASK_HASLINKNAME
+#define CMIC_MASK_FLAG_SEP_VDM SEE_MASK_FLAG_SEPVDM
+#define CMIC_MASK_HASTITLE SEE_MASK_HASTITLE
+#define CMIC_MASK_ASYNCOK SEE_MASK_ASYNCOK
+#if (_WIN32_IE >= 1281)
+#define CMIC_MASK_SHIFT_DOWN 0x10000000
+#define CMIC_MASK_CONTROL_DOWN 0x40000000
+#endif 
+#if (_WIN32_IE >= 1376)
+#define CMIC_MASK_FLAG_LOG_USAGE SEE_MASK_FLAG_LOG_USAGE
+#define CMIC_MASK_NOZONECHECKS SEE_MASK_NOZONECHECKS
+#endif 
+#if (_WIN32_IE >= 1024)
+#define CMIC_MASK_PTINVOKE 0x20000000
+#endif
+#include <pshpack8.h>
+typedef struct _CMINVOKECOMMANDINFO {
+DWORD cbSize; 
+DWORD fMask; 
+HWND hwnd; 
+LPCSTR lpVerb; 
+LPCSTR lpParameters; 
+LPCSTR lpDirectory; 
+int nShow; 
+DWORD dwHotKey;
+HANDLE hIcon;
+} CMINVOKECOMMANDINFO,*LPCMINVOKECOMMANDINFO;
+typedef struct _CMInvokeCommandInfoEx {
+DWORD cbSize; 
+DWORD fMask; 
+HWND hwnd; 
+LPCSTR lpVerb; 
+LPCSTR lpParameters; 
+LPCSTR lpDirectory; 
+int nShow; 
+DWORD dwHotKey;
+HANDLE hIcon;
+LPCSTR lpTitle; 
+LPCWSTR lpVerbW; 
+LPCWSTR lpParametersW; 
+LPCWSTR lpDirectoryW; 
+LPCWSTR lpTitleW; 
+#if (_WIN32_IE >= 1024)
+POINT ptInvoke; 
+#endif
+} CMINVOKECOMMANDINFOEX,*LPCMINVOKECOMMANDINFOEX;
+#include <poppack.h> 
+#undef INTERFACE
+#define INTERFACE IContextMenu
+DECLARE_INTERFACE_(IContextMenu,IUnknown)
+{
+STDMETHOD(QueryInterface) (THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD(QueryContextMenu)(THIS_ HMENU ,UINT ,UINT ,UINT ,UINT );
+STDMETHOD(InvokeCommand)(THIS_ LPCMINVOKECOMMANDINFO );
+STDMETHOD(GetCommandString)(THIS_ UINT_PTR ,UINT ,UINT *,LPSTR ,UINT );
+};
+typedef IContextMenu * LPCONTEXTMENU;
+#undef INTERFACE
+#define INTERFACE IContextMenu2
+DECLARE_INTERFACE_(IContextMenu2,IContextMenu)
+{
+STDMETHOD(QueryInterface) (THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD(QueryContextMenu)(THIS_ HMENU ,UINT ,UINT ,UINT ,UINT );
+STDMETHOD(InvokeCommand)(THIS_ LPCMINVOKECOMMANDINFO );
+STDMETHOD(GetCommandString)(THIS_ UINT_PTR ,UINT ,UINT *,LPSTR ,UINT );
+STDMETHOD(HandleMenuMsg)(THIS_ UINT ,WPARAM ,LPARAM );
+};
+typedef IContextMenu2 * LPCONTEXTMENU2;
+#undef INTERFACE
+#define INTERFACE IContextMenu3
+DECLARE_INTERFACE_(IContextMenu3,IContextMenu2)
+{
+STDMETHOD(QueryInterface) (THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD(QueryContextMenu)(THIS_ HMENU ,UINT ,UINT ,UINT ,UINT );
+STDMETHOD(InvokeCommand)(THIS_ LPCMINVOKECOMMANDINFO );
+STDMETHOD(GetCommandString)(THIS_ UINT_PTR ,UINT ,UINT *,LPSTR ,UINT );
+STDMETHOD(HandleMenuMsg)(THIS_ UINT ,WPARAM ,LPARAM );
+STDMETHOD(HandleMenuMsg2)(THIS_ UINT ,WPARAM ,LPARAM ,LRESULT* plResult);
+};
+typedef IContextMenu3 * LPCONTEXTMENU3;
+#if (_WIN32_IE >= 1280)
+#undef INTERFACE
+#define INTERFACE IPersistFolder3
+#define CSIDL_FLAG_PFTI_TRACKTARGET CSIDL_FLAG_DONT_VERIFY
+#include <pshpack8.h>
+typedef struct
+{
+LPITEMIDLIST pidlTargetFolder; 
+WCHAR szTargetParsingName[MAX_PATH]; 
+WCHAR szNetworkProvider[MAX_PATH]; 
+DWORD dwAttributes; 
+int csidl; 
+} PERSIST_FOLDER_TARGET_INFO;
+#include <poppack.h> 
+DECLARE_INTERFACE_(IPersistFolder3,IPersistFolder2)
+{
+STDMETHOD(QueryInterface)(THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef)(THIS);
+STDMETHOD_(ULONG,Release)(THIS);
+STDMETHOD(GetClassID)(THIS_ LPCLSID );
+STDMETHOD(Initialize)(THIS_ LPCITEMIDLIST );
+STDMETHOD(GetCurFolder)(THIS_ LPITEMIDLIST *);
+STDMETHOD(InitializeEx)(THIS_ IBindCtx *,LPCITEMIDLIST ,const PERSIST_FOLDER_TARGET_INFO *ppfti);
+STDMETHOD(GetFolderTargetInfo)(THIS_ PERSIST_FOLDER_TARGET_INFO *);
+};
+#endif
+#define GIL_OPENICON 1
+#define GIL_FORSHELL 2
+#define GIL_ASYNC 32
+#define GIL_DEFAULTICON 64
+#define GIL_FORSHORTCUT 128
+#define GIL_SIMULATEDOC 1
+#define GIL_PERINSTANCE 2
+#define GIL_PERCLASS 4
+#define GIL_NOTFILENAME 8
+#define GIL_DONTCACHE 16
+#undef INTERFACE
+#define INTERFACE IExtractIconA
+DECLARE_INTERFACE_(IExtractIconA,IUnknown) 
+{
+STDMETHOD(QueryInterface) (THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD(GetIconLocation)(THIS_ UINT ,LPSTR ,UINT ,int *,UINT *);
+STDMETHOD(Extract)(THIS_ LPCSTR ,UINT ,HICON *,HICON *,UINT );
+};
+typedef IExtractIconA * LPEXTRACTICONA;
+#undef INTERFACE
+#define INTERFACE IExtractIconW
+DECLARE_INTERFACE_(IExtractIconW,IUnknown) 
+{
+STDMETHOD(QueryInterface) (THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD(GetIconLocation)(THIS_ UINT ,LPWSTR ,UINT ,int *,UINT *);
+STDMETHOD(Extract)(THIS_ LPCWSTR ,UINT ,HICON *,HICON *,UINT );
+};
+typedef IExtractIconW * LPEXTRACTICONW;
+#ifdef UNICODE
+#define IExtractIcon IExtractIconW
+#define IExtractIconVtbl IExtractIconWVtbl
+#define LPEXTRACTICON LPEXTRACTICONW
+#else
+#define IExtractIcon IExtractIconA
+#define IExtractIconVtbl IExtractIconAVtbl
+#define LPEXTRACTICON LPEXTRACTICONA
+#endif
+#undef INTERFACE
+#define INTERFACE IShellIcon
+DECLARE_INTERFACE_(IShellIcon,IUnknown) 
+{
+STDMETHOD(QueryInterface) (THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD(GetIconOf)(THIS_ LPCITEMIDLIST ,UINT ,LPINT );
+};
+typedef IShellIcon *LPSHELLICON;
+#undef INTERFACE
+#define INTERFACE IShellIconOverlayIdentifier
+DECLARE_INTERFACE_(IShellIconOverlayIdentifier,IUnknown)
+{
+STDMETHOD(QueryInterface) (THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD (IsMemberOf)(THIS_ LPCWSTR ,DWORD );
+STDMETHOD (GetOverlayInfo)(THIS_ LPWSTR ,int ,int *,DWORD *);
+STDMETHOD (GetPriority)(THIS_ int *);
+};
+#define ISIOI_ICONFILE 1
+#define ISIOI_ICONINDEX 2
+#undef INTERFACE
+#define INTERFACE IShellIconOverlayManager
+DECLARE_INTERFACE_(IShellIconOverlayManager,IUnknown)
+{
+STDMETHOD(QueryInterface) (THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD(GetFileOverlayInfo)(THIS_ LPCWSTR ,DWORD ,int *,DWORD );
+STDMETHOD(GetReservedOverlayInfo)(THIS_ LPCWSTR ,DWORD ,int *,DWORD ,int );
+STDMETHOD(RefreshOverlayImages)(THIS_ DWORD );
+STDMETHOD(LoadNonloadedOverlayIdentifiers)(THIS);
+STDMETHOD(OverlayIndexFromImageIndex)(THIS_ int ,int *,BOOL );
+};
+#define SIOM_OVERLAYINDEX 1
+#define SIOM_ICONINDEX 2
+#define SIOM_RESERVED_SHARED 0
+#define SIOM_RESERVED_LINK 1
+#define SIOM_RESERVED_SLOWFILE 2
+#undef INTERFACE
+#define INTERFACE IShellIconOverlay
+DECLARE_INTERFACE_(IShellIconOverlay,IUnknown)
+{
+STDMETHOD(QueryInterface) (THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD(GetOverlayIndex)(THIS_ LPCITEMIDLIST ,int *);
+STDMETHOD(GetOverlayIconIndex)(THIS_ LPCITEMIDLIST ,int *);
+};
+#define OI_ASYNC 0xffffeeee
+#define IDO_SHGIOI_SHARE 0xfffffff
+#define IDO_SHGIOI_LINK 0xffffffe
+#define IDO_SHGIOI_SLOWFILE 0xfffffffd
+SHSTDAPI_(int) SHGetIconOverlayIndexA(LPCSTR ,int );
+SHSTDAPI_(int) SHGetIconOverlayIndexW(LPCWSTR ,int );
+#ifdef UNICODE
+#define SHGetIconOverlayIndex SHGetIconOverlayIndexW
+#else
+#define SHGetIconOverlayIndex SHGetIconOverlayIndexA
+#endif 
+#if (_WIN32_IE >= 1024)
+typedef enum {
+SLDF_HAS_ID_LIST=1,
+SLDF_HAS_LINK_INFO=2,
+SLDF_HAS_NAME=4,
+SLDF_HAS_RELPATH=8,
+SLDF_HAS_WORKINGDIR=16,
+SLDF_HAS_ARGS=32,
+SLDF_HAS_ICONLOCATION=64,
+SLDF_UNICODE=128,
+SLDF_FORCE_NO_LINKINFO=256,
+SLDF_HAS_EXP_SZ=512,
+SLDF_RUN_IN_SEPARATE=1024,
+SLDF_HAS_LOGO3ID=2048,
+SLDF_HAS_DARWINID=4096,
+SLDF_RUNAS_USER=0x2000,
+SLDF_HAS_EXP_ICON_SZ=0x4000,
+SLDF_NO_PIDL_ALIAS=0x8000,
+SLDF_FORCE_UNCNAME=0x10000,
+SLDF_RUN_WITH_SHIMLAYER=0x20000,
+SLDF_RESERVED=0x80000000,
+} SHELL_LINK_DATA_FLAGS;
+typedef struct tagDATABLOCKHEADER
+{
+DWORD cbSize; 
+DWORD dwSignature; 
+} DATABLOCK_HEADER,*LPDATABLOCK_HEADER,*LPDBLIST;
+typedef struct {
+ DATABLOCK_HEADER;
+WORD wFillAttribute; 
+WORD wPopupFillAttribute; 
+COORD dwScreenBufferSize; 
+COORD dwWindowSize; 
+COORD dwWindowOrigin; 
+DWORD nFont;
+DWORD nInputBufferSize;
+COORD dwFontSize;
+UINT uFontFamily;
+UINT uFontWeight;
+WCHAR FaceName[LF_FACESIZE];
+UINT uCursorSize;
+BOOL bFullScreen;
+BOOL bQuickEdit;
+BOOL bInsertMode;
+BOOL bAutoPosition;
+UINT uHistoryBufferSize;
+UINT uNumberOfHistoryBuffers;
+BOOL bHistoryNoDup;
+COLORREF ColorTable[ 16 ];
+} NT_CONSOLE_PROPS,*LPNT_CONSOLE_PROPS;
+#define NT_CONSOLE_PROPS_SIG 0xa0000002
+typedef struct {
+ DATABLOCK_HEADER;
+UINT uCodePage;
+} NT_FE_CONSOLE_PROPS,*LPNT_FE_CONSOLE_PROPS;
+#define NT_FE_CONSOLE_PROPS_SIG 0xa0000004
+#if (_WIN32_IE >= 1280)
+typedef struct {
+ DATABLOCK_HEADER;
+CHAR szDarwinID[MAX_PATH]; 
+WCHAR szwDarwinID[MAX_PATH]; 
+} EXP_DARWIN_LINK,*LPEXP_DARWIN_LINK;
+#define EXP_DARWIN_ID_SIG 0xa0000006
+#define EXP_LOGO3_ID_SIG 0xa0000007
+#endif
+#define EXP_SPECIAL_FOLDER_SIG 0xa0000005
+typedef struct
+{
+DWORD cbSize; 
+DWORD dwSignature; 
+DWORD idSpecialFolder; 
+DWORD cbOffset; 
+} EXP_SPECIAL_FOLDER,*LPEXP_SPECIAL_FOLDER;
+typedef struct
+{
+DWORD cbSize; 
+DWORD dwSignature; 
+CHAR szTarget[ MAX_PATH ]; 
+WCHAR swzTarget[ MAX_PATH ]; 
+} EXP_SZ_LINK,*LPEXP_SZ_LINK;
+#define EXP_SZ_LINK_SIG 0xa0000001
+#define EXP_SZ_ICON_SIG 0xa0000007
+#undef INTERFACE
+#define INTERFACE IShellLinkDataList
+DECLARE_INTERFACE_(IShellLinkDataList,IUnknown)
+{
+STDMETHOD(QueryInterface) (THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD(AddDataBlock)(THIS_ void *);
+STDMETHOD(CopyDataBlock)(THIS_ DWORD ,void **);
+STDMETHOD(RemoveDataBlock)(THIS_ DWORD );
+STDMETHOD(GetFlags)(THIS_ DWORD *);
+STDMETHOD(SetFlags)(THIS_ DWORD );
+};
+#endif 
+#if (_WIN32_IE >= 1280)
+#undef INTERFACE
+#define INTERFACE IResolveShellLink
+DECLARE_INTERFACE_(IResolveShellLink,IUnknown)
+{
+STDMETHOD(QueryInterface) (THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD(ResolveShellLink)(THIS_ IUnknown* punk,HWND ,DWORD );
+};
+#endif 
+#ifdef _INC_SHELLAPI 
+#undef INTERFACE
+#define INTERFACE IShellExecuteHookA
+DECLARE_INTERFACE_(IShellExecuteHookA,IUnknown) 
+{
+STDMETHOD(QueryInterface) (THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD(Execute)(THIS_ LPSHELLEXECUTEINFOA );
+};
+#undef INTERFACE
+#define INTERFACE IShellExecuteHookW
+DECLARE_INTERFACE_(IShellExecuteHookW,IUnknown) 
+{
+STDMETHOD(QueryInterface) (THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD(Execute)(THIS_ LPSHELLEXECUTEINFOW );
+};
+#ifdef UNICODE
+#define IShellExecuteHook IShellExecuteHookW
+#define IShellExecuteHookVtbl IShellExecuteHookWVtbl
+#else
+#define IShellExecuteHook IShellExecuteHookA
+#define IShellExecuteHookVtbl IShellExecuteHookAVtbl
+#endif
+#endif
+#undef INTERFACE
+#define INTERFACE IURLSearchHook
+DECLARE_INTERFACE_(IURLSearchHook,IUnknown)
+{
+STDMETHOD(QueryInterface) (THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD(Translate)(THIS_ LPWSTR ,DWORD );
+};
+#undef INTERFACE
+#define INTERFACE ISearchContext
+DECLARE_INTERFACE_(ISearchContext,IUnknown)
+{
+STDMETHOD(QueryInterface) (THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD(GetSearchUrl)(THIS_ BSTR *);
+STDMETHOD(GetSearchText)(THIS_ BSTR *);
+STDMETHOD(GetSearchStyle)(THIS_ DWORD *);
+};
+#undef INTERFACE
+#define INTERFACE IURLSearchHook2
+DECLARE_INTERFACE_(IURLSearchHook2,IURLSearchHook)
+{
+STDMETHOD(TranslateWithSearchContext)(THIS_ LPWSTR ,DWORD ,ISearchContext *);
+};
+#undef INTERFACE
+#define INTERFACE INewShortcutHookA
+DECLARE_INTERFACE_(INewShortcutHookA,IUnknown) 
+{
+STDMETHOD(QueryInterface) (THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD(SetReferent)(THIS_ LPCSTR ,HWND );
+STDMETHOD(GetReferent)(THIS_ LPSTR ,int );
+STDMETHOD(SetFolder)(THIS_ LPCSTR );
+STDMETHOD(GetFolder)(THIS_ LPSTR ,int );
+STDMETHOD(GetName)(THIS_ LPSTR ,int );
+STDMETHOD(GetExtension)(THIS_ LPSTR ,int );
+};
+#undef INTERFACE
+#define INTERFACE INewShortcutHookW
+DECLARE_INTERFACE_(INewShortcutHookW,IUnknown) 
+{
+STDMETHOD(QueryInterface) (THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD(SetReferent)(THIS_ LPCWSTR ,HWND );
+STDMETHOD(GetReferent)(THIS_ LPWSTR ,int );
+STDMETHOD(SetFolder)(THIS_ LPCWSTR );
+STDMETHOD(GetFolder)(THIS_ LPWSTR ,int );
+STDMETHOD(GetName)(THIS_ LPWSTR ,int );
+STDMETHOD(GetExtension)(THIS_ LPWSTR ,int );
+};
+#ifdef UNICODE
+#define INewShortcutHook INewShortcutHookW
+#define INewShortcutHookVtbl INewShortcutHookWVtbl
+#else
+#define INewShortcutHook INewShortcutHookA
+#define INewShortcutHookVtbl INewShortcutHookAVtbl
+#endif
+#ifndef FO_MOVE 
+#define FO_MOVE 1
+#define FO_COPY 2
+#define FO_DELETE 3
+#define FO_RENAME 4
+#define FOF_MULTIDESTFILES 1
+#define FOF_CONFIRMMOUSE 2
+#define FOF_SILENT 4
+#define FOF_RENAMEONCOLLISION 8
+#define FOF_NOCONFIRMATION 16
+#define FOF_WANTMAPPINGHANDLE 32
+#define FOF_ALLOWUNDO 64
+#define FOF_FILESONLY 128
+#define FOF_SIMPLEPROGRESS 256
+#define FOF_NOCONFIRMMKDIR 512
+#define FOF_NOERRORUI 1024
+#define FOF_NOCOPYSECURITYATTRIBS 2048
+#define FOF_NORECURSION 4096
+#if (_WIN32_IE >= 1280)
+#define FOF_NO_CONNECTED_ELEMENTS 0x2000
+#define FOF_WANTNUKEWARNING 0x4000
+#endif 
+#if (_WIN32_WINNT >= 1281)
+#define FOF_NORECURSEREPARSE 0x8000
+#endif 
+typedef WORD FILEOP_FLAGS;
+#define PO_DELETE 19
+#define PO_RENAME 20
+#define PO_PORTCHANGE 32
+#define PO_REN_PORT 52
+typedef UINT PRINTEROP_FLAGS;
+#endif 
+#undef INTERFACE
+#define INTERFACE ICopyHookA
+DECLARE_INTERFACE_(ICopyHookA,IUnknown) 
+{
+STDMETHOD(QueryInterface) (THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD_(UINT,CopyCallback) (THIS_ HWND ,UINT ,UINT ,LPCSTR ,DWORD ,LPCSTR ,DWORD );
+};
+typedef ICopyHookA * LPCOPYHOOKA;
+#undef INTERFACE
+#define INTERFACE ICopyHookW
+DECLARE_INTERFACE_(ICopyHookW,IUnknown) 
+{
+STDMETHOD(QueryInterface) (THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD_(UINT,CopyCallback) (THIS_ HWND ,UINT ,UINT ,LPCWSTR ,DWORD ,LPCWSTR ,DWORD );
+};
+typedef ICopyHookW * LPCOPYHOOKW;
+#ifdef UNICODE
+#define ICopyHook ICopyHookW
+#define ICopyHookVtbl ICopyHookWVtbl
+#define LPCOPYHOOK LPCOPYHOOKW
+#else
+#define ICopyHook ICopyHookA
+#define ICopyHookVtbl ICopyHookAVtbl
+#define LPCOPYHOOK LPCOPYHOOKA
+#endif
+#undef INTERFACE
+#define INTERFACE IFileViewerSite
+DECLARE_INTERFACE_(IFileViewerSite,IUnknown)
+{
+STDMETHOD(QueryInterface) (THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD(SetPinnedWindow) (THIS_ HWND );
+STDMETHOD(GetPinnedWindow) (THIS_ HWND *);
+};
+typedef IFileViewerSite * LPFILEVIEWERSITE;
+#include <pshpack8.h>
+typedef struct
+{
+DWORD cbSize; 
+HWND hwndOwner; 
+int iShow; 
+DWORD dwFlags; 
+RECT rect; 
+IUnknown *punkRel; 
+OLECHAR strNewFile[MAX_PATH]; 
+} FVSHOWINFO,*LPFVSHOWINFO;
+#include <poppack.h> 
+#define FVSIF_RECT 1
+#define FVSIF_PINNED 2
+#define FVSIF_NEWFAILED 0x8000000
+#define FVSIF_NEWFILE 0x80000000
+#define FVSIF_CANVIEWIT 0x40000000
+#undef INTERFACE
+#define INTERFACE IFileViewerA
+DECLARE_INTERFACE(IFileViewerA)
+{
+STDMETHOD(QueryInterface) (THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD(ShowInitialize) (THIS_ LPFILEVIEWERSITE );
+STDMETHOD(Show) (THIS_ LPFVSHOWINFO );
+STDMETHOD(PrintTo) (THIS_ LPSTR ,BOOL );
+};
+typedef IFileViewerA * LPFILEVIEWERA;
+#undef INTERFACE
+#define INTERFACE IFileViewerW
+DECLARE_INTERFACE(IFileViewerW)
+{
+STDMETHOD(QueryInterface) (THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD(ShowInitialize) (THIS_ LPFILEVIEWERSITE );
+STDMETHOD(Show) (THIS_ LPFVSHOWINFO );
+STDMETHOD(PrintTo) (THIS_ LPWSTR ,BOOL );
+};
+typedef IFileViewerW * LPFILEVIEWERW;
+#ifdef UNICODE
+#define IFileViewer IFileViewerW
+#define LPFILEVIEWER LPFILEVIEWERW
+#else
+#define IFileViewer IFileViewerA
+#define LPFILEVIEWER LPFILEVIEWERA
+#endif
+#define FCIDM_SHVIEWFIRST 0
+#define FCIDM_SHVIEWLAST 0x7fff
+#define FCIDM_BROWSERFIRST 0xa000
+#define FCIDM_BROWSERLAST 0xbf00
+#define FCIDM_GLOBALFIRST 0x8000
+#define FCIDM_GLOBALLAST 0x9fff
+#define FCIDM_MENU_FILE (FCIDM_GLOBALFIRST+0)
+#define FCIDM_MENU_EDIT (FCIDM_GLOBALFIRST+64)
+#define FCIDM_MENU_VIEW (FCIDM_GLOBALFIRST+128)
+#define FCIDM_MENU_VIEW_SEP_OPTIONS (FCIDM_GLOBALFIRST+129)
+#define FCIDM_MENU_TOOLS (FCIDM_GLOBALFIRST+192) 
+#define FCIDM_MENU_TOOLS_SEP_GOTO (FCIDM_GLOBALFIRST+193) 
+#define FCIDM_MENU_HELP (FCIDM_GLOBALFIRST+256)
+#define FCIDM_MENU_FIND (FCIDM_GLOBALFIRST+320)
+#define FCIDM_MENU_EXPLORE (FCIDM_GLOBALFIRST+336)
+#define FCIDM_MENU_FAVORITES (FCIDM_GLOBALFIRST+368)
+#define FCIDM_TOOLBAR (FCIDM_BROWSERFIRST + 0)
+#define FCIDM_STATUS (FCIDM_BROWSERFIRST + 1)
+#if (_WIN32_IE >= 1024)
+#define IDC_OFFLINE_HAND 103
+#endif
+#define PANE_NONE -1
+#define PANE_ZONE 1
+#define PANE_OFFLINE 2
+#define PANE_PRINTER 3
+#define PANE_SSL 4
+#define PANE_NAVIGATION 5
+#define PANE_PROGRESS 6
+#define PANE_PRIVACY 7
+#define CDBOSC_SETFOCUS 0
+#define CDBOSC_KILLFOCUS 1
+#define CDBOSC_SELCHANGE 2
+#define CDBOSC_RENAME 3
+#define CDBOSC_STATECHANGE 4
+#undef INTERFACE
+#define INTERFACE ICommDlgBrowser
+DECLARE_INTERFACE_(ICommDlgBrowser,IUnknown)
+{
+STDMETHOD(QueryInterface) (THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD(OnDefaultCommand) (THIS_ struct IShellView * ppshv);
+STDMETHOD(OnStateChange) (THIS_ struct IShellView * ppshv,ULONG );
+STDMETHOD(IncludeObject) (THIS_ struct IShellView * ppshv,LPCITEMIDLIST );
+};
+typedef ICommDlgBrowser * LPCOMMDLGBROWSER;
+#define CDB2N_CONTEXTMENU_DONE 1
+#define CDB2N_CONTEXTMENU_START 2
+#define CDB2GVF_SHOWALLFILES 1
+#undef INTERFACE
+#define INTERFACE ICommDlgBrowser2
+DECLARE_INTERFACE_(ICommDlgBrowser2,IUnknown)
+{
+STDMETHOD(QueryInterface) (THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD(OnDefaultCommand) (THIS_ struct IShellView * ppshv);
+STDMETHOD(OnStateChange) (THIS_ struct IShellView * ppshv,ULONG );
+STDMETHOD(IncludeObject) (THIS_ struct IShellView * ppshv,LPCITEMIDLIST );
+STDMETHOD(Notify) (THIS_ struct IShellView * ppshv,DWORD );
+STDMETHOD(GetDefaultMenuText) (THIS_ struct IShellView * ppshv,WCHAR *,INT );
+STDMETHOD(GetViewFlags)(THIS_ DWORD *);
+};
+typedef ICommDlgBrowser2 * LPCOMMDLGBROWSER2;
+SHSTDAPI_(BOOL) SHGetPathFromIDListA(LPCITEMIDLIST ,LPSTR );
+SHSTDAPI_(BOOL) SHGetPathFromIDListW(LPCITEMIDLIST ,LPWSTR );
+#ifdef UNICODE
+#define SHGetPathFromIDList SHGetPathFromIDListW
+#else
+#define SHGetPathFromIDList SHGetPathFromIDListA
+#endif 
+SHSTDAPI_(int) SHCreateDirectory(HWND ,LPCWSTR );
+SHSTDAPI_(int) SHCreateDirectoryExA(HWND ,LPCSTR ,SECURITY_ATTRIBUTES *);
+SHSTDAPI_(int) SHCreateDirectoryExW(HWND ,LPCWSTR ,SECURITY_ATTRIBUTES *);
+#ifdef UNICODE
+#define SHCreateDirectoryEx SHCreateDirectoryExW
+#else
+#define SHCreateDirectoryEx SHCreateDirectoryExA
+#endif 
+SHSTDAPI SHOpenFolderAndSelectItems(LPCITEMIDLIST ,UINT ,LPCITEMIDLIST *,DWORD );
+SHSTDAPI SHCreateShellItem(LPCITEMIDLIST ,IShellFolder *,LPCITEMIDLIST ,IShellItem **);
+#define REGSTR_PATH_SPECIAL_FOLDERS REGSTR_PATH_EXPLORER TEXT("\\Shell Folders")
+#define CSIDL_DESKTOP 0
+#define CSIDL_INTERNET 1
+#define CSIDL_PROGRAMS 2
+#define CSIDL_CONTROLS 3
+#define CSIDL_PRINTERS 4
+#define CSIDL_PERSONAL 5
+#define CSIDL_FAVORITES 6
+#define CSIDL_STARTUP 7
+#define CSIDL_RECENT 8
+#define CSIDL_SENDTO 9
+#define CSIDL_BITBUCKET 10
+#define CSIDL_STARTMENU 11
+#define CSIDL_MYDOCUMENTS 12
+#define CSIDL_MYMUSIC 13
+#define CSIDL_MYVIDEO 14
+#define CSIDL_DESKTOPDIRECTORY 16
+#define CSIDL_DRIVES 17
+#define CSIDL_NETWORK 18
+#define CSIDL_NETHOOD 19
+#define CSIDL_FONTS 20
+#define CSIDL_TEMPLATES 21
+#define CSIDL_COMMON_STARTMENU 22
+#define CSIDL_COMMON_PROGRAMS 0X0017 
+#define CSIDL_COMMON_STARTUP 24
+#define CSIDL_COMMON_DESKTOPDIRECTORY 25
+#define CSIDL_APPDATA 26
+#define CSIDL_PRINTHOOD 27
+#ifndef CSIDL_LOCAL_APPDATA
+#define CSIDL_LOCAL_APPDATA 28
+#endif 
+#define CSIDL_ALTSTARTUP 29
+#define CSIDL_COMMON_ALTSTARTUP 30
+#define CSIDL_COMMON_FAVORITES 31
+#ifndef _SHFOLDER_H_
+#define CSIDL_INTERNET_CACHE 32
+#define CSIDL_COOKIES 33
+#define CSIDL_HISTORY 34
+#define CSIDL_COMMON_APPDATA 35
+#define CSIDL_WINDOWS 36
+#define CSIDL_SYSTEM 37
+#define CSIDL_PROGRAM_FILES 38
+#define CSIDL_MYPICTURES 39
+#endif 
+#define CSIDL_PROFILE 40
+#define CSIDL_SYSTEMX86 41
+#define CSIDL_PROGRAM_FILESX86 42
+#ifndef _SHFOLDER_H_
+#define CSIDL_PROGRAM_FILES_COMMON 43
+#endif 
+#define CSIDL_PROGRAM_FILES_COMMONX86 44
+#define CSIDL_COMMON_TEMPLATES 45
+#ifndef _SHFOLDER_H_
+#define CSIDL_COMMON_DOCUMENTS 46
+#define CSIDL_COMMON_ADMINTOOLS 47
+#define CSIDL_ADMINTOOLS 48
+#endif 
+#define CSIDL_CONNECTIONS 49
+#define CSIDL_COMMON_MUSIC 53
+#define CSIDL_COMMON_PICTURES 54
+#define CSIDL_COMMON_VIDEO 55
+#define CSIDL_RESOURCES 56
+#ifndef _SHFOLDER_H_
+#define CSIDL_RESOURCES_LOCALIZED 57
+#endif 
+#define CSIDL_COMMON_OEM_LINKS 58
+#define CSIDL_CDBURN_AREA 59
+#define CSIDL_COMPUTERSNEARME 61
+#ifndef _SHFOLDER_H_
+#define CSIDL_FLAG_CREATE 0x8000
+#endif 
+#define CSIDL_FLAG_DONT_VERIFY 0x4000
+#define CSIDL_FLAG_NO_ALIAS 4096
+#define CSIDL_FLAG_PER_USER_INIT 2048
+#define CSIDL_FLAG_MASK 0xff00
+SHSTDAPI SHGetSpecialFolderLocation(HWND ,int ,LPITEMIDLIST *);
+#if (_WIN32_IE >= 1024)
+SHSTDAPI_(void) SHFlushSFCache(void); 
+SHSTDAPI_(LPITEMIDLIST) SHCloneSpecialIDList(HWND ,int ,BOOL ); 
+SHSTDAPI_(BOOL) SHGetSpecialFolderPathA(HWND ,LPSTR ,int ,BOOL );
+SHSTDAPI_(BOOL) SHGetSpecialFolderPathW(HWND ,LPWSTR ,int ,BOOL );
+#ifdef UNICODE
+#define SHGetSpecialFolderPath SHGetSpecialFolderPathW
+#else
+#define SHGetSpecialFolderPath SHGetSpecialFolderPathA
+#endif 
+#if (_WIN32_IE >= 1280)
+typedef enum {
+SHGFP_TYPE_CURRENT=0,
+SHGFP_TYPE_DEFAULT=1,
+} SHGFP_TYPE;
+SHFOLDERAPI SHGetFolderPathA(HWND ,int ,HANDLE ,DWORD ,LPSTR );
+SHFOLDERAPI SHGetFolderPathW(HWND ,int ,HANDLE ,DWORD ,LPWSTR );
+#ifdef UNICODE
+#define SHGetFolderPath SHGetFolderPathW
+#else
+#define SHGetFolderPath SHGetFolderPathA
+#endif 
+SHSTDAPI SHGetFolderLocation(HWND ,int ,HANDLE ,DWORD ,LPITEMIDLIST *);
+SHFOLDERAPI SHGetFolderPathAndSubDirA(HWND ,int ,HANDLE ,DWORD ,LPCSTR ,LPSTR );
+SHFOLDERAPI SHGetFolderPathAndSubDirW(HWND ,int ,HANDLE ,DWORD ,LPCWSTR ,LPWSTR );
+#ifdef UNICODE
+#define SHGetFolderPathAndSubDir SHGetFolderPathAndSubDirW
+#else
+#define SHGetFolderPathAndSubDir SHGetFolderPathAndSubDirA
+#endif 
+#endif 
+#endif 
+#if (_WIN32_IE >= 1280)
+#define FCS_READ 1
+#define FCS_FORCEWRITE 2
+#define FCS_WRITE (FCS_READ | FCS_FORCEWRITE)
+#define FCS_FLAG_DRAGDROP 2
+#define FCSM_VIEWID 1
+#define FCSM_WEBVIEWTEMPLATE 2
+#define FCSM_INFOTIP 4
+#define FCSM_CLSID 8
+#define FCSM_ICONFILE 16
+#define FCSM_LOGO 32
+#define FCSM_FLAGS 64
+#include <pshpack8.h>
+typedef struct
+{
+DWORD dwSize;
+DWORD dwMask; 
+SHELLVIEWID* pvid; 
+LPSTR pszWebViewTemplate; 
+DWORD cchWebViewTemplate; 
+LPSTR pszWebViewTemplateVersion; 
+LPSTR pszInfoTip; 
+DWORD cchInfoTip; 
+CLSID* pclsid; 
+DWORD dwFlags; 
+LPSTR pszIconFile; 
+DWORD cchIconFile; 
+int iIconIndex; 
+LPSTR pszLogo; 
+DWORD cchLogo; 
+} SHFOLDERCUSTOMSETTINGSA,*LPSHFOLDERCUSTOMSETTINGSA;
+typedef struct
+{
+DWORD dwSize;
+DWORD dwMask; 
+SHELLVIEWID* pvid; 
+LPWSTR pszWebViewTemplate; 
+DWORD cchWebViewTemplate; 
+LPWSTR pszWebViewTemplateVersion; 
+LPWSTR pszInfoTip; 
+DWORD cchInfoTip; 
+CLSID* pclsid; 
+DWORD dwFlags; 
+LPWSTR pszIconFile; 
+DWORD cchIconFile; 
+int iIconIndex; 
+LPWSTR pszLogo; 
+DWORD cchLogo; 
+} SHFOLDERCUSTOMSETTINGSW,*LPSHFOLDERCUSTOMSETTINGSW;
+#include <poppack.h> 
+SHSTDAPI SHGetSetFolderCustomSettingsA(LPSHFOLDERCUSTOMSETTINGSA ,LPCSTR ,DWORD );
+SHSTDAPI SHGetSetFolderCustomSettingsW(LPSHFOLDERCUSTOMSETTINGSW ,LPCWSTR ,DWORD );
+#ifdef UNICODE
+#define SHFOLDERCUSTOMSETTINGS SHFOLDERCUSTOMSETTINGSW
+#define SHGetSetFolderCustomSettings SHGetSetFolderCustomSettingsW
+#define LPSHFOLDERCUSTOMSETTINGS LPSHFOLDERCUSTOMSETTINGSW
+#else
+#define SHFOLDERCUSTOMSETTINGS SHFOLDERCUSTOMSETTINGSA
+#define SHGetSetFolderCustomSettings SHGetSetFolderCustomSettingsA
+#define LPSHFOLDERCUSTOMSETTINGS LPSHFOLDERCUSTOMSETTINGSA
+#endif
+#endif 
+typedef int (CALLBACK* BFFCALLBACK)(HWND ,UINT ,LPARAM ,LPARAM );
+#include <pshpack8.h>
+typedef struct _browseinfoA {
+HWND hwndOwner;
+LPCITEMIDLIST pidlRoot;
+LPSTR pszDisplayName; 
+LPCSTR lpszTitle; 
+UINT ulFlags; 
+BFFCALLBACK lpfn;
+LPARAM lParam; 
+int iImage; 
+} BROWSEINFOA,*PBROWSEINFOA,*LPBROWSEINFOA;
+typedef struct _browseinfoW {
+HWND hwndOwner;
+LPCITEMIDLIST pidlRoot;
+LPWSTR pszDisplayName; 
+LPCWSTR lpszTitle; 
+UINT ulFlags; 
+BFFCALLBACK lpfn;
+LPARAM lParam; 
+int iImage; 
+} BROWSEINFOW,*PBROWSEINFOW,*LPBROWSEINFOW;
+#include <poppack.h> 
+#ifdef UNICODE
+#define BROWSEINFO BROWSEINFOW
+#define PBROWSEINFO PBROWSEINFOW
+#define LPBROWSEINFO LPBROWSEINFOW
+#else
+#define BROWSEINFO BROWSEINFOA
+#define PBROWSEINFO PBROWSEINFOA
+#define LPBROWSEINFO LPBROWSEINFOA
+#endif
+#define BIF_RETURNONLYFSDIRS 1
+#define BIF_DONTGOBELOWDOMAIN 2
+#define BIF_STATUSTEXT 4
+#define BIF_RETURNFSANCESTORS 8
+#define BIF_EDITBOX 16
+#define BIF_VALIDATE 32
+#define BIF_NEWDIALOGSTYLE 64
+#define BIF_USENEWUI (BIF_NEWDIALOGSTYLE | BIF_EDITBOX)
+#define BIF_BROWSEINCLUDEURLS 128
+#define BIF_UAHINT 256
+#define BIF_NONEWFOLDERBUTTON 512
+#define BIF_NOTRANSLATETARGETS 1024
+#define BIF_BROWSEFORCOMPUTER 4096
+#define BIF_BROWSEFORPRINTER 0x2000
+#define BIF_BROWSEINCLUDEFILES 0x4000
+#define BIF_SHAREABLE 0x8000
+#define BFFM_INITIALIZED 1
+#define BFFM_SELCHANGED 2
+#define BFFM_VALIDATEFAILEDA 3 
+#define BFFM_VALIDATEFAILEDW 4 
+#define BFFM_IUNKNOWN 5 
+#define BFFM_SETSTATUSTEXTA (WM_USER + 100)
+#define BFFM_ENABLEOK (WM_USER + 101)
+#define BFFM_SETSELECTIONA (WM_USER + 102)
+#define BFFM_SETSELECTIONW (WM_USER + 103)
+#define BFFM_SETSTATUSTEXTW (WM_USER + 104)
+#define BFFM_SETOKTEXT (WM_USER + 105) 
+#define BFFM_SETEXPANDED (WM_USER + 106) 
+SHSTDAPI_(LPITEMIDLIST) SHBrowseForFolderA(LPBROWSEINFOA );
+SHSTDAPI_(LPITEMIDLIST) SHBrowseForFolderW(LPBROWSEINFOW );
+#ifdef UNICODE
+#define SHBrowseForFolder SHBrowseForFolderW
+#define BFFM_SETSTATUSTEXT BFFM_SETSTATUSTEXTW
+#define BFFM_SETSELECTION BFFM_SETSELECTIONW
+#define BFFM_VALIDATEFAILED BFFM_VALIDATEFAILEDW
+#else
+#define SHBrowseForFolder SHBrowseForFolderA
+#define BFFM_SETSTATUSTEXT BFFM_SETSTATUSTEXTA
+#define BFFM_SETSELECTION BFFM_SETSELECTIONA
+#define BFFM_VALIDATEFAILED BFFM_VALIDATEFAILEDA
+#endif
+SHSTDAPI SHLoadInProc(REFCLSID );
+#if _WIN32_IE >= 1536
+SHSTDAPI SHEnableServiceObject(REFCLSID ,BOOL );
+#endif
+enum {
+ISHCUTCMDID_DOWNLOADICON=0,
+ISHCUTCMDID_INTSHORTCUTCREATE=1,
+};
+#define CMDID_INTSHORTCUTCREATE ISHCUTCMDID_INTSHORTCUTCREATE
+SHSTDAPI SHGetDesktopFolder(IShellFolder **);
+#define STR_FILE_SYS_BIND_DATA L"File System Bind Data"
+#undef INTERFACE
+#define INTERFACE IFileSystemBindData
+DECLARE_INTERFACE_(IFileSystemBindData,IUnknown)
+{
+STDMETHOD(QueryInterface) (THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD(SetFindData)(THIS_ const WIN32_FIND_DATAW *pfd);
+STDMETHOD(GetFindData)(THIS_ WIN32_FIND_DATAW *);
+};
+#undef INTERFACE
+#define INTERFACE IShellDetails
+DECLARE_INTERFACE_(IShellDetails,IUnknown)
+{
+STDMETHOD(QueryInterface) (THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD(GetDetailsOf)(THIS_ LPCITEMIDLIST ,UINT ,SHELLDETAILS *);
+STDMETHOD(ColumnClick)(THIS_ UINT );
+};
+#undef INTERFACE
+#define INTERFACE IObjMgr
+DECLARE_INTERFACE_(IObjMgr,IUnknown)
+{
+STDMETHOD(QueryInterface) (THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD(Append) (THIS_ IUnknown *);
+STDMETHOD(Remove) (THIS_ IUnknown *);
+};
+#undef INTERFACE
+#define INTERFACE ICurrentWorkingDirectory
+DECLARE_INTERFACE_(ICurrentWorkingDirectory,IUnknown)
+{
+STDMETHOD(QueryInterface) (THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD(GetDirectory) (THIS_ LPWSTR ,DWORD );
+STDMETHOD(SetDirectory) (THIS_ LPCWSTR );
+};
+#undef INTERFACE
+#define INTERFACE IACList
+DECLARE_INTERFACE_(IACList,IUnknown)
+{
+STDMETHOD(QueryInterface) (THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD(Expand) (THIS_ LPCOLESTR );
+};
+#undef INTERFACE
+#define INTERFACE IACList2
+typedef enum _tagAUTOCOMPLETELISTOPTIONS
+{
+ACLO_NONE=0,
+ACLO_CURRENTDIR=1,
+ACLO_MYCOMPUTER=2,
+ACLO_DESKTOP=4,
+ACLO_FAVORITES=8,
+ACLO_FILESYSONLY=16,
+ACLO_FILESYSDIRS=32,
+} AUTOCOMPLETELISTOPTIONS;
+DECLARE_INTERFACE_(IACList2,IACList)
+{
+STDMETHOD(SetOptions)(THIS_ DWORD );
+STDMETHOD(GetOptions)(THIS_ DWORD* pdwFlag);
+};
+#define PROGDLG_NORMAL 0
+#define PROGDLG_MODAL 1
+#define PROGDLG_AUTOTIME 2
+#define PROGDLG_NOTIME 4
+#define PROGDLG_NOMINIMIZE 8
+#define PROGDLG_NOPROGRESSBAR 16
+#define PDTIMER_RESET 1
+#undef INTERFACE
+#define INTERFACE IProgressDialog
+DECLARE_INTERFACE_(IProgressDialog,IUnknown)
+{
+STDMETHOD(QueryInterface) (THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD(StartProgressDialog)(THIS_ HWND ,IUnknown *,DWORD ,LPCVOID );
+STDMETHOD(StopProgressDialog)(THIS);
+STDMETHOD(SetTitle)(THIS_ LPCWSTR );
+STDMETHOD(SetAnimation)(THIS_ HINSTANCE ,UINT );
+STDMETHOD_(BOOL,HasUserCancelled) (THIS);
+STDMETHOD(SetProgress)(THIS_ DWORD ,DWORD );
+STDMETHOD(SetProgress64)(THIS_ ULONGLONG ,ULONGLONG );
+STDMETHOD(SetLine)(THIS_ DWORD ,LPCWSTR ,BOOL ,LPCVOID );
+STDMETHOD(SetCancelMsg)(THIS_ LPCWSTR ,LPCVOID );
+STDMETHOD(Timer)(THIS_ DWORD ,LPCVOID );
+};
+#undef INTERFACE
+#define INTERFACE IInputObjectSite
+DECLARE_INTERFACE_(IInputObjectSite,IUnknown)
+{
+STDMETHOD(QueryInterface) (THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD(OnFocusChangeIS)(THIS_ IUnknown* punkObj,BOOL );
+};
+#undef INTERFACE
+#define INTERFACE IInputObject
+DECLARE_INTERFACE_(IInputObject,IUnknown)
+{
+STDMETHOD(QueryInterface) (THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD(UIActivateIO)(THIS_ BOOL ,LPMSG );
+STDMETHOD(HasFocusIO)(THIS);
+STDMETHOD(TranslateAcceleratorIO)(THIS_ LPMSG );
+};
+#undef INTERFACE
+#define INTERFACE IDockingWindowSite
+DECLARE_INTERFACE_(IDockingWindowSite,IOleWindow)
+{
+STDMETHOD(QueryInterface) (THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD(GetWindow) (THIS_ HWND *);
+STDMETHOD(ContextSensitiveHelp) (THIS_ BOOL );
+STDMETHOD(GetBorderDW) (THIS_ IUnknown* punkObj,LPRECT );
+STDMETHOD(RequestBorderSpaceDW) (THIS_ IUnknown* punkObj,LPCBORDERWIDTHS );
+STDMETHOD(SetBorderSpaceDW) (THIS_ IUnknown* punkObj,LPCBORDERWIDTHS );
+};
+#define DWFRF_NORMAL 0
+#define DWFRF_DELETECONFIGDATA 1
+#define DWFAF_HIDDEN 1
+#undef INTERFACE
+#define INTERFACE IDockingWindowFrame
+DECLARE_INTERFACE_(IDockingWindowFrame,IOleWindow)
+{
+STDMETHOD(QueryInterface) (THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD(GetWindow) (THIS_ HWND *);
+STDMETHOD(ContextSensitiveHelp) (THIS_ BOOL );
+STDMETHOD(AddToolbar) (THIS_ IUnknown* punkSrc,LPCWSTR ,DWORD );
+STDMETHOD(RemoveToolbar) (THIS_ IUnknown* punkSrc,DWORD );
+STDMETHOD(FindToolbar) (THIS_ LPCWSTR ,REFIID ,void **);
+};
+#if (_WIN32_IE >= 1024)
+#define IRTIR_TASK_NOT_RUNNING 0
+#define IRTIR_TASK_RUNNING 1
+#define IRTIR_TASK_SUSPENDED 2
+#define IRTIR_TASK_PENDING 3
+#define IRTIR_TASK_FINISHED 4
+#undef INTERFACE
+#define INTERFACE IRunnableTask
+DECLARE_INTERFACE_(IRunnableTask,IUnknown)
+{
+STDMETHOD (QueryInterface)(THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef)(THIS);
+STDMETHOD_(ULONG,Release)(THIS);
+STDMETHOD (Run)(THIS);
+STDMETHOD (Kill)(THIS_ BOOL );
+STDMETHOD (Suspend)(THIS);
+STDMETHOD (Resume)(THIS);
+STDMETHOD_(ULONG,IsRunning)(THIS);
+};
+typedef IRunnableTask * LPRUNNABLETASK;
+#endif
+#if (_WIN32_IE >= 1024)
+#define TASKOWNERID GUID
+#define REFTASKOWNERID REFGUID
+#define ITSSFLAG_COMPLETE_ON_DESTROY 0
+#define ITSSFLAG_KILL_ON_DESTROY 1
+#define ITSSFLAG_SUPPORTS_TERMINATE 2
+#define ITSSFLAG_FLAGS_MASK 3
+#define ITSSFLAG_THREAD_TERMINATE_TIMEOUT 16
+#define ITSSFLAG_THREAD_POOL_TIMEOUT 32
+#define ITSS_THREAD_DESTROY_DEFAULT_TIMEOUT (60*1000)
+#define ITSS_THREAD_TERMINATE_TIMEOUT (INFINITE)
+#define ITSS_THREAD_TIMEOUT_NO_CHANGE (INFINITE - 1)
+#define ITSAT_DEFAULT_LPARAM 0xffffffff
+#define ITSAT_DEFAULT_PRIORITY 0x10000000
+#define ITSAT_MAX_PRIORITY 0x7fffffff
+#define ITSAT_MIN_PRIORITY 0
+#define TOID_NULL CLSID_NULL
+#undef INTERFACE
+#define INTERFACE IShellTaskScheduler
+DECLARE_INTERFACE_(IShellTaskScheduler,IUnknown)
+{
+STDMETHOD (QueryInterface)(THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef)(THIS);
+STDMETHOD_(ULONG,Release)(THIS);
+STDMETHOD (AddTask)(THIS_ IRunnableTask *,REFTASKOWNERID ,DWORD_PTR ,DWORD );
+STDMETHOD (RemoveTasks)(THIS_ REFTASKOWNERID ,DWORD_PTR ,BOOL );
+STDMETHOD_(UINT,CountTasks)(THIS_ REFTASKOWNERID );
+STDMETHOD (Status)(THIS_ DWORD ,DWORD );
+};
+typedef IShellTaskScheduler * LPSHELLTASKSCHEDULER;
+#if (_WIN32_IE >= 1281)
+#define ITSSFLAG_TASK_PLACEINFRONT 1
+#define ITSSFLAG_TASK_PLACEINBACK 2
+#undef INTERFACE
+#define INTERFACE IShellTaskScheduler2
+DECLARE_INTERFACE_(IShellTaskScheduler2,IShellTaskScheduler)
+{
+STDMETHOD (QueryInterface)(THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef)(THIS);
+STDMETHOD_(ULONG,Release)(THIS);
+STDMETHOD (AddTask)(THIS_ IRunnableTask *,REFTASKOWNERID ,DWORD_PTR ,DWORD );
+STDMETHOD (RemoveTasks)(THIS_ REFTASKOWNERID ,DWORD_PTR ,BOOL );
+STDMETHOD_(UINT,CountTasks)(THIS_ REFTASKOWNERID );
+STDMETHOD (Status)(THIS_ DWORD ,DWORD );
+STDMETHOD (AddTask2)(THIS_ IRunnableTask *,REFTASKOWNERID ,DWORD_PTR ,DWORD ,DWORD );
+STDMETHOD (MoveTask)(THIS_ REFTASKOWNERID ,DWORD_PTR ,DWORD ,DWORD );
+};
+#endif 
+#endif 
+#if (_WIN32_IE >= 1024)
+#undef INTERFACE
+#define INTERFACE IThumbnailCapture
+DECLARE_INTERFACE_ (IThumbnailCapture,IUnknown)
+{
+STDMETHOD (CaptureThumbnail) (THIS_ const SIZE * pMaxSize,IUnknown *,HBITMAP *);
+};
+typedef IThumbnailCapture * LPTHUMBNAILCAPTURE;
+#endif
+#if (_WIN32_IE >= 1280)
+#include <pshpack8.h>
+typedef struct _EnumImageStoreDATAtag
+{
+WCHAR szPath[MAX_PATH];
+FILETIME ftTimeStamp;
+} ENUMSHELLIMAGESTOREDATA,* PENUMSHELLIMAGESTOREDATA;
+#include <poppack.h> 
+#undef INTERFACE
+#define INTERFACE IEnumShellImageStore
+DECLARE_INTERFACE_(IEnumShellImageStore,IUnknown)
+{
+STDMETHOD (QueryInterface) (THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD (Reset) (THIS);
+STDMETHOD (Next) (THIS_ ULONG ,PENUMSHELLIMAGESTOREDATA *,ULONG *);
+STDMETHOD (Skip) (THIS_ ULONG );
+STDMETHOD (Clone) (THIS_ IEnumShellImageStore **);
+};
+typedef IEnumShellImageStore * LPENUMSHELLIMAGESTORE;
+#define SHIMSTCAPFLAG_LOCKABLE 1
+#define SHIMSTCAPFLAG_PURGEABLE 2
+#undef INTERFACE
+#define INTERFACE IShellImageStore
+DECLARE_INTERFACE_(IShellImageStore,IUnknown)
+{
+STDMETHOD (QueryInterface)(THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD (Open) (THIS_ DWORD ,DWORD *);
+STDMETHOD (Create) (THIS_ DWORD ,DWORD *);
+STDMETHOD (ReleaseLock) (THIS_ DWORD const * pdwLock);
+STDMETHOD (Close) (THIS_ DWORD const * pdwLock);
+STDMETHOD (Commit) (THIS_ DWORD const * pdwLock);
+STDMETHOD (IsLocked) (THIS);
+STDMETHOD (GetMode) (THIS_ DWORD *);
+STDMETHOD (GetCapabilities) (THIS_ DWORD *);
+STDMETHOD (AddEntry) (THIS_ LPCWSTR ,const FILETIME * pftTimeStamp,DWORD ,HBITMAP );
+STDMETHOD (GetEntry) (THIS_ LPCWSTR ,DWORD ,HBITMAP *);
+STDMETHOD (DeleteEntry) (THIS_ LPCWSTR );
+STDMETHOD (IsEntryInStore) (THIS_ LPCWSTR ,FILETIME *);
+STDMETHOD (Enum) (THIS_ LPENUMSHELLIMAGESTORE *);
+};
+typedef IShellImageStore * LPSHELLIMAGESTORE;
+#endif
+#if (_WIN32_IE >= 1024)
+#define ISFB_MASK_STATE 1
+#define ISFB_MASK_BKCOLOR 2
+#define ISFB_MASK_VIEWMODE 4
+#define ISFB_MASK_SHELLFOLDER 8
+#define ISFB_MASK_IDLIST 16
+#define ISFB_MASK_COLORS 32
+#define ISFB_STATE_DEFAULT 0
+#define ISFB_STATE_DEBOSSED 1
+#define ISFB_STATE_ALLOWRENAME 2
+#define ISFB_STATE_NOSHOWTEXT 4
+#define ISFB_STATE_CHANNELBAR 16
+#define ISFB_STATE_QLINKSMODE 32
+#define ISFB_STATE_FULLOPEN 64
+#define ISFB_STATE_NONAMESORT 128
+#define ISFB_STATE_BTNMINSIZE 256
+#define ISFBVIEWMODE_SMALLICONS 1
+#define ISFBVIEWMODE_LARGEICONS 2
+#define ISFBVIEWMODE_LOGOS 3
+#include <pshpack8.h>
+typedef struct {
+DWORD dwMask; 
+DWORD dwStateMask; 
+DWORD dwState; 
+COLORREF crBkgnd; 
+COLORREF crBtnLt; 
+COLORREF crBtnDk; 
+WORD wViewMode; 
+WORD wAlign; 
+IShellFolder * psf; 
+LPITEMIDLIST pidl; 
+} BANDINFOSFB,*PBANDINFOSFB;
+#include <poppack.h> 
+#undef INTERFACE
+#define INTERFACE IShellFolderBand
+DECLARE_INTERFACE_(IShellFolderBand,IUnknown)
+{
+STDMETHOD(QueryInterface) (THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD(InitializeSFB)(THIS_ IShellFolder *,LPCITEMIDLIST );
+STDMETHOD(SetBandInfoSFB)(THIS_ PBANDINFOSFB );
+STDMETHOD(GetBandInfoSFB)(THIS_ PBANDINFOSFB );
+};
+enum {
+SFBID_PIDLCHANGED,
+};
+#undef INTERFACE
+#define INTERFACE IDeskBarClient
+DECLARE_INTERFACE_(IDeskBarClient,IOleWindow)
+{
+STDMETHOD(QueryInterface) (THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD(GetWindow) (THIS_ HWND *);
+STDMETHOD(ContextSensitiveHelp) (THIS_ BOOL );
+STDMETHOD(SetDeskBarSite) (THIS_ IUnknown* punkSite);
+STDMETHOD(SetModeDBC) (THIS_ DWORD );
+STDMETHOD(UIActivateDBC) (THIS_ DWORD );
+STDMETHOD(GetSize) (THIS_ DWORD ,LPRECT );
+};
+#define DBC_GS_IDEAL 0 
+#define DBC_GS_SIZEDOWN 1 
+#define DBC_HIDE 0 
+#define DBC_SHOW 1 
+#define DBC_SHOWOBSCURE 2 
+enum {
+DBCID_EMPTY=0,
+DBCID_ONDRAG=1,
+DBCID_CLSIDOFBAR=2,
+DBCID_RESIZE=3,
+DBCID_GETBAR=4,
+};
+#endif 
+#if (_WIN32_IE >= 1024)
+#ifdef _WININET_
+typedef struct _tagWALLPAPEROPT
+{
+DWORD dwSize; 
+DWORD dwStyle; 
+}
+WALLPAPEROPT;
+typedef WALLPAPEROPT *LPWALLPAPEROPT;
+typedef const WALLPAPEROPT *LPCWALLPAPEROPT;
+typedef struct _tagCOMPONENTSOPT
+{
+DWORD dwSize; 
+BOOL fEnableComponents; 
+BOOL fActiveDesktop; 
+}
+COMPONENTSOPT;
+typedef COMPONENTSOPT *LPCOMPONENTSOPT;
+typedef const COMPONENTSOPT *LPCCOMPONENTSOPT;
+typedef struct _tagCOMPPOS
+{
+DWORD dwSize; 
+int iLeft; 
+int iTop; 
+DWORD dwWidth; 
+DWORD dwHeight; 
+int izIndex; 
+BOOL fCanResize; 
+BOOL fCanResizeX; 
+BOOL fCanResizeY; 
+int iPreferredLeftPercent; 
+int iPreferredTopPercent; 
+}
+COMPPOS;
+typedef COMPPOS *LPCOMPPOS;
+typedef const COMPPOS *LPCCOMPPOS;
+typedef struct _tagCOMPSTATEINFO
+{
+DWORD dwSize; 
+int iLeft; 
+int iTop; 
+DWORD dwWidth; 
+DWORD dwHeight; 
+DWORD dwItemState; 
+}
+COMPSTATEINFO;
+typedef COMPSTATEINFO *LPCOMPSTATEINFO;
+typedef const COMPSTATEINFO *LPCCOMPSTATEINFO;
+#define COMPONENT_TOP 0x3fffffff  
+#define COMP_TYPE_HTMLDOC 0
+#define COMP_TYPE_PICTURE 1
+#define COMP_TYPE_WEBSITE 2
+#define COMP_TYPE_CONTROL 3
+#define COMP_TYPE_CFHTML 4
+#define COMP_TYPE_MAX 4
+typedef struct _tagIE4COMPONENT
+{
+DWORD dwSize; 
+DWORD dwID; 
+int iComponentType; 
+BOOL fChecked; 
+BOOL fDirty; 
+BOOL fNoScroll; 
+COMPPOS cpPos; 
+WCHAR wszFriendlyName[MAX_PATH]; 
+WCHAR wszSource[INTERNET_MAX_URL_LENGTH]; 
+WCHAR wszSubscribedURL[INTERNET_MAX_URL_LENGTH]; 
+}
+IE4COMPONENT;
+typedef IE4COMPONENT *LPIE4COMPONENT;
+typedef const IE4COMPONENT *LPCIE4COMPONENT;
+typedef struct _tagCOMPONENT
+{
+DWORD dwSize; 
+DWORD dwID; 
+int iComponentType; 
+BOOL fChecked; 
+BOOL fDirty; 
+BOOL fNoScroll; 
+COMPPOS cpPos; 
+WCHAR wszFriendlyName[MAX_PATH]; 
+WCHAR wszSource[INTERNET_MAX_URL_LENGTH]; 
+WCHAR wszSubscribedURL[INTERNET_MAX_URL_LENGTH]; 
+DWORD dwCurItemState; 
+COMPSTATEINFO csiOriginal; 
+COMPSTATEINFO csiRestored; 
+}
+COMPONENT;
+typedef COMPONENT *LPCOMPONENT;
+typedef const COMPONENT *LPCCOMPONENT;
+#define IS_NORMAL 1
+#define IS_FULLSCREEN 2
+#define IS_SPLIT 4
+#define IS_VALIDSIZESTATEBITS (IS_NORMAL | IS_SPLIT | IS_FULLSCREEN) 
+#define IS_VALIDSTATEBITS (IS_NORMAL | IS_SPLIT | IS_FULLSCREEN | 0x80000000| 0x40000000) 
+#define AD_APPLY_SAVE 1
+#define AD_APPLY_HTMLGEN 2
+#define AD_APPLY_REFRESH 4
+#define AD_APPLY_ALL (AD_APPLY_SAVE | AD_APPLY_HTMLGEN | AD_APPLY_REFRESH)
+#define AD_APPLY_FORCE 8
+#define AD_APPLY_BUFFERED_REFRESH 16
+#define AD_APPLY_DYNAMICREFRESH 32
+#define WPSTYLE_CENTER 0
+#define WPSTYLE_TILE 1
+#define WPSTYLE_STRETCH 2
+#define WPSTYLE_MAX 3
+#define COMP_ELEM_TYPE 1
+#define COMP_ELEM_CHECKED 2
+#define COMP_ELEM_DIRTY 4
+#define COMP_ELEM_NOSCROLL 8
+#define COMP_ELEM_POS_LEFT 16
+#define COMP_ELEM_POS_TOP 32
+#define COMP_ELEM_SIZE_WIDTH 64
+#define COMP_ELEM_SIZE_HEIGHT 128
+#define COMP_ELEM_POS_ZINDEX 256
+#define COMP_ELEM_SOURCE 512
+#define COMP_ELEM_FRIENDLYNAME 1024
+#define COMP_ELEM_SUBSCRIBEDURL 2048
+#define COMP_ELEM_ORIGINAL_CSI 4096
+#define COMP_ELEM_RESTORED_CSI 0x2000
+#define COMP_ELEM_CURITEMSTATE 0x4000
+#define COMP_ELEM_ALL (COMP_ELEM_TYPE | COMP_ELEM_CHECKED | COMP_ELEM_DIRTY | \ COMP_ELEM_NOSCROLL | COMP_ELEM_POS_LEFT | COMP_ELEM_SIZE_WIDTH | \ COMP_ELEM_SIZE_HEIGHT | COMP_ELEM_POS_ZINDEX | COMP_ELEM_SOURCE | \ COMP_ELEM_FRIENDLYNAME | COMP_ELEM_POS_TOP | COMP_ELEM_SUBSCRIBEDURL | \ COMP_ELEM_ORIGINAL_CSI | COMP_ELEM_RESTORED_CSI | COMP_ELEM_CURITEMSTATE)
+typedef enum tagDTI_ADTIWUI
+{
+DTI_ADDUI_DEFAULT=0,
+DTI_ADDUI_DISPSUBWIZARD=1,
+DTI_ADDUI_POSITIONITEM=2,
+};
+#define ADDURL_SILENT 0X0001
+#define COMPONENT_DEFAULT_LEFT 0xffff
+#define COMPONENT_DEFAULT_TOP 0xffff
+#undef INTERFACE
+#define INTERFACE IActiveDesktop
+DECLARE_INTERFACE_(IActiveDesktop,IUnknown)
+{
+STDMETHOD (QueryInterface)(THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD (ApplyChanges)(THIS_ DWORD );
+STDMETHOD (GetWallpaper)(THIS_ LPWSTR ,UINT ,DWORD );
+STDMETHOD (SetWallpaper)(THIS_ LPCWSTR ,DWORD );
+STDMETHOD (GetWallpaperOptions)(THIS_ LPWALLPAPEROPT ,DWORD );
+STDMETHOD (SetWallpaperOptions)(THIS_ LPCWALLPAPEROPT ,DWORD );
+STDMETHOD (GetPattern)(THIS_ LPWSTR ,UINT ,DWORD );
+STDMETHOD (SetPattern)(THIS_ LPCWSTR ,DWORD );
+STDMETHOD (GetDesktopItemOptions)(THIS_ LPCOMPONENTSOPT ,DWORD );
+STDMETHOD (SetDesktopItemOptions)(THIS_ LPCCOMPONENTSOPT ,DWORD );
+STDMETHOD (AddDesktopItem)(THIS_ LPCCOMPONENT ,DWORD );
+STDMETHOD (AddDesktopItemWithUI)(THIS_ HWND ,LPCOMPONENT ,DWORD );
+STDMETHOD (ModifyDesktopItem)(THIS_ LPCCOMPONENT ,DWORD );
+STDMETHOD (RemoveDesktopItem)(THIS_ LPCCOMPONENT ,DWORD );
+STDMETHOD (GetDesktopItemCount)(THIS_ LPINT ,DWORD );
+STDMETHOD (GetDesktopItem)(THIS_ int ,LPCOMPONENT ,DWORD );
+STDMETHOD (GetDesktopItemByID)(THIS_ ULONG_PTR ,LPCOMPONENT ,DWORD );
+STDMETHOD (GenerateDesktopItemHtml)(THIS_ LPCWSTR ,LPCOMPONENT ,DWORD );
+STDMETHOD (AddUrl)(THIS_ HWND ,LPCWSTR ,LPCOMPONENT ,DWORD );
+STDMETHOD (GetDesktopItemBySource)(THIS_ LPCWSTR ,LPCOMPONENT ,DWORD );
+};
+typedef IActiveDesktop * LPACTIVEDESKTOP;
+#define SSM_CLEAR 0
+#define SSM_SET 1
+#define SSM_REFRESH 2
+#define SSM_UPDATE 4
+#define SCHEME_DISPLAY 1
+#define SCHEME_EDIT 2
+#define SCHEME_LOCAL 4
+#define SCHEME_GLOBAL 8
+#define SCHEME_REFRESH 16
+#define SCHEME_UPDATE 32
+#define SCHEME_DONOTUSE 64
+#define SCHEME_CREATE 128
+#undef INTERFACE
+#define INTERFACE IActiveDesktopP
+DECLARE_INTERFACE_(IActiveDesktopP,IUnknown)
+{
+STDMETHOD (QueryInterface)(THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD (SetSafeMode)(THIS_ DWORD );
+STDMETHOD (EnsureUpdateHTML)(THIS);
+STDMETHOD (SetScheme)(THIS_ LPCWSTR ,DWORD );
+STDMETHOD (GetScheme)(THIS_ LPWSTR ,DWORD *,DWORD );
+};
+typedef IActiveDesktopP * LPACTIVEDESKTOPP;
+#define GADOF_DIRTY 1
+#undef INTERFACE
+#define INTERFACE IADesktopP2
+DECLARE_INTERFACE_(IADesktopP2,IUnknown)
+{
+STDMETHOD (QueryInterface)(THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD (ReReadWallpaper)(THIS);
+STDMETHOD (GetADObjectFlags)(THIS_ DWORD *,DWORD );
+STDMETHOD (UpdateAllDesktopSubscriptions)(THIS);
+STDMETHOD (MakeDynamicChanges)(THIS_ IOleObject *);
+};
+typedef IADesktopP2 * LPADESKTOPP2;
+#endif 
+#if (_WIN32_IE >= 1280)
+#define MAX_COLUMN_NAME_LEN 80
+#define MAX_COLUMN_DESC_LEN 128
+#include <pshpack1.h>
+typedef struct {
+SHCOLUMNID scid; 
+VARTYPE vt; 
+DWORD fmt; 
+UINT cChars; 
+DWORD csFlags; 
+WCHAR wszTitle[MAX_COLUMN_NAME_LEN]; 
+WCHAR wszDescription[MAX_COLUMN_DESC_LEN]; 
+} SHCOLUMNINFO,*LPSHCOLUMNINFO;
+typedef const SHCOLUMNINFO* LPCSHCOLUMNINFO;
+#include <poppack.h> 
+#include <pshpack8.h>
+typedef struct {
+ULONG dwFlags; 
+ULONG dwReserved; 
+WCHAR wszFolder[MAX_PATH]; 
+} SHCOLUMNINIT,*LPSHCOLUMNINIT;
+typedef const SHCOLUMNINIT* LPCSHCOLUMNINIT;
+#define SHCDF_UPDATEITEM 1
+typedef struct {
+ULONG dwFlags; 
+DWORD dwFileAttributes; 
+ULONG dwReserved; 
+WCHAR* pwszExt; 
+WCHAR wszFile[MAX_PATH]; 
+} SHCOLUMNDATA,*LPSHCOLUMNDATA;
+typedef const SHCOLUMNDATA* LPCSHCOLUMNDATA;
+#include <poppack.h> 
+#undef INTERFACE
+#define INTERFACE IColumnProvider
+DECLARE_INTERFACE_(IColumnProvider,IUnknown)
+{
+STDMETHOD (QueryInterface)(THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef)(THIS);
+STDMETHOD_(ULONG,Release)(THIS);
+STDMETHOD (Initialize)(THIS_ LPCSHCOLUMNINIT );
+STDMETHOD (GetColumnInfo)(THIS_ DWORD ,SHCOLUMNINFO *);
+STDMETHOD (GetItemData)(THIS_ LPCSHCOLUMNID ,LPCSHCOLUMNDATA ,VARIANT *);
+};
+#include <pshpack8.h>
+typedef struct
+{
+SIZE sizeDragImage; 
+POINT ptOffset; 
+HBITMAP hbmpDragImage; 
+COLORREF crColorKey; 
+} SHDRAGIMAGE,*LPSHDRAGIMAGE;
+#include <poppack.h> 
+#define DI_GETDRAGIMAGE TEXT("ShellGetDragImage")
+#undef INTERFACE
+#define INTERFACE IDropTargetHelper
+DECLARE_INTERFACE_(IDropTargetHelper,IUnknown)
+{
+STDMETHOD (QueryInterface)(THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD (DragEnter)(THIS_ HWND ,IDataObject* pDataObject,POINT* ppt,DWORD );
+STDMETHOD (DragLeave)(THIS);
+STDMETHOD (DragOver)(THIS_ POINT* ppt,DWORD );
+STDMETHOD (Drop)(THIS_ IDataObject* pDataObject,POINT* ppt,DWORD );
+STDMETHOD (Show)(THIS_ BOOL );
+};
+#undef INTERFACE
+#define INTERFACE IDragSourceHelper
+DECLARE_INTERFACE_(IDragSourceHelper,IUnknown)
+{
+STDMETHOD (QueryInterface)(THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD (InitializeFromBitmap)(THIS_ LPSHDRAGIMAGE ,IDataObject* pDataObject);
+STDMETHOD (InitializeFromWindow)(THIS_ HWND ,POINT* ppt,IDataObject* pDataObject);
+};
+#endif 
+#endif 
+#define CFSTR_SHELLIDLIST TEXT("Shell IDList Array") 
+#define CFSTR_SHELLIDLISTOFFSET TEXT("Shell Object Offsets") 
+#define CFSTR_NETRESOURCES TEXT("Net Resource") 
+#define CFSTR_FILEDESCRIPTORA TEXT("FileGroupDescriptor") 
+#define CFSTR_FILEDESCRIPTORW TEXT("FileGroupDescriptorW") 
+#define CFSTR_FILECONTENTS TEXT("FileContents") 
+#define CFSTR_FILENAMEA TEXT("FileName") 
+#define CFSTR_FILENAMEW TEXT("FileNameW") 
+#define CFSTR_PRINTERGROUP TEXT("PrinterFriendlyName") 
+#define CFSTR_FILENAMEMAPA TEXT("FileNameMap") 
+#define CFSTR_FILENAMEMAPW TEXT("FileNameMapW") 
+#define CFSTR_SHELLURL TEXT("UniformResourceLocator")
+#define CFSTR_INETURLA CFSTR_SHELLURL
+#define CFSTR_INETURLW TEXT("UniformResourceLocatorW")
+#define CFSTR_PREFERREDDROPEFFECT TEXT("Preferred DropEffect")
+#define CFSTR_PERFORMEDDROPEFFECT TEXT("Performed DropEffect")
+#define CFSTR_PASTESUCCEEDED TEXT("Paste Succeeded")
+#define CFSTR_INDRAGLOOP TEXT("InShellDragLoop")
+#define CFSTR_DRAGCONTEXT TEXT("DragContext")
+#define CFSTR_MOUNTEDVOLUME TEXT("MountedVolume")
+#define CFSTR_PERSISTEDDATAOBJECT TEXT("PersistedDataObject")
+#define CFSTR_TARGETCLSID TEXT("TargetCLSID") 
+#define CFSTR_LOGICALPERFORMEDDROPEFFECT TEXT("Logical Performed DropEffect")
+#define CFSTR_AUTOPLAY_SHELLIDLISTS TEXT("Autoplay Enumerated IDList Array") 
+#ifdef UNICODE
+#define CFSTR_FILEDESCRIPTOR CFSTR_FILEDESCRIPTORW
+#define CFSTR_FILENAME CFSTR_FILENAMEW
+#define CFSTR_FILENAMEMAP CFSTR_FILENAMEMAPW
+#define CFSTR_INETURL CFSTR_INETURLW
+#else
+#define CFSTR_FILEDESCRIPTOR CFSTR_FILEDESCRIPTORA
+#define CFSTR_FILENAME CFSTR_FILENAMEA
+#define CFSTR_FILENAMEMAP CFSTR_FILENAMEMAPA
+#define CFSTR_INETURL CFSTR_INETURLA
+#endif
+#define DVASPECT_SHORTNAME 2 
+#define DVASPECT_COPY 3 
+#define DVASPECT_LINK 4 
+#include <pshpack8.h>
+typedef struct _NRESARRAY { 
+UINT cItems;
+NETRESOURCE nr[1];
+} NRESARRAY,* LPNRESARRAY;
+#include <poppack.h> 
+typedef struct _IDA {
+UINT cidl; 
+UINT aoffset[1]; 
+} CIDA,* LPIDA;
+typedef enum {
+FD_CLSID=1,
+FD_SIZEPOINT=2,
+FD_ATTRIBUTES=4,
+FD_CREATETIME=8,
+FD_ACCESSTIME=16,
+FD_WRITESTIME=32,
+FD_FILESIZE=64,
+FD_PROGRESSUI=0x4000,
+FD_LINKUI=0x8000,
+} FD_FLAGS;
+typedef struct _FILEDESCRIPTORA { 
+DWORD dwFlags;
+CLSID clsid;
+SIZEL sizel;
+POINTL pointl;
+DWORD dwFileAttributes;
+FILETIME ftCreationTime;
+FILETIME ftLastAccessTime;
+FILETIME ftLastWriteTime;
+DWORD nFileSizeHigh;
+DWORD nFileSizeLow;
+CHAR cFileName[ MAX_PATH ];
+} FILEDESCRIPTORA,*LPFILEDESCRIPTORA;
+typedef struct _FILEDESCRIPTORW { 
+DWORD dwFlags;
+CLSID clsid;
+SIZEL sizel;
+POINTL pointl;
+DWORD dwFileAttributes;
+FILETIME ftCreationTime;
+FILETIME ftLastAccessTime;
+FILETIME ftLastWriteTime;
+DWORD nFileSizeHigh;
+DWORD nFileSizeLow;
+WCHAR cFileName[ MAX_PATH ];
+} FILEDESCRIPTORW,*LPFILEDESCRIPTORW;
+#ifdef UNICODE
+#define FILEDESCRIPTOR FILEDESCRIPTORW
+#define LPFILEDESCRIPTOR LPFILEDESCRIPTORW
+#else
+#define FILEDESCRIPTOR FILEDESCRIPTORA
+#define LPFILEDESCRIPTOR LPFILEDESCRIPTORA
+#endif
+typedef struct _FILEGROUPDESCRIPTORA { 
+UINT cItems;
+FILEDESCRIPTORA fgd[1];
+} FILEGROUPDESCRIPTORA,* LPFILEGROUPDESCRIPTORA;
+typedef struct _FILEGROUPDESCRIPTORW { 
+UINT cItems;
+FILEDESCRIPTORW fgd[1];
+} FILEGROUPDESCRIPTORW,* LPFILEGROUPDESCRIPTORW;
+#ifdef UNICODE
+#define FILEGROUPDESCRIPTOR FILEGROUPDESCRIPTORW
+#define LPFILEGROUPDESCRIPTOR LPFILEGROUPDESCRIPTORW
+#else
+#define FILEGROUPDESCRIPTOR FILEGROUPDESCRIPTORA
+#define LPFILEGROUPDESCRIPTOR LPFILEGROUPDESCRIPTORA
+#endif
+typedef struct _DROPFILES {
+DWORD pFiles; 
+POINT pt; 
+BOOL fNC; 
+BOOL fWide; 
+} DROPFILES,*LPDROPFILES;
+typedef struct _SHChangeNotifyEntry
+{
+LPCITEMIDLIST pidl;
+BOOL fRecursive;
+} SHChangeNotifyEntry;
+#define SHCNE_RENAMEITEM 1
+#define SHCNE_CREATE 2
+#define SHCNE_DELETE 4
+#define SHCNE_MKDIR 8
+#define SHCNE_RMDIR 16
+#define SHCNE_MEDIAINSERTED 32
+#define SHCNE_MEDIAREMOVED 64
+#define SHCNE_DRIVEREMOVED 128
+#define SHCNE_DRIVEADD 256
+#define SHCNE_NETSHARE 512
+#define SHCNE_NETUNSHARE 1024
+#define SHCNE_ATTRIBUTES 2048
+#define SHCNE_UPDATEDIR 4096
+#define SHCNE_UPDATEITEM 0x2000
+#define SHCNE_SERVERDISCONNECT 0x4000
+#define SHCNE_UPDATEIMAGE 0x8000
+#define SHCNE_DRIVEADDGUI 0x10000
+#define SHCNE_RENAMEFOLDER 0x20000
+#define SHCNE_FREESPACE 0x40000
+#if (_WIN32_IE >= 1024)
+#define SHCNE_EXTENDED_EVENT 0x4000000
+#endif 
+#define SHCNE_ASSOCCHANGED 0x8000000
+#define SHCNE_DISKEVENTS 0x2381f
+#define SHCNE_GLOBALEVENTS 0xc0581e0
+#define SHCNE_ALLEVENTS 0x7fffffff
+#define SHCNE_INTERRUPT 0x80000000
+#if (_WIN32_IE >= 1024)
+#define SHCNEE_ORDERCHANGED 2L 
+#define SHCNEE_MSI_CHANGE 4L 
+#define SHCNEE_MSI_UNINSTALL 5L 
+#endif
+#define SHCNF_IDLIST 0
+#define SHCNF_PATHA 1
+#define SHCNF_PRINTERA 2
+#define SHCNF_DWORD 3
+#define SHCNF_PATHW 5
+#define SHCNF_PRINTERW 6
+#define SHCNF_TYPE 255
+#define SHCNF_FLUSH 4096
+#define SHCNF_FLUSHNOWAIT 0x2000
+#ifdef UNICODE
+#define SHCNF_PATH SHCNF_PATHW
+#define SHCNF_PRINTER SHCNF_PRINTERW
+#else
+#define SHCNF_PATH SHCNF_PATHA
+#define SHCNF_PRINTER SHCNF_PRINTERA
+#endif
+SHSTDAPI_(void) SHChangeNotify(LONG ,UINT ,LPCVOID ,LPCVOID );
+#undef INTERFACE
+#define INTERFACE IShellChangeNotify
+DECLARE_INTERFACE_(IShellChangeNotify,IUnknown)
+{
+STDMETHOD(QueryInterface) (THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD(OnChange) (THIS_ LONG ,LPCITEMIDLIST ,LPCITEMIDLIST );
+} ;
+#undef INTERFACE
+#define INTERFACE IQueryInfo
+DECLARE_INTERFACE_(IQueryInfo,IUnknown)
+{
+STDMETHOD(QueryInterface) (THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD(GetInfoTip)(THIS_ DWORD ,WCHAR **);
+STDMETHOD(GetInfoFlags)(THIS_ DWORD *);
+} ;
+#define QITIPF_DEFAULT 0
+#define QITIPF_USENAME 1
+#define QITIPF_LINKNOTARGET 2
+#define QITIPF_LINKUSETARGET 4
+#define QITIPF_USESLOWTIP 8
+#define QIF_CACHED 1
+#define QIF_DONTEXPANDFOLDER 2
+#define SHARD_PIDL 1
+#define SHARD_PATHA 2
+#define SHARD_PATHW 3
+#ifdef UNICODE
+#define SHARD_PATH SHARD_PATHW
+#else
+#define SHARD_PATH SHARD_PATHA
+#endif
+SHSTDAPI_(void) SHAddToRecentDocs(UINT ,LPCVOID );
+typedef struct _SHChangeDWORDAsIDList {
+USHORT cb;
+DWORD dwItem1;
+DWORD dwItem2;
+USHORT cbZero;
+} SHChangeDWORDAsIDList,*LPSHChangeDWORDAsIDList;
+#if (_WIN32_IE >= 1024)
+typedef struct _SHChangeUpdateImageIDList {
+USHORT cb;
+int iIconIndex;
+int iCurIndex;
+UINT uFlags;
+DWORD dwProcessID;
+WCHAR szName[MAX_PATH];
+USHORT cbZero;
+} SHChangeUpdateImageIDList,* LPSHChangeUpdateImageIDList;
+SHSTDAPI_(int) SHHandleUpdateImage(LPCITEMIDLIST );
+typedef struct _SHChangeProductKeyAsIDList {
+USHORT cb;
+WCHAR wszProductKey[39];
+USHORT cbZero;
+} SHChangeProductKeyAsIDList,*LPSHChangeProductKeyAsIDList;
+SHSTDAPI_(void) SHUpdateImageA(LPCSTR ,int ,UINT ,int );
+SHSTDAPI_(void) SHUpdateImageW(LPCWSTR ,int ,UINT ,int );
+#ifdef UNICODE
+#define SHUpdateImage SHUpdateImageW
+#else
+#define SHUpdateImage SHUpdateImageA
+#endif 
+#endif 
+SHSTDAPI_(ULONG) SHChangeNotifyRegister(HWND ,int ,LONG ,UINT ,int ,SHChangeNotifyEntry *);
+SHSTDAPI_(BOOL) SHChangeNotifyDeregister(unsigned long ulID);
+SHSTDAPI_(HANDLE) SHChangeNotification_Lock(HANDLE ,DWORD ,LPITEMIDLIST **,LONG *);
+SHSTDAPI_(BOOL) SHChangeNotification_Unlock(HANDLE );
+#if (_WIN32_IE >= 1024)
+SHSTDAPI SHGetRealIDL(IShellFolder *,LPCITEMIDLIST ,LPITEMIDLIST *);
+#endif 
+SHSTDAPI SHGetInstanceExplorer(IUnknown **);
+#define SHGDFIL_FINDDATA 1
+#define SHGDFIL_NETRESOURCE 2
+#define SHGDFIL_DESCRIPTIONID 3
+#define SHDID_ROOT_REGITEM 1
+#define SHDID_FS_FILE 2
+#define SHDID_FS_DIRECTORY 3
+#define SHDID_FS_OTHER 4
+#define SHDID_COMPUTER_DRIVE35 5
+#define SHDID_COMPUTER_DRIVE525 6
+#define SHDID_COMPUTER_REMOVABLE 7
+#define SHDID_COMPUTER_FIXED 8
+#define SHDID_COMPUTER_NETDRIVE 9
+#define SHDID_COMPUTER_CDROM 10
+#define SHDID_COMPUTER_RAMDISK 11
+#define SHDID_COMPUTER_OTHER 12
+#define SHDID_NET_DOMAIN 13
+#define SHDID_NET_SERVER 14
+#define SHDID_NET_SHARE 15
+#define SHDID_NET_RESTOFNET 16
+#define SHDID_NET_OTHER 17
+#define SHDID_COMPUTER_IMAGING 18
+#define SHDID_COMPUTER_AUDIO 19
+#define SHDID_COMPUTER_SHAREDDOCS 20
+#include <pshpack8.h>
+typedef struct _SHDESCRIPTIONID {
+DWORD dwDescriptionId;
+CLSID clsid;
+} SHDESCRIPTIONID,*LPSHDESCRIPTIONID;
+#include <poppack.h> 
+SHSTDAPI SHGetDataFromIDListA(IShellFolder *,LPCITEMIDLIST ,int ,void *,int );
+SHSTDAPI SHGetDataFromIDListW(IShellFolder *,LPCITEMIDLIST ,int ,void *,int );
+#ifdef UNICODE
+#define SHGetDataFromIDList SHGetDataFromIDListW
+#else
+#define SHGetDataFromIDList SHGetDataFromIDListA
+#endif 
+#define PRF_VERIFYEXISTS 1
+#define PRF_TRYPROGRAMEXTENSIONS (2| PRF_VERIFYEXISTS)
+#define PRF_FIRSTDIRDEF 4
+#define PRF_DONTFINDLNK 8
+SHSTDAPI_(int) RestartDialog(HWND ,LPCWSTR ,DWORD );
+SHSTDAPI_(int) RestartDialogEx(HWND ,LPCWSTR ,DWORD ,DWORD );
+SHSTDAPI SHCoCreateInstance(LPCWSTR ,const CLSID *pclsid,IUnknown *,REFIID ,void **);
+DECLARE_HANDLE(FARPROC16);
+SHSTDAPI_(LRESULT) CallCPLEntry16(HINSTANCE ,FARPROC16 ,HWND ,UINT ,LPARAM ,LPARAM );
+SHSTDAPI SHCreateStdEnumFmtEtc(UINT ,const FORMATETC afmt[],IEnumFORMATETC **);
+SHSTDAPI SHDoDragDrop(HWND ,IDataObject *,IDropSource *,DWORD ,DWORD *);
+#define NUM_POINTS 3
+typedef struct { 
+int iNextSample;
+DWORD dwLastScroll;
+BOOL bFull;
+POINT pts[NUM_POINTS];
+DWORD dwTimes[NUM_POINTS];
+} AUTO_SCROLL_DATA;
+SHSTDAPI_(BOOL) DAD_SetDragImage(HIMAGELIST ,POINT *);
+SHSTDAPI_(BOOL) DAD_DragEnterEx(HWND ,const POINT ptStart);
+SHSTDAPI_(BOOL) DAD_DragEnterEx2(HWND ,const POINT ptStart,IDataObject *);
+SHSTDAPI_(BOOL) DAD_ShowDragImage(BOOL ); 
+SHSTDAPI_(BOOL) DAD_DragMove(POINT );
+SHSTDAPI_(BOOL) DAD_DragLeave(void);
+SHSTDAPI_(BOOL) DAD_AutoScroll(HWND ,AUTO_SCROLL_DATA *,const POINT *pptNow);
+typedef struct {
+WORD cLength;
+WORD nVersion;
+BOOL fFullPathTitle : 1;
+BOOL fSaveLocalView : 1;
+BOOL fNotShell : 1;
+BOOL fSimpleDefault : 1;
+BOOL fDontShowDescBar : 1;
+BOOL fNewWindowMode : 1;
+BOOL fShowCompColor : 1; 
+BOOL fDontPrettyNames : 1; 
+BOOL fAdminsCreateCommonGroups : 1; 
+UINT fUnusedFlags : 7;
+UINT fMenuEnumFilter;
+} CABINETSTATE,* LPCABINETSTATE;
+#define CABINETSTATE_VERSION 2
+SHSTDAPI_(BOOL) ReadCabinetState(LPCABINETSTATE ,int );
+SHSTDAPI_(BOOL) WriteCabinetState(LPCABINETSTATE );
+SHSTDAPI_(BOOL) PathMakeUniqueName(LPWSTR ,UINT ,LPCWSTR ,LPCWSTR ,LPCWSTR );
+SHSTDAPI_(void) PathQualify(LPWSTR );
+SHSTDAPI_(BOOL) PathIsExe(LPCWSTR );
+SHSTDAPI_(BOOL) PathIsSlowA(LPCSTR ,DWORD );
+SHSTDAPI_(BOOL) PathIsSlowW(LPCWSTR ,DWORD );
+#ifdef UNICODE
+#define PathIsSlow PathIsSlowW
+#else
+#define PathIsSlow PathIsSlowA
+#endif 
+#define PCS_FATAL 0x80000000
+#define PCS_REPLACEDCHAR 1
+#define PCS_REMOVEDCHAR 2
+#define PCS_TRUNCATED 4
+#define PCS_PATHTOOLONG 8
+SHSTDAPI_(int) PathCleanupSpec(LPCWSTR ,LPWSTR );
+SHSTDAPI_(int) PathResolve(LPWSTR ,LPCWSTR dirs[],UINT );
+SHSTDAPI_(BOOL) GetFileNameFromBrowse(HWND ,LPWSTR ,UINT ,LPCWSTR ,LPCWSTR ,LPCWSTR ,LPCWSTR );
+SHSTDAPI_(int) DriveType(int );
+SHSTDAPI_(int) RealDriveType(int ,BOOL );
+SHSTDAPI_(int) IsNetDrive(int );
+#define MM_ADDSEPARATOR 1
+#define MM_SUBMENUSHAVEIDS 2
+#define MM_DONTREMOVESEPS 4
+SHSTDAPI_(UINT) Shell_MergeMenus(HMENU ,HMENU ,UINT ,UINT ,UINT ,ULONG );
+SHSTDAPI_(BOOL) SHObjectProperties(HWND ,DWORD ,LPCWSTR ,LPCWSTR );
+#define SHOP_PRINTERNAME 1
+#define SHOP_FILEPATH 2
+#define SHOP_VOLUMEGUID 4
+SHSTDAPI_(DWORD) SHFormatDrive(HWND ,UINT ,UINT ,UINT );
+#define SHFMT_ID_DEFAULT 0xffff
+#define SHFMT_OPT_FULL 1
+#define SHFMT_OPT_SYSONLY 2
+#define SHFMT_ERROR 0xffffffff
+#define SHFMT_CANCEL 0xfffffffe
+#define SHFMT_NOFORMAT 0xfffffffd
+#ifndef HPSXA_DEFINED
+#define HPSXA_DEFINED
+DECLARE_HANDLE(HPSXA);
+#endif
+WINSHELLAPI HPSXA SHCreatePropSheetExtArray(HKEY ,LPCWSTR ,UINT );
+WINSHELLAPI void SHDestroyPropSheetExtArray(HPSXA );
+WINSHELLAPI UINT SHAddFromPropSheetExtArray(HPSXA ,LPFNADDPROPSHEETPAGE ,LPARAM );
+WINSHELLAPI UINT SHReplaceFromPropSheetExtArray(HPSXA ,UINT ,LPFNADDPROPSHEETPAGE ,LPARAM );
+SHSTDAPI_(LPITEMIDLIST) ILClone(LPCITEMIDLIST );
+SHSTDAPI_(LPITEMIDLIST) ILGetNext(LPCITEMIDLIST );
+SHSTDAPI_(UINT) ILGetSize(LPCITEMIDLIST );
+SHSTDAPI_(LPITEMIDLIST) ILFindLastID(LPCITEMIDLIST );
+SHSTDAPI_(BOOL) ILRemoveLastID(LPITEMIDLIST );
+SHSTDAPI_(LPITEMIDLIST) ILAppendID(LPITEMIDLIST ,LPCSHITEMID ,BOOL );
+SHSTDAPI_(void) ILFree(LPITEMIDLIST );
+SHSTDAPI_(LPITEMIDLIST) ILCloneFirst(LPCITEMIDLIST );
+SHSTDAPI_(BOOL) ILIsEqual(LPCITEMIDLIST ,LPCITEMIDLIST );
+SHSTDAPI_(BOOL) ILIsParent(LPCITEMIDLIST ,LPCITEMIDLIST ,BOOL );
+SHSTDAPI_(LPITEMIDLIST) ILFindChild(LPCITEMIDLIST ,LPCITEMIDLIST );
+SHSTDAPI_(LPITEMIDLIST) ILCombine(LPCITEMIDLIST ,LPCITEMIDLIST );
+SHSTDAPI ILLoadFromStream(IStream *,LPITEMIDLIST *);
+SHSTDAPI ILSaveToStream(IStream *,LPCITEMIDLIST );
+#if (_WIN32_IE >= 1024)
+SHSTDAPI_(LPITEMIDLIST) ILCreateFromPathA(LPCSTR );
+SHSTDAPI_(LPITEMIDLIST) ILCreateFromPathW(LPCWSTR );
+#ifdef NO_WRAPPERS_FOR_ILCREATEFROMPATH
+SHSTDAPI_(LPITEMIDLIST) ILCreateFromPath(LPCTSTR );
+#else
+#ifdef UNICODE
+#define ILCreateFromPath ILCreateFromPathW
+#else
+#define ILCreateFromPath ILCreateFromPathA
+#endif 
+#endif
+#endif
+SHSTDAPI SHILCreateFromPath(LPCWSTR ,LPITEMIDLIST *,DWORD *);
+#undef INTERFACE
+#define INTERFACE IDefViewFrame
+DECLARE_INTERFACE_(IDefViewFrame,IUnknown)
+{
+STDMETHOD(QueryInterface) (THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD(GetWindowLV) (THIS_ HWND *);
+STDMETHOD(ReleaseWindowLV) (THIS);
+STDMETHOD(GetShellFolder)(THIS_ IShellFolder **);
+};
+typedef enum RESTRICTIONS
+{
+REST_NONE=0,
+REST_NORUN=1,
+REST_NOCLOSE=2,
+REST_NOSAVESET=4,
+REST_NOFILEMENU=8,
+REST_NOSETFOLDERS=16,
+REST_NOSETTASKBAR=32,
+REST_NODESKTOP=64,
+REST_NOFIND=128,
+REST_NODRIVES=256,
+REST_NODRIVEAUTORUN=512,
+REST_NODRIVETYPEAUTORUN=1024,
+REST_NONETHOOD=2048,
+REST_STARTBANNER=4096,
+REST_RESTRICTRUN=0x2000,
+REST_NOPRINTERTABS=0x4000,
+REST_NOPRINTERDELETE=0x8000,
+REST_NOPRINTERADD=0x10000,
+REST_NOSTARTMENUSUBFOLDERS=0x20000,
+REST_MYDOCSONNET=0x40000,
+REST_NOEXITTODOS=0x80000,
+REST_ENFORCESHELLEXTSECURITY=0x100000,
+REST_LINKRESOLVEIGNORELINKINFO=0x200000,
+REST_NOCOMMONGROUPS=0x400000,
+REST_SEPARATEDESKTOPPROCESS=0x800000,
+REST_NOWEB=0x1000000,
+REST_NOTRAYCONTEXTMENU=0x2000000,
+REST_NOVIEWCONTEXTMENU=0x4000000,
+REST_NONETCONNECTDISCONNECT=0x8000000,
+REST_STARTMENULOGOFF=0x10000000,
+REST_NOSETTINGSASSIST=0x20000000,
+REST_NOINTERNETICON=0x40000001,
+REST_NORECENTDOCSHISTORY=0x40000002,
+REST_NORECENTDOCSMENU=0x40000003,
+REST_NOACTIVEDESKTOP=0x40000004,
+REST_NOACTIVEDESKTOPCHANGES=0x40000005,
+REST_NOFAVORITESMENU=0x40000006,
+REST_CLEARRECENTDOCSONEXIT=0x40000007,
+REST_CLASSICSHELL=0x40000008,
+REST_NOCUSTOMIZEWEBVIEW=0x40000009,
+REST_NOHTMLWALLPAPER=0x40000010,
+REST_NOCHANGINGWALLPAPER=0x40000011,
+REST_NODESKCOMP=0x40000012,
+REST_NOADDDESKCOMP=0x40000013,
+REST_NODELDESKCOMP=0x40000014,
+REST_NOCLOSEDESKCOMP=0x40000015,
+REST_NOCLOSE_DRAGDROPBAND=0x40000016,
+REST_NOMOVINGBAND=0x40000017,
+REST_NOEDITDESKCOMP=0x40000018,
+REST_NORESOLVESEARCH=0x40000019,
+REST_NORESOLVETRACK=0x4000001a,
+REST_FORCECOPYACLWITHFILE=0X4000001B,
+REST_NOLOGO3CHANNELNOTIFY=0x4000001c,
+REST_NOFORGETSOFTWAREUPDATE=0x4000001d,
+REST_NOSETACTIVEDESKTOP=0x4000001e,
+REST_NOUPDATEWINDOWS=0x4000001f,
+REST_NOCHANGESTARMENU=0x40000020,
+REST_NOFOLDEROPTIONS=0x40000021,
+REST_HASFINDCOMPUTERS=0x40000022,
+REST_INTELLIMENUS=0x40000023,
+REST_RUNDLGMEMCHECKBOX=0x40000024,
+REST_ARP_ShowPostSetup=0x40000025,
+REST_NOCSC=0x40000026,
+REST_NOCONTROLPANEL=0x40000027,
+REST_ENUMWORKGROUP=0x40000028,
+REST_ARP_NOARP=0x40000029,
+REST_ARP_NOREMOVEPAGE=0x4000002a,
+REST_ARP_NOADDPAGE=0x4000002b,
+REST_ARP_NOWINSETUPPAGE=0x4000002c,
+REST_GREYMSIADS=0x4000002d,
+REST_NOCHANGEMAPPEDDRIVELABEL=0x4000002e,
+REST_NOCHANGEMAPPEDDRIVECOMMENT=0x4000002f,
+REST_MaxRecentDocs=0x40000030,
+REST_NONETWORKCONNECTIONS=0x40000031,
+REST_FORCESTARTMENULOGOFF=0x40000032,
+REST_NOWEBVIEW=0x40000033,
+REST_NOCUSTOMIZETHISFOLDER=0x40000034,
+REST_NOENCRYPTION=0x40000035,
+REST_DONTSHOWSUPERHIDDEN=0x40000037,
+REST_NOSHELLSEARCHBUTTON=0x40000038,
+REST_NOHARDWARETAB=0x40000039,
+REST_NORUNASINSTALLPROMPT=0x4000003a,
+REST_PROMPTRUNASINSTALLNETPATH=0x4000003b,
+REST_NOMANAGEMYCOMPUTERVERB=0x4000003c,
+REST_NORECENTDOCSNETHOOD=0x4000003d,
+REST_DISALLOWRUN=0x4000003e,
+REST_NOWELCOMESCREEN=0x4000003f,
+REST_RESTRICTCPL=0x40000040,
+REST_DISALLOWCPL=0x40000041,
+REST_NOSMBALLOONTIP=0x40000042,
+REST_NOSMHELP=0x40000043,
+REST_NOWINKEYS=0x40000044,
+REST_NOENCRYPTONMOVE=0x40000045,
+REST_NOLOCALMACHINERUN=0x40000046,
+REST_NOCURRENTUSERRUN=0x40000047,
+REST_NOLOCALMACHINERUNONCE=0x40000048,
+REST_NOCURRENTUSERRUNONCE=0x40000049,
+REST_FORCEACTIVEDESKTOPON=0x4000004a,
+REST_NOCOMPUTERSNEARME=0x4000004b,
+REST_NOVIEWONDRIVE=0x4000004c,
+REST_NONETCRAWL=0x4000004d,
+REST_NOSHAREDDOCUMENTS=0x4000004e,
+REST_NOSMMYDOCS=0x4000004f,
+REST_NOSMMYPICS=0x40000050,
+REST_ALLOWBITBUCKDRIVES=0x40000051,
+REST_NONLEGACYSHELLMODE=0x40000052,
+REST_NOCONTROLPANELBARRICADE=0x40000053,
+REST_NOSTARTPAGE=0x40000054,
+REST_NOAUTOTRAYNOTIFY=0x40000055,
+REST_NOTASKGROUPING=0x40000056,
+REST_NOCDBURNING=0x40000057,
+REST_MYCOMPNOPROP=0x40000058,
+REST_MYDOCSNOPROP=0x40000059,
+REST_NOSTARTPANEL=0x4000005a,
+REST_NODISPLAYAPPEARANCEPAGE=0x4000005b,
+REST_NOTHEMESTAB=0x4000005c,
+REST_NOVISUALSTYLECHOICE=0x4000005d,
+REST_NOSIZECHOICE=0x4000005e,
+REST_NOCOLORCHOICE=0x4000005f,
+REST_SETVISUALSTYLE=0x40000060,
+REST_STARTRUNNOHOMEPATH=0x40000061,
+REST_NOUSERNAMEINSTARTPANEL=0x40000062,
+REST_NOMYCOMPUTERICON=0x40000063,
+REST_NOSMNETWORKPLACES=0x40000064,
+REST_NOSMPINNEDLIST=0x40000065,
+REST_NOSMMYMUSIC=0x40000066,
+REST_NOSMEJECTPC=0x40000067,
+REST_NOSMMOREPROGRAMS=0x40000068,
+REST_NOSMMFUPROGRAMS=0x40000069,
+REST_NOTRAYITEMSDISPLAY=0x4000006a,
+REST_NOTOOLBARSONTASKBAR=0x4000006b,
+REST_NOSMCONFIGUREPROGRAMS=0x4000006f,
+REST_HIDECLOCK=0x40000070,
+REST_NOLOWDISKSPACECHECKS=0x40000071,
+REST_NOENTIRENETWORK=0x40000072,
+REST_NODESKTOPCLEANUP=0x40000073,
+REST_BITBUCKNUKEONDELETE=0x40000074,
+REST_BITBUCKCONFIRMDELETE=0x40000075,
+REST_BITBUCKNOPROP=0x40000076,
+REST_NODISPBACKGROUND=0x40000077,
+REST_NODISPSCREENSAVEPG=0x40000078,
+REST_NODISPSETTINGSPG=0x40000079,
+REST_NODISPSCREENSAVEPREVIEW=0x4000007a,
+REST_NODISPLAYCPL=0x4000007b,
+REST_HIDERUNASVERB=0x4000007c,
+REST_NOTHUMBNAILCACHE=0x4000007d,
+REST_NOSTRCMPLOGICAL=0x4000007e,
+REST_NOPUBLISHWIZARD=0x4000007f,
+REST_NOONLINEPRINTSWIZARD=0x40000080,
+REST_NOWEBSERVICES=0x40000081,
+REST_ALLOWUNHASHEDWEBVIEW=0x40000082,
+REST_ALLOWLEGACYWEBVIEW=0x40000083,
+REST_REVERTWEBVIEWSECURITY=0x40000084,
+REST_INHERITCONSOLEHANDLES=0x40000086,
+REST_SORTMAXITEMCOUNT=0x40000087,
+REST_NOREMOTECHANGENOTIFY=0x40000091,
+REST_NODISCONNECT=0x41000001,
+REST_NOSECURITY=0x41000002,
+REST_NOFILEASSOCIATE=0x41000003,
+REST_ALLOWCOMMENTTOGGLE=0x41000004,
+} RESTRICTIONS;
+SHSTDAPI_(IStream *) OpenRegStream(HKEY ,LPCWSTR ,LPCWSTR ,DWORD );
+SHSTDAPI_(BOOL) SHFindFiles(LPCITEMIDLIST ,LPCITEMIDLIST );
+SHSTDAPI_(void) PathGetShortPath(LPWSTR );
+SHSTDAPI_(BOOL) PathYetAnotherMakeUniqueName(LPWSTR ,LPCWSTR ,LPCWSTR ,LPCWSTR );
+SHSTDAPI_(BOOL) Win32DeleteFile(LPCWSTR );
+#define PPCF_ADDQUOTES 1
+#define PPCF_ADDARGUMENTS 3
+#define PPCF_NODIRECTORIES 16
+#define PPCF_FORCEQUALIFY 64
+#define PPCF_LONGESTPOSSIBLE 128
+SHSTDAPI_(LONG) PathProcessCommand(LPCWSTR ,LPWSTR ,int ,DWORD );
+SHSTDAPI_(DWORD) SHRestricted(RESTRICTIONS );
+SHSTDAPI_(BOOL) SignalFileOpen(LPCITEMIDLIST );
+SHSTDAPI_(LPITEMIDLIST) SHSimpleIDListFromPath(LPCWSTR );
+SHSTDAPI SHLoadOLE(LPARAM );
+SHSTDAPI SHStartNetConnectionDialogA(HWND ,LPCSTR ,DWORD );
+SHSTDAPI SHStartNetConnectionDialogW(HWND ,LPCWSTR ,DWORD );
+#ifdef UNICODE
+#define SHStartNetConnectionDialog SHStartNetConnectionDialogW
+#else
+#define SHStartNetConnectionDialog SHStartNetConnectionDialogA
+#endif 
+SHSTDAPI SHDefExtractIconA(LPCSTR ,int ,UINT ,HICON *,HICON *,UINT );
+SHSTDAPI SHDefExtractIconW(LPCWSTR ,int ,UINT ,HICON *,HICON *,UINT );
+#ifdef UNICODE
+#define SHDefExtractIcon SHDefExtractIconW
+#else
+#define SHDefExtractIcon SHDefExtractIconA
+#endif 
+SHSTDAPI_(BOOL) Shell_GetImageLists(HIMAGELIST *,HIMAGELIST *);
+SHSTDAPI_(int) Shell_GetCachedImageIndex(LPCWSTR ,int ,UINT );
+#undef INTERFACE
+#define INTERFACE IDocViewSite
+DECLARE_INTERFACE_(IDocViewSite,IUnknown)
+{
+STDMETHOD(QueryInterface)(THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef)(THIS);
+STDMETHOD_(ULONG,Release)(THIS);
+STDMETHOD(OnSetTitle) (THIS_ VARIANTARG *);
+} ;
+#define VALIDATEUNC_NOUI 2
+#define VALIDATEUNC_CONNECT 1
+#define VALIDATEUNC_PRINT 4
+#define VALIDATEUNC_VALID 7
+SHSTDAPI_(BOOL) SHValidateUNC(HWND ,LPWSTR ,UINT );
+#define OPENPROPS_NONE 0
+#define OPENPROPS_INHIBITPIF 0x8000
+#define GETPROPS_NONE 0
+#define SETPROPS_NONE 0
+#define CLOSEPROPS_NONE 0
+#define CLOSEPROPS_DISCARD 1
+#define PIFNAMESIZE 30
+#define PIFSTARTLOCSIZE 63
+#define PIFDEFPATHSIZE 64
+#define PIFPARAMSSIZE 64
+#define PIFSHPROGSIZE 64
+#define PIFSHDATASIZE 64
+#define PIFDEFFILESIZE 80
+#define PIFMAXFILEPATH 260
+typedef struct PROPPRG { 
+WORD flPrg; 
+WORD flPrgInit; 
+CHAR achTitle[PIFNAMESIZE]; 
+CHAR achCmdLine[PIFSTARTLOCSIZE+PIFPARAMSSIZE+1];
+CHAR achWorkDir[PIFDEFPATHSIZE]; 
+WORD wHotKey; 
+CHAR achIconFile[PIFDEFFILESIZE]; 
+WORD wIconIndex; 
+DWORD dwEnhModeFlags; 
+DWORD dwRealModeFlags; 
+CHAR achOtherFile[PIFDEFFILESIZE]; 
+CHAR achPIFFile[PIFMAXFILEPATH]; 
+} PROPPRG;
+typedef PROPPRG *PPROPPRG;
+typedef PROPPRG *LPPROPPRG;
+typedef const  PROPPRG *LPCPROPPRG;
+SHSTDAPI_(HANDLE) PifMgr_OpenProperties(LPCWSTR ,LPCWSTR ,UINT ,UINT );
+SHSTDAPI_(int) PifMgr_GetProperties(HANDLE ,LPCSTR ,void *,int ,UINT );
+SHSTDAPI_(int) PifMgr_SetProperties(HANDLE ,LPCSTR ,const VOID *lpProps,int ,UINT );
+SHSTDAPI_(HANDLE) PifMgr_CloseProperties(HANDLE ,UINT );
+SHSTDAPI_(void) SHSetInstanceExplorer(IUnknown *);
+SHSTDAPI_(BOOL) IsUserAnAdmin(void);
+#undef INTERFACE
+#define INTERFACE IInitializeObject
+DECLARE_INTERFACE_(IInitializeObject,IUnknown)
+{
+STDMETHOD(QueryInterface) (THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD(Initialize)(THIS);
+};
+enum {
+BMICON_LARGE=0,
+BMICON_SMALL
+};
+#undef INTERFACE
+#define INTERFACE IBanneredBar
+DECLARE_INTERFACE_(IBanneredBar,IUnknown)
+{
+STDMETHOD(QueryInterface) (THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD(SetIconSize)(THIS_ DWORD );
+STDMETHOD(GetIconSize)(THIS_ DWORD* piIcon);
+STDMETHOD(SetBitmap)(THIS_ HBITMAP );
+STDMETHOD(GetBitmap)(THIS_ HBITMAP* phBitmap);
+};
+SHSTDAPI_(LRESULT) SHShellFolderView_Message(HWND ,UINT ,LPARAM );
+#undef INTERFACE
+#define INTERFACE IShellFolderViewCB
+DECLARE_INTERFACE_(IShellFolderViewCB,IUnknown)
+{
+STDMETHOD(QueryInterface) (THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD(MessageSFVCB)(THIS_ UINT ,WPARAM ,LPARAM );
+};
+#include <pshpack8.h>
+#undef UNSIZED_ARRAY2
+#undef EMPTY_SIZE2
+#define UNSIZED_ARRAY2
+#define EMPTY_SIZE2 UNSIZED_ARRAY2
+#define QCMINFO_PLACE_BEFORE 0
+#define QCMINFO_PLACE_AFTER 1
+typedef struct _QCMINFO_IDMAP_PLACEMENT
+{
+UINT id;
+UINT fFlags;
+} QCMINFO_IDMAP_PLACEMENT;
+typedef struct _QCMINFO_IDMAP
+{
+UINT nMaxIds;
+QCMINFO_IDMAP_PLACEMENT pIdList[1];
+} QCMINFO_IDMAP;
+typedef struct _QCMINFO
+{
+HMENU hmenu; 
+UINT indexMenu; 
+UINT idCmdFirst; 
+UINT idCmdLast; 
+QCMINFO_IDMAP const* pIdMap; 
+} QCMINFO;
+typedef QCMINFO * LPQCMINFO;
+#define TBIF_APPEND 0
+#define TBIF_PREPEND 1
+#define TBIF_REPLACE 2
+#define TBIF_DEFAULT 0
+#define TBIF_INTERNETBAR 0x10000
+#define TBIF_STANDARDTOOLBAR 0x20000
+#define TBIF_NOTOOLBAR 0x30000
+typedef struct _TBINFO
+{
+UINT cbuttons; 
+UINT uFlags; 
+} TBINFO;
+typedef struct _DETAILSINFO
+{
+LPCITEMIDLIST pidl;
+int fmt;
+int cxChar;
+STRRET str;
+int iImage;
+} DETAILSINFO;
+typedef struct _SFVM_PROPPAGE_DATA
+{
+DWORD dwReserved;
+LPFNADDPROPSHEETPAGE pfn;
+LPARAM lParam;
+} SFVM_PROPPAGE_DATA;
+typedef struct _SFVM_HELPTOPIC_DATA
+{
+WCHAR wszHelpFile[MAX_PATH];
+WCHAR wszHelpTopic[MAX_PATH];
+} SFVM_HELPTOPIC_DATA;
+#define SFVM_MERGEMENU 1 
+#define SFVM_INVOKECOMMAND 2 
+#define SFVM_GETHELPTEXT 3 
+#define SFVM_GETTOOLTIPTEXT 4 
+#define SFVM_GETBUTTONINFO 5 
+#define SFVM_GETBUTTONS 6 
+#define SFVM_INITMENUPOPUP 7 
+#define SFVM_FSNOTIFY 14 
+#define SFVM_WINDOWCREATED 15 
+#define SFVM_GETDETAILSOF 23 
+#define SFVM_COLUMNCLICK 24 
+#define SFVM_QUERYFSNOTIFY 25 
+#define SFVM_DEFITEMCOUNT 26 
+#define SFVM_DEFVIEWMODE 27 
+#define SFVM_UNMERGEMENU 28 
+#define SFVM_UPDATESTATUSBAR 31 
+#define SFVM_BACKGROUNDENUM 32 
+#define SFVM_DIDDRAGDROP 36 
+#define SFVM_SETISFV 39 
+#define SFVM_THISIDLIST 41 
+#define SFVM_ADDPROPERTYPAGES 47 
+#define SFVM_BACKGROUNDENUMDONE 48 
+#define SFVM_GETNOTIFY 49 
+#define SFVM_GETSORTDEFAULTS 53 
+#define SFVM_SIZE 57 
+#define SFVM_GETZONE 58 
+#define SFVM_GETPANE 59 
+#define SFVM_GETHELPTOPIC 63 
+#define SFVM_GETANIMATION 68 
+typedef struct _SFV_CREATE
+{
+UINT cbSize;
+IShellFolder* pshf;
+IShellView* psvOuter;
+IShellFolderViewCB* psfvcb; 
+} SFV_CREATE;
+SHSTDAPI SHCreateShellFolderView(const SFV_CREATE* pcsfv,IShellView **);
+typedef HRESULT (CALLBACK *LPFNDFMCALLBACK)(IShellFolder *,HWND ,IDataObject *,UINT ,WPARAM ,LPARAM );
+SHSTDAPI CDefFolderMenu_Create2(LPCITEMIDLIST ,HWND ,UINT ,LPCITEMIDLIST *,IShellFolder *,LPFNDFMCALLBACK ,UINT ,const HKEY *ahkeyClsKeys,IContextMenu **);
+SHSTDAPI_(BOOL) SHOpenPropSheetA(LPCSTR ,HKEY ahkeys[],UINT ,const CLSID * pclsidDefault,IDataObject *,IShellBrowser *,LPCSTR );
+SHSTDAPI_(BOOL) SHOpenPropSheetW(LPCWSTR ,HKEY ahkeys[],UINT ,const CLSID * pclsidDefault,IDataObject *,IShellBrowser *,LPCWSTR );
+#ifdef UNICODE
+#define SHOpenPropSheet SHOpenPropSheetW
+#else
+#define SHOpenPropSheet SHOpenPropSheetA
+#endif 
+#define DFM_MERGECONTEXTMENU 1 
+#define DFM_INVOKECOMMAND 2 
+#define DFM_GETDEFSTATICID 14 
+#define DFM_CMD_PROPERTIES ((UINT)-5)
+typedef TBINFO * LPTBINFO;
+typedef DETAILSINFO *PDETAILSINFO;
+typedef HRESULT (CALLBACK *LPFNVIEWCALLBACK)(IShellView *,IShellFolder *,HWND ,UINT ,WPARAM ,LPARAM );
+typedef struct _CSFV
+{
+UINT cbSize;
+IShellFolder * pshf;
+IShellView * psvOuter;
+LPCITEMIDLIST pidl;
+LONG lEvents;
+LPFNVIEWCALLBACK pfnCallback; 
+FOLDERVIEWMODE fvm;
+} CSFV,* LPCSFV;
+#define SFVM_REARRANGE 1
+#define ShellFolderView_ReArrange(_hwnd,_lparam) \
+(BOOL)SHShellFolderView_Message(_hwnd,SFVM_REARRANGE,_lparam)
+#define SFVM_ADDOBJECT 3
+#define ShellFolderView_AddObject(_hwnd,_pidl) \
+(LPARAM)SHShellFolderView_Message(_hwnd,SFVM_ADDOBJECT,(LPARAM)_pidl)
+#define SFVM_REMOVEOBJECT 6
+#define ShellFolderView_RemoveObject(_hwnd,_pidl) \
+(LPARAM)SHShellFolderView_Message(_hwnd,SFVM_REMOVEOBJECT,(LPARAM)_pidl)
+#define SFVM_UPDATEOBJECT 7
+#define ShellFolderView_UpdateObject(_hwnd,_ppidl) \
+(LPARAM)SHShellFolderView_Message(_hwnd,SFVM_UPDATEOBJECT,(LPARAM)_ppidl)
+#define SFVM_GETSELECTEDOBJECTS 9
+#define ShellFolderView_GetSelectedObjects(_hwnd,ppidl) \
+(LPARAM)SHShellFolderView_Message(_hwnd,SFVM_GETSELECTEDOBJECTS,(LPARAM)ppidl)
+typedef struct _SFV_SETITEMPOS
+{
+LPCITEMIDLIST pidl;
+POINT pt;
+} SFV_SETITEMPOS,*LPSFV_SETITEMPOS;
+#define SFVM_SETITEMPOS 14
+#define ShellFolderView_SetItemPos(_hwnd,_pidl,_x,_y) \
+{ SFV_SETITEMPOS _sip={_pidl,{_x,_y}}; \
+SHShellFolderView_Message(_hwnd,SFVM_SETITEMPOS,(LPARAM)(LPSFV_SETITEMPOS)&_sip);}
+#define SFVM_SETCLIPBOARD 16
+#define ShellFolderView_SetClipboard(_hwnd,_dwEffect) \
+(void)SHShellFolderView_Message(_hwnd,SFVM_SETCLIPBOARD,(LPARAM)(DWORD)(_dwEffect))
+#define SFVM_SETPOINTS 23
+#define ShellFolderView_SetPoints(_hwnd,_pdtobj) \
+(void)SHShellFolderView_Message(_hwnd,SFVM_SETPOINTS,(LPARAM)_pdtobj)
+#include <poppack.h> 
+SHSTDAPI_(IContextMenu *) SHFind_InitMenuPopup(HMENU ,HWND ,UINT ,UINT );
+SHSTDAPI SHCreateShellFolderViewEx(LPCSFV ,IShellView **);
+#define PID_IS_URL 2
+#define PID_IS_NAME 4
+#define PID_IS_WORKINGDIR 5
+#define PID_IS_HOTKEY 6
+#define PID_IS_SHOWCMD 7
+#define PID_IS_ICONINDEX 8
+#define PID_IS_ICONFILE 9
+#define PID_IS_WHATSNEW 10
+#define PID_IS_AUTHOR 11
+#define PID_IS_DESCRIPTION 12
+#define PID_IS_COMMENT 13
+#define PID_INTSITE_WHATSNEW 2
+#define PID_INTSITE_AUTHOR 3
+#define PID_INTSITE_LASTVISIT 4
+#define PID_INTSITE_LASTMOD 5
+#define PID_INTSITE_VISITCOUNT 6
+#define PID_INTSITE_DESCRIPTION 7
+#define PID_INTSITE_COMMENT 8
+#define PID_INTSITE_FLAGS 9
+#define PID_INTSITE_CONTENTLEN 10
+#define PID_INTSITE_CONTENTCODE 11
+#define PID_INTSITE_RECURSE 12
+#define PID_INTSITE_WATCH 13
+#define PID_INTSITE_SUBSCRIPTION 14
+#define PID_INTSITE_URL 15
+#define PID_INTSITE_TITLE 16
+#define PID_INTSITE_CODEPAGE 18
+#define PID_INTSITE_TRACKING 19
+#define PID_INTSITE_ICONINDEX 20
+#define PID_INTSITE_ICONFILE 21
+#define PIDISF_RECENTLYCHANGED 1
+#define PIDISF_CACHEDSTICKY 2
+#define PIDISF_CACHEIMAGES 16
+#define PIDISF_FOLLOWALLLINKS 32
+#define PIDISM_GLOBAL 0 
+#define PIDISM_WATCH 1 
+#define PIDISM_DONTWATCH 2 
+typedef struct {
+BOOL fShowAllObjects : 1;
+BOOL fShowExtensions : 1;
+BOOL fNoConfirmRecycle : 1;
+BOOL fShowSysFiles : 1;
+BOOL fShowCompColor : 1;
+BOOL fDoubleClickInWebView : 1;
+BOOL fDesktopHTML : 1;
+BOOL fWin95Classic : 1;
+BOOL fDontPrettyPath : 1;
+BOOL fShowAttribCol : 1; 
+BOOL fMapNetDrvBtn : 1;
+BOOL fShowInfoTip : 1;
+BOOL fHideIcons : 1;
+BOOL fWebView : 1;
+BOOL fFilter : 1;
+BOOL fShowSuperHidden : 1;
+BOOL fNoNetCrawling : 1;
+DWORD dwWin95Unused; 
+UINT uWin95Unused; 
+LONG lParamSort;
+int iSortDirection;
+UINT version;
+UINT uNotUsed; 
+BOOL fSepProcess: 1;
+BOOL fStartPanelOn: 1; 
+BOOL fShowStartPage: 1; 
+UINT fSpareFlags : 13;
+} SHELLSTATEA,*LPSHELLSTATEA;
+typedef struct {
+BOOL fShowAllObjects : 1;
+BOOL fShowExtensions : 1;
+BOOL fNoConfirmRecycle : 1;
+BOOL fShowSysFiles : 1;
+BOOL fShowCompColor : 1;
+BOOL fDoubleClickInWebView : 1;
+BOOL fDesktopHTML : 1;
+BOOL fWin95Classic : 1;
+BOOL fDontPrettyPath : 1;
+BOOL fShowAttribCol : 1;
+BOOL fMapNetDrvBtn : 1;
+BOOL fShowInfoTip : 1;
+BOOL fHideIcons : 1;
+BOOL fWebView : 1;
+BOOL fFilter : 1;
+BOOL fShowSuperHidden : 1;
+BOOL fNoNetCrawling : 1;
+DWORD dwWin95Unused; 
+UINT uWin95Unused; 
+LONG lParamSort;
+int iSortDirection;
+UINT version;
+UINT uNotUsed; 
+BOOL fSepProcess: 1;
+BOOL fStartPanelOn: 1; 
+BOOL fShowStartPage: 1; 
+UINT fSpareFlags : 13;
+} SHELLSTATEW,*LPSHELLSTATEW;
+#define SHELLSTATEVERSION_IE4 9
+#define SHELLSTATEVERSION_WIN2K 10
+#ifdef UNICODE
+#define SHELLSTATE SHELLSTATEW
+#define LPSHELLSTATE LPSHELLSTATEW
+#else
+#define SHELLSTATE SHELLSTATEA
+#define LPSHELLSTATE LPSHELLSTATEA
+#endif
+#define SHELLSTATE_SIZE_WIN95 FIELD_OFFSET(SHELLSTATE,lParamSort)
+#define SHELLSTATE_SIZE_NT4 FIELD_OFFSET(SHELLSTATE,version)
+#define SHELLSTATE_SIZE_IE4 FIELD_OFFSET(SHELLSTATE,uNotUsed)
+#define SHELLSTATE_SIZE_WIN2K sizeof(SHELLSTATE)
+SHSTDAPI_(void) SHGetSetSettings(LPSHELLSTATE ,DWORD ,BOOL );
+typedef struct {
+BOOL fShowAllObjects : 1;
+BOOL fShowExtensions : 1;
+BOOL fNoConfirmRecycle : 1;
+BOOL fShowSysFiles : 1;
+BOOL fShowCompColor : 1;
+BOOL fDoubleClickInWebView : 1;
+BOOL fDesktopHTML : 1;
+BOOL fWin95Classic : 1;
+BOOL fDontPrettyPath : 1;
+BOOL fShowAttribCol : 1;
+BOOL fMapNetDrvBtn : 1;
+BOOL fShowInfoTip : 1;
+BOOL fHideIcons : 1;
+UINT fRestFlags : 3;
+} SHELLFLAGSTATE,*LPSHELLFLAGSTATE;
+#define SSF_SHOWALLOBJECTS 1
+#define SSF_SHOWEXTENSIONS 2
+#define SSF_HIDDENFILEEXTS 4
+#define SSF_SERVERADMINUI 4
+#define SSF_SHOWCOMPCOLOR 8
+#define SSF_SORTCOLUMNS 16
+#define SSF_SHOWSYSFILES 32
+#define SSF_DOUBLECLICKINWEBVIEW 128
+#define SSF_SHOWATTRIBCOL 256
+#define SSF_DESKTOPHTML 512
+#define SSF_WIN95CLASSIC 1024
+#define SSF_DONTPRETTYPATH 2048
+#define SSF_SHOWINFOTIP 0x2000
+#define SSF_MAPNETDRVBUTTON 4096
+#define SSF_NOCONFIRMRECYCLE 0x8000
+#define SSF_HIDEICONS 0x4000
+#define SSF_FILTER 0x10000
+#define SSF_WEBVIEW 0x20000
+#define SSF_SHOWSUPERHIDDEN 0x40000
+#define SSF_SEPPROCESS 0x80000
+#define SSF_NONETCRAWLING 0x100000
+#define SSF_STARTPANELON 0x200000
+#define SSF_SHOWSTARTPAGE 0x400000
+SHSTDAPI_(void) SHGetSettings(LPSHELLFLAGSTATE ,DWORD );
+SHSTDAPI SHBindToParent(LPCITEMIDLIST ,REFIID ,void **,LPCITEMIDLIST *);
+SHSTDAPI SHParseDisplayName(PCWSTR ,IBindCtx *,LPITEMIDLIST *,SFGAOF ,SFGAOF *);
+#define SHPPFW_NONE 0
+#define SHPPFW_DEFAULT SHPPFW_DIRCREATE 
+#define SHPPFW_DIRCREATE 1
+#define SHPPFW_ASKDIRCREATE 2
+#define SHPPFW_IGNOREFILENAME 4
+#define SHPPFW_NOWRITECHECK 8
+#define SHPPFW_MEDIACHECKONLY 16
+SHSTDAPI SHPathPrepareForWriteA(HWND ,IUnknown *,LPCSTR ,DWORD );
+SHSTDAPI SHPathPrepareForWriteW(HWND ,IUnknown *,LPCWSTR ,DWORD );
+#ifdef UNICODE
+#define SHPathPrepareForWrite SHPathPrepareForWriteW
+#else
+#define SHPathPrepareForWrite SHPathPrepareForWriteA
+#endif 
+#undef INTERFACE
+#define INTERFACE INamedPropertyBag
+DECLARE_INTERFACE_(INamedPropertyBag,IUnknown)
+{
+STDMETHOD(QueryInterface) (THIS_ REFIID ,void **);
+STDMETHOD_(ULONG,AddRef) (THIS);
+STDMETHOD_(ULONG,Release) (THIS);
+STDMETHOD(ReadPropertyNPB) (THIS_  LPCOLESTR pszBagname,LPCOLESTR ,PROPVARIANT *);
+STDMETHOD(WritePropertyNPB)(THIS_  LPCOLESTR pszBagname,LPCOLESTR ,PROPVARIANT *);
+STDMETHOD(RemovePropertyNPB)(THIS_  LPCOLESTR pszBagname,LPCOLESTR );
+};
+#ifdef __urlmon_h__
+SHDOCAPI_(DWORD) SoftwareUpdateMessageBox(HWND ,LPCWSTR ,DWORD ,LPSOFTDISTINFO );
+#endif 
+SHSTDAPI SHPropStgCreate(IPropertySetStorage* psstg,REFFMTID ,CLSID* pclsid,DWORD ,DWORD ,DWORD ,OUT IPropertyStorage** ppstg,OUT UINT* puCodePage);
+SHSTDAPI SHPropStgReadMultiple(IPropertyStorage* pps,UINT ,ULONG ,PROPSPEC const rgpspec[],PROPVARIANT rgvar[]);
+SHSTDAPI SHPropStgWriteMultiple(IPropertyStorage* pps,UINT* puCodePage,ULONG ,PROPSPEC const rgpspec[],PROPVARIANT rgvar[],PROPID );
+SHSTDAPI SHCreateFileExtractIconA(LPCSTR ,DWORD ,REFIID ,void **);
+SHSTDAPI SHCreateFileExtractIconW(LPCWSTR ,DWORD ,REFIID ,void **);
+#ifdef UNICODE
+#define SHCreateFileExtractIcon SHCreateFileExtractIconW
+#else
+#define SHCreateFileExtractIcon SHCreateFileExtractIconA
+#endif 
+#include <pshpack8.h>
+SHSTDAPI SHLimitInputEdit(HWND ,IShellFolder *);
+#if (_WIN32_WINNT >= 1280) || (_WIN32_WINDOWS >= 1280) 
+SHSTDAPI SHMultiFileProperties(IDataObject *,DWORD );
+#endif 
+#if (_WIN32_IE >= 1536)
+typedef void (CALLBACK *PFNASYNCICONTASKBALLBACK)(LPCITEMIDLIST ,LPVOID ,LPVOID ,INT ,INT );
+SHSTDAPI SHMapIDListToImageListIndexAsync(IShellTaskScheduler* pts,IShellFolder *,LPCITEMIDLIST ,UINT ,PFNASYNCICONTASKBALLBACK ,LPVOID ,LPVOID ,int *,int *);
+#endif 
+SHSTDAPI_(int) SHMapPIDLToSystemImageListIndex(IShellFolder *,LPCITEMIDLIST ,int *);
+EXTERN_C WINSHELLAPI HRESULT STDAPICALLTYPE SHCLSIDFromString(LPCWSTR ,LPCLSID );
+HANDLE _SHAllocShared(LPCVOID ,DWORD ,DWORD );
+BOOL _SHFreeShared(HANDLE ,DWORD );
+void *_SHLockShared(HANDLE ,DWORD );
+BOOL _SHUnlockShared(void *);
+STDAPI SHFlushClipboard(void);
+STDAPI SHCreateQueryCancelAutoPlayMoniker(IMoniker** ppmoniker);
+HINSTANCE WINAPI SHGetShellStyleHInstance(void);
+STDAPI_(void) PerUserInit(void);
+WINSHELLAPI BOOL WINAPI SHRunControlPanel(LPCWSTR ,HWND );
+WINSHELLAPI int WINAPI PickIconDlg(HWND ,LPWSTR ,UINT ,int *);
+typedef struct tagAAMENUFILENAME
+{
+SHORT cbTotal;
+BYTE rgbReserved[12];
+WCHAR szFileName[1]; 
+} AASHELLMENUFILENAME,*LPAASHELLMENUFILENAME;
+typedef struct tagAASHELLMENUITEM
+{
+void* lpReserved1;
+int iReserved;
+UINT uiReserved;
+LPAASHELLMENUFILENAME lpName; 
+LPWSTR psz; 
+} AASHELLMENUITEM,*LPAASHELLMENUITEM;
+STDAPI SHGetAttributesFromDataObject(IDataObject *,DWORD ,DWORD *,UINT *);
+#include <poppack.h> 
+#include <poppack.h>
+SHDOCAPI_(BOOL) ImportPrivacySettings(LPCWSTR ,BOOL* pfParsePrivacyPreferences,IN BOOL* pfParsePerSiteRules);
+#ifndef IEnumPrivacyRecords
+typedef interface IEnumPrivacyRecords IEnumPrivacyRecords;
+#endif
+SHDOCAPI DoPrivacyDlg(HWND ,LPOLESTR ,IEnumPrivacyRecords *,BOOL );
+#endif 
