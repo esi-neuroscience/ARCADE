@@ -17,7 +17,7 @@ if ~isempty(value) && isnumeric(value) && value<2^16 && value>=0
     if isempty(varargin)
         EventServer.mSendEventMarker(value);% send eventmarker
     else
-        EventServer.mSendEventMarker(value,varargin{1});% send eventmarker
+        EventServer.mSendEventMaErker(value,varargin{1});% send eventmarker
     end
 end
 

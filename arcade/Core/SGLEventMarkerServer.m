@@ -2,27 +2,27 @@ classdef (Sealed) SGLEventMarkerServer < handle
     % [SINGLETON]
     
     % Should run a timing test with this version
-    % and a version using a peristent variable 
+    % and a version using a peristent variable
     
     %---------------------------------------------%
     % unknown   - Jarrod, wrote class
     % 14.7.2015 - Jarrod, replaced decimalToBinaryVector() with dec2bin()-'0'
-    % - because decimalToBinaryVector() is in the daq toolbox, and -'0' dec2bin returns a string 
+    % - because decimalToBinaryVector() is in the daq toolbox, and -'0' dec2bin returns a string
     % 21.4.2016 - Jarrod, added some documentation/notes
     
-
+    
     properties (SetAccess = immutable)
         nidaqObj % object for
     end
     
     methods (Static)
-       function this = launch
+        function this = launch
             persistent thisObj
             if isempty(thisObj) || ~isvalid(thisObj)
                 thisObj = SGLEventMarkerServer;
             end
             this = thisObj;
-       end
+        end
     end
     
     methods (Access = private)
@@ -44,22 +44,17 @@ classdef (Sealed) SGLEventMarkerServer < handle
         end
     end
     
-    methods 
+    methods
         %# set the state of the reward bit
         function mSendEventMarker(this,value,varargin)
-            nbits = 16; % trigger bits
-            % port should be all zeros
-            % send trigger
-
-            bin_evt = dec2bin(value,nbits)-'0';                    % 16-bit event
-            this.nidaqObj.daqmxWriteDigitalLines([bin_evt,0]);	   % from 20160628: first write bits without triggering strobe
-            java.lang.Thread.sleep(1);                             % changed in lab209!!
-            %java.lang.Thread.sleep(2);                             % changed in lab209!!
-            %java.lang.Thread.sleep(3);                             % changed in lab209!! 31 05 2016
-            
-            this.nidaqObj.daqmxWriteDigitalLines([bin_evt,1]);     % from 20160628: then write to port and trigger event            
-            
-            java.lang.Thread.sleep(5);                             % changed in lab209!! 01 06 2016 - try to make sure em are not overwritten
+            nbits = 16; 
+                        
+            % 16-bit event
+            bin_evt = dec2bin(value,nbits)-'0';                    
+            this.nidaqObj.daqmxWriteDigitalLines([bin_evt,0]);	   
+            java.lang.Thread.sleep(1);                                                                
+            this.nidaqObj.daqmxWriteDigitalLines([bin_evt,1]);                 
+            java.lang.Thread.sleep(5);                             
             
             if isempty(varargin)
                 this.nidaqObj.daqmxWriteDigitalLines(zeros(1,nbits+1)); % zero port(s)
@@ -67,18 +62,18 @@ classdef (Sealed) SGLEventMarkerServer < handle
                 switch varargin{1}
                     case 'default'
                         % zero port after sending event
-                        postEvent = zeros(1,nbits+1); % zero all 
+                        postEvent = zeros(1,nbits+1); % zero all
                     case 'leave'
                         postEvent = [bin_evt,0];      % zero trigger bit
                     otherwise
-                        postEvent = zeros(1,nbits+1); % zero all 
+                        postEvent = zeros(1,nbits+1); % zero all
                 end
-                this.nidaqObj.daqmxWriteDigitalLines(postEvent); 
+                this.nidaqObj.daqmxWriteDigitalLines(postEvent);
             end
-                    
+            
         end
-
-        %# general delete function 
+        
+        %# general delete function
         function delete(this)
             delete(this.nidaqObj);
         end
