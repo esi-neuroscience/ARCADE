@@ -142,5 +142,5 @@ end
 
 function [maximum, iMax] = nanmax(x, varargin)
 x(isnan(x)) = -Inf;
-[maximum, iMax] = max(x, varargin{:})
+[maximum, iMax] = max(x, varargin{:});
 end
