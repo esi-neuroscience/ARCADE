@@ -6,7 +6,7 @@ StimServerGeneral = SGLStimServerGeneral.launch;
 
 %%
 ARCADEFOLDER = 'C:\Toolbox\ARCADE\arcade';
-TESTFOLDER = fullfile(ARCADEFOLDER, 'Tests');
+TESTFOLDER = fullfile(ARCADEFOLDER, 'Tests', 'Stimuli');
 LEFTEYE = [1 3];
 RIGHTEYE = [2 4];
 BOTHEYES = 1:4;
