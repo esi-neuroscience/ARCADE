@@ -65,9 +65,10 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
             end
             
             % Launch Matlab processes for these servers
-            this.mLaunchServer('EyeServer');
-            this.mLaunchServer('ControlScreen');
-            % connet to servers
+            eyeProcess = this.mLaunchServer('EyeServer');
+            controlScreenProcess = this.mLaunchServer('ControlScreen');                                  
+            
+            % connect to servers
             EyeSerPipe  = this.mConnectToServer('EyeServer');
             CntlSrnPipe = this.mConnectToServer('ControlScreen');
             
@@ -90,11 +91,7 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
             end
             
             %----------------------------------------%
-            
-            % quit ControlScreen, and EyeServer
-            success = CntlSrnPipe.mWriteCommandMessage('quit_proc');
-            success = EyeSerPipe.mWriteCommandMessage('quit_proc');
-            
+                        
             % delete objects
             this.mWriteToDiary('Closing', true);
             
@@ -103,6 +100,10 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
             delete(rewServer);
             delete(eventServer);
 
+            % quit ControlScreen, and EyeServer
+            eyeProcess.destroy()
+            controlScreenProcess.destroy()
+            
             delete(MSgui);
             fclose('all'); % close all open files
         end
@@ -110,11 +111,17 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
     
     methods (Access = protected)
         %# launch server process
-        function mLaunchServer(this,xServ)
+        function process = mLaunchServer(this,xServ)
             % create filepath to call
-            runProcDir = fullfile(this.FPATH.pathProcessLaunch,sprintf('run%s.m',xServ));
+            launchFunc = fullfile(this.FPATH.pathProcessLaunch, ...
+                sprintf('run%s.m',xServ));
+            launchCmd = sprintf('matlab -nosplash -r "dbstop if error; run(''%s'')"', ...
+                launchFunc);
+                        
             % launch process
-            eval(sprintf('!matlab -automation -r "run(''%s'')" &', runProcDir));
+            runtime = java.lang.Runtime.getRuntime();
+            process = runtime.exec(launchCmd);
+%             system(launchCmd);
         end
 
         %# connect to server
@@ -129,9 +136,9 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
                     thisServer = SGLCoreCntlPipe.launch;
             end
             % wait to see Eye Server has made pipe available
-            available = thisServer.mWaitForServerAvailable(10);
+            available = thisServer.mWaitForServerAvailable(50);
             while ~available
-                available = thisServer.mWaitForServerAvailable(10);
+                available = thisServer.mWaitForServerAvailable(10000);
             end
             thisServer.mOpenClient;  % connect as client
             this.mWriteToDiary([xServ,' is Running'], true);
