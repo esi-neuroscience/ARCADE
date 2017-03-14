@@ -31,28 +31,35 @@ classdef MSMessagePipe < MSNamedPipe
             % test if creation was successful
             [result, flags, outSize, inSize, ~] = MSNamedPipe.mGetNamedPipeInfo(this.hPipe);
             if ~(result > 0) || flags ~= 5 || outSize ~= this.pipeBuffer(1) || inSize~= this.pipeBuffer(2)
-                error('MSMessagePipe:mOpenServer', 'Message pipe creation failed')
+                error('MSMessagePipe:mOpenServer', 'Message pipe creation  of %s failed', this.pipeName)
             end
         end
         
         %# connect to server as a client 
         function mOpenClient(this) 
-            pipe_available = this.mWaitForServerAvailable(250);
+            pipe_available = this.mWaitForServerAvailable(5000);
             if ~pipe_available
                 error('MSMessagePipe:mOpenClient',...
-                    'Named pipe not available');
+                    'Named pipe %s not available', this.pipeName);
             end
             
             % connect to pipe 
             pipeAccess = 'GENERIC_READ_WRITE';
-            hPipe = MSNamedPipe.mCreateFileA(this.pipeName,pipeAccess); %#ok<*PROP>
+            hPipe = MSNamedPipe.mCreateFileA(this.pipeName,pipeAccess); %#ok<*PROP>                                    
             
             % set as a message pipe
             pipeMode = 'PIPE_READMODE_MESSAGE | PIPE_NOWAIT';
             result = this.mSetNamedPipeHandleState(hPipe,pipeMode);
             if ~result
                 error('MSMessagePipe:mOpenClient',...
-                    'Unable to set pipe mode');
+                    'Unable to set pipe mode for %s', this.pipeName);
+            end
+            
+            % check successful creation
+            [result, flags, outSize, inSize, ~] = MSNamedPipe.mGetNamedPipeInfo(hPipe);
+            if ~(result > 0) || flags ~= 4 || outSize ~= this.pipeBuffer(1) || inSize~= this.pipeBuffer(2)
+                error('MSMessagePipe:mOpenClient', ...
+                    'Message pipe creation of %s failed', this.pipeName)
             end
             this.hPipe = hPipe;
         end
