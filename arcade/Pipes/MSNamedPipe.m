@@ -220,8 +220,8 @@ classdef MSNamedPipe < handle
         end
         
         %# close pipe
-        function mCloseHandle(hPIPE)
-            calllib('kernel32', 'CloseHandle',hPIPE);
+        function success = mCloseHandle(hPIPE)
+            success = calllib('kernel32', 'CloseHandle',hPIPE);
         end
         
     end
