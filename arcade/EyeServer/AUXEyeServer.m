@@ -70,6 +70,8 @@ classdef AUXEyeServer < MSMessagePipe & KEYEyeServer
                         eye_pos = KEYEyeServer.mIOEyeData('Read',byte_msg(3:end));
                     end
                 end
+            else
+                warning('AUXEyeServer:mRequestEyeData', 'Request of eye data failed')
             end
         end
         
