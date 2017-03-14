@@ -138,7 +138,7 @@ classdef MSNamedPipe < handle
         % of the specified named pipe is available for connection
         function success = mWaitNamedPipeA(pipeName,timeout) % timeout [ms]
             timeout = uint64(timeout); % ulong
-            success = calllib('kernel32', 'WaitNamedPipeA',pipeName,timeout); 
+            success = calllib('kernel32', 'WaitNamedPipeA', uint8(pipeName), timeout);
         end
         %---------------------------------------------%
         %                   READ/WRITE

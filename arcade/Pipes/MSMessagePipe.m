@@ -32,8 +32,8 @@ classdef MSMessagePipe < MSNamedPipe
         %# conect to server as a client 
         function mOpenClient(this)
             % client should not try to connect if the 
-            % named pipe has not been created, try for 100ms
-            pipe_available = this.mWaitForServerAvailable(100);
+            % named pipe has not been created, try for 250 ms
+            pipe_available = this.mWaitForServerAvailable(250);
             if ~pipe_available
                 error('MSMessagePipe:mOpenClient',...
                     'Named pipe not available');
@@ -45,7 +45,7 @@ classdef MSMessagePipe < MSNamedPipe
             
             % set as a message pipe
             pipeMode = 'PIPE_READMODE_MESSAGE | PIPE_NOWAIT';
-            result = MSNamedPipe.mSetNamedPipeHandleState(hPipe,pipeMode);
+            result = this.mSetNamedPipeHandleState(hPipe,pipeMode);
             if ~result
                 error('MSMessagePipe:mOpenClient',...
                     'Unable to set pipe mode');
@@ -61,7 +61,7 @@ classdef MSMessagePipe < MSNamedPipe
         %# server is available for connection [client]
         function result = mWaitForServerAvailable(this,timeout)
             %timeout = 10;
-            result = this.mWaitNamedPipeA(this.pipeName,timeout);
+            result = this.mWaitNamedPipeA(uint8(this.pipeName),timeout);
         end
     end
     
