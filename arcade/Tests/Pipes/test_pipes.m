@@ -40,4 +40,19 @@ clientPipe = TestPipe;
 clientPipe.mOpenClient();
 % assert(isa(clientPipe.hPipe, 'libpointer'))
 
+% send some data
+tStart = tic;
 
+while toc(tStart) < 5 
+    sendData = uint8(randi(255, 1, serverPipe.pipeBuffer(1)));
+    serverPipe.mWriteFile(serverPipe.hPipe, sendData);    
+    pause(0.001)
+    receivedData = clientPipe.mReadFile(clientPipe.hPipe, clientPipe.pipeBuffer(2));
+    assert(isequal(sendData, receivedData))
+end
+
+MSNamedPipe.mCloseHandle(clientPipe.hPipe)
+MSNamedPipe.mCloseHandle(serverPipe.hPipe)
+
+
+ 
