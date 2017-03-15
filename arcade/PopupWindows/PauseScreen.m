@@ -59,8 +59,8 @@ classdef (Sealed) PauseScreen < AUXEditableVariables & SPCGUIDefinition
             this.mInitUIObjects;
             
             % force forward
-            this.mFindMatlabWindow;
-            this.mForceForward;
+%             this.mFindMatlabWindow;
+%             this.mForceForward;
             
             % wait for user action
             this.mWaitForUserAction;
