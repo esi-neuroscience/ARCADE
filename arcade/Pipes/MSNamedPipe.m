@@ -216,8 +216,14 @@ classdef MSNamedPipe < handle
             % Disconnects the server end of a named pipe instance from a 
             % client process. If the function succeeds, the return value
             % is nonzero.
-            success = calllib('kernel32', 'DisconnectNamedPipe',hPIPE);
+            success = calllib('kernel32', 'DisconnectNamedPipe', hPIPE);
         end
+        
+        
+        function success = mFlushFileBuffers(hPIPE)
+            success = calllib('kernel32', 'FlushFileBuffers', hPIPE);            
+        end
+        
         
         %# close pipe
         function success = mCloseHandle(hPIPE)

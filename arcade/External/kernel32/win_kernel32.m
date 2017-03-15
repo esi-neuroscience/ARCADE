@@ -246,8 +246,8 @@ fcns.thunkname{fcnNum}='ulongvoidPtrulongThunk';fcns.name{fcnNum}='WaitForSingle
 fcns.thunkname{fcnNum}='int32voidPtrvoidPtrulongvoidPtrvoidPtrThunk';fcns.name{fcnNum}='WriteFile'; fcns.calltype{fcnNum}='Thunk'; fcns.LHS{fcnNum}='int32'; fcns.RHS{fcnNum}={'voidPtr', 'voidPtr', 'ulong', 'uint32Ptr', 's_OVERLAPPEDPtr'};fcnNum=fcnNum+1;
 % BOOL  ReadFile ( HANDLE hFile , LPVOID lpBuffer , DWORD nNumberOfBytesToRead , LPDWORD lpNumberOfBytesRead , LPOVERLAPPED lpOverlapped ); 
 fcns.thunkname{fcnNum}='int32voidPtrvoidPtrulongvoidPtrvoidPtrThunk';fcns.name{fcnNum}='ReadFile'; fcns.calltype{fcnNum}='Thunk'; fcns.LHS{fcnNum}='int32'; fcns.RHS{fcnNum}={'voidPtr', 'voidPtr', 'ulong', 'uint32Ptr', 's_OVERLAPPEDPtr'};fcnNum=fcnNum+1;
-% % BOOL  FlushFileBuffers ( HANDLE hFile ); 
-% fcns.thunkname{fcnNum}='int32voidPtrThunk';fcns.name{fcnNum}='FlushFileBuffers'; fcns.calltype{fcnNum}='Thunk'; fcns.LHS{fcnNum}='int32'; fcns.RHS{fcnNum}={'voidPtr'};fcnNum=fcnNum+1;
+% BOOL  FlushFileBuffers ( HANDLE hFile ); 
+fcns.thunkname{fcnNum}='int32voidPtrThunk';fcns.name{fcnNum}='FlushFileBuffers'; fcns.calltype{fcnNum}='Thunk'; fcns.LHS{fcnNum}='int32'; fcns.RHS{fcnNum}={'voidPtr'};fcnNum=fcnNum+1;
 % % BOOL  DeviceIoControl ( HANDLE hDevice , DWORD dwIoControlCode , LPVOID lpInBuffer , DWORD nInBufferSize , LPVOID lpOutBuffer , DWORD nOutBufferSize , LPDWORD lpBytesReturned , LPOVERLAPPED lpOverlapped ); 
 % fcns.thunkname{fcnNum}='int32voidPtrulongvoidPtrulongvoidPtrulongvoidPtrvoidPtrThunk';fcns.name{fcnNum}='DeviceIoControl'; fcns.calltype{fcnNum}='Thunk'; fcns.LHS{fcnNum}='int32'; fcns.RHS{fcnNum}={'voidPtr', 'ulong', 'voidPtr', 'ulong', 'voidPtr', 'ulong', 'uint32Ptr', 's_OVERLAPPEDPtr'};fcnNum=fcnNum+1;
 % % BOOL  RequestDeviceWakeup ( HANDLE hDevice ); 
