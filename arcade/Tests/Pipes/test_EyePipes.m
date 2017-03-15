@@ -1,7 +1,7 @@
 
 %% launch eye server
 
-launchCmd = 'matlab  -nosplash -r "CorePipe = SGLEyeServerCorePipe.launch;CorePipe.mOpenServer;" ';
+launchCmd = 'matlab  -nosplash -r "runEyeServer" ';
 
 % launch process
 runtime = java.lang.Runtime.getRuntime();
@@ -16,5 +16,5 @@ EyeCorePipe.mWriteCommandMessage('start_eye');
 %%
 while true
     EyeCorePipe.mRequestEyeData()
-    pause(0.2)
+    pause(0.001)
 end
