@@ -21,7 +21,7 @@ classdef MSMessagePipe < MSNamedPipe
     
     methods (Sealed = true)
         %# create server pipe
-        function mOpenServer(this)
+        function result = mOpenServer(this)
             pipeAccess = 'PIPE_ACCESS_DUPLEX';
             pipeMode   = 'PIPE_NOWAIT | PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE';
             
@@ -31,13 +31,16 @@ classdef MSMessagePipe < MSNamedPipe
             % test if creation was successful
             [result, flags, outSize, inSize, ~] = MSNamedPipe.mGetNamedPipeInfo(this.hPipe);
             if ~(result > 0) || flags ~= 5 || outSize ~= this.pipeBuffer(1) || inSize~= this.pipeBuffer(2)
-                error('MSMessagePipe:mOpenServer', 'Message pipe creation  of %s failed', this.pipeName)
+                error('MSMessagePipe:mOpenServer', 'Message pipe creation of %s failed', this.pipeName)
             end                        
+            
+            % wait for connect
+            result = this.mCheckClientIsConnected();
             
         end
         
         %# connect to server as a client
-        function mOpenClient(this)
+        function result = mOpenClient(this)
             pipe_available = this.mWaitForServerAvailable(5000);
             if ~pipe_available
                 error('MSMessagePipe:mOpenClient',...
@@ -63,6 +66,7 @@ classdef MSMessagePipe < MSNamedPipe
                     'Message pipe creation of %s failed', this.pipeName)
             end
             this.hPipe = hPipe;
+            
         end
         
         %# client has connected to server  [server]

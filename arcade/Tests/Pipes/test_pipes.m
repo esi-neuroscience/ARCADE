@@ -6,7 +6,7 @@
 addpath(genpath('C:\Toolbox\ARCADE\arcade'))
 msNamedPipe = MSNamedPipe; % load library
 
-serverPipe.name = '\\.\pipe\test';
+serverPipe.name = '\\.\pipe\EyeServerCorePipe';
 serverPipe.access = 'PIPE_ACCESS_DUPLEX';
 serverPipe.mode   = 'PIPE_NOWAIT | PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE';
 serverPipe.buffer = [14 14];
@@ -18,7 +18,7 @@ success = MSNamedPipe.mConnectNamedPipe(serverPipe.handle);
 assert(result > 0 & flags == 5, 'Server pipe creation using MSNamedPipe failed');
 
 % client
-clientPipe.name = '\\.\pipe\test';
+clientPipe.name = '\\.\pipe\EyeServerCorePipe';
 clientPipe.access =  'GENERIC_READ_WRITE';
 clientPipe.mode   = 'PIPE_NOWAIT | PIPE_READMODE_MESSAGE';
 
@@ -61,7 +61,7 @@ while toc(tStart) < 1
     receivedData = clientPipe.mReadFile(clientPipe.hPipe, clientPipe.pipeBuffer(2));
     assert(isequal(sendData, receivedData))
     n = n+1;
-    java.lang.Thread.sleep(1); % 1ms
+    java.lang.Thread.sleep(.5); % 1ms
 end
 
 delete(serverPipe)

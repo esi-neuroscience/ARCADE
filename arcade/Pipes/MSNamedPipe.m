@@ -54,15 +54,16 @@ classdef MSNamedPipe < handle
                         'PIPE_NOWAIT | PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE'}
                     PIPE_MODE = uint32(hex2dec('00000007'));
             end
-            
+            pNAME = uint8([pNAME 0]);
+%             {'int8Ptr', 'ulong', 'ulong', 'ulong', 'ulong', 'ulong', 'ulong', 's_SECURITY_ATTRIBUTESPtr'}
             hPIPE = calllib('kernel32', 'CreateNamedPipeA', ...
-                uint8(pNAME), ...
+                pNAME, ...
                 ACCESS, ...
                 PIPE_MODE, ...  %
-                1, ...          % max instances
+                uint32(1), ...          % max instances
                 pBUFFER(1),...  % out buffer
                 pBUFFER(2),...  % in buffer
-                0, ...          % timeout ms (50ms)
+                uint32(0), ...          % timeout ms (50ms)
                 []);
         end
         
@@ -93,14 +94,15 @@ classdef MSNamedPipe < handle
                     % GENERIC_READ_WRITE = uint32(hex2dec('C0000000')); % both
                     ACCESS = uint32(hex2dec('C0000000')); % both
             end
+            pNAME = uint8([pNAME 0]);
             
             hPIPE = calllib('kernel32', 'CreateFileA', ...
-                uint8(pNAME), ...
+                pNAME, ...
                 ACCESS, ...
-                0, ...  % no sharing
+                uint32(0), ...  % no sharing
                 [], ...
-                3, ...  % OPEN_EXISTING
-                0, ...
+                uint32(3), ...  % OPEN_EXISTING
+                uint32(0), ...
                 []);
         end
         
@@ -131,8 +133,9 @@ classdef MSNamedPipe < handle
         function success = mWaitNamedPipeA(pipeName,timeout) % timeout [ms]
             % Waits until either a time-out interval elapses or an instance
             % of the specified named pipe is available for connection
-            timeout = uint64(timeout); % ulong
-            success = calllib('kernel32', 'WaitNamedPipeA', uint8(pipeName), timeout);
+            timeout = uint32(timeout); % ulong
+            pipeName = uint8([pipeName 0]);
+            success = calllib('kernel32', 'WaitNamedPipeA', pipeName, timeout);
         end
         %---------------------------------------------%
         %                   READ/WRITE

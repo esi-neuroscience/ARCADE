@@ -1,7 +1,7 @@
 
 %% launch eye server
 
-launchCmd = 'matlab  -nosplash -r "CorePipe = SGLEyeServerCorePipe.launch;CorePipe.mOpenServer;" &';
+launchCmd = 'matlab  -nosplash -r "CorePipe = SGLEyeServerCorePipe.launch;CorePipe.mOpenServer;" ';
 
 % launch process
 runtime = java.lang.Runtime.getRuntime();
