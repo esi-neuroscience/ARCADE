@@ -23,12 +23,15 @@ cd(initialWorkingDirectory);
 % run server
 PROC.mRunServer; 
 
-% cleaup
-delete(PROC);
 
-java.lang.Thread.sleep(500);
-% quit matlab
-quit
+% cleanup
+PROC.mWriteToDiary('Closing MATLAB in 5 s. Press CTRL+C to cancel or see log files', true);
+delete(PROC);
+for seconds = 5:-1:0
+    fprintf('%g\n', seconds)
+    pause(1)
+end
+exit
 
 end
 
