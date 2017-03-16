@@ -64,8 +64,8 @@ classdef AUXEyeServer < MSMessagePipe & KEYEyeServer
             byte_msg = [];
             if success
                 while isempty(byte_msg)
-                    byte_msg = this.mReadFile(hPipe, pipeReadBuf);
                     java.lang.Thread.sleep(1); % wait a ms
+                    byte_msg = this.mReadFile(hPipe, pipeReadBuf);                    
                 end
                 str_msg  = this.mGetMessageKey(byte_msg(1:2));
                 if strcmpi(str_msg,'eye_data')
