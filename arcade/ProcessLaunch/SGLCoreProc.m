@@ -76,22 +76,23 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
             % start polling eye signal
             success = EyeSerPipe.mWriteCommandMessage('start_eye');
             
-            while ishghandle(MSgui.hfig)
-                cfg = MSgui.cfg; % get cfg file
-                cfg.taskFile = MSgui.taskFile;
-                
-                % Run session
-                success = CntlSrnPipe.mWriteCommandMessage('start'); %#ok<*NASGU>
-                this.mWriteToDiary('Starting Session', true);
-                this.mRunSession(cfg);
-                
-                success = CntlSrnPipe.mWriteCommandMessage('stop');
-                % Enter wait for user mode
-                MSgui.mWaitForUserAction;
-            end
+            
+            
+            cfg = MSgui.cfg; % get cfg file
+            cfg.taskFile = MSgui.taskFile;
+            
+            delete(MSgui);
+            drawnow()
+            
+            % Run session
+            success = CntlSrnPipe.mWriteCommandMessage('start'); %#ok<*NASGU>
+            this.mWriteToDiary('Starting Session', true);
+            this.mRunSession(cfg);
+            
+            success = CntlSrnPipe.mWriteCommandMessage('stop');                        
             
             %----------------------------------------%
-                        
+            
             % delete objects
             this.mWriteToDiary('Closing', true);
             
@@ -102,9 +103,7 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
 
             % quit ControlScreen, and EyeServer
             eyeProcess.destroy()
-            controlScreenProcess.destroy()
-            
-            delete(MSgui);
+            controlScreenProcess.destroy()                        
             fclose('all'); % close all open files
         end
     end
