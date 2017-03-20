@@ -1,4 +1,4 @@
-classdef (Sealed) SGLSessionArc < MSWindow
+classdef (Sealed) SGLSessionArc
     % [SINGLETON CLASS] STATE ARC
     %   Loop through trials
     %   controls the movement from one trial to another
@@ -76,10 +76,10 @@ classdef (Sealed) SGLSessionArc < MSWindow
             
             % find the control screen
             % how best to handle the name 
-            this.hwnd_ctrl = this.mGetGUIWindow('Control Screen');
+            % this.hwnd_ctrl = this.mGetGUIWindow('Control Screen');
             java.lang.Thread.sleep(20);
             %result = this.mSetActiveWindow(this.hwnd_ctrl);
-            result = this.mSetForegroundWindow(this.hwnd_ctrl);
+            % result = this.mSetForegroundWindow(this.hwnd_ctrl);
             
 
             %** session is running, break point ***
@@ -168,11 +168,11 @@ classdef (Sealed) SGLSessionArc < MSWindow
                 end
             end
         end
-        %# get the hwnd to the GUI window 
-        function hwnd = mGetGUIWindow(this,winName)
-            hwnd = this.mFindWindow('SunAwtFrame',winName);
-        end
-
+        % # get the hwnd to the GUI window 
+        % function hwnd = mGetGUIWindow(this,winName)
+            % hwnd = this.mFindWindow('SunAwtFrame',winName);
+        % end
+% 
     end
     
     methods (Static = true)
@@ -259,74 +259,12 @@ classdef (Sealed) SGLSessionArc < MSWindow
             end
         end
         
-        %function pause(this)
-        %end
+        function delete(this)
+                        
+        end
     end
     
 end
-
-
-% function RunUserTaskScript(TrialData,retEVFcn,TaskScript)
-% 
-% 
-% retEVFcn();
-% clear retEVFcn;
-% 
-% whos
-% 
-% run(TaskScript);
-% objName = this.getWSVariable('StateArc');
-% eval([objName,'.runTrial;']);
-% 
-% % cleanup after trial
-% this.deleteObject(objName);
-% 
-% 
-% end
-
-
-
-%{
-w = whos;
-varClass = {w.class}';
-varName  = {w.name}';
-obj_idx  = find(strcmp(varClass,'StateArc'));
-% ensure there is one and only one insatnce of StateArc
-if numel(obj_idx)==0
-    disp('Failed to find an instance of StateArc');
-elseif numel(obj_idx)>1
-    disp('Found more than one instance of StateArc'); 
-end
-toc(t)
-
-eval([varName{obj_idx},'.runTrial;']);
-  
-    
-
-% either SessionArc calls StateArc
-% or user does, state arc must be a singleton 
-% 
-
-w = whos;
-varClass = {w.class}';
-varName  = {w.name}';
-obj_idx  = find(strcmp(varClass,'StateArc'));
-% ensure there is one and only one insatnce of StateArc
-if numel()==0
-    disp('Failed to find an instance of StateArc');
-elseif numel()>1
-    disp('Found more than one instance of StateArc'); 
-end
-(varName{obj_idx}).runTrial;
-
-%mc = ?StateArc
-%findobj(
-
-%W = findobj('-property','states')
-%}
-
-
-
 
 
 

@@ -1,4 +1,4 @@
-classdef (Sealed) PauseScreen < AUXEditableVariables & SPCGUIDefinition & AUXWindowControl
+classdef (Sealed) PauseScreen < AUXEditableVariables & SPCGUIDefinition
     % [GUI]
     % resume -> saves cfg
     % cancel -> rejects changes
@@ -59,8 +59,8 @@ classdef (Sealed) PauseScreen < AUXEditableVariables & SPCGUIDefinition & AUXWin
             this.mInitUIObjects;
             
             % force forward
-            this.mFindMatlabWindow;
-            this.mForceForward;
+%             this.mFindMatlabWindow;
+%             this.mForceForward;
             
             % wait for user action
             this.mWaitForUserAction;

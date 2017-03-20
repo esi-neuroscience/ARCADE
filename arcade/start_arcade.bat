@@ -1,7 +1,7 @@
 @Echo OFF
 SETLOCAL
-:: 32-bit version of matlab 2014a
-PATH "C:\Program Files (x86)\MATLAB\R2014a\bin\"
+:: 64-bit version of matlab 2014a
+PATH "C:\Program Files\MATLAB\R2014a\bin\"
 SET DISPLAYDIR="%~dp0"\ProcessLaunch\
 
 IF "%~1"=="/DEBUG" (

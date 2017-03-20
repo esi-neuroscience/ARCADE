@@ -1,0 +1,70 @@
+#ifndef __TVOUT__
+#define __TVOUT__
+#pragma once
+#ifndef GUID_DEFINED
+#include <guiddef.h>
+#endif
+typedef struct _VIDEOPARAMETERS {
+	GUID Guid; 
+	ULONG dwOffset; 
+	ULONG dwCommand; 
+	ULONG dwFlags; 
+	ULONG dwMode; 
+	ULONG dwTVStandard; 
+	ULONG dwAvailableModes; 
+	ULONG dwAvailableTVStandard; 
+	ULONG dwFlickerFilter; 
+	ULONG dwOverScanX; 
+	ULONG dwOverScanY; 
+	ULONG dwMaxUnscaledX; 
+	ULONG dwMaxUnscaledY; 
+	ULONG dwPositionX; 
+	ULONG dwPositionY; 
+	ULONG dwBrightness; 
+	ULONG dwContrast; 
+	ULONG dwCPType; 
+	ULONG dwCPCommand; 
+	ULONG dwCPStandard; 
+	ULONG dwCPKey;
+	ULONG bCP_APSTriggerBits; 
+	UCHAR bOEMCopyProtection[256]; 
+} VIDEOPARAMETERS,*PVIDEOPARAMETERS,*LPVIDEOPARAMETERS;
+#define VP_COMMAND_GET 1 
+#define VP_COMMAND_SET 2 
+#define VP_FLAGS_TV_MODE 1
+#define VP_FLAGS_TV_STANDARD 2
+#define VP_FLAGS_FLICKER 4
+#define VP_FLAGS_OVERSCAN 8
+#define VP_FLAGS_MAX_UNSCALED 16 
+#define VP_FLAGS_POSITION 32
+#define VP_FLAGS_BRIGHTNESS 64
+#define VP_FLAGS_CONTRAST 128
+#define VP_FLAGS_COPYPROTECT 256
+#define VP_MODE_WIN_GRAPHICS 1
+#define VP_MODE_TV_PLAYBACK 2 
+#define VP_TV_STANDARD_NTSC_M 1 
+#define VP_TV_STANDARD_NTSC_M_J 2 
+#define VP_TV_STANDARD_PAL_B 4
+#define VP_TV_STANDARD_PAL_D 8
+#define VP_TV_STANDARD_PAL_H 16
+#define VP_TV_STANDARD_PAL_I 32
+#define VP_TV_STANDARD_PAL_M 64
+#define VP_TV_STANDARD_PAL_N 128
+#define VP_TV_STANDARD_SECAM_B 256
+#define VP_TV_STANDARD_SECAM_D 512
+#define VP_TV_STANDARD_SECAM_G 1024
+#define VP_TV_STANDARD_SECAM_H 2048
+#define VP_TV_STANDARD_SECAM_K 0x1000
+#define VP_TV_STANDARD_SECAM_K1 0x2000
+#define VP_TV_STANDARD_SECAM_L 0x4000
+#define VP_TV_STANDARD_WIN_VGA 0x8000
+#define VP_TV_STANDARD_NTSC_433 0x10000
+#define VP_TV_STANDARD_PAL_G 0x20000
+#define VP_TV_STANDARD_PAL_60 0x40000
+#define VP_TV_STANDARD_SECAM_L1 0x80000
+#define VP_CP_TYPE_APS_TRIGGER 1 
+#define VP_CP_TYPE_MACROVISION 2 
+#define VP_CP_CMD_ACTIVATE 1 
+#define VP_CP_CMD_DEACTIVATE 2
+#define VP_CP_CMD_CHANGE 4
+#endif

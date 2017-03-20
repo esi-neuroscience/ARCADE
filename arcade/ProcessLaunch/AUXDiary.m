@@ -44,7 +44,7 @@ classdef AUXDiary < handle
         % may not be written to diary immediately unless flushed
         function mWriteToDiary(this, message, doFlush)
             % format -> message... [time now]
-            fprintf('%s... %s\n',message,datestr(now,'HHMM'));
+            fprintf('%s %s\n',datestr(now,'HH:MM:SS'),message);
             if doFlush, this.mFlushDiary; end;
         end
         

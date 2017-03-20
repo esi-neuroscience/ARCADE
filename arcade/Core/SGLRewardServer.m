@@ -63,7 +63,7 @@ classdef (Sealed) SGLRewardServer < handle
             while toc(t)*1000<rdur
                 %java.lang.Thread.sleep(1);
             end
-            disp(['Reward pulse: ', int2str(toc(t)*1000),' / ',int2str(rdur)]);
+%             disp(['Reward pulse: ', int2str(toc(t)*1000),' / ',int2str(rdur)]);
             this.mSetRewardBit(0);
         end
         %# pulse sequence

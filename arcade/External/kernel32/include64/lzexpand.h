@@ -1,0 +1,33 @@
+#ifndef _LZEXPAND_
+#define _LZEXPAND_
+#define LZERROR_BADINHANDLE (-1) 
+#define LZERROR_BADOUTHANDLE (-2) 
+#define LZERROR_READ (-3) 
+#define LZERROR_WRITE (-4) 
+#define LZERROR_GLOBALLOC (-5) 
+#define LZERROR_GLOBLOCK (-6) 
+#define LZERROR_BADVALUE (-7) 
+#define LZERROR_UNKNOWNALG (-8) 
+INT APIENTRY LZStart(VOID);
+VOID APIENTRY LZDone(VOID);
+LONG APIENTRY CopyLZFile(INT,INT);
+LONG APIENTRY LZCopy(INT,INT);
+INT APIENTRY LZInit(INT);
+INT APIENTRY GetExpandedNameA(LPSTR,LPSTR);
+INT APIENTRY GetExpandedNameW(LPWSTR,LPWSTR);
+#ifdef UNICODE
+#define GetExpandedName GetExpandedNameW
+#else
+#define GetExpandedName GetExpandedNameA
+#endif 
+INT APIENTRY LZOpenFileA(LPSTR,LPOFSTRUCT,WORD);
+INT APIENTRY LZOpenFileW(LPWSTR,LPOFSTRUCT,WORD);
+#ifdef UNICODE
+#define LZOpenFile LZOpenFileW
+#else
+#define LZOpenFile LZOpenFileA
+#endif 
+LONG APIENTRY LZSeek(INT,LONG,INT);
+INT APIENTRY LZRead(INT,LPSTR,INT);
+VOID APIENTRY LZClose(INT);
+#endif 

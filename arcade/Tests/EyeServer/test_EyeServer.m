@@ -6,7 +6,7 @@ EyeServer = SGLEyeServer.launch();
 %% test fetching
 nMin = 60*24*5; % 5 days
 % nMin = 1;
-plotEyePosition = false;
+plotEyePosition = true;
 
 if plotEyePosition
     figure('WindowStyle', 'normal')

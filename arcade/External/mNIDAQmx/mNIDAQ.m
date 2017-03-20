@@ -34,15 +34,7 @@ classdef mNIDAQ < handle
                 warning('off','MATLAB:loadlibrary:functionnotfound');
                 warning('off','MATLAB:loadlibrary:typenotfound');
                 warning('off','MATLAB:loadlibrary:enumexists');
-                switch computer
-                    case 'PCWIN'
-                        loadlibrary(this.lib, @mNIDAQmx); 
-                    case 'PCWIN64'
-                        loadlibrary(this.lib, @mNIDAQmx64); 
-                    otherwise
-                        error('Architecture not supported.');
-                end
-                         
+                loadlibrary(this.lib, @mNIDAQmx64Short);                      
             end;
         end
         %# create task

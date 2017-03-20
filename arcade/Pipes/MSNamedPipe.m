@@ -1,24 +1,18 @@
-classdef MSNamedPipe < handle 
-    % [MICROSOFT]
-    
+classdef MSNamedPipe < handle
+    % Collection of wrapper functions for pipe-related kernel32 functions.
     
     % + mCreateNamedPipeA        [SERVER]
     % + mCreateFileA             [CLIENT]
     % + mSetNamedPipeHandleState [CLIENT]
-    % + MCloseHandle
-
-    
-    %---------------------------------------------%
-    % Jarrod, wrote class
-    % 21.4.2016 - Jarrod, added some documentation/notes
-
+    % + mCloseHandle
+        
     methods (Static)
         %# constructor
         function this = MSNamedPipe
             if ~libisloaded('kernel32'); loadlibrary('kernel32', @win_kernel32); end;
         end
     end
-
+    
     methods (...
             Static = true,...
             Sealed = true)
@@ -50,9 +44,9 @@ classdef MSNamedPipe < handle
                 case 'PIPE_TYPE_MESSAGE'
                     %PIPE_TYPE_MESSAGE = uint32(hex2dec('00000004'));
                     PIPE_MODE = uint32(hex2dec('00000004'));
-                 case 'PIPE_READMODE_MESSAGE'
+                case 'PIPE_READMODE_MESSAGE'
                     %PIPE_READMODE_MESSAGE= uint32(hex2dec('00000002'));
-                    PIPE_MODE = uint32(hex2dec('00000002'));   
+                    PIPE_MODE = uint32(hex2dec('00000002'));
                 case 'PIPE_NOWAIT'
                     %PIPE_NOWAIT = uint32(hex2dec('00000001'));
                     PIPE_MODE = uint32(hex2dec('00000001'));
@@ -60,31 +54,32 @@ classdef MSNamedPipe < handle
                         'PIPE_NOWAIT | PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE'}
                     PIPE_MODE = uint32(hex2dec('00000007'));
             end
-            
+            pNAME = uint8([pNAME 0]);
+%             {'int8Ptr', 'ulong', 'ulong', 'ulong', 'ulong', 'ulong', 'ulong', 's_SECURITY_ATTRIBUTESPtr'}
             hPIPE = calllib('kernel32', 'CreateNamedPipeA', ...
                 pNAME, ...
                 ACCESS, ...
                 PIPE_MODE, ...  %
-                1, ...          % max instances
+                uint32(1), ...          % max instances
                 pBUFFER(1),...  % out buffer
                 pBUFFER(2),...  % in buffer
-                0, ...          % timeout ms (50ms)
+                uint32(0), ...          % timeout ms (50ms)
                 []);
         end
         
         %# ConnectNamedPipe function
         % Enables a named pipe server process to wait for a client process
-        % to connect to an instance of a named pipe. A client process 
+        % to connect to an instance of a named pipe. A client process
         % connects by calling either the CreateFile or CallNamedPipe function.
         function success = mConnectNamedPipe(hPIPE)
             % If the function succeeds, the return value is nonzero.
-            success = calllib('kernel32', 'ConnectNamedPipe',hPIPE,[]); 
+            success = calllib('kernel32', 'ConnectNamedPipe',hPIPE,[]);
         end
         
         %---------------------------------------------%
         %                    CLIENT
         %---------------------------------------------%
-        %# 
+        %#
         function hPIPE = mCreateFileA(pNAME,pACCESS)
             % pNAME = '\\.\pipe\ControlScreenPipe'
             % READ/WRITE ACCESS
@@ -99,18 +94,19 @@ classdef MSNamedPipe < handle
                     % GENERIC_READ_WRITE = uint32(hex2dec('C0000000')); % both
                     ACCESS = uint32(hex2dec('C0000000')); % both
             end
-
+            pNAME = uint8([pNAME 0]);
+            
             hPIPE = calllib('kernel32', 'CreateFileA', ...
                 pNAME, ...
                 ACCESS, ...
-                0, ...  % no sharing
+                uint32(0), ...  % no sharing
                 [], ...
-                3, ...  % OPEN_EXISTING
-                0, ...
+                uint32(3), ...  % OPEN_EXISTING
+                uint32(0), ...
                 []);
         end
         
-        %# 
+        %#
         function result = mSetNamedPipeHandleState(hPIPE,pPIPE_MODE)
             switch pPIPE_MODE
                 case 'PIPE_READMODE_MESSAGE'
@@ -133,17 +129,18 @@ classdef MSNamedPipe < handle
                 []);   % lpCollectDataTimeout
         end
         
-        %# WaitNamedPipe function
-        % Waits until either a time-out interval elapses or an instance 
-        % of the specified named pipe is available for connection
+        
         function success = mWaitNamedPipeA(pipeName,timeout) % timeout [ms]
-            timeout = uint64(timeout); % ulong
-            success = calllib('kernel32', 'WaitNamedPipeA',pipeName,timeout); 
+            % Waits until either a time-out interval elapses or an instance
+            % of the specified named pipe is available for connection
+            timeout = uint32(timeout); % ulong
+            pipeName = uint8([pipeName 0]);
+            success = calllib('kernel32', 'WaitNamedPipeA', pipeName, timeout);
         end
         %---------------------------------------------%
         %                   READ/WRITE
         %---------------------------------------------%
-        %# write 
+        % write
         function success = mWriteFile(hPIPE,pBYTE_STREAM)
             
             BYTE_STREAM  = uint8(pBYTE_STREAM); % is unit8
@@ -161,7 +158,7 @@ classdef MSNamedPipe < handle
             success = nWRITTEN == nBYTES;
         end
         
-        %# read 
+        % read
         function byte_stream = mReadFile(hPIPE,nBYTES)
             byte_stream = uint8(zeros(1,nBYTES)); % create a buffer
             nREAD       = uint32(0);              % number of bytes read
@@ -174,22 +171,34 @@ classdef MSNamedPipe < handle
                 nREAD, ...
                 []); %
             
-            % truncate if necessary 
+            % truncate if necessary
             byte_stream = byte_stream(1:nREAD); % 1:0 = empty matrix
             
         end
         
         function mPrintLastErrorMessage
-            
+            error('Not implemented yet')
             
         end
         
-        
+        function [result, flags, outSize, inSize, nMaxInstances] = mGetNamedPipeInfo(hPIPE)            
+            % Retrieve information about pipe. If result is nonzero
+            % function has succeeded.
+            flags = uint32(0);
+            outSize = uint32(0);
+            inSize = uint32(0);
+            nMaxInstances = uint32(0);
+            
+            [result, ~, flags, outSize, inSize, nMaxInstances] = calllib(...
+                'kernel32', 'GetNamedPipeInfo', ...
+                hPIPE, flags, outSize, inSize, nMaxInstances);
+            
+        end
         
         % GetLastError function
         function MSG_ID = mGetLastError
             MSG_ID = uint64(0); %#ok<NASGU>
-            MSG_ID = calllib('kernel32', 'GetLastError'); 
+            MSG_ID = calllib('kernel32', 'GetLastError');
         end
         
         function err = FormatMessageA(MSG_ID)
@@ -206,33 +215,25 @@ classdef MSNamedPipe < handle
                 [])
         end
         
-        %# DisconnectNamedPipe function
-        % Disconnects the server end of a named pipe 
-        % instance from a client process.
-        function success = mDisconnectNamedPipe(hPIPE)
-            % If the function succeeds, the return value is nonzero.
-            success = calllib('kernel32', 'DisconnectNamedPipe',hPIPE); 
+        function success = mDisconnectNamedPipe(hPIPE)            
+            % Disconnects the server end of a named pipe instance from a 
+            % client process. If the function succeeds, the return value
+            % is nonzero.
+            success = calllib('kernel32', 'DisconnectNamedPipe', hPIPE);
         end
         
-        %# close pipe 
-        function mCloseHandle(hPIPE)
-           calllib('kernel32', 'CloseHandle',hPIPE); 
+        
+        function success = mFlushFileBuffers(hPIPE)
+            success = calllib('kernel32', 'FlushFileBuffers', hPIPE);            
+        end
+        
+        
+        %# close pipe
+        function success = mCloseHandle(hPIPE)
+            success = calllib('kernel32', 'CloseHandle',hPIPE);
         end
         
     end
 end
-
-%EnumDisplaySettings
-%ChangeDisplaySettings
-% DeviceCapabilities
-% GetNamedPipeClientProcessId function
-% PeekNamedPipe
-             
-
-
-%FORMAT_MESSAGE_FROM_SYSTEM
-
-
-
 
 
