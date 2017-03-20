@@ -1,1 +1,3 @@
 git pull --all
+pause
+
