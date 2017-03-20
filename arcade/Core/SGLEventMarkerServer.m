@@ -30,8 +30,8 @@ classdef (Sealed) SGLEventMarkerServer < handle
             %------------------------------%
             %       Init Events Port
             evtLines = {...
-                'Dev1/port1/line7:0',... %port order changed in lab209!!
-                'Dev1/port0/line7:0',... %port order changed in lab209!!
+                'Dev1/port0/line7:0',... 
+                'Dev1/port1/line7:0',... 
                 'Dev1/port2/line7'};
             % create session, add lines
             nidaqObj = mNIDAQ; %#ok<*PROP>
