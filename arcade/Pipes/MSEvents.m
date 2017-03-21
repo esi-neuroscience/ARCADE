@@ -4,12 +4,7 @@ classdef MSEvents < handle
     %---------------------------------------------%
     % Jarrod, wrote class
     % 21.4.2016 - Jarrod, added some documentation/notes
-    
-    properties (Abstract = true)
-        hEvent    % event handle 
-        eventName % name of event
-    end
-    
+     
 
     methods (Static)
         function this = MSEvents
@@ -23,16 +18,18 @@ classdef MSEvents < handle
         
         %# create Event
         % event server 
-        function hEvent = mCreateEventA(eventName)
+        function hEvent = mCreateEvent(eventName)
             secAttr = libstruct('s_SECURITY_ATTRIBUTES');
+            eventName = uint8([eventName 0]);
             hEvent = calllib('kernel32', 'CreateEventA', secAttr, false, false, eventName);
         end
         
         %# open event
         % event client
-        function hEvent = mOpenEventA(eventName)
+        function hEvent = mOpenEvent(eventName)
             %access = uint32(hex2dec('00100000'));
             access = uint32(hex2dec('1F0003'));
+            eventName = uint8([eventName 0]);
             [hEvent, ~] = calllib('kernel32', 'OpenEventA', access, false, eventName);
         end
         
@@ -43,7 +40,7 @@ classdef MSEvents < handle
         
         %# wait for event
         function result = mWaitForEvent(hEvent,timeout) % timeout = ms
-            timeout = uint64(timeout); % ulong
+            timeout = uint32(timeout); % ulong
             result = calllib('kernel32', 'WaitForSingleObject', hEvent, timeout);
         end
         
@@ -53,8 +50,8 @@ classdef MSEvents < handle
         end
         
         %# close event handle 
-        function mCloseHandle(hEvent)
-            calllib('kernel32', 'CloseHandle',hEvent);
+        function result = mCloseHandle(hEvent)
+            result = calllib('kernel32', 'CloseHandle',hEvent);
         end
     end
     

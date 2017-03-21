@@ -452,8 +452,8 @@ fcns.thunkname{fcnNum}='int32voidPtrvoidPtrulongvoidPtrvoidPtrvoidPtrThunk';fcns
 % fcns.thunkname{fcnNum}='voidPtrulongint32voidPtrThunk';fcns.name{fcnNum}='OpenMutexA'; fcns.calltype{fcnNum}='Thunk'; fcns.LHS{fcnNum}='voidPtr'; fcns.RHS{fcnNum}={'ulong', 'int32', 'int8Ptr'};fcnNum=fcnNum+1;
 % % HANDLE  OpenMutexW ( DWORD dwDesiredAccess , BOOL bInheritHandle , LPCWSTR lpName ); 
 % fcns.thunkname{fcnNum}='voidPtrulongint32voidPtrThunk';fcns.name{fcnNum}='OpenMutexW'; fcns.calltype{fcnNum}='Thunk'; fcns.LHS{fcnNum}='voidPtr'; fcns.RHS{fcnNum}={'ulong', 'int32', 'uint16Ptr'};fcnNum=fcnNum+1;
-% % HANDLE  CreateEventA ( LPSECURITY_ATTRIBUTES lpEventAttributes , BOOL bManualReset , BOOL bInitialState , LPCSTR lpName ); 
-% fcns.thunkname{fcnNum}='voidPtrvoidPtrint32int32voidPtrThunk';fcns.name{fcnNum}='CreateEventA'; fcns.calltype{fcnNum}='Thunk'; fcns.LHS{fcnNum}='voidPtr'; fcns.RHS{fcnNum}={'s_SECURITY_ATTRIBUTESPtr', 'int32', 'int32', 'int8Ptr'};fcnNum=fcnNum+1;
+% HANDLE  CreateEventA ( LPSECURITY_ATTRIBUTES lpEventAttributes , BOOL bManualReset , BOOL bInitialState , LPCSTR lpName ); 
+fcns.thunkname{fcnNum}='voidPtrvoidPtrint32int32voidPtrThunk';fcns.name{fcnNum}='CreateEventA'; fcns.calltype{fcnNum}='Thunk'; fcns.LHS{fcnNum}='voidPtr'; fcns.RHS{fcnNum}={'s_SECURITY_ATTRIBUTESPtr', 'int32', 'int32', 'int8Ptr'};fcnNum=fcnNum+1;
 % % HANDLE  CreateEventW ( LPSECURITY_ATTRIBUTES lpEventAttributes , BOOL bManualReset , BOOL bInitialState , LPCWSTR lpName ); 
 % fcns.thunkname{fcnNum}='voidPtrvoidPtrint32int32voidPtrThunk';fcns.name{fcnNum}='CreateEventW'; fcns.calltype{fcnNum}='Thunk'; fcns.LHS{fcnNum}='voidPtr'; fcns.RHS{fcnNum}={'s_SECURITY_ATTRIBUTESPtr', 'int32', 'int32', 'uint16Ptr'};fcnNum=fcnNum+1;
 % HANDLE  OpenEventA ( DWORD dwDesiredAccess , BOOL bInheritHandle , LPCSTR lpName ); 
@@ -468,12 +468,12 @@ fcns.thunkname{fcnNum}='voidPtrulongint32voidPtrThunk';fcns.name{fcnNum}='OpenEv
 % fcns.thunkname{fcnNum}='voidPtrulongint32voidPtrThunk';fcns.name{fcnNum}='OpenSemaphoreA'; fcns.calltype{fcnNum}='Thunk'; fcns.LHS{fcnNum}='voidPtr'; fcns.RHS{fcnNum}={'ulong', 'int32', 'int8Ptr'};fcnNum=fcnNum+1;
 % % HANDLE  OpenSemaphoreW ( DWORD dwDesiredAccess , BOOL bInheritHandle , LPCWSTR lpName ); 
 % fcns.thunkname{fcnNum}='voidPtrulongint32voidPtrThunk';fcns.name{fcnNum}='OpenSemaphoreW'; fcns.calltype{fcnNum}='Thunk'; fcns.LHS{fcnNum}='voidPtr'; fcns.RHS{fcnNum}={'ulong', 'int32', 'uint16Ptr'};fcnNum=fcnNum+1;
-% % HANDLE  CreateFileMappingA ( HANDLE hFile , LPSECURITY_ATTRIBUTES lpFileMappingAttributes , DWORD flProtect , DWORD dwMaximumSizeHigh , DWORD dwMaximumSizeLow , LPCSTR lpName ); 
-% fcns.thunkname{fcnNum}='voidPtrvoidPtrvoidPtrulongulongulongvoidPtrThunk';fcns.name{fcnNum}='CreateFileMappingA'; fcns.calltype{fcnNum}='Thunk'; fcns.LHS{fcnNum}='voidPtr'; fcns.RHS{fcnNum}={'voidPtr', 's_SECURITY_ATTRIBUTESPtr', 'ulong', 'ulong', 'ulong', 'int8Ptr'};fcnNum=fcnNum+1;
+% HANDLE  CreateFileMappingA ( HANDLE hFile , LPSECURITY_ATTRIBUTES lpFileMappingAttributes , DWORD flProtect , DWORD dwMaximumSizeHigh , DWORD dwMaximumSizeLow , LPCSTR lpName ); 
+fcns.thunkname{fcnNum}='voidPtrvoidPtrvoidPtrulongulongulongvoidPtrThunk';fcns.name{fcnNum}='CreateFileMappingA'; fcns.calltype{fcnNum}='Thunk'; fcns.LHS{fcnNum}='voidPtr'; fcns.RHS{fcnNum}={'voidPtr', 's_SECURITY_ATTRIBUTESPtr', 'ulong', 'ulong', 'ulong', 'int8Ptr'};fcnNum=fcnNum+1;
 % % HANDLE  CreateFileMappingW ( HANDLE hFile , LPSECURITY_ATTRIBUTES lpFileMappingAttributes , DWORD flProtect , DWORD dwMaximumSizeHigh , DWORD dwMaximumSizeLow , LPCWSTR lpName ); 
 % fcns.thunkname{fcnNum}='voidPtrvoidPtrvoidPtrulongulongulongvoidPtrThunk';fcns.name{fcnNum}='CreateFileMappingW'; fcns.calltype{fcnNum}='Thunk'; fcns.LHS{fcnNum}='voidPtr'; fcns.RHS{fcnNum}={'voidPtr', 's_SECURITY_ATTRIBUTESPtr', 'ulong', 'ulong', 'ulong', 'uint16Ptr'};fcnNum=fcnNum+1;
-% % HANDLE  OpenFileMappingA ( DWORD dwDesiredAccess , BOOL bInheritHandle , LPCSTR lpName ); 
-% fcns.thunkname{fcnNum}='voidPtrulongint32voidPtrThunk';fcns.name{fcnNum}='OpenFileMappingA'; fcns.calltype{fcnNum}='Thunk'; fcns.LHS{fcnNum}='voidPtr'; fcns.RHS{fcnNum}={'ulong', 'int32', 'int8Ptr'};fcnNum=fcnNum+1;
+% HANDLE  OpenFileMappingA ( DWORD dwDesiredAccess , BOOL bInheritHandle , LPCSTR lpName ); 
+fcns.thunkname{fcnNum}='voidPtrulongint32voidPtrThunk';fcns.name{fcnNum}='OpenFileMappingA'; fcns.calltype{fcnNum}='Thunk'; fcns.LHS{fcnNum}='voidPtr'; fcns.RHS{fcnNum}={'ulong', 'int32', 'int8Ptr'};fcnNum=fcnNum+1;
 % % HANDLE  OpenFileMappingW ( DWORD dwDesiredAccess , BOOL bInheritHandle , LPCWSTR lpName ); 
 % fcns.thunkname{fcnNum}='voidPtrulongint32voidPtrThunk';fcns.name{fcnNum}='OpenFileMappingW'; fcns.calltype{fcnNum}='Thunk'; fcns.LHS{fcnNum}='voidPtr'; fcns.RHS{fcnNum}={'ulong', 'int32', 'uint16Ptr'};fcnNum=fcnNum+1;
 % % DWORD  GetLogicalDriveStringsA ( DWORD nBufferLength , LPSTR lpBuffer ); 
