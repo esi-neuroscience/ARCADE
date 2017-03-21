@@ -1,22 +1,21 @@
 
-pauseTime = 1;
-%% initialize StimServer
+% initialize StimServer & set parameters
 StimServer = SGLStimServer.launch;
 StimServerGeneral = SGLStimServerGeneral.launch;
 
-%%
-ARCADEFOLDER = 'C:\Toolbox\ARCADE\arcade';
-TESTFOLDER = fullfile(ARCADEFOLDER, 'Tests', 'Stimuli');
+pauseTime = 1;
+TESTFOLDER = fileparts(mfilename('fullpath'));
 LEFTEYE = [1 3];
 RIGHTEYE = [2 4];
 BOTHEYES = 1:4;
 
-%% image on
+
+%% TEST: image 
 img =  [];
 img.imageFile = fullfile(TESTFOLDER, 'test.png');
 img.position = [0 0];
 img.alpha = 200;
-% img.angle = 200;
+img.angle = 200;
 imageObject = createNewStimulus('Image', img);
 
 imageObject.visible(true);
@@ -25,11 +24,10 @@ imageObject.setParameter('alpha', 100);
 pause(pauseTime)
 imageObject.setParameter('angle', 30);
 
-%% image off
 imageObject.visible(false);
-imageObject.delete();
+delete(imageObject);
 
-%% quad4x image on
+%% TEST: quad4x image
 imgLeft =  [];
 imgLeft.imageFile =  fullfile(TESTFOLDER, 'test.bmp');
 imgLeft.position = [0 0];
@@ -44,12 +42,12 @@ quadObjectsRight = createNewQuad4XStimulus('Image', imgRight, RIGHTEYE);
 arrayfun(@(x) x.visible(true), quadObjectsLeft);
 arrayfun(@(x) x.visible(true), quadObjectsRight);
 
-%% quad4x image off
+pause(pauseTime)
 arrayfun(@(x) x.visible(false), [quadObjectsLeft quadObjectsRight]);
 arrayfun(@(x) x.delete, [quadObjectsLeft quadObjectsRight]);
 
 
-%% filled dot on
+%% TEST: filled dot
 dot = [];
 dot.position = [0 250];
 dot.color = [0 0 0 255];
@@ -62,11 +60,10 @@ dotObject.setParameter('diameter', 150);
 pause(pauseTime)
 dotObject.setParameter('position', [300 -100]);
 
-%% filled dot off
 dotObject.visible(false)
 dotObject.delete()
 
-%% masked grating on
+%% TEST: masked grating
 def =  [];
 def.position       = [0,0];             % [x,y] position
 def.color0         = [ 0, 255, 0,150]; % [r,g,b,w] [0...255] color when sinewave is 0
@@ -81,7 +78,6 @@ def.maskRotation   = 0;                 % degrees
 
 gratingObject = createNewStimulus('MaskedGrating', def);
 gratingObject.visible(true)
-
 
 pause(pauseTime)
 gratingObject.setParameter('color0', [0,0,0,255])
@@ -100,15 +96,13 @@ gratingObject.setParameter('smoothing', 2);
 pause(pauseTime)
 gratingObject.setParameter('maskRotation', 45);
 pause(pauseTime)
-gratingObject.setParameter('maskRadii', [500 200]);
+% gratingObject.setParameter('maskRadii', [500 200]);
 
-
-%% masked grating off
 gratingObject.visible(false);
 gratingObject.delete();
 
 
-%% masked grating with QUAD4X
+%% TEST: QUAD4X grating
 % system(fullfile(ARCADEFOLDER, 'External', 'ProPIXX', 'enable_quadx.bat'))
 def =  [];
 def.position       = [0,0];             % [x,y] position
@@ -141,13 +135,13 @@ arrayfun(@(x) x.visible(true), quadObjectsLeft);
 arrayfun(@(x) x.visible(true), quadObjectsRight);
 arrayfun(@(x) x.visible(true), dotObject);
 
-%% quad4x gratings off
+pause(pauseTime)
 arrayfun(@(x) x.visible(false), [quadObjectsLeft quadObjectsRight]);
 arrayfun(@(x) x.delete, [quadObjectsLeft quadObjectsRight]);
 arrayfun(@(x) x.delete, dotObject);
 
 
-%% random dots
+%% TEST: random dot pattern
 %           create defaults
 def =  [];
 def.position           = [0,0];     % [x,y] position             (signed floats)
@@ -178,7 +172,7 @@ rdpObject.delete();
 % BUG: dots appear on screen instead of flying into mask
 
 
-%% static bar
+%% TEST: static bar
 def =  [];
 def.position      = [0,0];             % [x,y] position
 def.widthHeight   = [500,21];           % pixels >=1
@@ -195,10 +189,10 @@ pause(pauseTime);
 barObject.setParameter('color', [128 0 0 199])
 pause(pauseTime);
 barObject.setParameter('widthHeight', [128 2])
-
+pause(pauseTime)
 barObject.delete();
 
-%% moving bar
+%% TEST: moving bar
 %           create defaults
 def =  [];
 def.position      = [0,0];             % [x,y] position
@@ -215,7 +209,7 @@ barObject.visible(true);
 % BUG: motion is jagged
 % NOTE: motion direction: 0 right, 90 up
 
-%%
+%% cleanup
 StimServerGeneral.delete()
 StimServer.delete();
-
+clear
