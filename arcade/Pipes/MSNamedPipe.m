@@ -61,8 +61,8 @@ classdef MSNamedPipe < handle
                 ACCESS, ...
                 PIPE_MODE, ...  %
                 uint32(1), ...          % max instances
-                pBUFFER(1),...  % out buffer
-                pBUFFER(2),...  % in buffer
+                uint32(pBUFFER(1)),...  % out buffer
+                uint32(pBUFFER(2)),...  % in buffer
                 uint32(0), ...          % timeout ms (50ms)
                 []);
         end
