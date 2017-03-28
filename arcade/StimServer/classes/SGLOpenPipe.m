@@ -35,44 +35,20 @@ classdef (Sealed) SGLOpenPipe < handle
             if ~libisloaded('kernel32'); loadlibrary('kernel32', @win_kernel32); end;
             % GENERIC_WRITE = uint32(hex2dec('40000000'));
             GENERIC_READ_WRITE = uint32(hex2dec('C0000000'));
-            pipeName = uint8(['\\.\pipe\StimServerPipe' 0]);
             hPipe = calllib('kernel32', 'CreateFileA', ...
-                pipeName, ...
+                uint8('\\.\pipe\StimServerPipe'), ...
                 GENERIC_READ_WRITE, ...
-                uint32(0), ...  % no sharing
+                0, ...  % no sharing
                 [], ...
-                uint32(3), ...  % OPEN_EXISTING
-                uint32(0), ...
+                3, ...  % OPEN_EXISTING
+                0, ...
                 []);
-                     
-            % set as a nowait message pipe
-            PIPE_MODE = uint32(hex2dec('00000003')); % message | nowait
-            result = calllib('kernel32', 'SetNamedPipeHandleState',...
-                hPipe,...
-                PIPE_MODE,...
-                [],... % lpMaxCollectionCount
-                []);   % lpCollectDataTimeout
-               
-            if ~result
-                error('StimServer:mOpenPipe', ...
-                    'Unable to set pipe mode for StimServerPipe');
-            end
-            
-            % check successful creation
-            [result, flags, outSize, inSize, ~] = MSNamedPipe.mGetNamedPipeInfo(hPipe);
-            if ~(result > 0) || flags ~= 4 || outSize ~= 8 || inSize~= 128
-                error('StimServer:mOpenPipe', 'StimServerPipe creation failed')
-            end
-
         end
     end
     
     methods
         function delete(this)
-             success = calllib('kernel32', 'CloseHandle', this.hPipe);
-             if success == 0 
-                warning('Could not close handle of \\.\pipe\StimServerPipe')
-            end
+             calllib('kernel32', 'CloseHandle', this.hPipe);
         end
     end
     
