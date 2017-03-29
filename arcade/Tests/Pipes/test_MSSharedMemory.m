@@ -10,6 +10,9 @@ while true
     count = count+1;
     sharedObject.pointer.Value = [count; count];
     pause(0.0001);
+    if rem(count, 100) == 0
+        fprintf('%g\n', count)
+    end
 end
 
 delete(sharedObject)
@@ -22,7 +25,11 @@ sharedObject.mOpenFileMapping('EyeMap');
 
 setdatatype(sharedObject.pointer, 'singlePtr', 2);
 while true
-    disp(num2str(sharedObject.pointer.Value'));
-    pause(0.5);
+    data = sharedObject.pointer.Value';
+    disp(data);
+    if data(1) ~= data(2)
+        warning('Value mismatch')
+    end
+    pause(0.1);
 end
 delete(sharedObject);
