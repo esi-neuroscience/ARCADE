@@ -172,44 +172,48 @@ classdef mNIDAQ < handle
             this.daqmxCheckError('daqmxReadAnalogF64',err); % error check
         end
         
-        %--------------------------------------%
-        % int32 DAQmxGetDeviceAttribute ( const char deviceName [], int32 attribute , void * value , ...); 
-        % DAQmxGetChanAttribute
-        %function value = daqxGetDeviceAttribute(this,attribute)
-            % return attribute
-            %value = int32(0);
-            %value_ptr = libpointer('voidPtr',value);
-            %'cstring', 'long', 'voidPtr', 'error'
-            %value = calllib(this.lib, 'DAQmxGetDeviceAttribute',...
-            %    'Dev1', int32(attribute), value_ptr);
-       
-        %end
+        function daqmxCfgSampClkTiming(this, samplingRate)
+            DAQmx_Val_Rising = 10280;
+            DAQmx_Val_Falling = 10171;            
+            DAQmx_Val_FiniteSamps = 10178 ;
+            DAQmx_Val_ContSamps = 10123;
+            DAQmx_Val_HWTimedSinglePoint = 12522;
+            
+            bufferSize = 5*samplingRate; % 5 s buffer
+           
+             err = calllib(this.lib, 'DAQmxCfgSampClkTiming', ...
+                    uint32(this.mHandle), ... 
+                    [], ... % clock source
+                    double(samplingRate), ... % double
+                    int32(DAQmx_Val_Rising), ...
+                    int32(DAQmx_Val_ContSamps), ...
+                    uint64(bufferSize))      ;         
+            this.daqmxCheckError('DAQmxCfgSampClkTiming',err); % error check
+        end
         
+        function daqmxStartTask(this)
+            err = calllib(this.lib, 'DAQmxStartTask', ...
+                this.mHandle);            
+            this.daqmxCheckError('DAQmxStartTask',err); 
+        end
         
+        function daqmxStopTask(this)
+            err = calllib(this.lib, 'DAQmxStopTask', ...
+                this.mHandle);
+            this.daqmxCheckError('DAQmxStopTask',err); 
+        end
+                
         function daqmxClearTask(this)
             [err] = calllib(this.lib,'DAQmxClearTask',this.mHandle); 
-            this.daqmxCheckError('daqmxClearTask',err); % error check
+            this.daqmxCheckError('DAQmxClearTask',err); % error check
         end
         
         function delete(this)
-            this.daqmxClearTask;
-            %unloadlibrary(this.lib); % problem if there are multiple
-            %objects
+            this.daqmxStopTask();
+            this.daqmxClearTask();            
         end
         
     end
-    
-
-    % create session
-    % get channel information 
-    % allows on to set the information 
-    
-    %DAQmx_Val_Task_Verify = 2; % Verify
-    %[err,b] = calllib(lib,'DAQmxTaskControl',taskh,DAQmx_Val_Task_Verify);
-    
-    
-    
-    
     
     
 end

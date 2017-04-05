@@ -38,5 +38,8 @@ fcns.thunkname{fcnNum}='longulongcstringcstringlongThunk';fcns.name{fcnNum}='DAQ
 fcns.thunkname{fcnNum}='longulonglongdoubleulongvoidPtrulongvoidPtrvoidPtrvoidPtrThunk';fcns.name{fcnNum}='DAQmxReadDigitalLines'; fcns.calltype{fcnNum}='Thunk'; fcns.LHS{fcnNum}='long'; fcns.RHS{fcnNum}={'ulong', 'long', 'double', 'ulong', 'uint8Ptr', 'ulong', 'longPtr', 'longPtr', 'ulongPtr'};fcnNum=fcnNum+1;
 % int32 __stdcall DAQmxReadAnalogF64 ( TaskHandle taskHandle , int32 numSampsPerChan , float64 timeout , bool32 fillMode , float64 readArray [], uInt32 arraySizeInSamps , int32 * sampsPerChanRead , bool32 * reserved ); 
 fcns.thunkname{fcnNum}='longulonglongdoubleulongvoidPtrulongvoidPtrvoidPtrThunk';fcns.name{fcnNum}='DAQmxReadAnalogF64'; fcns.calltype{fcnNum}='Thunk'; fcns.LHS{fcnNum}='long'; fcns.RHS{fcnNum}={'ulong', 'long', 'double', 'ulong', 'doublePtr', 'ulong', 'longPtr', 'ulongPtr'};fcnNum=fcnNum+1;
+% int32 __stdcall DAQmxCfgSampClkTiming ( TaskHandle taskHandle , const char source [], float64 rate , int32 activeEdge , int32 sampleMode , uInt64 sampsPerChan ); 
+fcns.thunkname{fcnNum}='longulongcstringdoublelonglonguint64Thunk';fcns.name{fcnNum}='DAQmxCfgSampClkTiming'; fcns.calltype{fcnNum}='Thunk'; fcns.LHS{fcnNum}='long'; fcns.RHS{fcnNum}={'ulong', 'cstring', 'double', 'long', 'long', 'uint64'};fcnNum=fcnNum+1;
+
 
 methodinfo=fcns;
