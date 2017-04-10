@@ -148,7 +148,7 @@ classdef mNIDAQ < handle
             
         function readarray1 = daqmxReadAnalogF64(this,numsample) 
             numSampsPerChan = 1;
-            timeout = 1;
+            timeout = -1; % wait infinitely for sample
             DAQmx_Val_GroupByChannel    = 0; % Group by Channel
             %DAQmx_Val_GroupByScanNumber = 1; % Group by Scan Number
             fillMode =  DAQmx_Val_GroupByChannel; % Group by Channel
@@ -175,7 +175,7 @@ classdef mNIDAQ < handle
         function daqmxCfgSampClkTiming(this, samplingRate)
             DAQmx_Val_Rising = 10280;
             DAQmx_Val_Falling = 10171;            
-            DAQmx_Val_FiniteSamps = 10178 ;
+            DAQmx_Val_FiniteSamps = 10178;
             DAQmx_Val_ContSamps = 10123;
             DAQmx_Val_HWTimedSinglePoint = 12522;
             
