@@ -1,8 +1,8 @@
-classdef NIEyeServer < handle
+classdef SGLNiEyeServer < handle
     
     properties ( Constant )
         eyelines = {'Dev1/ai0:1'};
-        samplingRate = 1000; % Hz
+        samplingRate = 2000; % Hz, tested up to 4000 Hz
         
         vgain = [10 10]; % V
         screensize = [1680 1050]; % x y in px
@@ -14,8 +14,19 @@ classdef NIEyeServer < handle
         sharedMemory        
     end
     
-    methods
-        function this = NIEyeServer
+
+  methods (Static)
+        function this = launch
+            persistent thisObj
+            if isempty(thisObj) || ~isvalid(thisObj)
+                thisObj = SGLNiEyeServer;
+            end
+            this = thisObj;
+        end
+    end
+
+    methods (Access = private)
+        function this = SGLNiEyeServer
             this.nidaqObj = mNIDAQ;
             this.nidaqObj.daqmxCreateAIVoltageChan(this.eyelines); % create channels
             this.nidaqObj.daqmxCfgSampClkTiming(this.samplingRate)
@@ -27,16 +38,18 @@ classdef NIEyeServer < handle
             this.sharedMemory = sharedObject;            
             
         end
-        
+    end
+
+    methods
         function this = start(this)
             this.nidaqObj.daqmxStartTask();
             try
                 while true
-                    analogInput = this.nidaqObj.daqmxReadAnalogF64(1);
+                    analogInput = this.nidaqObj.daqmxReadAnalogF64(1);                    
                     [xPx, yPx] = volts2pixels(analogInput(1),analogInput(2), ...
                         this.vgain, this.screensize);
                     this.sharedMemory.pointer.Value = [xPx; yPx];
-%                     java.lang.Thread.sleep(0.1);
+%                     java.lang.Thread.sleep(0.01);
                 end
             catch me
                 delete(this)
