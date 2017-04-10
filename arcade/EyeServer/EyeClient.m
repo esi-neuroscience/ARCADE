@@ -4,6 +4,10 @@ classdef EyeClient < handle
         sharedMemoryName = 'EyePosition';
     end
     
+    properties ( Dependent = true, SetAccess = immutable )
+        eyePosition
+    end
+    
     properties ( Access = private )
         sharedMemory
     end
@@ -17,9 +21,8 @@ classdef EyeClient < handle
             this.sharedMemory = sharedObject;
         end
         
-        function eyePos = mGetEyePosition(this)
-            eyePos = this.sharedMemory.pointer.Value;
-            
+        function value = get.eyePosition(this)
+            value = (this.sharedMemory.pointer.Value)';
         end
     end
     
