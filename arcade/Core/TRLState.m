@@ -171,12 +171,12 @@ classdef TRLState <  AUXPropertyManager & AUXEvalFunctions %& EyeTrack
         %function mCheckEyePosition(this,hObj,evt,varargin) 
         function shouldBreak = mCheckEyePosition(this,varargin)
             persistent fcnEvalEyePosition returnNextState
-            persistent EyeServer
+            persistent eyeClient
             
             shouldBreak = false;
             if ~isempty(varargin) % initialize
-                % fetch a the Eye Server
-                EyeServer = SGLEyeServerCorePipe.launch;
+                % initialize EyeClient
+                eyeClient = EyeClient;
                 fcnEvalEyePosition = varargin{1}(:,1);
                 returnNextState    = varargin{1}(:,2);
                 return;
@@ -184,7 +184,7 @@ classdef TRLState <  AUXPropertyManager & AUXEvalFunctions %& EyeTrack
 
             % else get eye
             % returns eye position in pixels, and [x_pos, y_pos];
-            eye_pos = EyeServer.mRequestEyeData;
+            eye_pos = eyeClient.eyePosition;
             
             if ~isempty(eye_pos)
                 %disp(['Eye Position: ', this.nextState]);

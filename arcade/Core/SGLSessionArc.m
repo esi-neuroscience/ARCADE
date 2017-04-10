@@ -124,7 +124,7 @@ classdef (Sealed) SGLSessionArc
                     % the StimServer freezing and then 
                     % everything must be shut down 
                     
-                    ME
+                    rethrow(ME)
                     keyboard
                 end
 
