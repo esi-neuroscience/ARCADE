@@ -1,17 +1,14 @@
-classdef SGLNiEyeServer < handle
+classdef (Sealed) SGLNiEyeServer < ABSEyeServer
     
     properties ( Constant )
         eyelines = {'Dev1/ai0:1'};
-        samplingRate = 2000; % Hz, tested up to 4000 Hz
-        
+        samplingRate = 2000; % Hz, tested up to 4000 Hz        
         vgain = [10 10]; % V
         screensize = [1680 1050]; % x y in px
-        sharedMemoryName = 'EyePosition'; % name for memory mapping to be used in EyeClient
     end
     
     properties ( Access = private )
-        nidaqObj
-        sharedMemory        
+        nidaqObj                
     end
     
 
@@ -27,15 +24,10 @@ classdef SGLNiEyeServer < handle
 
     methods (Access = private)
         function this = SGLNiEyeServer
+            this = this@ABSEyeServer;              
             this.nidaqObj = mNIDAQ;
             this.nidaqObj.daqmxCreateAIVoltageChan(this.eyelines); % create channels
             this.nidaqObj.daqmxCfgSampClkTiming(this.samplingRate)
-            
-            sharedObject = MSNamedSharedMemory;
-            sharedObject.mCreateFileMapping(this.sharedMemoryName, 16);
-            setdatatype(sharedObject.pointer, 'doublePtr', 2);
-            sharedObject.pointer.Value = [0.0; 0.0];
-            this.sharedMemory = sharedObject;            
             
         end
     end
