@@ -21,7 +21,7 @@ classdef SGLTestEyeServer < ABSEyeServer
         function obj = SGLTestEyeServer
             obj = obj@ABSEyeServer;
             
-            obj.fig = figure('WindowStyle', 'normal');
+            obj.fig = figure('WindowStyle', 'normal', 'MenuBar', 'None');
             obj.ax = axes('SortMethod','childorder', ...
                 'XLim', [-1920 1920]/2, 'YLim', [-1080 1080]/2);
             grid on
@@ -31,7 +31,7 @@ classdef SGLTestEyeServer < ABSEyeServer
             set(obj.fig,'Pointer','circle');
             obj.update();
             set(obj.fig, 'WindowButtonDownFcn', @obj.onClick)
-            fprintf('bla')
+            
         end
     end
     methods
@@ -62,7 +62,12 @@ classdef SGLTestEyeServer < ABSEyeServer
         end
         
         function obj = start(obj)
+            uiwait
+        end
+        
             
+        function delete(obj)
+            delete(obj.sharedMemory);    
         end
     end
 end
