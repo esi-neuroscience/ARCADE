@@ -25,9 +25,11 @@ classdef SGLEyelinkEyeServer < ABSEyeServer
     methods ( Access = public )
         
         
-        function this = start(this)
+        function start(this)
             MISSING_DATA=-32768;
             eye_used = 0;
+            stopEvent = IPCEvtServer('StopEyelink')
+            
             
             err =  Eyelink('StartRecording'); % [,file_samples, file_events, link_samples, link_events] )
             Eyelink('Message', 'SYNCTIME');
@@ -43,8 +45,12 @@ classdef SGLEyelinkEyeServer < ABSEyeServer
                         this.sharedMemory.pointer.Value = [x; y];
                     end
                 end
+                if stopEvent.wasTriggered
+                    break
+                end
                 java.lang.Thread.sleep(1)
             end
+            this.stop()
         end
         
         
