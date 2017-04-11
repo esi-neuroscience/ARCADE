@@ -52,9 +52,7 @@ classdef (Sealed) SGLControlScreenProc < SPCServerProc
             this.mWriteToDiary('Opened Core Pipe', true);
             % *creating this pipe informs Core that this process has launched
             
-            EyePipe  = SGLEyeServerCntlPipe.launch; % instance of EyeServer Pipe
-            EyePipe.mOpenClient;                    % connect as client
-            this.mWriteToDiary('Opened Eyelink Pipe', true);
+
 
             %----------------------------%
             this.mWriteToDiary('Waiting for Start Commmand', true);
@@ -66,7 +64,7 @@ classdef (Sealed) SGLControlScreenProc < SPCServerProc
                 switch char(msg)
                     case 'start'
                         this.mWriteToDiary('Start Control Screen', true);
-                        flag_runProc = this.mRunControlScreenLoop(CorePipe,EyePipe);
+                        flag_runProc = this.mRunControlScreenLoop(CorePipe);
                     case 'quit_proc'
                         flag_runProc = false;
                     case ''
@@ -94,7 +92,7 @@ classdef (Sealed) SGLControlScreenProc < SPCServerProc
         % 1. fetch eye data
         % 2. check for commands
         % 2. respond to command
-        function flag = mRunControlScreenLoop(this,CorePipe, EyePipe)
+        function flag = mRunControlScreenLoop(this,CorePipe)
             
             %---------------------------%
             % 1. Launch Control Screen Gui
@@ -121,6 +119,8 @@ classdef (Sealed) SGLControlScreenProc < SPCServerProc
             %CntlScreen.mForceFocus;
             this.mWriteToDiary('Entering loop', true);
             
+            eyeClient = EyeClient;
+            
             while 1
                 % ----- Pause Requested ------%
                 if CntlScreen.keyPressed
@@ -132,12 +132,11 @@ classdef (Sealed) SGLControlScreenProc < SPCServerProc
                     CntlScreen.keyPressed = false;
                 end
                 
-                % ------ Request Eye ------ %
-                eye_pos = EyePipe.mRequestEyeData;
-                if ~isempty(eye_pos)
-                    PltEyePos.mUpdate(eye_pos);
-                    drawnow('expose');
-                end
+                % ------ Update eye position ------ %
+                eye_pos = eyeClient.eyePosition;               
+                PltEyePos.mUpdate(eye_pos);
+                drawnow('expose');
+                
                 
                 % ------ Check Core  ------ %
                 [core_msg, byte_msg] = CorePipe.mReadMessageKey;

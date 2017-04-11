@@ -374,12 +374,12 @@ fcns.thunkname{fcnNum}='int32voidPtrvoidPtrulongvoidPtrvoidPtrvoidPtrThunk';fcns
 % fcns.thunkname{fcnNum}='int32voidPtrvoidPtrvoidPtrvoidPtrvoidPtrThunk';fcns.name{fcnNum}='GetMailslotInfo'; fcns.calltype{fcnNum}='Thunk'; fcns.LHS{fcnNum}='int32'; fcns.RHS{fcnNum}={'voidPtr', 'uint32Ptr', 'uint32Ptr', 'uint32Ptr', 'uint32Ptr'};fcnNum=fcnNum+1;
 % % BOOL  SetMailslotInfo ( HANDLE hMailslot , DWORD lReadTimeout ); 
 % fcns.thunkname{fcnNum}='int32voidPtrulongThunk';fcns.name{fcnNum}='SetMailslotInfo'; fcns.calltype{fcnNum}='Thunk'; fcns.LHS{fcnNum}='int32'; fcns.RHS{fcnNum}={'voidPtr', 'ulong'};fcnNum=fcnNum+1;
-% % LPVOID  MapViewOfFile ( HANDLE hFileMappingObject , DWORD dwDesiredAccess , DWORD dwFileOffsetHigh , DWORD dwFileOffsetLow , SIZE_T dwNumberOfBytesToMap ); 
-% fcns.thunkname{fcnNum}='voidPtrvoidPtrulongulongulonguint64Thunk';fcns.name{fcnNum}='MapViewOfFile'; fcns.calltype{fcnNum}='Thunk'; fcns.LHS{fcnNum}='voidPtr'; fcns.RHS{fcnNum}={'voidPtr', 'ulong', 'ulong', 'ulong', 'uint64'};fcnNum=fcnNum+1;
+% LPVOID  MapViewOfFile ( HANDLE hFileMappingObject , DWORD dwDesiredAccess , DWORD dwFileOffsetHigh , DWORD dwFileOffsetLow , SIZE_T dwNumberOfBytesToMap ); 
+fcns.thunkname{fcnNum}='voidPtrvoidPtrulongulongulonguint64Thunk';fcns.name{fcnNum}='MapViewOfFile'; fcns.calltype{fcnNum}='Thunk'; fcns.LHS{fcnNum}='voidPtr'; fcns.RHS{fcnNum}={'voidPtr', 'ulong', 'ulong', 'ulong', 'uint64'};fcnNum=fcnNum+1;
 % % BOOL  FlushViewOfFile ( LPCVOID lpBaseAddress , SIZE_T dwNumberOfBytesToFlush ); 
 % fcns.thunkname{fcnNum}='int32voidPtruint64Thunk';fcns.name{fcnNum}='FlushViewOfFile'; fcns.calltype{fcnNum}='Thunk'; fcns.LHS{fcnNum}='int32'; fcns.RHS{fcnNum}={'voidPtr', 'uint64'};fcnNum=fcnNum+1;
-% % BOOL  UnmapViewOfFile ( LPCVOID lpBaseAddress ); 
-% fcns.thunkname{fcnNum}='int32voidPtrThunk';fcns.name{fcnNum}='UnmapViewOfFile'; fcns.calltype{fcnNum}='Thunk'; fcns.LHS{fcnNum}='int32'; fcns.RHS{fcnNum}={'voidPtr'};fcnNum=fcnNum+1;
+% BOOL  UnmapViewOfFile ( LPCVOID lpBaseAddress ); 
+fcns.thunkname{fcnNum}='int32voidPtrThunk';fcns.name{fcnNum}='UnmapViewOfFile'; fcns.calltype{fcnNum}='Thunk'; fcns.LHS{fcnNum}='int32'; fcns.RHS{fcnNum}={'voidPtr'};fcnNum=fcnNum+1;
 % % int  lstrcmpA ( LPCSTR lpString1 , LPCSTR lpString2 ); 
 % fcns.thunkname{fcnNum}='int32voidPtrvoidPtrThunk';fcns.name{fcnNum}='lstrcmpA'; fcns.calltype{fcnNum}='Thunk'; fcns.LHS{fcnNum}='int32'; fcns.RHS{fcnNum}={'int8Ptr', 'int8Ptr'};fcnNum=fcnNum+1;
 % % int  lstrcmpW ( LPCWSTR lpString1 , LPCWSTR lpString2 ); 

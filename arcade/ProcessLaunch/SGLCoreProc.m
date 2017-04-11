@@ -55,8 +55,10 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
             
             if ishghandle(MSgui.hfig)
                 %# LAUNCH RewardServer
+                this.mWriteToDiary('Starting Reward Server', true);
                 rewServer   = SGLRewardServer.launch;
                 %# trigger events server
+                this.mWriteToDiary('Starting Event Server', true);
                 eventServer = SGLEventMarkerServer.launch;
             else
                 delete(MSgui)
@@ -65,18 +67,13 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
             end
             
             % Launch Matlab processes for these servers
+            this.mWriteToDiary('Launching Eye Server', true)
             eyeProcess = this.mLaunchServer('EyeServer');
+            this.mWriteToDiary('Launching ControlScreen', true)
             controlScreenProcess = this.mLaunchServer('ControlScreen');                                  
             
-            % connect to servers
-            EyeSerPipe  = this.mConnectToServer('EyeServer');
+            % connect to Control Screen            
             CntlSrnPipe = this.mConnectToServer('ControlScreen');
-            
-            %----------------------------------------%
-            % start polling eye signal
-            success = EyeSerPipe.mWriteCommandMessage('start_eye');
-            
-            
             
             cfg = MSgui.cfg; % get cfg file
             cfg.taskFile = MSgui.taskFile;
@@ -96,14 +93,13 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
             % delete objects
             this.mWriteToDiary('Closing', true);
             
-            delete(CntlSrnPipe);
-            delete(EyeSerPipe);
+            delete(CntlSrnPipe);            
             delete(rewServer);
             delete(eventServer);
 
             % quit ControlScreen, and EyeServer
-            eyeProcess.destroy()
-            controlScreenProcess.destroy()                        
+            eyeProcess.stop()
+            controlScreenProcess.stop()                        
             fclose('all'); % close all open files
         end
     end
@@ -111,16 +107,30 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
     methods (Access = protected)
         %# launch server process
         function process = mLaunchServer(this,xServ)
+            
+            % are we in debug mode?
+            debugPoints = dbstatus();            
+            isInDebugMode = any(arrayfun(@(x) strcmp(debugPoints.cond, 'error'), ...
+                debugPoints));
+            
             % create filepath to call
             launchFunc = fullfile(this.FPATH.pathProcessLaunch, ...
                 sprintf('run%s.m',xServ));
-            launchCmd = sprintf('matlab -automation -r "dbstop if error; run(''%s'')"', ...
-                launchFunc);
+            
+            if ~isInDebugMode
+                launchCmd = sprintf('matlab -automation -r "run(''%s'')"', ...
+                    launchFunc);
+            else
+                launchCmd = sprintf('matlab -r "dbstop if error; run(''%s'')"', ...
+                    launchFunc);
+            end
                         
             % launch process
-            runtime = java.lang.Runtime.getRuntime();
-            process = runtime.exec(launchCmd);
-%             system(launchCmd);
+            process = processManager('id', xServ, ...
+                'command', launchCmd, ...
+                'printStdout', false, ...
+                'printStderr', false);
+
         end
 
         %# connect to server
@@ -129,8 +139,6 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
         % 3. connect as client
         function thisServer = mConnectToServer(this, xServ)
             switch xServ
-                case 'EyeServer'
-                    thisServer = SGLEyeServerCorePipe.launch;
                 case 'ControlScreen'
                     thisServer = SGLCoreCntlPipe.launch;
             end
@@ -149,6 +157,7 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
             cd(fileparts(cfg.taskFile));
             
             % Launch StimServer
+            this.mWriteToDiary('Launching StimServer', true)
             StimServer = SGLStimServer.launch;
             % ***TODO: check if server is available***
             java.lang.Thread.sleep(15); % 15ms pause
@@ -157,6 +166,7 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
             % Launch a Session
             SESSArc  = SGLSessionArc.launch;
             % Start Session
+            this.mWriteToDiary('Starting Session', true)
             SESSArc.mStart;
             
             %----------------------------------------%
