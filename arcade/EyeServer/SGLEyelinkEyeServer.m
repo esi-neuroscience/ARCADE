@@ -28,14 +28,14 @@ classdef SGLEyelinkEyeServer < ABSEyeServer
         function start(this)
             MISSING_DATA=-32768;
             eye_used = 0;
-            stopEvent = IPCEvtServer('StopEyelink')
+            stopEvent = IPCEvtServer('StopEyelink');
             
             
             err =  Eyelink('StartRecording'); % [,file_samples, file_events, link_samples, link_events] )
             Eyelink('Message', 'SYNCTIME');
             
-            % TODO: add event for stopping the recording
-            while true 
+            
+            while ~stopEvent.wasTriggered 
                 if Eyelink('NewFloatSampleAvailable') > 0
                     % get the sample in the form of an event structure
                     evt = Eyelink('NewestFloatSample');
@@ -44,9 +44,6 @@ classdef SGLEyelinkEyeServer < ABSEyeServer
                     if x~=MISSING_DATA && y~=MISSING_DATA && evt.pa(eye_used+1)>0
                         this.sharedMemory.pointer.Value = [x; y];
                     end
-                end
-                if stopEvent.wasTriggered
-                    break
                 end
                 java.lang.Thread.sleep(1)
             end
