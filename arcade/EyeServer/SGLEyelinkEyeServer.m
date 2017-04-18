@@ -65,7 +65,7 @@ classdef SGLEyelinkEyeServer < ABSEyeServer
             assert(err == 0, 'Eyelink: Could not reset time to zero')
             
             
-            while ~stopEvent.wasTriggered && Eyelink('CurrentMode') == 4
+            while ~stopEvent.wasTriggered && Eyelink('CheckRecording') == 0
                 if Eyelink('NewFloatSampleAvailable') > 0
                     % get the sample in the form of an event structure
                     evt = Eyelink('NewestFloatSample');
@@ -96,10 +96,8 @@ classdef SGLEyelinkEyeServer < ABSEyeServer
                 fprintf('Stored %g MB in %s\n', nBytes/1024/1024, this.filename)
             end
             
-        end
-        
-        
-        function delete(this)
+        end                
+        function delete
             Eyelink('Shutdown');
         end
     end % public methods
