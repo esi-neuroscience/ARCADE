@@ -118,11 +118,11 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
                 sprintf('run%s.m',xServ));
             
             if ~isInDebugMode
-                launchCmd = sprintf('"%s\\bin\\matlab.exe" -automation -r "run(''%s'')"', ...
-                    matlabroot, launchFunc);
+                launchCmd = sprintf('matlab -automation -r "run(''%s'')"', ...
+                    launchFunc);
             else
-                launchCmd = sprintf('%s\\bin\\matlab.exe -r "dbstop if error; run(''%s'')"', ...
-                    matlabroot, launchFunc);
+                launchCmd = sprintf('matlab -r "dbstop if error; run(''%s'')"', ...
+                    launchFunc);
             end
                         
             % launch process

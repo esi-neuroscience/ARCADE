@@ -33,22 +33,24 @@ classdef (Sealed) SGLNiEyeServer < ABSEyeServer
     end
 
     methods
-        function start(this)
+        function this = start(this)
             this.nidaqObj.daqmxStartTask();
-            stopEvent = IPCEvtServer('StopEyeServer');
-            
-            while ~stopEvent.wasTriggered
-                analogInput = this.nidaqObj.daqmxReadAnalogF64(1);
-                [xPx, yPx] = volts2pixels(analogInput(1),analogInput(2), ...
-                    this.vgain, this.screensize);
-                this.sharedMemory.pointer.Value = [xPx; yPx];
-                %                     java.lang.Thread.sleep(0.01);
-            end                        
-            this.nidaqObj.daqmxStopTask();
+            try
+                while true
+                    analogInput = this.nidaqObj.daqmxReadAnalogF64(1);                    
+                    [xPx, yPx] = volts2pixels(analogInput(1),analogInput(2), ...
+                        this.vgain, this.screensize);
+                    this.sharedMemory.pointer.Value = [xPx; yPx];
+%                     java.lang.Thread.sleep(0.01);
+                end
+            catch me
+                delete(this)
+                rethrow(me)
+            end
             
         end
         
-        function delete(this)
+        function this = delete(this)
             delete(this.nidaqObj);
             delete(this.sharedMemory);
         end
