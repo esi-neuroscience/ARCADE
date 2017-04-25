@@ -102,9 +102,9 @@ classdef MSMessagePipe < MSNamedPipe
                 if this.mIsServer();
                     successFlush = this.mFlushFileBuffers(hPipe);
                     successDisconnect = this.mDisconnectNamedPipe(hPipe);
-                    if any([successFlush, successDisconnect] == 0)
-                        warning('Server disconnect of pipe %s failed. Client already closed?', this.pipeName)
-                    end
+%                     if any([successFlush, successDisconnect] == 0)
+%                         warning('Server disconnect of pipe %s failed. Client already closed?', this.pipeName)
+%                     end
                 end
                 successClose = this.mCloseHandle(hPipe);
                 if successClose == 0
