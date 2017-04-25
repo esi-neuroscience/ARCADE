@@ -15,9 +15,9 @@ classdef IPCEvtServer < MSEvents
             this.name = eventName;
         end
         
-        function wasTriggered = mWaitForTrigger(timeout)
+        function wasTriggered = mWaitForTrigger(this, timeout)
             WAIT_TIMEOUT = 258;
-            result = this.mWaitForEvent(this.hEvent,timeout) % timeout = ms
+            result = this.mWaitForEvent(this.hEvent,timeout); % timeout = ms
             wasTriggered = (result ~= WAIT_TIMEOUT); 
         end
         
