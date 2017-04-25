@@ -3,6 +3,7 @@ classdef SGLEyelinkEyeServer < ABSEyeServer
     properties
         filename = [];
         usedEye = 0;
+        screenSize = [1680 1050]; % x y in px
     end
     
     
@@ -69,8 +70,8 @@ classdef SGLEyelinkEyeServer < ABSEyeServer
                 if Eyelink('NewFloatSampleAvailable') > 0
                     % get the sample in the form of an event structure
                     evt = Eyelink('NewestFloatSample');
-                    x = evt.gx(this.usedEye+1); % +1 as we're accessing MATLAB array
-                    y = evt.gy(this.usedEye+1);
+                    x = evt.gx(this.usedEye+1)-this.screenSize(1)/2;
+                    y = -1*(1*evt.gy(this.usedEye+1)-this.screenSize(2)/2);
                     if x~=MISSING_DATA && y~=MISSING_DATA && evt.pa(this.usedEye+1)>0
                         this.sharedMemory.pointer.Value = [x; y];
                     end
@@ -97,7 +98,7 @@ classdef SGLEyelinkEyeServer < ABSEyeServer
             end
             
         end                
-        function delete
+        function delete(this)
             Eyelink('Shutdown');
         end
     end % public methods
