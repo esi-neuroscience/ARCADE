@@ -1,4 +1,4 @@
-classdef (Sealed) SGLRewardServer < handle 
+classdef (Sealed) SGLRewardServer < handle
     % [SINGKETON]
     
     
@@ -8,31 +8,37 @@ classdef (Sealed) SGLRewardServer < handle
     
     properties (SetAccess = immutable)
         nidaqObj % daq object
+        simulationMode = false;
     end
     
     methods (Static)
-       function this = launch
+        function this = launch
             persistent thisObj
             if isempty(thisObj) || ~isvalid(thisObj)
                 thisObj = SGLRewardServer;
             end
             this = thisObj;
-       end
+        end
     end
     
     methods (Access = private)
         %# constructor
         function this = SGLRewardServer
-            %# create nidaq object
-            rewLine = {'Dev1/port2/line3'}; % reward line
-
-            nidaqObj = mNIDAQ; %#ok<*PROP>       % create object
-            nidaqObj.daqmxCreateDOChan(rewLine);
-            this.nidaqObj = nidaqObj;
+            if ~this.simulationMode
+                %# create nidaq object
+                rewLine = {'Dev1/port2/line3'}; % reward line
+                
+                nidaqObj = mNIDAQ; %#ok<*PROP>       % create object
+                nidaqObj.daqmxCreateDOChan(rewLine);
+                this.nidaqObj = nidaqObj;
+                
+                % set the nidaq object as a peristent variable
+                % and ensure it starts closed
+                this.mSetRewardBit(0,nidaqObj);
+            else
+                warning('Simulation mode for reward is on. No events will be sent out')
+            end
             
-            % set the nidaq object as a peristent variable
-            % and ensure it starts closed 
-            this.mSetRewardBit(0,nidaqObj); 
         end
         
     end
@@ -52,41 +58,45 @@ classdef (Sealed) SGLRewardServer < handle
         end
     end
     
-    %# public methods 
-    methods 
+    %# public methods
+    methods
         %# single pulse
         function mRewardPulse(this,rdur)
-            % open, time, close 
-            t = tic;
-            this.mSetRewardBit(1);
-            % TODO: why is this a while loop, not a sleep/pause?
-            while toc(t)*1000<rdur
-                %java.lang.Thread.sleep(1);
+            if ~this.simulationMode
+                % open, time, close
+                t = tic;
+                this.mSetRewardBit(1);
+                % TODO: why is this a while loop, not a sleep/pause?
+                while toc(t)*1000<rdur
+                    %java.lang.Thread.sleep(1);
+                end
+                %             disp(['Reward pulse: ', int2str(toc(t)*1000),' / ',int2str(rdur)]);
+                this.mSetRewardBit(0);
             end
-%             disp(['Reward pulse: ', int2str(toc(t)*1000),' / ',int2str(rdur)]);
-            this.mSetRewardBit(0);
         end
         %# pulse sequence
         function mRewardSequence(this,duration,iri)
-            % make sure they are the same length
-            if length(duration) ~= length(iri)
-                disp('Warning: Reward Duration and Inter-Reward-Interval vectors are not the same length.');
-                return;
-            end
-            
-            % first reward 
-            %if length(duration)
-            for k = 1:length(duration)
-                this.mRewardPulse(duration(k));
-                % does this hold up the main tread?
-                java.lang.Thread.sleep(iri(k));
+            if ~this.simulationMode
+                % make sure they are the same length
+                if length(duration) ~= length(iri)
+                    disp('Warning: Reward Duration and Inter-Reward-Interval vectors are not the same length.');
+                    return;
+                end
+                
+                % first reward
+                %if length(duration)
+                for k = 1:length(duration)
+                    this.mRewardPulse(duration(k));
+                    % does this hold up the main tread?
+                    java.lang.Thread.sleep(iri(k));
+                end
             end
         end
-        %# general delete function 
+        %# general delete function
         function delete(this)
             delete(this.nidaqObj);
         end
     end
-
+    
 end
 
