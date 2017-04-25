@@ -40,14 +40,14 @@ classdef (Sealed) SGLEyeServerProc < SPCServerProc
     methods
         function mRunServer(this)
             % initialize eye server
-            eyeServer = SGLNiEyeServer.launch();
+            eyeServer = SGLEyelinkEyeServer.launch();
             
             %----------------------------%
-            this.mWriteToDiary('Starting eye data acquistion', true);
+            this.mWriteToDiary('Starting eye data acquisition', true);
             eyeServer.start();
             
             %---------------------------%
-            this.mWriteToDiary('Stopping data acqusition', false);
+            this.mWriteToDiary('Stopping data acquisition', false);
             
             % setup better disconnect
             delete(eyeServer);
