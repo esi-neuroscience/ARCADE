@@ -1,7 +1,7 @@
 clear
 close all
 
-EyeServer = SGLEyeServer.launch();
+EyeServer = SGLEyelinkEyeServer.launch();
 
 %% test fetching
 nMin = 60*24*5; % 5 days
@@ -14,10 +14,11 @@ if plotEyePosition
     set(ax, 'NextPlot', 'replacechildren', 'XLim', [-0.5 0.5]*1680, 'YLim', [-0.5 0.5]*1050)
 end
 
+client = EyeClient;
 nSamples = 0;
 tic
 while toc<nMin*60
-    eye_pos = EyeServer.mFetchEyePosition();
+    eye_pos = client.eyePosition;
     if plotEyePosition
         plot(eye_pos(1), eye_pos(2), 'o')
         drawnow()
