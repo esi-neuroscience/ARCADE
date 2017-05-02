@@ -34,9 +34,10 @@ classdef (Sealed) SGLNiEyeServer < ABSEyeServer
 
     methods
         function this = start(this)
+            stopEvent = IPCEvtServer('StopEyeServer');
             this.nidaqObj.daqmxStartTask();
             try
-                while true
+                while stopEvent.wasTriggered
                     analogInput = this.nidaqObj.daqmxReadAnalogF64(1);                    
                     [xPx, yPx] = volts2pixels(analogInput(1),analogInput(2), ...
                         this.vgain, this.screensize);

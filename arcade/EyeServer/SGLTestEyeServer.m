@@ -4,6 +4,7 @@ classdef SGLTestEyeServer < ABSEyeServer
         fig
         ax
         dot
+        stopEvent
     end
    
     methods (Static)
@@ -31,7 +32,7 @@ classdef SGLTestEyeServer < ABSEyeServer
             set(obj.fig,'Pointer','circle');
             obj.update();
             set(obj.fig, 'WindowButtonDownFcn', @obj.onClick)
-            
+            this.stopEvent = IPCEvtServer('StopEyeServer');
         end
     end
     methods
