@@ -5,9 +5,9 @@ SET PATH="C:\Program Files\MATLAB\R2014a\bin\";"C:\Program Files\MATLAB\R2014a\b
 SET ARCADEDIR="%~dp0"\ProcessLaunch\
 
 IF "%~1"=="/DEBUG" (
-	SET RUNCMD=matlab -r "dbstop if error; run('%DISPLAYDIR%runCore.m')";
+	SET RUNCMD=matlab -r "dbstop if error; run('%ARCADEDIR%runCore.m')";
 ) ELSE (
-	SET RUNCMD=matlab -nodesktop -r "run('%DISPLAYDIR%runCore.m')"
+	SET RUNCMD=matlab -nodesktop -r "run('%ARCADEDIR%runCore.m')"
 )
 
 %RUNCMD%
