@@ -2,7 +2,7 @@ classdef (Sealed) SGLNiEyeServer < ABSEyeServer
     
     properties ( Constant )
         eyelines = {'Dev1/ai0:1'};
-        samplingRate = 2000; % Hz, tested up to 4000 Hz        
+        samplingRate = 1000; % Hz, tested up to 4000 Hz        
         vgain = [10 10]; % V
         screensize = [1680 1050]; % x y in px
     end

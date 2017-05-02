@@ -66,27 +66,48 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
                 return    
             end
             
-            % Launch Matlab processes for these servers
-            this.mWriteToDiary('Launching Eye Server', true)
-            eyeProcess = this.mLaunchServer('EyeServer');
-            this.mWriteToDiary('Launching ControlScreen', true)
-            controlScreenProcess = this.mLaunchServer('ControlScreen');                                  
-            
-            % connect to Control Screen            
-            CntlSrnPipe = this.mConnectToServer('ControlScreen');
-            
+                        
             cfg = MSgui.cfg; % get cfg file
             cfg.taskFile = MSgui.taskFile;
             
+            % close main screen
             delete(MSgui);
             drawnow()
             
+            
+            this.mWriteToDiary('Launching ControlScreen', true)
+            controlScreenProcess = this.mLaunchServer('ControlScreen'); 
+            
+            this.mWriteToDiary('Launching Eye Server', true)
+            eyeProcess = this.mLaunchServer('EyeServer');
+            
+            this.mWriteToDiary('Launching StimServer', true)
+            stimServerProcess = processManager('id', 'StimServer', ...
+                'command', 'StimServer.exe', ...
+                'printStdout', false, ...
+                'printStderr', false);
+                                   
+            
+            this.mWriteToDiary('Waiting for processes', true)
+            
+            
+            % connect to Control Screen            
+            CntlSrnPipe = this.mConnectToServer('ControlScreen');
+                       
+            % connect to StimServer            
+            stimPipe = SGLOpenPipe.fetch();            
+            
             % Run session
-            success = CntlSrnPipe.mWriteCommandMessage('start'); %#ok<*NASGU>
+            startEvent = IPCEvtClient('startControlScreenLoop');
+            startEvent.trigger();
+            
+            pause(2)
             this.mWriteToDiary('Starting Session', true);
             this.mRunSession(cfg);
             
-            success = CntlSrnPipe.mWriteCommandMessage('stop');                        
+            
+            
+
             
             %----------------------------------------%
             
@@ -97,9 +118,20 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
             delete(rewServer);
             delete(eventServer);
 
-            % quit ControlScreen, and EyeServer
+            % quit eye server
+            stopEyeServerEvt = IPCEvtClient('StopEyeServer');
+            stopEyeServerEvt.trigger();
             eyeProcess.stop()
-            controlScreenProcess.stop()                        
+            
+            % quit control screen
+            stopControlScreenEvt = IPCEvtClient('StopControlScreen');
+            stopControlScreenEvt.trigger()           
+            controlScreenProcess.stop()
+            
+            % quit stim server
+            stimServerProcess.stop()
+            
+            
             fclose('all'); % close all open files
         end
     end
@@ -156,9 +188,6 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
             % move to user's working directory
             cd(fileparts(cfg.taskFile));
             
-            % Launch StimServer
-            this.mWriteToDiary('Launching StimServer', true)
-            StimServer = SGLStimServer.launch;
             % ***TODO: check if server is available***
             java.lang.Thread.sleep(15); % 15ms pause
             % Launch Behavioural Data Store
@@ -179,7 +208,6 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
             % leaving session
             this.mWriteToDiary('Quitting session', true);
 
-            delete(StimServer);
             delete(BHVstore);
             delete(SESSArc);
             

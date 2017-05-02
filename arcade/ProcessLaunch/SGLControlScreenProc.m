@@ -55,26 +55,19 @@ classdef (Sealed) SGLControlScreenProc < SPCServerProc
 
 
             %----------------------------%
-            this.mWriteToDiary('Waiting for Start Commmand', true);
-            flag_runProc = true;  % quit_proc
-            while flag_runProc
-                
-                [msg, byte_msg] = CorePipe.mReadMessageKey; %#ok<*NASGU>
-                
-                switch char(msg)
-                    case 'start'
-                        this.mWriteToDiary('Start Control Screen', true);
-                        flag_runProc = this.mRunControlScreenLoop(CorePipe);
-                    case 'quit_proc'
-                        flag_runProc = false;
-                    case ''
-                        % no message in pipe
-                    otherwise
-                        % ignore message
-                end
-                drawnow; % flush events
-                java.lang.Thread.sleep(1);
+            this.mWriteToDiary('Waiting for start commmand', true);
+            startEvent = IPCEvtServer('startControlScreenLoop');
+            
+            wasTriggered = startEvent.mWaitForTrigger(60000);
+            if ~wasTriggered
+                error('Did not receive start command')
             end
+                
+
+            this.mRunControlScreenLoop(CorePipe);
+            drawnow; % flush events
+            java.lang.Thread.sleep(1);
+
             
             %---------------------------%
             this.mWriteToDiary('Quit process command', false);
@@ -82,7 +75,7 @@ classdef (Sealed) SGLControlScreenProc < SPCServerProc
 
             % setup better disconnect
             delete(CorePipe);
-            delete(EyePipe);
+
         end
     end
     
@@ -120,8 +113,8 @@ classdef (Sealed) SGLControlScreenProc < SPCServerProc
             this.mWriteToDiary('Entering loop', true);
             
             eyeClient = EyeClient;
-            
-            while 1
+            stopControlScreenEvt = IPCEvtServer('StopControlScreen');
+            while ~stopControlScreenEvt.wasTriggered()
                 % ----- Pause Requested ------%
                 if CntlScreen.keyPressed
                     % ensure it is sent
@@ -181,7 +174,7 @@ classdef (Sealed) SGLControlScreenProc < SPCServerProc
                     otherwise
                         % ignore message
                 end
-                
+                flag = false;
                 drawnow; % flush events 
                 java.lang.Thread.sleep(1); % pause a bit
             end
