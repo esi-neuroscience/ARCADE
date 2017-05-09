@@ -1,4 +1,4 @@
-classdef Stimulus < handle
+classdef Stimulus < hgsetget % will be matlab.mixin.SetGet after 2014b
     
     properties ( SetAccess = public, GetAccess = public )
         position = [0 0];
