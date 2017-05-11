@@ -8,7 +8,7 @@ classdef (Sealed) SGLRewardServer < handle
     
     properties (SetAccess = immutable)
         nidaqObj % daq object
-        simulationMode = false;
+        sendToDaq = true;
     end
     
     methods (Static)
@@ -24,7 +24,7 @@ classdef (Sealed) SGLRewardServer < handle
     methods (Access = private)
         %# constructor
         function this = SGLRewardServer
-            if ~this.simulationMode
+            try             
                 %# create nidaq object
                 rewLine = {'Dev1/port2/line3'}; % reward line
                 
@@ -35,8 +35,10 @@ classdef (Sealed) SGLRewardServer < handle
                 % set the nidaq object as a peristent variable
                 % and ensure it starts closed
                 this.mSetRewardBit(0,nidaqObj);
-            else
-                warning('Simulation mode for reward is on. No events will be sent out')
+            catch me
+                me
+                warning('Could not find NI DAQ card. No reward will be send out.')
+                this.sendToDaq = false;
             end
             
         end
@@ -62,7 +64,7 @@ classdef (Sealed) SGLRewardServer < handle
     methods
         %# single pulse
         function mRewardPulse(this,rdur)
-            if ~this.simulationMode
+            if this.sendToDaq
                 % open, time, close
                 t = tic;
                 this.mSetRewardBit(1);
@@ -76,7 +78,7 @@ classdef (Sealed) SGLRewardServer < handle
         end
         %# pulse sequence
         function mRewardSequence(this,duration,iri)
-            if ~this.simulationMode
+            if this.sendToDaq
                 % make sure they are the same length
                 if length(duration) ~= length(iri)
                     disp('Warning: Reward Duration and Inter-Reward-Interval vectors are not the same length.');

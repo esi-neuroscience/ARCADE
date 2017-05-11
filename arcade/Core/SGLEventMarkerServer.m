@@ -34,7 +34,7 @@ classdef (Sealed) SGLEventMarkerServer < handle
     methods (Access = private)
         function this = SGLEventMarkerServer(filename)
             
-            if this.sendToDaq
+            try            
                 %------------------------------%
                 %       Init Events Port
                 evtLines = {...
@@ -42,6 +42,7 @@ classdef (Sealed) SGLEventMarkerServer < handle
                     'Dev1/port1/line7:0',...
                     'Dev1/port2/line7'};
                 % create session, add lines
+               
                 nidaqObj = mNIDAQ; %#ok<*PROP>
                 nidaqObj.daqmxCreateDOChan(evtLines);
                 %------------------------------%
@@ -49,8 +50,10 @@ classdef (Sealed) SGLEventMarkerServer < handle
                 nbits = 16; % trigger bits
                 nidaqObj.daqmxWriteDigitalLines(zeros(1,nbits+1)); % zero port(s)
                 this.nidaqObj = nidaqObj;
-            else
-                warning('Simulation mode for event markers is on. No events will be sent out')
+            catch me
+                this.sendToDaq = false;
+                me
+                warning('Could not find NI DAQ card. No event markers will be send out.')
             end
             this.tStart = tic;
             if ~isempty(filename)
