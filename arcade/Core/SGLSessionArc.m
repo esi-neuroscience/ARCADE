@@ -81,7 +81,7 @@ classdef (Sealed) SGLSessionArc
             %result = this.mSetActiveWindow(this.hwnd_ctrl);
             % result = this.mSetForegroundWindow(this.hwnd_ctrl);
             
-
+            
             %** session is running, break point ***
             % startTrial
             % time the loop time, 
@@ -132,6 +132,8 @@ classdef (Sealed) SGLSessionArc
                 % -> this is where I would send an 'EndOfTrial' trigger 
                 delete(StateArc); % delete StateArc
 
+                EventServer.writeEvents();
+                
                 % read ControlScreen pipe
                 msgs = CntlSrnPipe.mReadMessagePipeEmpty;
                 quitSession = false;

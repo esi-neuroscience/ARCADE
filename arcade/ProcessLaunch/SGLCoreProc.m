@@ -53,14 +53,7 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
             % launch Main Screen
             MSgui = MainScreen.launch;
             
-            if ishghandle(MSgui.hfig)
-                %# LAUNCH RewardServer
-                this.mWriteToDiary('Starting Reward Server', true);
-                rewServer   = SGLRewardServer.launch;
-                %# trigger events server
-                this.mWriteToDiary('Starting Event Server', true);
-                eventServer = SGLEventMarkerServer.launch;
-            else
+            if ~ishghandle(MSgui.hfig)
                 delete(MSgui)
                 fclose('all')
                 return    
@@ -74,6 +67,12 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
             delete(MSgui);
             drawnow()
             
+            this.mWriteToDiary('Starting Reward Server', true);
+            rewServer   = SGLRewardServer.launch;
+            
+            this.mWriteToDiary('Starting Event Server', true);
+            evtFile = fullfile(cfg.filepaths.Behaviour, [cfg.Subject '_' today() '_' cfg.Experiment '_' cfg.Session '.evt']);
+            eventServer = SGLEventMarkerServer.launch(evtFile);
             
             this.mWriteToDiary('Launching ControlScreen', true)
             controlScreenProcess = this.mLaunchServer('ControlScreen'); 
