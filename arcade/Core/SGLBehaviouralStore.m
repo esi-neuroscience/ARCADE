@@ -85,12 +85,7 @@ classdef (Sealed) SGLBehaviouralStore < AUXEditableVariables & AUXOutputDataFile
         %# true constructor
         function this = SGLBehaviouralStore(cfg)
             
-            timeNow    = datestr(now,'HH:MM PM');
-            today      = datestr(now,'ddmmyy');
-            timeString = [today,'_',datestr(timeNow,'HHMM')];
-            % e.g., 020215_0613
-            this.dataFileString = timeString;
-            
+            this.dataFileString =  [cfg.Subject '_' today() '_' cfg.Experiment '_' cfg.Session];            
             % set cfg  structure
             this.cfg = cfg;
             behavDir = this.cfg.filepaths.Behaviour;
@@ -187,7 +182,7 @@ classdef (Sealed) SGLBehaviouralStore < AUXEditableVariables & AUXOutputDataFile
                 CntlSrnPipe = SGLCoreCntlPipe.launch; % writing to pipe
                 
                 % open trial behavioural data file 
-                this.mOpenFile(this.cfg.taskFile);
+                this.mOpenFile();
                 
             else
                 

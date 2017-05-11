@@ -40,7 +40,7 @@ classdef (Sealed) SGLEyeServerProc < SPCServerProc
     methods
         function mRunServer(this)
             % initialize eye server
-            eyeServer = SGLEyelinkEyeServer.launch();
+            eyeServer = SGLTestEyeServer.launch();
             
             %----------------------------%
             this.mWriteToDiary('Starting eye data acquisition', true);

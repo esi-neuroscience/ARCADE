@@ -1,34 +1,40 @@
 classdef (Sealed) SGLEventMarkerServer < handle
-    % [SINGLETON]
-    
-    % Should run a timing test with this version
-    % and a version using a peristent variable
-    
-    %---------------------------------------------%
-    % unknown   - Jarrod, wrote class
-    % 14.7.2015 - Jarrod, replaced decimalToBinaryVector() with dec2bin()-'0'
-    % - because decimalToBinaryVector() is in the daq toolbox, and -'0' dec2bin returns a string
-    % 21.4.2016 - Jarrod, added some documentation/notes
     
     
     properties (SetAccess = immutable)
-        nidaqObj % object for
-        simulationMode = false;
+        nidaqObj 
+        sendToDaq = true;
+        filename = [];
+        fileHandle = [];
+    end
+    
+    properties ( Access = private )
+        timestamps = uint64(zeros(1,1000))
+        values = uint64(zeros(1,1000))
+        lastEvent = 0;  
+    end
+    
+    properties ( Access = public )
+        tStart
     end
     
     methods (Static)
-        function this = launch
+        function this = launch(filename)
+            if nargin == 0
+                filename = [];
+            end
             persistent thisObj
             if isempty(thisObj) || ~isvalid(thisObj)
-                thisObj = SGLEventMarkerServer;
+                thisObj = SGLEventMarkerServer(filename);
             end
             this = thisObj;
         end
     end
     
     methods (Access = private)
-        function this = SGLEventMarkerServer
-            if ~this.simulationMode
+        function this = SGLEventMarkerServer(filename)
+            
+            try            
                 %------------------------------%
                 %       Init Events Port
                 evtLines = {...
@@ -36,6 +42,7 @@ classdef (Sealed) SGLEventMarkerServer < handle
                     'Dev1/port1/line7:0',...
                     'Dev1/port2/line7'};
                 % create session, add lines
+               
                 nidaqObj = mNIDAQ; %#ok<*PROP>
                 nidaqObj.daqmxCreateDOChan(evtLines);
                 %------------------------------%
@@ -43,16 +50,30 @@ classdef (Sealed) SGLEventMarkerServer < handle
                 nbits = 16; % trigger bits
                 nidaqObj.daqmxWriteDigitalLines(zeros(1,nbits+1)); % zero port(s)
                 this.nidaqObj = nidaqObj;
-            else
-                warning('Simulation mode for event markers is on. No events will be sent out')
+            catch me
+                this.sendToDaq = false;
+                me
+                warning('Could not find NI DAQ card. No event markers will be send out.')
+            end
+            this.tStart = tic;
+            if ~isempty(filename)
+                this.filename = filename;
+                h = fopen(this.filename, 'w');
+                assert(h ~= -1);
+                this.fileHandle = h;
             end
         end
     end
     
     methods
-        %# set the state of the reward bit
+        
         function mSendEventMarker(this,value,varargin)
-            if ~this.simulationMode
+            
+            this.timestamps(this.lastEvent+1) = uint64(toc(this.tStart)*1E6);
+            this.values(this.lastEvent+1) = uint64(value);
+            this.lastEvent = this.lastEvent+1;
+            
+            if this.sendToDaq
                 nbits = 16;
                 
                 % 16-bit event
@@ -80,24 +101,24 @@ classdef (Sealed) SGLEventMarkerServer < handle
             
         end
         
-        %# general delete function
-        function delete(this)
-            if ~this.simulationMode
-                delete(this.nidaqObj);
+        function writeEvents(this)
+            if ~isempty(this.filename)
+                writeArray = [this.timestamps(1:this.lastEvent); this.values(1:this.lastEvent)];
+                nWritten = fwrite(this.fileHandle, writeArray, 'uint64');
+                assert(nWritten == this.lastEvent*2)
+                this.lastEvent = 0;
+                this.timestamps(:) = 0;
+                this.values(:) = 0;
             end
         end
-    end
-    
+        
+        function delete(this)
+            if this.sendToDaq
+                delete(this.nidaqObj);
+            end
+            if ~isempty(this.filename)
+                fclose(this.fileHandle);
+            end
+        end
+    end   
 end
-
-
-% [f,e]=log2(max(d)); % How many digits do we need to represent the numbers?
-% s = char(rem(floor(d*pow2(1-max(n,e):0)),2)+'0');
-% OR,
-% x = dec2bin(value,nbits)-'0';
-
-
-
-
-
-
