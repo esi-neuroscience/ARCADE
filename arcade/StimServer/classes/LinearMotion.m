@@ -1,10 +1,10 @@
 classdef LinearMotion < Animation
     
-    properties ( SetAccess = immutable )       
+    properties ( SetAccess = immutable, Transient = true )       
        velocity = []; % px / s
     end
     
-    properties
+    properties ( Transient = true )
        vertices = []; 
     end
     

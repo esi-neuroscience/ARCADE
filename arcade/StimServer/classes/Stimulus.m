@@ -1,13 +1,13 @@
 classdef Stimulus < hgsetget % will be matlab.mixin.SetGet after 2014b
     
-    properties ( SetAccess = public, GetAccess = public )        
+    properties ( SetAccess = public, GetAccess = public, Transient = true )        
         visible = false;
         protected = false;
         position = [0 0];
         animation = [];
     end
     
-    properties ( SetAccess = immutable, GetAccess = public, Hidden = false )
+    properties ( SetAccess = immutable, GetAccess = public, Hidden = false, Transient = true )
         key
     end
         

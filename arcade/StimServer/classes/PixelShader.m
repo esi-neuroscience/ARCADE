@@ -1,10 +1,10 @@
 classdef PixelShader < Stimulus
             
-    properties ( SetAccess = immutable )
+    properties ( SetAccess = immutable, Transient = true )
         filename
     end
     
-    properties ( SetAccess = public, GetAccess = public )
+    properties ( SetAccess = public, GetAccess = public, Transient = true )
         shaderWidth = 1000;
         shaderHeight = 1000;
         animationIncrement = 1;

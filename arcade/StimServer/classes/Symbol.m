@@ -5,7 +5,7 @@ classdef Symbol < Stimulus
         type
     end
     
-    properties ( SetAccess = public, GetAccess = public )
+    properties ( SetAccess = public, GetAccess = public, Transient = true )
         diameter        
         color = [255 255 255];
         alpha = 255;

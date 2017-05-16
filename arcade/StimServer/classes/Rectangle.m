@@ -1,7 +1,7 @@
 classdef Rectangle < Stimulus
     
     
-    properties ( SetAccess = public, GetAccess = public )
+    properties ( SetAccess = public, GetAccess = public, Transient = true )
         width = 11;
         height = 21;
         angle = 0;
@@ -39,6 +39,10 @@ classdef Rectangle < Stimulus
         function set.alpha(obj, alpha)
             StimServer.Command(obj.key, [5, obj.color, alpha]);
             obj.alpha = alpha;
+        end
+        
+        function delete(obj)
+            delete@Stimulus(obj)
         end
         
     end

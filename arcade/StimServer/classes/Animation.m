@@ -4,7 +4,7 @@ classdef (Abstract) Animation < hgsetget
         terminalAction
     end
     
-    properties ( SetAccess = immutable, GetAccess = public, Hidden = false )
+    properties ( SetAccess = immutable, GetAccess = public, Hidden = false, Transient = true )
         key = [];
     end
     

@@ -1,6 +1,6 @@
 classdef Grating < PixelShader
     
-    properties
+    properties ( Transient = true )
         color1 = [255 255 255 255];
         color2 = [0 0 0 255];
         maskRotation = 0;
