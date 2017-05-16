@@ -1,21 +1,24 @@
 function photodiode(setmode)
-% 'toggle'
-% 'on'
-% 'off'
-% 'flicker'
+% Set the mode of the photodiode stimulus
+% 
+% INPUT
+% -----
+% 	'on'     : turn photodiode stimulus white
+%   'off'	 : turn photodiode stimulus black
+% 	'toggle' : switch status of photodioe (i.e., on->off, or off->on)
+% 	'flicker': flip between black and white with every frame
 
-StimControl = SGLStimServerGeneral.launch;
 switch setmode
     case 'toggle'
-        StimControl.togglePD;
+        StimServer.PDmode(2);
     case 'on'
-        StimControl.setPDvalue(1);
+        StimServer.PDmode(1)
     case 'off'
-        StimControl.setPDvalue(0);
+        StimServer.PDmode(0)
     case 'flicker'
-        StimControl.flickerPD;
+        StimServer.PDmode(3)
 end
-
+       
 
 
 end

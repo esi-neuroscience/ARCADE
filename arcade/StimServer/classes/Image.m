@@ -1,5 +1,6 @@
 classdef Image < Stimulus
-    
+% Class for image  
+
     properties ( SetAccess = immutable )
         filename
     end
@@ -10,7 +11,14 @@ classdef Image < Stimulus
     end            
     methods
         function obj = Image(filename)      
+            
             assert(exist(filename, 'file') == 2, 'Image %s file not found', filename)
+            [~,~,ext] = fileparts(filename);
+            validExts = {'.png', '.bmp', '.jpeg'};
+            if ~ismember(ext, validExts)
+                error('%s is not a valid image file (png, bmp, jpeg)', filename)
+            end
+            
             StimServer.Command(0, uint8([2 filename 0]));
             obj = obj@Stimulus();
             obj.filename = filename;

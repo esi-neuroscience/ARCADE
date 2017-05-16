@@ -1,11 +1,9 @@
 function allStimuliClear
+% Remove all stimuli from StimServer
+% This function should only be used for debugging.
 
-
-% provides access to general StimServer functions
-StimControl = SGLStimServerGeneral.launch;   
-StimControl.showAll(false);
-StimControl.removeAll;
-
+StimServer.ShowAll(false)
+StimServer.RemoveAll()
 
 end
 

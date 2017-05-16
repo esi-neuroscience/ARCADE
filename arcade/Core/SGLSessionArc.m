@@ -53,7 +53,7 @@ classdef (Sealed) SGLSessionArc
             CntlSrnPipe = SGLCoreCntlPipe.launch;       % get ControlScreen Pipe 
             EventServer = SGLEventMarkerServer.launch;  % eventmarkers 
             BHVstore    = SGLBehaviouralStore.launch;   % behavioural store (for CFG)
-            StimControl = SGLStimServerGeneral.launch;  % provides access to general StimServer functions
+            % StimServer = SGLStimServerGeneral.launch;  % provides access to general StimServer functions
             StimBckgrnd = SGLBackgroundObject.launch;   % allows images for background
             
             %----------------------------------%
@@ -67,7 +67,7 @@ classdef (Sealed) SGLSessionArc
             StimBckgrnd.backgroundColor = round(BHVstore.cfg.BackgroundRGB*255); % colours
             StimBckgrnd.pauseColor      = round(BHVstore.cfg.PauseRGB*255);
             
-            StimControl.enablePD(1);    % enable use of photo-diode
+            StimServer.PDshown(1);    % enable use of photo-diode
             StimBckgrnd.setBackground;  % make sure background is correct color 
 
             % this function will be asked whether to quit the session or
@@ -165,7 +165,6 @@ classdef (Sealed) SGLSessionArc
                 % -- Quit Requested or Max Trials Reached? --
                 if BHVstore.currentTrial >= maxTrials || quitSession || userQuitSession
                     delete(StimBckgrnd);
-                    delete(StimControl); % important to keep track of objects
                     break;
                 end
             end

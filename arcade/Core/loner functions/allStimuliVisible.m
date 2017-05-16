@@ -1,10 +1,9 @@
-function allStimuliVisible(value)
+function allStimuliVisible(visible)
+% Change visibility of all stimuli
+% 
+% This function should only be used for debugging.
 
-
-% provides access to general StimServer functions
-StimControl = SGLStimServerGeneral.launch;    
-StimControl.showAll(value);
-
+StimServer.ShowAll(visible)
 
 end
 
