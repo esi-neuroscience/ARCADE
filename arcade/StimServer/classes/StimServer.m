@@ -7,20 +7,28 @@ classdef (Sealed = true) StimServer < handle
     end
     
     properties (Access = private, Transient = true, Hidden = true)
-        %        hPipe = []
         hPipe = libpointer;
     end
     
     methods (Access = private, Hidden=true)
+        function obj = StimServer()
+            mlock;
+        end
+    end
+    
+    methods (Static)
         
         % The 64 bit implementation of calllib does not accept char
         % arrays as arguments. Therefore we convert strings to uint8.
-        function obj = StimServer()
-            %                disp('Stimserver Konstruktor');
-            %            if ~isempty(obj.hPipe); return; end;
-            if ~obj.hPipe.isNull(); return; end;
+        function Connect(varargin)
+            obj = StimServer.this;
+            if ~obj.hPipe.isNull()
+                warning('StimServer:Connect:failed', ...
+                    'StimServer connection was already established.');
+                return;
+            end;
             if ~libisloaded('kernel32')
-                loadlibrary('kernel32', @win_kernel32);
+                loadlibrary('kernel32', @win_kernel32);                
             end;
             %             [result] = ...
             %                 calllib('kernel32', 'GetNamedPipeInfo', ...
@@ -30,9 +38,10 @@ classdef (Sealed = true) StimServer < handle
             %                 [], ...
             %                 []);
             %             if isequal(result, 0)
+            if isequal(nargin, 0); server='.'; else server = varargin{1}; end;
             GENERIC_READ_WRITE = uint32(hex2dec('C0000000'));
             obj.hPipe = calllib('kernel32', 'CreateFileA', ...
-                uint8('\\.\pipe\StimServerPipe'), ...
+                uint8(['\\' server '\pipe\StimServerPipe']), ...
                 GENERIC_READ_WRITE, ...
                 0, ...  % no sharing
                 [], ...
@@ -40,7 +49,6 @@ classdef (Sealed = true) StimServer < handle
                 0, ...
                 []);
             assert(~obj.hPipe.isNull());
-            disp('Connected to pipe');
             result = calllib('kernel32', 'GetNamedPipeInfo', ...
                 obj.hPipe, ...
                 [], ...
@@ -48,6 +56,7 @@ classdef (Sealed = true) StimServer < handle
                 [], ...
                 []);
             if isequal(result, 0)
+                obj.hPipe = libpointer;
                 ConstructorResult = calllib('kernel32', 'GetLastError');
                 if ~isequal(ConstructorResult, 0)
                     ConstructorResult
@@ -55,18 +64,18 @@ classdef (Sealed = true) StimServer < handle
                 error('StimServer:Constructor:failed', ...
                     'Can''t connect to StimServer''s pipe. Is the server running ?');
             end
-            %             end
-            mlock;
+            disp('Connected to pipe');
         end
-    end
-    
-    methods (Static)
         
-        function delete()
+        function Disconnect()
             temp = StimServer.this;
             assert(~isequal(0, calllib('kernel32', 'CloseHandle', temp.hPipe)));
             temp.hPipe = libpointer;
             disp('Disconnected from pipe');
+        end
+        
+        function delete()
+            StimServer.Disconnect();
             munlock;
             clear StimServer;
         end
