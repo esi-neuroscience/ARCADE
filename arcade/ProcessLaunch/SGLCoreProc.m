@@ -92,10 +92,10 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
             
             % connect to Control Screen            
             CntlSrnPipe = this.mConnectToServer('ControlScreen');
-            StimServer.Connect()
+            
                        
             % connect to StimServer            
-            stimPipe = SGLOpenPipe.fetch();            
+            StimServer.Connect();
             
             % Run session
             startEvent = IPCEvtClient('startControlScreenLoop');
