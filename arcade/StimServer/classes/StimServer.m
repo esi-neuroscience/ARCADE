@@ -1,7 +1,6 @@
 classdef (Sealed = true) StimServer < handle
-    %UNTITLED Summary of this class goes here
-    %   Detailed explanation goes here
-    
+% Matlab interface for communication with StimServer.exe via a named pipe.
+
     properties (Constant, Access = private, Hidden = true)
         this = StimServer
     end
@@ -64,14 +63,14 @@ classdef (Sealed = true) StimServer < handle
                 error('StimServer:Constructor:failed', ...
                     'Can''t connect to StimServer''s pipe. Is the server running ?');
             end
-            disp('Connected to pipe');
+            disp('Connected to StimServer pipe');
         end
         
         function Disconnect()
             temp = StimServer.this;
             assert(~isequal(0, calllib('kernel32', 'CloseHandle', temp.hPipe)));
             temp.hPipe = libpointer;
-            disp('Disconnected from pipe');
+            disp('Disconnected from StimServer pipe');
         end
         
         function delete()
@@ -92,7 +91,7 @@ classdef (Sealed = true) StimServer < handle
             StimServer.Command(0, uint8([0 shown]));
         end
         
-        function PDlit(lit)
+        function PDmode(lit)
             StimServer.Command(0, uint8([16 lit]));
         end
         
