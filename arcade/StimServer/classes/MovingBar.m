@@ -24,7 +24,7 @@ classdef MovingBar < Rectangle
         function set.startPosition(obj, position)
             obj.animation.vertices = obj.calc_vertices(position, ...
                 obj.direction, obj.travelDistance);
-            obj.position = position;
+            obj.startPosition = position;
         end
             
             

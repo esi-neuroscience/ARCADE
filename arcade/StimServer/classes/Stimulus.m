@@ -2,14 +2,18 @@ classdef Stimulus < hgsetget % will be matlab.mixin.SetGet after 2014b
     
     properties ( SetAccess = public, GetAccess = public, Transient = true )        
         visible = false;
-        protected = false;
-        position = [0 0];
+        protected = false;       
         animation = [];
     end
     
     properties ( SetAccess = immutable, GetAccess = public, Hidden = false, Transient = true )
         key
     end
+    
+    properties ( Dependent = true )
+        position
+    end
+      
         
     methods
         function obj = Stimulus                        
@@ -29,8 +33,12 @@ classdef Stimulus < hgsetget % will be matlab.mixin.SetGet after 2014b
             y = value(2);
             StimServer.Command(obj.key, ...
                 [3 typecast(single([x y]), 'uint8')]);
-            obj.position = value;
         end      
+        
+        function position = get.position(obj)
+             StimServer.Command(obj.key, 8);             
+             position = StimServer.read2single();
+        end
         
         function set.protected(obj, value)
            error('Not implemented yet') 
