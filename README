@@ -6,6 +6,10 @@ Actions and stimulus Diplay for behavioral Experiments. It consists of several
 interacting modules that are running in parallel and take advantage of modern
 multi-core CPU architectures.
 
+The software is developed by Jarrod Dowdall (jarrod.dowdall@esi-frankfurt.de),
+Joscha Schmiedt (joscha.schmiedt@esi-frankfurt.de) and Michael Stephan
+(michael.stephan@esi-frankfurt.de)
+
 
 Brief overview of modules
 -------------------------
