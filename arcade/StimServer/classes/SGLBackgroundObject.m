@@ -1,4 +1,4 @@
-classdef (Sealed) SGLBackgroundObject < AUXStimServerGeneral
+classdef (Sealed) SGLBackgroundObject
     % [SINGELTON]
     
     % singleton class
@@ -54,12 +54,12 @@ classdef (Sealed) SGLBackgroundObject < AUXStimServerGeneral
         %# Turn ON background
         function setBackground(this)
             % set background color
-            this.background(this.backgroundColor);
+            StimServer.SetBackgroundColor(this.backgroundColor);
         end
         %# Turn ON Pause Screen
         function setPauseScreen(this) % turn on
             % set pause color
-            this.background(this.pauseColor);
+            StimServer.SetBackgroundColor(this.backgroundColor);
         end
     end
     
