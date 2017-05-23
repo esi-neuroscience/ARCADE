@@ -2,11 +2,11 @@ classdef Stimulus < hgsetget % will be matlab.mixin.SetGet after 2014b
     
     properties ( SetAccess = public, GetAccess = public, Transient = true )        
         visible = false;
-        protected = false;       
+%         protected = false;       
         animation = [];
     end
     
-    properties ( SetAccess = immutable, GetAccess = public, Hidden = false, Transient = true )
+    properties ( SetAccess = immutable, GetAccess = public, Hidden = true, Transient = true )
         key
     end
     
@@ -40,9 +40,9 @@ classdef Stimulus < hgsetget % will be matlab.mixin.SetGet after 2014b
              position = StimServer.read2single();
         end
         
-        function set.protected(obj, value)
-           error('Not implemented yet') 
-        end
+%         function set.protected(obj, value)
+%            error('Not implemented yet') 
+%         end
         
         
         function set.animation(obj, animation)            

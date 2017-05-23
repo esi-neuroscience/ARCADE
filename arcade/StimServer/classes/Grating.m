@@ -11,7 +11,6 @@ classdef Grating < PixelShader
         maskWidth = 200;
         maskHeight = 200;
     end
-
     
     methods
         function obj = Grating()
