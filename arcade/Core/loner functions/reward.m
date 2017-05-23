@@ -1,7 +1,12 @@
 function reward(rMode,varargin)
-%---------------------------------------%
-% INPUT:
-%   rMode => reward mode 
+% Give a reward pulse or pulse sequence.
+% 
+% INPUT
+% -----
+% 
+%   rMode : reward mode, 'pulse' or 'sequence'.
+%   
+% 
 
 % pulse ms    = varargin{1} 
 % sequence ms = varargin{2} 
