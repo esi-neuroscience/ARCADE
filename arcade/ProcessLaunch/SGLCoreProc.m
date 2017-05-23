@@ -74,34 +74,43 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
             evtFile = fullfile(cfg.filepaths.Behaviour, [cfg.Subject '_' today() '_' cfg.Experiment '_' cfg.Session '.evt']);
             eventServer = SGLEventMarkerServer.launch(evtFile);
             
-            this.mWriteToDiary('Launching ControlScreen', true)
+            % Create TrialData pipe
+            SGLTrialDataPipe.Create();
+            
+            % launch ControlScreen process
+            this.mWriteToDiary('Starting ControlScreen', true)
+            controlScreenReadyEvt = IPCEvent('controlScreenReady');
+            controlScreenReadyEvt.CreateEvent();            
             controlScreenProcess = this.mLaunchServer('ControlScreen'); 
             
-            this.mWriteToDiary('Launching Eye Server', true)
+            % launch EyeServer process
+            this.mWriteToDiary('Starting EyeServer', true)
+            eyeServerReadyEvt = IPCEvent('eyeServerReadyEvt');
+            eyeServerReadyEvt.CreateEvent();            
             eyeProcess = this.mLaunchServer('EyeServer');
             
-            this.mWriteToDiary('Launching StimServer', true)
+            % launch StimServer process
+            this.mWriteToDiary('Starting StimServer', true)
             stimServerProcess = processManager('id', 'StimServer', ...
                 'command', 'StimServer.exe', ...
                 'printStdout', false, ...
                 'printStderr', false);
-                                   
+            
+            
             
             this.mWriteToDiary('Waiting for processes', true)
-            
-            
-            % connect to Control Screen            
-            CntlSrnPipe = this.mConnectToServer('ControlScreen');
-            
+            controlScreenReadyEvt.waitForTrigger(20000);
+%             eyeServerReadyEvt.waitForTrigger(20000);
+                      
                        
             % connect to StimServer            
             StimServer.Connect();
             
             % Run session
-            startEvent = IPCEvtClient('startControlScreenLoop');
+            startEvent = IPCEvent('startControlScreenLoop');
+            startEvent.OpenEvent();
             startEvent.trigger();
-            
-            pause(2)
+                        
             this.mWriteToDiary('Starting Session', true);
             this.mRunSession(cfg);
             
@@ -114,17 +123,18 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
             % delete objects
             this.mWriteToDiary('Closing', true);
             
-            delete(CntlSrnPipe);            
             delete(rewServer);
             delete(eventServer);
 
             % quit eye server
-            stopEyeServerEvt = IPCEvtClient('StopEyeServer');
+            stopEyeServerEvt = IPCEvent('StopEyeServer');
+            stopEyeServerEvt.OpenEvent();
             stopEyeServerEvt.trigger();
             eyeProcess.stop()
             
             % quit control screen
-            stopControlScreenEvt = IPCEvtClient('StopControlScreen');
+            stopControlScreenEvt = IPCEvent('StopControlScreen');
+            stopControlScreenEvt.OpenEvent();
             stopControlScreenEvt.trigger()           
             controlScreenProcess.stop()
             

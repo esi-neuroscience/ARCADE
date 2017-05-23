@@ -28,12 +28,13 @@ classdef ( Sealed ) MSMessagePipeClient < MSMessagePipe
                 pipeMode = 'PIPE_READMODE_MESSAGE';
             end
             
-            MSNamedPipe.mSetNamedPipeHandleState(this.hPipe, pipeMode)
+            result = MSNamedPipe.mSetNamedPipeHandleState(this.hPipe, pipeMode);
+            assert(result>0, 'Could not waiting state of %s', this.pipeName)
             
             this.pipeBuffer(1) = outSize;
             this.pipeBuffer(2) = inSize;
             this.pipeName = name;
-            
+            this.isServer = false;
         end
         
         

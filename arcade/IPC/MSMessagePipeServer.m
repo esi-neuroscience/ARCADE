@@ -21,6 +21,7 @@ classdef ( Sealed ) MSMessagePipeServer < MSMessagePipe
             
             this.pipeBuffer = pipeBuffer;
             this.pipeName = name;
+            this.isServer = true;
             
             % test if creation was successful
             [result, flags, outSize, inSize, ~] = MSNamedPipe.mGetNamedPipeInfo(this.hPipe);

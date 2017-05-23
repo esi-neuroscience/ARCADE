@@ -6,6 +6,7 @@ classdef ( Abstract ) MSMessagePipe < handle
         pipeName   % pipe name
         waitMode 
         duplex 
+        isServer 
     end
         
     
@@ -13,14 +14,18 @@ classdef ( Abstract ) MSMessagePipe < handle
     methods
         
         function result = writeMessage(this, msg)
-            result = MSNamedPipe.mWriteFile(this.hPipe,msg);
+            result = MSNamedPipe.mWriteFile(this.hPipe, msg);
             if nargout == 0
                 clear result
             end
         end
         
         function msg = readMessage(this)
-            msg = MSNamedPipe.mReadFile(this.hPipe,this.pipeBuffer(1));
+            if this.isServer
+                msg = MSNamedPipe.mReadFile(this.hPipe,this.pipeBuffer(2));
+            else
+                msg = MSNamedPipe.mReadFile(this.hPipe,this.pipeBuffer(1));
+            end
         end
         
         function delete(this)

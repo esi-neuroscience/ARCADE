@@ -32,7 +32,8 @@ classdef SGLTestEyeServer < ABSEyeServer
             set(obj.fig,'Pointer','circle');
             obj.update();
             set(obj.fig, 'WindowButtonDownFcn', @obj.onClick)
-            obj.stopEvent = IPCEvtServer('StopEyeServer');
+            obj.stopEvent = IPCEvent('StopEyeServer');
+            obj.stopEvent.CreateEvent();
         end
     end
     methods
