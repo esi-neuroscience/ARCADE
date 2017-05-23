@@ -6,10 +6,14 @@ classdef MSNamedPipe < handle
     % + mSetNamedPipeHandleState [CLIENT]
     % + mCloseHandle
         
-    methods (Static)
-        %# constructor
-        function this = MSNamedPipe
+    properties (Constant, Access = private, Hidden = true)
+        this = MSNamedPipe
+    end
+
+    methods (Access = private, Hidden=true)
+        function obj = MSNamedPipe()
             if ~libisloaded('kernel32'); loadlibrary('kernel32', @win_kernel32); end;
+            mlock;
         end
     end
     
@@ -21,6 +25,9 @@ classdef MSNamedPipe < handle
         %---------------------------------------------%
         function hPIPE = mCreateNamedPipeA(pNAME,pACCESS,pPIPE_MODE,pBUFFER)
             
+            if ~strcmp(pNAME(1:2), '\\')
+                error('Pipe name must start with \\')
+            end
             % pNAME = '\\.\pipe\ControlScreenPipe'
             % READ/WRITE ACCESS
             switch pACCESS
@@ -51,11 +58,14 @@ classdef MSNamedPipe < handle
                     %PIPE_NOWAIT = uint32(hex2dec('00000001'));
                     PIPE_MODE = uint32(hex2dec('00000001'));
                 case {...
+                        'PIPE_WAIT | PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE'}
+                    PIPE_MODE = uint32(hex2dec('00000006'));
+                case {...
                         'PIPE_NOWAIT | PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE'}
                     PIPE_MODE = uint32(hex2dec('00000007'));
             end
             pNAME = uint8([pNAME 0]);
-%             {'int8Ptr', 'ulong', 'ulong', 'ulong', 'ulong', 'ulong', 'ulong', 's_SECURITY_ATTRIBUTESPtr'}
+
             hPIPE = calllib('kernel32', 'CreateNamedPipeA', ...
                 pNAME, ...
                 ACCESS, ...

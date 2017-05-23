@@ -1,17 +1,17 @@
 classdef MSEvents < handle
-    % [MICROSOFT]
-    
-    %---------------------------------------------%
-    % Jarrod, wrote class
-    % 21.4.2016 - Jarrod, added some documentation/notes
-     
 
-    methods (Static)
-        function this = MSEvents
+    properties (Constant, Access = private, Hidden = true)
+        this = MSEvents
+    end
+    
+    methods (Access = private, Hidden=true)
+        function obj = MSEvents()
             if ~libisloaded('kernel32'); loadlibrary('kernel32', @win_kernel32); end;
+            mlock;
         end
     end
     
+     
     methods (...
             Static = true,...
             Sealed = true)
@@ -44,6 +44,17 @@ classdef MSEvents < handle
             result = calllib('kernel32', 'WaitForSingleObject', hEvent, timeout);
         end
         
+        function result = mWaitForMultipleEvents(hEvents, waitAll, timeout)
+           timeout = uint32(timeout); % ms
+%             DWORD nCount , const HANDLE * lpHandles , BOOL bWaitAll , DWORD dwMilliseconds ); 
+%            fcns.RHS{fcnNum}={'ulong', 'voidPtrPtr', 'int32', 'ulong'};
+
+            result = calllib('kernel32', 'WaitForMultipleObjects', ...
+                length(hEvents), hEvents, waitAll, timeout)
+                
+                
+        end
+        
         %# reset event
         function result = mResetEvent(hEvent)
            result = calllib('kernel32', 'ResetEvent', hEvent); 
@@ -57,52 +68,6 @@ classdef MSEvents < handle
     
 
 end
-
-
-
-%S = libstruct('s_SECURITY_ATTRIBUTES');
-%hA = calllib('kernel32', 'CreateEventA', S, false, false, 'SentData');
-% calllib('kernel32', 'CloseHandle',hPipe);
-%
-%
-%}
-%calllib('kernel32', 'CloseHandle',hA);
-%result = calllib('kernel32', 'ResetEvent', hA);
-
-%
-
-
-% EyeServer
-% poll eye signal
-% but only write to the pipe if requested to do so
-
-
-% event and pipe
-% event -> ready for eye
-% eye <-- write eye signal
-
-% on a pipe
-% eye --> ready for eye
-% eye <--- write eye
-% ---- offers commands -> start eye buffer
-% ----> stop polling eye
-% ----> start polling eye 
-
-% if I have written to a pipe
-% what happens if I read from the pipe, before the message is read
-
-
-% opening multiple instances of the same pipe?
-
-
-
-
-
-
-
-
-
-
 
 
 

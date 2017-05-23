@@ -1,9 +1,14 @@
 %% Helper functions
 
-%%
-% 
-% * |eventmarker|
-% * |groupStimuli|
-% * |photodiode|
-% * |reward|
-% * |reactiontime|
+%% |eventmarker|
+help eventmarker
+%% |groupStimuli|
+help groupStimuli
+
+%% |photodiode|
+help photodiode
+
+%% |reward|
+help reward
+
+%% |reactiontime|

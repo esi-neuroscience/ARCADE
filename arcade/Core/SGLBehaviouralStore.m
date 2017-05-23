@@ -148,8 +148,7 @@ classdef (Sealed) SGLBehaviouralStore < AUXEditableVariables & AUXOutputDataFile
     methods
         %# create a new trial 
         % create trial could return TrialData
-        function mCreateTrialData(this)
-            persistent CntlSrnPipe
+        function mCreateTrialData(this)            
             
             % increment trial
             currentTrial     = this.currentTrial+1; %#ok<*PROP>
@@ -178,9 +177,7 @@ classdef (Sealed) SGLBehaviouralStore < AUXEditableVariables & AUXOutputDataFile
             
             %userVariables{1} = {};
             if currentTrial==1
-                trlData      = nan(1,4); %#ok<*NASGU>
-                CntlSrnPipe = SGLCoreCntlPipe.launch; % writing to pipe
-                
+                trlData      = nan(1,4); %#ok<*NASGU>                
                 % open trial behavioural data file 
                 this.mOpenFile();
                 
@@ -208,12 +205,7 @@ classdef (Sealed) SGLBehaviouralStore < AUXEditableVariables & AUXOutputDataFile
             % [trialError, reactionTime, trialErrorTime]; % previous trial
             % trialErrorTime < set by trialerror loner function
 
-            success = false;
-            while ~success
-                % write to control screen pipe for user feedback 
-                success = CntlSrnPipe.mWriteTrialData(current,trlData);
-                java.lang.Thread.sleep(1);
-            end
+            SGLTrialDataPipe.WriteTrialData(current, trlData) 
             
         end
         

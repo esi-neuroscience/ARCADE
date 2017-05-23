@@ -22,8 +22,8 @@ classdef (Sealed = true) StimServer < handle
         function Connect(varargin)
             obj = StimServer.this;
             if ~obj.hPipe.isNull()
-                warning('StimServer:Connect:failed', ...
-                    'StimServer connection was already established.');
+%                 warning('StimServer:Connect:failed', ...
+%                     'StimServer connection was already established.');
                 return;
             end;
             if ~libisloaded('kernel32')
@@ -63,14 +63,14 @@ classdef (Sealed = true) StimServer < handle
                 error('StimServer:Constructor:failed', ...
                     'Can''t connect to StimServer''s pipe. Is the server running ?');
             end
-            disp('Connected to StimServer pipe');
+%             disp('Connected to StimServer pipe');
         end
         
         function Disconnect()
             temp = StimServer.this;
             assert(~isequal(0, calllib('kernel32', 'CloseHandle', temp.hPipe)));
             temp.hPipe = libpointer;
-            disp('Disconnected from StimServer pipe');
+%             disp('Disconnected from StimServer pipe');
         end
         
         function delete()

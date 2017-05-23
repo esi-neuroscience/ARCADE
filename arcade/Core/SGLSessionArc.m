@@ -50,11 +50,12 @@ classdef (Sealed) SGLSessionArc
             %** TODO: replace StimControl **
             %----------------------------------%
             %            Objects 
-            CntlSrnPipe = SGLCoreCntlPipe.launch;       % get ControlScreen Pipe 
+            
             EventServer = SGLEventMarkerServer.launch;  % eventmarkers 
             BHVstore    = SGLBehaviouralStore.launch;   % behavioural store (for CFG)
             StimBckgrnd = SGLBackgroundObject.launch;   % allows images for background
-            
+            PauseEvent  = IPCEvent('PauseCoreRequested');
+            PauseEvent.CreateEvent();
             %----------------------------------%
             %        get Parameters 
             maxTrials       = BHVstore.cfg.MaximumNumberOfTrials;
@@ -133,13 +134,11 @@ classdef (Sealed) SGLSessionArc
 
                 EventServer.writeEvents();
                 
-                % read ControlScreen pipe
-                msgs = CntlSrnPipe.mReadMessagePipeEmpty;
                 quitSession = false;
                 
                 % -- Pause Requested? --
                 % also allows the user to quit the current session
-                if ~isempty(msgs) && any(strcmpi('pause_request',msgs))
+                if PauseEvent.wasTriggered;
                     % launch pause GUI 
                     EventServer.mSendEventMarker(eventPause);      % send enter Pause marker event 
                     StimBckgrnd.setPauseScreen;
