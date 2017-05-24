@@ -12,7 +12,7 @@ extern float height = 1000.0f;
 
 cbuffer PS_ANIMATION : register (b1)
 {
-    float  pixelsPerFrame : packoffset(c0.x); // pixels per frame -> nFrames * pixelsPerFrame
+    float  numCycles : packoffset(c0.x); // pixels per frame -> nFrames * pixelsPerFrame
 };
 
 cbuffer PS_CONSTANT_BUFFER : register (b0)
@@ -74,7 +74,7 @@ float4 PSmain( float4 Pos : SV_POSITION ) : SV_Target
     sincos(radians(-1.0f*direction), p.y, p.x);
 
     float pixelsPerCycle = (cycle ? cycle : 20.0f);
-    float numCycles      = pixelsPerFrame/pixelsPerCycle;
+
     
     // calculate sinewave 
     float sineWave = sin( radians(phaseOffset) + numCycles*2.0f*pi + dot(center-Pos.xy, p)*(2.0f*pi)/pixelsPerCycle );

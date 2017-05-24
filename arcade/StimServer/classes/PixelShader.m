@@ -1,14 +1,23 @@
 classdef PixelShader < Stimulus
-            
+    % Class for passing and controlling pixel shader programs in HLSL to the
+    % StimServer. Actual pixel shader shader implementations should be
+    % children of this class to implement parameter handling.
+    %
+    % Usage
+    % -----
+    %   ps = PixelShader(filename);
+    %
+    % See also Stimulus
+    
     properties ( SetAccess = immutable, Transient = true )
         filename
     end
     
     properties ( SetAccess = public, GetAccess = public, Transient = true )
-        shaderWidth = 1000;
-        shaderHeight = 1000;
-        animationIncrement = 1;
-        animationPhase = 0;
+        shaderWidth = 1000; % width of shader window in px
+        shaderHeight = 1000; % height of shader window in px
+        animationIncrement = 1; % value to be added to phase variable in shader with each frame
+        animationPhase = 0; % manuall set phase variable in shader
     end
     
     methods
@@ -38,8 +47,8 @@ classdef PixelShader < Stimulus
         end
         
         function set.animationPhase(obj, phase)
-             StimServer.Command(obj.key, [uint8(6), typecast(single(phase),'uint8')]);
-             obj.animationPhase = phase;
+            StimServer.Command(obj.key, [uint8(6), typecast(single(phase),'uint8')]);
+            obj.animationPhase = phase;
         end
         
         
@@ -55,7 +64,7 @@ classdef PixelShader < Stimulus
             StimServer.Command(obj.key, [uint8(1), uint8(idx), typecast(single(value), 'uint8')]);
         end
         
-
+        
     end
     
     

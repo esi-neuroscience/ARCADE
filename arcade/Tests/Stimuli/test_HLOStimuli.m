@@ -4,25 +4,25 @@ StimServer.Connect()
 
 pauseTime = 1;
 TESTFOLDER = fileparts(mfilename('fullpath'));
-
+TESTFOLDER = 'C:\Toolboxes\ARCADE\arcade\Tests\Stimuli';
 
 
 %% TEST: image 
+img2 =  Image(fullfile(TESTFOLDER, 'test.png'));
+img2.position = [200 0];
+img2.alpha = 200;
+img2.angle = 200;
+
 img =  Image(fullfile(TESTFOLDER, 'test.png'));
 img.position = [0 0];
 img.alpha = 200;
-img.angle = 200;
+img.angle = 45;
 
 
-img.visible = true;
-pause(pauseTime)
-img.alpha = 100;
-pause(pauseTime)
-img.angle = 30;
-pause(pauseTime)
-img.visible = false;
+set([img, img2], 'visible', true)
 
-delete(img);
+
+% delete(img);
 
 
 %% TEST: filled dot

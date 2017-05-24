@@ -1,14 +1,34 @@
 classdef ParticleStimulus < Stimulus
-    
+    % Class for a particle stimulus in the StimServer. Particle positions are
+    % loaded from a NumericBinaryFile.
+    %
+    % This stimulus is still under development and should not be used for
+    % important experiments yet.
+    %
+    % Usage
+    % -----
+    %   ps = ParticleStimulus(filename, width, height);
+    %
+    %  Particle stimuli are composed of a given set of dots (particles),
+    %  which move in a certain direction with a given speed. The positions 
+    % of the dots (and optionally the direction of movement per particle) 
+    % are read from a binary file. The first two rows (in Matlab) of the
+    % file contain the normalized x- and y-coordinates (single foats in 
+    % the range -1 to 1). The file may also contain a third row specifying 
+    % the direction of movement for each particle (angles in degrees as single
+    % foats). Dots moving out of the rectangular viewport (specified at the
+    % creation of the object) wrap to the opposite edge. 
+    %     
+    % See also NumericBinaryFile, Stimulus, NumericBinaryFile
     
     properties ( Transient = true )
         
-        particleDiameter = 3; % px
-        particleColor = [255 255 255];
-        particleAlpha = 255;
+        particleDiameter = 3; % diameter in pixels 
+        particleColor = [255 255 255]; % particle color as 8-bit RGB
+        particleAlpha = 255; % 8-bit alpha transparency value
         particleSpeed = 0.01; % px per frame
-        particleDirection = 0;
-        maskRadius = 0;
+        particleDirection = 0; % direction in degree
+        maskRadius = 0; % normalized radius of circular mask
         phase = 0;
         
     end

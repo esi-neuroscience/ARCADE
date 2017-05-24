@@ -1,6 +1,5 @@
 classdef NumericBinaryFile < handle
-    %UNTITLED3 Summary of this class goes here
-    %   Detailed explanation goes here
+    
     
     properties (Constant = true)
         version = uint8(0);

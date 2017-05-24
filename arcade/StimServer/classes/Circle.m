@@ -1,4 +1,4 @@
-classdef Symbol < Stimulus            
+classdef Circle < Stimulus            
    
     
     properties ( SetAccess = immutable, GetAccess = public )
@@ -12,10 +12,11 @@ classdef Symbol < Stimulus
     end       
         
     methods
-        function obj = Symbol(symbolDiameter, symbolType)
-            if nargin < 2
+        function obj = Circle(symbolType)
+            if nargin == 0
                 symbolType = 1;
             end
+            symbolDiameter = 200;
             StimServer.Command(0, [uint8([12, symbolType]), typecast(uint16(symbolDiameter),'uint8')]);                         
             obj = obj@Stimulus();
             obj.type = symbolType;

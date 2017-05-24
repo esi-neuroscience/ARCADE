@@ -1,11 +1,11 @@
 function eventmarker(value,varargin)
-
-% add in wait option 
-% java.lang.Thread.sleep(1);
-
-%----------------------------------%
-% 20.3.2015 - Jarrod, 
-%    - added in round event value. 
+% Send a digital marker for an event to the DAQ card (if available) and
+% store the corresponding timestamp in the .evt file.
+% 
+% INPUT
+% -----
+%   value : event code number between 0 and 2^16
+% 
 
 % if there is a value, and it is an unsigned 16-bit integer
 if ~isempty(value) && isnumeric(value) && value<2^16 && value>=0

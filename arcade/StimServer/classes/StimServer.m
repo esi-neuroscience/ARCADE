@@ -1,6 +1,11 @@
 classdef (Sealed = true) StimServer < handle
-% Matlab interface for communication with StimServer.exe via a named pipe.
-
+    % Matlab interface for communication with StimServer.exe via a named pipe.
+    %
+    % StimServer.exe must be started before using this class.
+    % Commands and stimuli can be passed after StimServer.Connect() was called.
+    %
+    % See also Stimulus
+    
     properties (Constant, Access = private, Hidden = true)
         this = StimServer
     end
@@ -17,17 +22,16 @@ classdef (Sealed = true) StimServer < handle
     
     methods (Static)
         
-        % The 64 bit implementation of calllib does not accept char
-        % arrays as arguments. Therefore we convert strings to uint8.
         function Connect(varargin)
+            % Connect to StimServer.exe pipe for issueing commands
             obj = StimServer.this;
             if ~obj.hPipe.isNull()
-                warning('StimServer:Connect:failed', ...
-                    'StimServer connection was already established.');
+                %                 warning('StimServer:Connect:failed', ...
+                %                     'StimServer connection was already established.');
                 return;
             end;
             if ~libisloaded('kernel32')
-                loadlibrary('kernel32', @win_kernel32);                
+                loadlibrary('kernel32', @win_kernel32);
             end;
             %             [result] = ...
             %                 calllib('kernel32', 'GetNamedPipeInfo', ...
@@ -63,14 +67,15 @@ classdef (Sealed = true) StimServer < handle
                 error('StimServer:Constructor:failed', ...
                     'Can''t connect to StimServer''s pipe. Is the server running ?');
             end
-            disp('Connected to StimServer pipe');
+            %             disp('Connected to StimServer pipe');
         end
         
         function Disconnect()
+            % Disconnect from StimServer.exe pipe
             temp = StimServer.this;
             assert(~isequal(0, calllib('kernel32', 'CloseHandle', temp.hPipe)));
             temp.hPipe = libpointer;
-            disp('Disconnected from StimServer pipe');
+            %             disp('Disconnected from StimServer pipe');
         end
         
         function delete()
@@ -80,30 +85,37 @@ classdef (Sealed = true) StimServer < handle
         end
         
         function SetBackgroundColor(color)
+            % Set the full screen background color (24-bit RGB)
             StimServer.Command(0, uint8([0 color]));
         end
         
         function SetDefaultDrawColor(color)
+            % Set the default draw color of Symbols and Rectangle
             StimServer.Command(0, uint8([1 5 color]));
         end
         
         function PDshow(shown)
+            % Enable (shown=1) or disable (shown=0) photo diode
             StimServer.Command(0, uint8([0 shown]));
         end
         
         function PDmode(lit)
+            % Change mode of photo diode. 0=off, 1=on, 2=toggle, 3=flicker
             StimServer.Command(0, uint8([16 lit]));
         end
         
         function Defer(deferred)
+            % Enable (1) or disable (0) grouping of following commands
             StimServer.Command(0, uint8([1 deferred]));
         end
         
         function RemoveAll()
+            % Remove all stimuli
             StimServer.Command(0, uint8(0));
         end
         
         function ShowAll(visible)
+            % Make all stimuli visible (1) or invisible (0)
             StimServer.Command(0, uint8([0 0 visible]));
         end
         
@@ -128,7 +140,7 @@ classdef (Sealed = true) StimServer < handle
                 result = calllib('kernel32', 'GetLastError');
                 assert(false);
             end
-            assert(nWritten == length(cmdMessage));
+            assert(nWritten == length(cmdMessage), 'Could not write message to StimServer pipe');
         end
         
         function Command(key, bytearr)
@@ -145,7 +157,7 @@ classdef (Sealed = true) StimServer < handle
                 2, ...
                 nRead, ...
                 []);
-            assert(nRead == 2);
+            assert(nRead == 2, 'Could not read stimulus key from StimServer pipe');
         end
         
         function pos = read2single()
@@ -158,7 +170,7 @@ classdef (Sealed = true) StimServer < handle
                 8, ...
                 nRead, ...
                 []);
-            assert(nRead == 8);
+            assert(nRead == 8, 'Could not read position from StimServer pipe');
             pos = typecast(pos, 'single');
         end
         
