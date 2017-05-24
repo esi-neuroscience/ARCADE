@@ -123,6 +123,11 @@ classdef (Sealed = true) StimServer < handle
             StimServer.Command(0, uint8([1 3 mask]));
         end
         
+        function frameRate = GetFrameRate
+            StimServer.Command(0, uint8([1 8]));
+            frameRate = StimServer.read1single();
+        end
+        
     end
     
     methods (Static, Hidden=true)
@@ -158,6 +163,20 @@ classdef (Sealed = true) StimServer < handle
                 nRead, ...
                 []);
             assert(nRead == 2, 'Could not read stimulus key from StimServer pipe');
+        end
+        
+        function result = read1single()
+            result = single(0);
+            nRead = uint32(0);
+            [~, ~, result, nRead] = ...
+                calllib('kernel32', 'ReadFile', ...
+                StimServer.this.hPipe, ...
+                result, ...
+                4, ...
+                nRead, ...
+                []);
+            assert(nRead == 4, 'Could not read position from StimServer pipe');
+%            result = typecast(result, 'single');
         end
         
         function pos = read2single()
