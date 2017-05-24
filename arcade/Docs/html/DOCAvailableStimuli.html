@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Visual stimuli for ARCADE</title><meta name="generator" content="MATLAB 8.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-05-23"><meta name="DC.source" content="DOCAvailableStimuli.m"><style type="text/css">
+      --><title>Visual stimuli for ARCADE</title><meta name="generator" content="MATLAB 9.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-05-24"><meta name="DC.source" content="DOCAvailableStimuli.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -67,11 +67,11 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
   </style></head><body><div class="content"><h1>Visual stimuli for ARCADE</h1><!--introduction--><p>Stimuli are created invisibly in the task script before the creation of the trial states. They can then be manipulated (made visible, moved, ...) in the <tt>onEntry</tt> and <tt>onExit</tt> functions of the trial states. Possible stimuli are described here. A stimulus is created by calling the stimulus type class and storing it in a variable, e.g.</p><pre class="language-matlab">stim = MyStimulus;
-</pre><p><tt>MyStimulus</tt> is the type of stimulus, e.g. <tt>Grating</tt>, <tt>Image</tt>, <tt>Rectangle</tt>, ... Stimulus properties can be then be changed in two ways. Either by directly setting the property, similar to changing fields of a struct array, e.g.</p><pre class="language-matlab">stim.property = 3.14;
+</pre><p><tt>MyStimulus</tt> is the type of stimulus, e.g. <tt>Grating</tt>, <tt>Picture</tt>, <tt>Rectangle</tt>, ... Stimulus properties can be then be changed in two ways. Either by directly setting the property, similar to changing fields of a struct array, e.g.</p><pre class="language-matlab">stim.property = 3.14;
 </pre><p>or by using the <tt>set</tt> command, similar to how figures and axes can be manipulated in MATLAB, e.g.,</p><pre class="language-matlab">set(stim, <span class="string">'property'</span>, 3.14)
 </pre><p>Only the latter variant can be used in the <tt>onEntry</tt> and <tt>onExit</tt> functions of trial states. The former variant is useful for testing your stimuli. To see all properties of a stimulus, use   <tt>properties('MyStimulus')</tt>, e.g. <tt>properties('Rectangle')</tt></p><p>To ensure stable operation of ARCADE, all stimuli should be explicitly deleted at the end of a trial, e.g. in a <tt>cleanUp</tt> state by issuing</p><pre class="language-matlab">stim.delete()
 </pre><p><b>Testing stimuli</b></p><p>All stimuli can be tested from any open MATLAB if ARCADE is in the MATLAB search path and <tt>ARCADE/arcade/StimServer/StimServer.exe</tt> is running. The first command in such a test environment has to be</p><pre class="language-matlab">StimServer.Connect()
-</pre><p>This command is not necessary in the actual trial script.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">General stimulus properties</a></li><li><a href="#3">Circles</a></li><li><a href="#6">Images</a></li><li><a href="#9">Masked grating</a></li><li><a href="#13">Rectangles</a></li><li><a href="#16">Animations</a></li><li><a href="#19">Moving Bars</a></li></ul></div><h2>General stimulus properties<a name="1"></a></h2><p>All stimuli share a few properties. They can be made visible, repositioned, protected from clearing or animated (smoothly translated)</p><pre class="codeinput">properties(<span class="string">'Stimulus'</span>)
+</pre><p>This command is not necessary in the actual trial script.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">General stimulus properties</a></li><li><a href="#3">Circles</a></li><li><a href="#6">Pictures</a></li><li><a href="#9">Masked grating</a></li><li><a href="#13">Rectangles</a></li><li><a href="#16">Animations</a></li><li><a href="#19">Moving Bars</a></li><li><a href="#22">Pixel shader</a></li></ul></div><h2 id="1">General stimulus properties</h2><p>All stimuli share a few properties. They can be made visible, repositioned, protected from clearing or animated (smoothly translated)</p><pre class="codeinput">properties(<span class="string">'Stimulus'</span>)
 </pre><pre class="codeoutput">
 Properties for class Stimulus:
 
@@ -79,7 +79,7 @@ Properties for class Stimulus:
     animation
     position
 
-</pre><p>Visibility can be <tt>true</tt> for on or <tt>false</tt> for off. The <tt>animation</tt> property is empty by default and can be set if a stimulus should be animated (see below). Coordinates are usually in pixels. The stimulus <tt>position</tt> is always relative to the screen center. Angles are defined in degree with 0 being rightward (--) and 90 upward (|).</p><p>Colors are always specified as 24-bit RGB values, e.g. [255 255 255] for white and [0 0 0] for black. Alpha values range from fully transparent (0) to fully opaque (255).</p><p><i>Note</i> : For displays with an even number of pixels is actually between the two center pixels. To achieve pixel-perfect display of stimuli one should add 0.5 to the coordinate.</p><h2>Circles<a name="3"></a></h2><p>Filled circles can be created as a <tt>Circle</tt>. Type 1 circles are filled, type 2 circles are outlined circles (5 px width, currently not flexible).</p><pre class="codeinput">properties(<span class="string">'Circle'</span>)
+</pre><p>Visibility can be <tt>true</tt> for on or <tt>false</tt> for off. The <tt>animation</tt> property is empty by default and can be set if a stimulus should be animated (see below). Coordinates are usually in pixels. The stimulus <tt>position</tt> is always relative to the screen center. Angles are defined in degree with 0 being rightward (--) and 90 upward (|).</p><p>Colors are always specified as 24-bit RGB values, e.g. [255 255 255] for white and [0 0 0] for black. Alpha values range from fully transparent (0) to fully opaque (255).</p><p><i>Note</i> : For displays with an even number of pixels is actually between the two center pixels. To achieve pixel-perfect display of stimuli one should add 0.5 to the coordinate.</p><h2 id="3">Circles</h2><p>Filled circles can be created as a <tt>Circle</tt>. Type 1 circles are filled, type 2 circles are outlined circles (5 px width, currently not flexible).</p><pre class="codeinput">properties(<span class="string">'Circle'</span>)
 </pre><pre class="codeoutput">
 Properties for class Circle:
 
@@ -109,24 +109,25 @@ pause(1)
 circ1.delete()
 circ2.delete()
 circ3.delete()
-</pre><p><img vspace="5" hspace="5" src="exampleCircle.png" alt=""> </p><h2>Images<a name="6"></a></h2><p>Possible image formats are BMP, PNG and JPEG. The position can be defined as an <tt>[x y]</tt> vector in pixels relative to the screen center. An alpha transparency level can be defined between 0 and 255 with 0 being fully transparent and 255 fully opaque. Transparency in PNGs is also supported.</p><pre class="codeinput">properties(<span class="string">'Image'</span>)
-</pre><pre class="codeoutput">
-Properties for class Image:
+</pre><pre class="codeoutput error">Error using StimServer.Write (line 129)
+Assertion failed.
 
-    filename
-    alpha
-    angle
-    visible
-    animation
-    position
+Error in StimServer.Command (line 135)
+            StimServer.Write([typecast(uint16(key), 'uint8') uint8(bytearr)]);
 
+Error in Circle (line 20)
+            StimServer.Command(0, [uint8([12, symbolType]), typecast(uint16(symbolDiameter),'uint8')]);                         
+
+Error in DOCAvailableStimuli (line 68)
+circ1 = Circle(1);
+</pre><p><img vspace="5" hspace="5" src="exampleCircle.png" alt=""> </p><h2 id="6">Pictures</h2><p>Possible Picture formats are BMP, PNG and JPEG. The position can be defined as an <tt>[x y]</tt> vector in pixels relative to the screen center. An alpha transparency level can be defined between 0 and 255 with 0 being fully transparent and 255 fully opaque. Transparency in PNGs is also supported.</p><pre class="codeinput">properties(<span class="string">'Picture'</span>)
 </pre><p><b>Example</b></p><pre class="codeinput">imgPath = <span class="string">'C:\Toolboxes\ARCADE\arcade\Docs'</span>;
-img =  Image(fullfile(imgPath, <span class="string">'image.png'</span>));
+img = Picture(fullfile(imgPath, <span class="string">'Picture.png'</span>));
 img.position = [0 0];
 img.alpha = 200;
 img.angle = 45;
 
-img2 =  Image(fullfile(imgPath, <span class="string">'image.png'</span>));
+img2 = Picture(fullfile(imgPath, <span class="string">'Picture.png'</span>));
 img2.position = [200 0];
 img2.alpha = 200;
 img2.angle = 200;
@@ -134,28 +135,7 @@ set([img, img2], <span class="string">'visible'</span>, true)
 pause(1)
 img.delete()
 img2.delete()
-</pre><p><img vspace="5" hspace="5" src="exampleImage.png" alt=""> </p><h2>Masked grating<a name="9"></a></h2><p>Masked gratings are implemented as PixelShader stimuli with various parameters:</p><pre class="codeinput">properties(<span class="string">'Grating'</span>)
-</pre><pre class="codeoutput">
-Properties for class Grating:
-
-    color1
-    color2
-    maskRotation
-    pixelsPerCycle
-    direction
-    smoothing
-    phaseShift
-    maskWidth
-    maskHeight
-    filename
-    shaderWidth
-    shaderHeight
-    animationIncrement
-    animationPhase
-    visible
-    animation
-    position
-
+</pre><p><img vspace="5" hspace="5" src="exampleImage.png" alt=""> </p><h2 id="9">Masked grating</h2><p>Masked gratings are implemented as PixelShader stimuli with various parameters:</p><pre class="codeinput">properties(<span class="string">'Grating'</span>)
 </pre><p>Spatial frequency is defined as <tt>pixelsPerCycle</tt>. Temporal frequency is specified via the <tt>animationIncrement</tt> property in units of cycles per frame. That is, for a 120 Hz display, a <tt>animationIncrement</tt> value of 1/120 will result in a drifting grating at a speed of 1 cycle/s. The mask can be circular or elliptical, and can be rotated. The two colors of the grating are specfied as a vector of 8-bit values for <tt>[red green blue alpha]</tt>. The <tt>smoothing</tt> parameter is 2 for purely sinusoidal gratings. Values &gt; 2 will approach a square wave grating.</p><p><b>Example</b></p><pre class="codeinput">grat1 = Grating();
 grat1.color1 = [255 0 0 200];
 grat1.color2 = [0 255 0 200];
@@ -180,19 +160,7 @@ grat2.visible = true;
 pause(1);
 grat1.delete();
 grat2.delete();
-</pre><p><img vspace="5" hspace="5" src="exampleGrating.png" alt=""> </p><h2>Rectangles<a name="13"></a></h2><p>Rectangles are always filled and have the following properties:</p><pre class="codeinput">properties(<span class="string">'Rectangle'</span>)
-</pre><pre class="codeoutput">
-Properties for class Rectangle:
-
-    width
-    height
-    angle
-    color
-    alpha
-    visible
-    animation
-    position
-
+</pre><p><img vspace="5" hspace="5" src="exampleGrating.png" alt=""> </p><h2 id="13">Rectangles</h2><p>Rectangles are always filled and have the following properties:</p><pre class="codeinput">properties(<span class="string">'Rectangle'</span>)
 </pre><p><b>Example</b></p><pre class="codeinput">r1 = Rectangle;
 r1.color = [128 0 255];
 r1.height = 200;
@@ -209,14 +177,14 @@ r2.visible = true;
 pause(1)
 r1.delete();
 r2.delete();
-</pre><p><img vspace="5" hspace="5" src="exampleRectangle.png" alt=""> </p><h2>Animations<a name="16"></a></h2><p>Every stimulus can be smoothly moved around on the screen. To animate a stimulus, the <tt>animation</tt> parameter of the stimulus should be set with the required animation. Currently there are two types of animation</p><div><ol><li><tt>LinearMotion</tt>: This moves the stimulus along a polygon.</li><li><tt>GeneralMotion</tt>: This moves the stimulus along an arbitrary path defined in a file. <b>NOT IMPLEMENTED YET</b></li></ol></div><p>The <tt>LinearMotion</tt> needs two input arguments, the <tt>velocity</tt> defined in pixels per second at 120 Hz and the <tt>vertices=[x1 y1 x2 y2 ...]</tt>, which are the center coordinates that the stimulus will be moved to one after the other. The <tt>terminalAction</tt> property defines what happens at the end of the animation and is an 8-bit mask. The bits have the following meaning</p><pre>  1 disable the assigned stimulus
+</pre><p><img vspace="5" hspace="5" src="exampleRectangle.png" alt=""> </p><h2 id="16">Animations</h2><p>Every stimulus can be smoothly moved around on the screen. To animate a stimulus, the <tt>animation</tt> parameter of the stimulus should be set with the required animation. Currently there are two types of animation</p><div><ol><li><tt>LinearMotion</tt>: This moves the stimulus along a polygon.</li><li><tt>GeneralMotion</tt>: This moves the stimulus along an arbitrary path defined in a file. <b>NOT IMPLEMENTED YET</b></li></ol></div><p>The <tt>LinearMotion</tt> needs two input arguments, the <tt>velocity</tt> defined in pixels per second at 120 Hz and the <tt>vertices=[x1 y1 x2 y2 ...]</tt>, which are the center coordinates that the stimulus will be moved to one after the other. The <tt>terminalAction</tt> property defines what happens at the end of the animation and is an 8-bit mask. The bits have the following meaning</p><pre>  1 disable the assigned stimulus
   2
   4 toggle the photodiode signal1
   8 signal an event (see section 3 on page 4)
  16 restart animation (cyclic execution)
  32
  64
-128 end deferred mode</pre><p><b>Example</b></p><pre class="codeinput">r = Rectangle;
+128 end deferred mode</pre><p>Animations start immediatly when the stimulus is visible or when it becomes visible. An animation can be stopped by setting the <tt>animation</tt> property of the stimulus to <tt>[]</tt>;</p><p><b>Example</b></p><pre class="codeinput">r = Rectangle;
 r.color = [255 255 255];
 r.height = 200;
 r.angle = 45;
@@ -227,23 +195,7 @@ speed = 150; <span class="comment">% px/s</span>
 a = LinearMotion(speed, vertices);
 r.animation = a;
 r.visible = true;
-</pre><p><img vspace="5" hspace="5" src="exampleAnimation.png" alt=""> </p><h2>Moving Bars<a name="19"></a></h2><p>The <tt>MovingBar</tt> class simplifies the creation of animated bars by automatically creating the animation.</p><pre class="codeinput">properties(<span class="string">'MovingBar'</span>)
-</pre><pre class="codeoutput">
-Properties for class MovingBar:
-
-    direction
-    travelDistance
-    startPosition
-    linkedOrientationDirection
-    width
-    height
-    angle
-    color
-    alpha
-    visible
-    animation
-    position
-
+</pre><p><img vspace="5" hspace="5" src="exampleAnimation.png" alt=""> </p><h2 id="19">Moving Bars</h2><p>The <tt>MovingBar</tt> class simplifies the creation of animated bars by automatically creating the animation.</p><pre class="codeinput">properties(<span class="string">'MovingBar'</span>)
 </pre><p>Only the <tt>startPosition</tt>, <tt>direction</tt> and <tt>travelDistance</tt> have to bet set. If <tt>linkedOrientationDirection</tt> is set, the bar will always be orthogonal to the travel direction.</p><p><b>Example</b></p><pre class="codeinput">speed = 200;
 travelDistance = 500;
 mb = MovingBar(speed, travelDistance);
@@ -251,7 +203,8 @@ mb.direction = 35;
 mb.visible = true;
 pause(5)
 mb.delete()
-</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014a</a><br></p></div><!--
+</pre><h2 id="22">Pixel shader</h2><p>Pixel shader are small programs that run on the graphics card and are written in a specific shader language, HLSL  (see <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb509561(v=vs.85).aspx">here</a> for more information). Using HLSL any stimulus that can be parameterized may be generated and rendered with high performance.</p><p>Programming in HLSL is not trivial, but offers great flexibility. As a starting point you may have a look at the gratings presented above. They are implemented in the file <tt>ARCADE\arcade\StimServer\classes\stimfiles\pixelShader\MaskedGrating.fx</tt>, which is loaded and controlled by the <tt>PixelShader</tt> class with the following properties and methods</p><pre class="codeinput">properties(<span class="string">'PixelShader'</span>)
+</pre><p>Pixel shaders can currently use up to 4 RGB-Alpha colors and 12 parameters that are passed to the shader using the <tt>setColor</tt> and <tt>setParameter</tt> methods.</p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016b</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 %% Visual stimuli for ARCADE
 % Stimuli are created invisibly in the task script before the creation of the trial
@@ -262,7 +215,7 @@ mb.delete()
 % 
 %   stim = MyStimulus;
 % 
-% |MyStimulus| is the type of stimulus, e.g. |Grating|, |Image|, |Rectangle|, ...
+% |MyStimulus| is the type of stimulus, e.g. |Grating|, |Picture|, |Rectangle|, ...
 % Stimulus properties can be then be changed in two ways. Either by directly
 % setting the property, similar to changing fields of a struct array, e.g.
 %
@@ -345,22 +298,22 @@ circ3.delete()
 %
 
 
-%% Images
-% Possible image formats are BMP, PNG and JPEG. The position can be defined
+%% Pictures
+% Possible Picture formats are BMP, PNG and JPEG. The position can be defined
 % as an |[x y]| vector in pixels relative to the screen center. An alpha
 % transparency level can be defined between 0 and 255 with 0 being fully
 % transparent and 255 fully opaque. Transparency in PNGs is also supported.
-properties('Image')
+properties('Picture')
 %%
 % *Example*
 %
 imgPath = 'C:\Toolboxes\ARCADE\arcade\Docs';
-img =  Image(fullfile(imgPath, 'image.png'));
+img = Picture(fullfile(imgPath, 'Picture.png'));
 img.position = [0 0];
 img.alpha = 200;
 img.angle = 45;
 
-img2 =  Image(fullfile(imgPath, 'image.png'));
+img2 = Picture(fullfile(imgPath, 'Picture.png'));
 img2.position = [200 0];
 img2.alpha = 200;
 img2.angle = 200;
@@ -471,6 +424,10 @@ r2.delete();
 %   64 
 %  128 end deferred mode
 % 
+% Animations start immediatly when the stimulus is visible or when it
+% becomes visible. An animation can be stopped by setting the |animation|
+% property of the stimulus to |[]|;
+% 
 %%
 % *Example*
 r = Rectangle;
@@ -507,6 +464,26 @@ mb.direction = 35;
 mb.visible = true;
 pause(5)
 mb.delete()
+
+%% Pixel shader
+% Pixel shader are small programs that run on the graphics card and are 
+% written in a specific shader language, HLSL  (see 
+% <https://msdn.microsoft.com/en-us/library/windows/desktop/bb509561(v=vs.85).aspx here>
+% for more information). Using HLSL any stimulus that 
+% can be parameterized may be generated and rendered with high performance.
+% 
+% Programming in HLSL is not trivial, but offers great flexibility. As a
+% starting point you may have a look at the gratings presented above.
+% They are implemented in the file
+% |ARCADE\arcade\StimServer\classes\stimfiles\pixelShader\MaskedGrating.fx|,
+% which is loaded and controlled by the |PixelShader| class with the
+% following properties and methods
+properties('PixelShader')
+%%
+% Pixel shaders can currently use up to 4 RGB-Alpha colors and 12
+% parameters that are passed to the shader using the |setColor| and
+% |setParameter| methods.
+
 
 
 

@@ -1,11 +1,26 @@
 classdef LinearMotion < Animation
+    % Class for linear motion of a stimulus along a polygon.
+    %
+    % Usage
+    % -----
+    %   a = LinearMotion(speed, coordinates)
+    %     
+    %  
+    % Example
+    % -------
+    %   a = LinearMotion(200, [0 0 200 200]);
+    %   c = Circle;
+    %   c.animation = a;
+    %   c.visible = true;
+    %     
+    % See also Animation, Stimulus
     
     properties ( SetAccess = immutable, Transient = true )       
-       velocity = []; % px / s
+       velocity = []; % px / s for 120 Hz refresh rate
     end
     
     properties ( Transient = true )
-       vertices = []; 
+       vertices = []; % vector of positions ([x1 y1 x2 y2 ...])
     end
     
     methods

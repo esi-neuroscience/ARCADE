@@ -7,7 +7,7 @@
 % 
 %   stim = MyStimulus;
 % 
-% |MyStimulus| is the type of stimulus, e.g. |Grating|, |Image|, |Rectangle|, ...
+% |MyStimulus| is the type of stimulus, e.g. |Grating|, |Picture|, |Rectangle|, ...
 % Stimulus properties can be then be changed in two ways. Either by directly
 % setting the property, similar to changing fields of a struct array, e.g.
 %
@@ -90,22 +90,22 @@ circ3.delete()
 %
 
 
-%% Images
-% Possible image formats are BMP, PNG and JPEG. The position can be defined
+%% Pictures
+% Possible Picture formats are BMP, PNG and JPEG. The position can be defined
 % as an |[x y]| vector in pixels relative to the screen center. An alpha
 % transparency level can be defined between 0 and 255 with 0 being fully
 % transparent and 255 fully opaque. Transparency in PNGs is also supported.
-properties('Image')
+properties('Picture')
 %%
 % *Example*
 %
 imgPath = 'C:\Toolboxes\ARCADE\arcade\Docs';
-img =  Image(fullfile(imgPath, 'image.png'));
+img = Picture(fullfile(imgPath, 'Picture.png'));
 img.position = [0 0];
 img.alpha = 200;
 img.angle = 45;
 
-img2 =  Image(fullfile(imgPath, 'image.png'));
+img2 = Picture(fullfile(imgPath, 'Picture.png'));
 img2.position = [200 0];
 img2.alpha = 200;
 img2.angle = 200;
@@ -216,6 +216,10 @@ r2.delete();
 %   64 
 %  128 end deferred mode
 % 
+% Animations start immediatly when the stimulus is visible or when it
+% becomes visible. An animation can be stopped by setting the |animation|
+% property of the stimulus to |[]|.
+% 
 %%
 % *Example*
 r = Rectangle;
@@ -252,6 +256,26 @@ mb.direction = 35;
 mb.visible = true;
 pause(5)
 mb.delete()
+
+%% Pixel shader
+% Pixel shader are small programs that run on the graphics card and are 
+% written in a specific shader language, HLSL  (see 
+% <https://msdn.microsoft.com/en-us/library/windows/desktop/bb509561(v=vs.85).aspx here>
+% for more information). Using HLSL any stimulus that 
+% can be parameterized may be generated and rendered with high performance.
+% 
+% Programming in HLSL is not trivial, but offers great flexibility. As a
+% starting point you may have a look at the gratings presented above.
+% They are implemented in the file
+% |ARCADE\arcade\StimServer\classes\stimfiles\pixelShader\MaskedGrating.fx|,
+% which is loaded and controlled by the |PixelShader| class with the
+% following properties and methods
+properties('PixelShader')
+%%
+% Pixel shaders can currently use up to 4 RGB-Alpha colors and 12
+% parameters that are passed to the shader using the |setColor| and
+% |setParameter| methods.
+
 
 
 
