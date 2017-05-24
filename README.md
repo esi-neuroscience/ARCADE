@@ -22,12 +22,12 @@ states. The sequence of states is what defines the flow of the experiment
 
 Getting started
 ---------------
-Detailed documentation can be found in arcade/Docs/html or arcade/Docs/pdf.
-Examples for task scripts are provided in Tasks/Examples.
+See GettingStarted.html as an entry point for learning how to use ARCADE.
 
 
 Requirements
 ------------
 Currently ARCADE can only run 
+
 * Windows 7 with Windows Platform Update (https://www.microsoft.com/en-us/download/details.aspx?id=36805)
 * MATLAB 2014a, 64-bit
