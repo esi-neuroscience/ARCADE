@@ -54,9 +54,6 @@ classdef (Sealed) SGLControlScreenProc < SPCServerProc
             
             SGLTrialDataPipe.Open();
             this.mWriteToDiary('Opened Core Pipe', true);
-            % *creating this pipe informs Core that this process has launched
-            
-       
             
             %----------------------------%
             this.mWriteToDiary('Waiting for start commmand', true);
