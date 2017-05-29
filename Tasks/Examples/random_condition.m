@@ -1,4 +1,4 @@
-function condition = random_condition(varargin)
+function condition = random_condition(currenTrial)
 
-% select randomly from 10 conditions
-condition = randi(10);
+% select randomly from 4 conditions
+condition = randi(4);
