@@ -40,8 +40,8 @@
 % This command is not necessary in the actual trial script.
 
 %% General stimulus properties
-% All stimuli share a few properties. They can be made visible, repositioned,
-% protected from clearing or animated (smoothly translated)
+% All stimuli share a few properties. All stimuli can be made visible, 
+% repositioned, or animated (smoothly translated).
 properties('Stimulus')
 %%
 % Visibility can be |true| for on or |false| for off. The |animation| property is empty by
@@ -54,7 +54,7 @@ properties('Stimulus')
 % white and [0 0 0] for black. Alpha values range from fully transparent
 % (0) to fully opaque (255).
 % 
-% _Note_ : For displays with an even number of pixels is
+% _Note_: For displays with an even number of pixels the center |[0 0]| is
 % actually between the two center pixels. To achieve pixel-perfect display of
 % stimuli one should add 0.5 to the coordinate. 
 
@@ -91,7 +91,7 @@ circ3.delete()
 
 
 %% Pictures
-% Possible Picture formats are BMP, PNG and JPEG. The position can be defined
+% Possible Picture formats are BMP, PNG, TIFF and JPEG. The position can be defined
 % as an |[x y]| vector in pixels relative to the screen center. An alpha
 % transparency level can be defined between 0 and 255 with 0 being fully
 % transparent and 255 fully opaque. Transparency in PNGs is also supported.
@@ -100,12 +100,12 @@ properties('Picture')
 % *Example*
 %
 imgPath = 'C:\Toolboxes\ARCADE\arcade\Docs';
-img = Picture(fullfile(imgPath, 'Picture.png'));
+img = Picture(fullfile(imgPath, 'image.png'));
 img.position = [0 0];
 img.alpha = 200;
 img.angle = 45;
 
-img2 = Picture(fullfile(imgPath, 'Picture.png'));
+img2 = Picture(fullfile(imgPath, 'image.png'));
 img2.position = [200 0];
 img2.alpha = 200;
 img2.angle = 200;
@@ -120,7 +120,7 @@ img2.delete()
 %
 
 %% Masked grating
-% Masked gratings are implemented as PixelShader stimuli with various
+% Masked gratings are implemented as |PixelShader| (see below) stimuli with various
 % parameters:
 properties('Grating')
 %%
@@ -128,7 +128,8 @@ properties('Grating')
 % specified via the |animationIncrement| property in units of cycles per
 % frame. That is, for a 120 Hz display, a |animationIncrement| value of
 % 1/120 will result in a drifting grating at a speed of 1 cycle/s. 
-% The mask can be circular or elliptical, and can be rotated.
+% The mask can be circular or elliptical (|maskWidth|, |maskHeight|), 
+% and can be rotated (|maskRotation|). 
 % The two colors of the grating are specfied as a vector of 8-bit values for
 % |[red green blue alpha]|. The |smoothing| parameter is 2 for purely
 % sinusoidal gratings. Values > 2 will approach a square wave grating.

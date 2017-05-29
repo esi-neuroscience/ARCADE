@@ -22,12 +22,14 @@ states. The sequence of states is what defines the flow of the experiment
 
 Getting started
 ---------------
-See GettingStarted.html as an entry point for learning how to use ARCADE.
+See arcade/Docs/html/ARCADE.html for the full documentation of ARCADE. 
+arcade/start_arcade.bat will start ARCADE.
 
 
 Requirements
 ------------
-Currently ARCADE can only run 
+Currently ARCADE can only run on
 
 * Windows 7 with Windows Platform Update (https://www.microsoft.com/en-us/download/details.aspx?id=36805)
 * MATLAB 2014a, 64-bit
+* Eyelink eye tracker or eye signal via National Instruments PCI card.
