@@ -76,7 +76,6 @@ classdef MSJavaObjects < handle
                 'cfg_MonitorDiagonalSize',  '<html>Diagonal Size of Monitor in centimeters';...
                 'cfg_DistanceToScreen',     '<html>Distance from monitor in centimeters';...
                 'cfg_MaximumNumberOfTrials','<html>Maximum number of trials to run';...
-                'cfg_RewardButtonDuration', '<html>Reward duration in milliseconds';...
                 'cfg_EventMarker_Pause',    '<html>Event Marker sent when "Pause" button is pressed';...
                 'cfg_EventMarker_Resume',   '<html>Event Marker sent when "Resume" or "Quit"<br>button pressed during Pause'};
             
@@ -89,7 +88,6 @@ classdef MSJavaObjects < handle
                 55.50,  0,     200, 0.01;... 'cfg_MonitorDiagonalSize'
                 80.67,  0,     300, 0.01;... 'cfg_DistanceToScreen'
                 5000,   1,   10000, 1;...    'cfg_MaximumNumberOfTrials'
-                100,    0,    1000, 1;...    'cfg_RewardButtonDuration'
                 29600,  0, maxTrig, 1;...    'cfg_EventMarker_Pause'
                 29601,  0, maxTrig, 1;...    'cfg_EventMarker_Resume'
                 ];
@@ -104,24 +102,6 @@ classdef MSJavaObjects < handle
                 if ~isempty(jsxTags{k,2})
                     jsxObjects{k}.mAddToolTip(jsxTags{k,2});
                 end
-                
-                % --------------------------- % 
-                %     Quick and Dirty Fix 
-                %   add a spinner listener 
-                % **this should be developed in the future**
-                if strcmp(jsxTags{k,1},'cfg_RewardButtonDuration')
-                    hRewEnable = findobj(this.hfig,'Tag','cfg_RewardButtonEnabled');
-                    %hSpinFrame = findobj(this.hfig,'Tag','cfg_RewardButtonEnabled');
-                    
-                    % set with current value 
-                    jsxObjects{k}.mSetEnabled(logical(get(hRewEnable,'Value')));
-                    
-                    % add listener 
-                    addlistener(hRewEnable,'Value','PostSet',...
-                        @(hObj,evt) jsxObjects{k}.mSetEnabled(logical(get(evt.AffectedObject,'Value'))));
-                end
-                % --------------------------- %    
-                
             end
             
             this.jsxNumberSpinners = jsxObjects;
