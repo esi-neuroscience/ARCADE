@@ -99,39 +99,32 @@ classdef (Sealed) SGLBehaviouralStore < AUXEditableVariables & AUXOutputDataFile
         
         %# setup the condition selection functions
         function [curCond,curBlock] = mCallTrialSelectionFcns(this,currentTrial) %#ok<INUSD,*STOUT>
-            persistent condSelFile blockSelFile
+            persistent condSelFcn blockSelFcn
             %---------------------------------------%
             %      Trial Selection Functions
             % -
             % check if files are specified
             % check if the files exist
             
-            if this.currentTrial==0
+            if this.currentTrial==0                                
                 % get condition selection function 
-                keepext = false;
-                rmode   = 'call_func';
-                condSelFile  = AUXBackupCopy.mSingleShortFile(this.cfg.Files.ConditionSelection,keepext,rmode);
-                blockSelFile = AUXBackupCopy.mSingleShortFile(this.cfg.Files.BlockSelection,keepext,rmode);
+                if ~strcmp(this.cfg.Files.ConditionSelection, 'n/a')
+                    [~,condSelFile,~] = fileparts(this.cfg.Files.ConditionSelection);
+                    condSelFcn = str2func(condSelFile);
+                else
+                    condSelFcn = @(x) ones(1);
+                end
+                if ~strcmp(this.cfg.Files.BlockSelection, 'n/a')
+                    [~,blockSelFile,~] = fileparts(this.cfg.Files.BlockSelection);
+                    blockSelFcn = str2func(blockSelFile);
+                else
+                    blockSelFcn = @(x) ones(1);
+                end
             end
 
-            % --> call users functions 
-            % --> check return values
-            try
-                if ischar(condSelFile)
-                    eval(['curCond  = ',condSelFile,'(currentTrial);']);
-                else
-                    curCond  = condSelFile();
-                end
-                if ischar(blockSelFile)
-                    eval(['curBlock = ',blockSelFile,'(currentTrial);']);
-                else
-                    curBlock  = blockSelFile();
-                end
-                
-            catch ME
-                ME
-                keyboard
-            end
+            % --> call users functions             
+            curCond = condSelFcn(currentTrial);
+            curBlock = blockSelFcn(currentTrial);
             
             % return values should be positive integers 
             if curCond~=floor(curCond) && ~isscalar(curCond)
