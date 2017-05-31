@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Visual stimuli for ARCADE</title><meta name="generator" content="MATLAB 8.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-05-29"><meta name="DC.source" content="DOCAvailableStimuli.m"><style type="text/css">
+      --><title>Visual stimuli for ARCADE</title><meta name="generator" content="MATLAB 8.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-05-31"><meta name="DC.source" content="DOCAvailableStimuli.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -109,7 +109,7 @@ pause(1)
 circ1.delete()
 circ2.delete()
 circ3.delete()
-</pre><p><img vspace="5" hspace="5" src="exampleCircle.png" alt=""> </p><h2>Pictures<a name="6"></a></h2><p>Possible Picture formats are BMP, PNG, TIFF and JPEG. The position can be defined as an <tt>[x y]</tt> vector in pixels relative to the screen center. An alpha transparency level can be defined between 0 and 255 with 0 being fully transparent and 255 fully opaque. Transparency in PNGs is also supported.</p><pre class="codeinput">properties(<span class="string">'Picture'</span>)
+</pre><p><img vspace="5" hspace="5" src="exampleCircle.png" alt=""> </p><p>Detailed documentation can be found with <a href="matlab:doc('Circle')">doc Circle</a></p><h2>Pictures<a name="6"></a></h2><p>Possible Picture formats are BMP, PNG, TIFF and JPEG. The position can be defined as an <tt>[x y]</tt> vector in pixels relative to the screen center. An alpha transparency level can be defined between 0 and 255 with 0 being fully transparent and 255 fully opaque. Transparency in PNGs is also supported.</p><pre class="codeinput">properties(<span class="string">'Picture'</span>)
 </pre><pre class="codeoutput">
 Properties for class Picture:
 
@@ -134,19 +134,20 @@ set([img, img2], <span class="string">'visible'</span>, true)
 pause(1)
 img.delete()
 img2.delete()
-</pre><p><img vspace="5" hspace="5" src="exampleImage.png" alt=""> </p><h2>Masked grating<a name="9"></a></h2><p>Masked gratings are implemented as <tt>PixelShader</tt> (see below) stimuli with various parameters:</p><pre class="codeinput">properties(<span class="string">'Grating'</span>)
+</pre><p><img vspace="5" hspace="5" src="exampleImage.png" alt=""> </p><p>Detailed documentation can be found with <a href="matlab:doc('Picture')">doc Picture</a></p><h2>Masked grating<a name="9"></a></h2><p>Masked gratings are implemented as <tt>PixelShader</tt> (see below) stimuli with various parameters:</p><pre class="codeinput">properties(<span class="string">'Grating'</span>)
 </pre><pre class="codeoutput">
 Properties for class Grating:
 
     color1
     color2
     maskRotation
-    pixelsPerCycle
+    spatialFrequency
     direction
     smoothing
     phaseShift
     maskWidth
     maskHeight
+    temporalFrequency
     filename
     shaderWidth
     shaderHeight
@@ -156,14 +157,14 @@ Properties for class Grating:
     animation
     position
 
-</pre><p>Spatial frequency is defined as <tt>pixelsPerCycle</tt>. Temporal frequency is specified via the <tt>animationIncrement</tt> property in units of cycles per frame. That is, for a 120 Hz display, a <tt>animationIncrement</tt> value of 1/120 will result in a drifting grating at a speed of 1 cycle/s. The mask can be circular or elliptical (<tt>maskWidth</tt>, <tt>maskHeight</tt>), and can be rotated (<tt>maskRotation</tt>). The two colors of the grating are specfied as a vector of 8-bit values for <tt>[red green blue alpha]</tt>. The <tt>smoothing</tt> parameter is 2 for purely sinusoidal gratings. Values &gt; 2 will approach a square wave grating.</p><p><b>Example</b></p><pre class="codeinput">grat1 = Grating();
+</pre><p>Spatial frequency is defined as <tt>spatialFrequency</tt> in pixel per cycle. Temporal frequency is specified via the <tt>temporalFrequency</tt> property in units of cycles per s. That is, for a 120 Hz display, a <tt>animationIncrement</tt> value of 1/120 will result in a drifting grating at a speed of 1 cycle/s. The mask can be circular or elliptical (<tt>maskWidth</tt>, <tt>maskHeight</tt>), and can be rotated (<tt>maskRotation</tt>). The two colors of the grating are specfied as a vector of 8-bit values for <tt>[red green blue alpha]</tt>. The <tt>smoothing</tt> parameter is 2 for purely sinusoidal gratings. Values &gt; 2 will approach a square wave grating.</p><p><b>Example</b></p><pre class="codeinput">grat1 = Grating();
 grat1.color1 = [255 0 0 200];
 grat1.color2 = [0 255 0 200];
 grat1.maskRotation = 45;
 grat1.maskWidth = 400;
-grat1.pixelsPerCycle = 60;
+grat1.spatialFrequency = 60;
 grat1.smoothing = 2;
-grat1.animationIncrement = 1/120;
+grat1.temporalFrequency = 1;
 grat1.visible = true;
 
 grat2 = Grating();
@@ -171,16 +172,18 @@ grat2.color1 = [255 0 0 200];
 grat2.color2 = [0 0 0 200];
 grat2.maskRotation = 270;
 grat2.maskWidth = 400;
-grat2.pixelsPerCycle = 20;
+grat2.spatialFrequency = 20;
 grat2.smoothing = 10;
-grat2.animationIncrement = 1/120;
+grat2.temporalFrequency = 1;
 grat2.position = [400 0];
+grat2.direction = 45;
 grat2.visible = true;
+
 
 pause(1);
 grat1.delete();
 grat2.delete();
-</pre><p><img vspace="5" hspace="5" src="exampleGrating.png" alt=""> </p><h2>Rectangles<a name="13"></a></h2><p>Rectangles are always filled and have the following properties:</p><pre class="codeinput">properties(<span class="string">'Rectangle'</span>)
+</pre><p><img vspace="5" hspace="5" src="exampleGrating.png" alt=""> </p><p>Detailed documentation can be found with <a href="matlab:doc('Grating')">doc Grating</a></p><h2>Rectangles<a name="13"></a></h2><p>Rectangles are always filled and have the following properties:</p><pre class="codeinput">properties(<span class="string">'Rectangle'</span>)
 </pre><pre class="codeoutput">
 Properties for class Rectangle:
 
@@ -209,7 +212,7 @@ r2.visible = true;
 pause(1)
 r1.delete();
 r2.delete();
-</pre><p><img vspace="5" hspace="5" src="exampleRectangle.png" alt=""> </p><h2>Animations<a name="16"></a></h2><p>Every stimulus can be smoothly moved around on the screen. To animate a stimulus, the <tt>animation</tt> parameter of the stimulus should be set with the required animation. Currently there are two types of animation</p><div><ol><li><tt>LinearMotion</tt>: This moves the stimulus along a polygon.</li><li><tt>GeneralMotion</tt>: This moves the stimulus along an arbitrary path defined in a file. <b>NOT IMPLEMENTED YET</b></li></ol></div><p>The <tt>LinearMotion</tt> needs two input arguments, the <tt>velocity</tt> defined in pixels per second at 120 Hz and the <tt>vertices=[x1 y1 x2 y2 ...]</tt>, which are the center coordinates that the stimulus will be moved to one after the other. The <tt>terminalAction</tt> property defines what happens at the end of the animation and is an 8-bit mask. The bits have the following meaning</p><pre>  1 disable the assigned stimulus
+</pre><p><img vspace="5" hspace="5" src="exampleRectangle.png" alt=""> </p><p>Detailed documentation can be found with <a href="matlab:doc('Rectangle')">doc Rectangle</a></p><h2>Animations<a name="16"></a></h2><p>Every stimulus can be smoothly moved around on the screen. To animate a stimulus, the <tt>animation</tt> parameter of the stimulus should be set with the required animation. Currently there are two types of animation</p><div><ol><li><tt>LinearMotion</tt>: This moves the stimulus along a polygon.</li><li><tt>GeneralMotion</tt>: This moves the stimulus along an arbitrary path defined in a file. <b>NOT IMPLEMENTED YET</b></li></ol></div><p>The <tt>LinearMotion</tt> needs two input arguments, the <tt>velocity</tt> defined in pixels per second at 120 Hz and the <tt>vertices=[x1 y1 x2 y2 ...]</tt>, which are the center coordinates that the stimulus will be moved to one after the other. The <tt>terminalAction</tt> property defines what happens at the end of the animation and is an 8-bit mask. The bits have the following meaning</p><pre>  1 disable the assigned stimulus
   2
   4 toggle the photodiode signal1
   8 signal an event (see section 3 on page 4)
@@ -227,7 +230,7 @@ speed = 150; <span class="comment">% px/s</span>
 a = LinearMotion(speed, vertices);
 r.animation = a;
 r.visible = true;
-</pre><p><img vspace="5" hspace="5" src="exampleAnimation.png" alt=""> </p><h2>Moving Bars<a name="19"></a></h2><p>The <tt>MovingBar</tt> class simplifies the creation of animated bars by automatically creating the animation.</p><pre class="codeinput">properties(<span class="string">'MovingBar'</span>)
+</pre><p><img vspace="5" hspace="5" src="exampleAnimation.png" alt=""> </p><p>Detailed documentation can be found with <a href="matlab:doc('LinearMotion')">doc LinearMotion</a></p><h2>Moving Bars<a name="19"></a></h2><p>The <tt>MovingBar</tt> class simplifies the creation of animated bars by automatically creating the animation.</p><pre class="codeinput">properties(<span class="string">'MovingBar'</span>)
 </pre><pre class="codeoutput">
 Properties for class MovingBar:
 
@@ -264,7 +267,7 @@ Properties for class PixelShader:
     animation
     position
 
-</pre><p>Pixel shaders can currently use up to 4 RGB-Alpha colors and 12 parameters that are passed to the shader using the <tt>setColor</tt> and <tt>setParameter</tt> methods.</p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014a</a><br></p></div><!--
+</pre><p>Pixel shaders can currently use up to 4 RGB-Alpha colors and 12 parameters that are passed to the shader using the <tt>setColor</tt> and <tt>setParameter</tt> methods. Detailed documentation can be found with <a href="matlab:doc('PixelShader')">doc PixelShader</a></p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014a</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 %% Visual stimuli for ARCADE
 % Stimuli are created invisibly in the task script before the creation of the trial
@@ -356,7 +359,7 @@ circ3.delete()
 %
 % <<exampleCircle.png>>
 %
-
+% Detailed documentation can be found with <matlab:doc('Circle') doc Circle>
 
 %% Pictures
 % Possible Picture formats are BMP, PNG, TIFF and JPEG. The position can be defined
@@ -386,15 +389,16 @@ img2.delete()
 %
 % <<exampleImage.png>>
 %
-
+% Detailed documentation can be found with <matlab:doc('Picture') doc Picture>
 %% Masked grating
 % Masked gratings are implemented as |PixelShader| (see below) stimuli with various
 % parameters:
 properties('Grating')
 %%
-% Spatial frequency is defined as |pixelsPerCycle|. Temporal frequency is
-% specified via the |animationIncrement| property in units of cycles per
-% frame. That is, for a 120 Hz display, a |animationIncrement| value of
+% Spatial frequency is defined as |spatialFrequency| in pixel per cycle. 
+% Temporal frequency is
+% specified via the |temporalFrequency| property in units of cycles per
+% s. That is, for a 120 Hz display, a |animationIncrement| value of
 % 1/120 will result in a drifting grating at a speed of 1 cycle/s. 
 % The mask can be circular or elliptical (|maskWidth|, |maskHeight|), 
 % and can be rotated (|maskRotation|). 
@@ -409,9 +413,9 @@ grat1.color1 = [255 0 0 200];
 grat1.color2 = [0 255 0 200];
 grat1.maskRotation = 45;
 grat1.maskWidth = 400;
-grat1.pixelsPerCycle = 60;
+grat1.spatialFrequency = 60;
 grat1.smoothing = 2;
-grat1.animationIncrement = 1/120;
+grat1.temporalFrequency = 1;
 grat1.visible = true;
 
 grat2 = Grating();
@@ -419,11 +423,13 @@ grat2.color1 = [255 0 0 200];
 grat2.color2 = [0 0 0 200];
 grat2.maskRotation = 270;
 grat2.maskWidth = 400;
-grat2.pixelsPerCycle = 20;
+grat2.spatialFrequency = 20;
 grat2.smoothing = 10;
-grat2.animationIncrement = 1/120;
+grat2.temporalFrequency = 1;
 grat2.position = [400 0];
+grat2.direction = 45;
 grat2.visible = true;
+
 
 pause(1);
 grat1.delete();
@@ -432,7 +438,7 @@ grat2.delete();
 %
 % <<exampleGrating.png>>
 %
-
+% Detailed documentation can be found with <matlab:doc('Grating') doc Grating>
 %% Rectangles
 % Rectangles are always filled and have the following properties:
 properties('Rectangle')
@@ -459,6 +465,7 @@ r2.delete();
 %
 % <<exampleRectangle.png>>
 %
+% Detailed documentation can be found with <matlab:doc('Rectangle') doc Rectangle>
 
 %% Animations
 % Every stimulus can be smoothly moved around on the screen. To animate a
@@ -506,7 +513,7 @@ r.visible = true;
 %
 % <<exampleAnimation.png>>
 %
-
+% Detailed documentation can be found with <matlab:doc('LinearMotion') doc LinearMotion>
 
 %% Moving Bars
 % The |MovingBar| class simplifies the creation of animated bars by
@@ -544,6 +551,7 @@ properties('PixelShader')
 % Pixel shaders can currently use up to 4 RGB-Alpha colors and 12
 % parameters that are passed to the shader using the |setColor| and
 % |setParameter| methods.
+% Detailed documentation can be found with <matlab:doc('PixelShader') doc PixelShader>
 
 
 

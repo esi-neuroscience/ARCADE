@@ -22,9 +22,13 @@ states. The sequence of states is what defines the flow of the experiment
 
 Getting started
 ---------------
-See arcade/Docs/html/ARCADE.html for the full documentation of ARCADE. 
-arcade/start_arcade.bat will start ARCADE.
 
+To get started add the ARCADE folder and its subfolders to your MATLAB path.
+The tutorial documentaiton can then be found by opening the MATLAB help
+browser under Supplemental Software. Alternatively, open arcade/Docs/html/ARCADE.html
+in a browser. 
+
+To start arcade, use arcade/start_arcade.bat
 
 Requirements
 ------------

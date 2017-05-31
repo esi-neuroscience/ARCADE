@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Tracking the eye position</title><meta name="generator" content="MATLAB 8.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-05-29"><meta name="DC.source" content="DOCEyetracking.m"><style type="text/css">
+      --><title>Tracking the eye position</title><meta name="generator" content="MATLAB 8.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-05-31"><meta name="DC.source" content="DOCEyetracking.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -66,13 +66,13 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>Tracking the eye position</h1><!--introduction--><p>ARCADE can track and respond to the eye position of the subject. This is defined in the <tt>trackEye</tt> property of each trial state. When defining a state the trackEye property can be set with a struct with the following fields</p><!--/introduction--><div><ul><li><tt>method</tt>: <tt>'circle'</tt> (further methods will be implemented later)</li><li><tt>report</tt>: <tt>'enter'</tt> or <tt>'leave'</tt> . Defines for which change of the eye               position change the <tt>nextState</tt> is entered.</li><li><tt>nextState</tt>: Name of the next state as string</li><li><tt>center</tt>: <tt>[x y]</tt> coordinates of tracked position in pixels</li><li><tt>radius</tt>: Radius of tracking area around tracked position in pixels</li></ul></div><p>For example:</p><pre class="codeinput"><span class="comment">% define trackEye for use in state definition</span>
+  </style></head><body><div class="content"><h1>Tracking the eye position</h1><!--introduction--><p>ARCADE can track and respond to the eye position of the subject. This is defined in the <tt>trackEye</tt> property of each trial state. When defining a state the trackEye property can be set with a struct with the following fields</p><!--/introduction--><div><ul><li><tt>method</tt>: <tt>'circle'</tt> (further methods will be implemented later)</li><li><tt>report</tt>: <tt>'enter'</tt> or <tt>'leave'</tt> . Defines for which change of the eye               position change the <tt>nextState</tt> is entered.</li><li><tt>nextState</tt>: Name of the next state as string</li><li><tt>center</tt>: <tt>[x y]</tt> coordinates of tracked position in pixels</li><li><tt>radius</tt>: Radius of tracking area around tracked position in pixels</li></ul></div><p><b>Example</b></p><pre class="codeinput"><span class="comment">% define trackEye for use in state definition</span>
 trackEye = struct(<span class="keyword">...</span>
     <span class="string">'method'</span>, <span class="string">'circle'</span>, <span class="keyword">...</span>
     <span class="string">'report'</span>, <span class="string">'enter'</span>, <span class="keyword">...</span>
     <span class="string">'nextState'</span>, <span class="string">'holdFix'</span>, <span class="keyword">...</span>
     <span class="string">'center'</span>, [0 0], <span class="keyword">...</span>
-    <span class="string">'radius'</span>, 0.8);
+    <span class="string">'radius'</span>, 100); <span class="comment">% px</span>
 
 <span class="comment">% state definition</span>
 sAcquireFix = [];
@@ -96,7 +96,8 @@ sAcquireFix.trackEye  = trackEye;
 % * |center|: |[x y]| coordinates of tracked position in pixels
 % * |radius|: Radius of tracking area around tracked position in pixels
 % 
-% For example:
+%% 
+% *Example*
 
 % define trackEye for use in state definition
 trackEye = struct(...
@@ -104,7 +105,7 @@ trackEye = struct(...
     'report', 'enter', ...
     'nextState', 'holdFix', ...
     'center', [0 0], ...
-    'radius', 0.8);
+    'radius', 100); % px
 
 % state definition
 sAcquireFix = [];

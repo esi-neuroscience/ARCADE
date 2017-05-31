@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Helper functions</title><meta name="generator" content="MATLAB 8.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-05-29"><meta name="DC.source" content="DOCHelperFunctions.m"><style type="text/css">
+      --><title>Helper functions</title><meta name="generator" content="MATLAB 8.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-05-31"><meta name="DC.source" content="DOCHelperFunctions.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -66,13 +66,13 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>Helper functions</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1"><tt>eventmarker</tt></a></li><li><a href="#2"><tt>groupStimuli</tt></a></li><li><a href="#3"><tt>photodiode</tt></a></li><li><a href="#4"><tt>reward</tt></a></li><li><a href="#5"><tt>reactiontime</tt></a></li></ul></div><h2><tt>eventmarker</tt><a name="1"></a></h2><pre class="codeinput">help <span class="string">eventmarker</span>
+  </style></head><body><div class="content"><h1>Helper functions</h1><!--introduction--><p>ARCADE provides several helper functions that are useful for controlling the experiment and storing additional behavioral data. See below for a list.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1"><tt>eventmarker</tt></a></li><li><a href="#2"><tt>groupStimuli</tt></a></li><li><a href="#3"><tt>photodiode</tt></a></li><li><a href="#4"><tt>trialerror</tt></a></li><li><a href="#5"><tt>reward</tt></a></li><li><a href="#6"><tt>reactiontime</tt></a></li><li><a href="#7"><tt>storeUserVariables</tt></a></li></ul></div><h2><tt>eventmarker</tt><a name="1"></a></h2><pre class="codeinput">help <span class="string">eventmarker</span>
 </pre><pre class="codeoutput">  Send a digital marker for an event to the DAQ card (if available) and
   store the corresponding timestamp in the .evt file.
   
   INPUT
   -----
-    value : event code number between 0 and 2^16
+    value : event code number &gt;=0 and &lt;2^16
   
 
 </pre><h2><tt>groupStimuli</tt><a name="2"></a></h2><pre class="codeinput">help <span class="string">groupStimuli</span>
@@ -105,20 +105,71 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
   	'toggle' : switch status of photodioe (i.e., on-&gt;off, or off-&gt;on)
   	'flicker': flip between black and white with every frame
 
-</pre><h2><tt>reward</tt><a name="4"></a></h2><pre class="codeinput">help <span class="string">reward</span>
+</pre><h2><tt>trialerror</tt><a name="4"></a></h2><pre class="codeinput">help <span class="string">trialerror</span>
+</pre><pre class="codeoutput">  Store outcome of trial in behavioral record file
+  
+  INPUT
+  -----
+    trlerr : code for outcome of trial in range 1-9 
+
+</pre><h2><tt>reward</tt><a name="5"></a></h2><pre class="codeinput">help <span class="string">reward</span>
 </pre><pre class="codeoutput">  Give a reward pulse or pulse sequence.
   
   INPUT
   -----
   
     rMode : reward mode, 'pulse' or 'sequence'.
-    
+    duration : length of reward pulse(s) in ms
+    pause    : pause after each pulse for 'sequence' mode
+  
+  EXAMPLE
+  -------
+  Give 100 ms reward pulse
+    reward('pulse', 100)  
+  
+  Give 2x50 ms pulse with a pause of 40 ms after each pulse
+    reward('sequence', [100 100], [40 40]) 
+  
   
 
-</pre><h2><tt>reactiontime</tt><a name="5"></a></h2><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014a</a><br></p></div><!--
+</pre><h2><tt>reactiontime</tt><a name="6"></a></h2><pre class="codeinput">help <span class="string">reactiontime</span>
+</pre><pre class="codeoutput">  Measure and store reaction times
+   
+  INPUT
+  -----
+  Input is always a string plus optional further arguments:   
+  
+    'start'    : start timer for reaction time
+    'end'      : record elapsed time in ms since reactiontime('start')
+                     in behavioral data file
+    'writeRT', rt   : write rt as reaction time value to
+                      behavioral data file, e.g.
+                      reactiontime('writeRT', 264)
+    'settic', timer : set start timer to timer handle returned by tic
+  
+  See also tic
+  
+
+</pre><h2><tt>storeUserVariables</tt><a name="7"></a></h2><pre class="codeinput">help <span class="string">storeUserVariables</span>
+</pre><pre class="codeoutput">  Store a variable in the behavioral data file of ARCADE. 
+  
+  INPUT
+  -----
+    var : MATLAB variable to be stored in behavioral data
+  
+  Only one variable per trial can be stored. Multiple
+  variables can be held together in cell array or struct.
+  
+  Note: large variables (&gt; ~5 MB) will cause a noticable delay.
+  
+
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014a</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 %% Helper functions
-
+% ARCADE provides several helper functions that are useful for controlling
+% the experiment and storing additional behavioral data. See below for a
+% list.
+% 
 %% |eventmarker|
 help eventmarker
 %% |groupStimuli|
@@ -127,10 +178,16 @@ help groupStimuli
 %% |photodiode|
 help photodiode
 
+%% |trialerror|
+help trialerror
+
 %% |reward|
 help reward
 
 %% |reactiontime|
+help reactiontime
 
+%% |storeUserVariables|
+help storeUserVariables
 ##### SOURCE END #####
 --></body></html>

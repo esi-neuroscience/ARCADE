@@ -1,9 +1,12 @@
 <?xml version='1.0' encoding="utf-8"?>
 <toc version="2.0">
 
-    <tocitem target="ARCADE.html">ARCADE 
-    <tocitem target="DOCAvailableStimuli.html">Available Stimuli </tocitem>
-    <tocitem target="DOCDesigningTaskFiles.html">Designing task scripts </tocitem>
+    <tocitem target="ARCADE.html">ARCADE     
+	    <tocitem target="DOCDesigningTaskFiles.html">Designing task scripts </tocitem>
+	    <tocitem target="DOCAvailableStimuli.html">Available stimuli </tocitem>
+	    <tocitem target="DOCEyetracking.html">Eye tracking</tocitem>
+	    <tocitem target="DOCBehavioralData.html">Behavioral data</tocitem>
+	    <tocitem target="DOCHelperFunctions.html">Helper functions</tocitem>
     </tocitem>
 
 </toc>

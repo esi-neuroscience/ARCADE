@@ -4,7 +4,7 @@ function eventmarker(value,varargin)
 % 
 % INPUT
 % -----
-%   value : event code number between 0 and 2^16
+%   value : event code number >=0 and <2^16
 % 
 
 % if there is a value, and it is an unsigned 16-bit integer
@@ -19,6 +19,8 @@ if ~isempty(value) && isnumeric(value) && value<2^16 && value>=0
     else
         EventServer.mSendEventMarker(value,varargin{1});% send eventmarker
     end
+else
+    error('Eventmarker value (%g) is not a 16-bit integer', value)
 end
 
 end
