@@ -21,7 +21,7 @@ classdef (Sealed) SGLEyeServerProc < SPCServerProc
             this = thisObj;
         end
     end
-    
+     
     methods (...
             Access = private,...
             Hidden = true)
@@ -40,7 +40,11 @@ classdef (Sealed) SGLEyeServerProc < SPCServerProc
     methods
         function mRunServer(this)
             % initialize eye server
-            eyeServer = SGLTestEyeServer.launch();
+            
+            eyeServer = SGLNiEyeServer.launch();
+            % eyeServer = SGLTestEyeServer.launch();
+            % eyeServer = SGLEyelinkEyeServer.launch();
+            
             
             %----------------------------%
             this.mWriteToDiary('Starting eye data acquisition', true);
@@ -49,7 +53,7 @@ classdef (Sealed) SGLEyeServerProc < SPCServerProc
             %---------------------------%
             this.mWriteToDiary('Stopping data acquisition', false);
             
-            % setup better disconnect
+            
             delete(eyeServer);
         end
     end
