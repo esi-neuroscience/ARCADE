@@ -42,7 +42,7 @@ classdef (Sealed) SGLNiEyeServer < ABSEyeServer
                     analogInput = this.nidaqObj.daqmxReadAnalogF64(1);                    
                     [xPx, yPx] = volts2pixels(analogInput(1),analogInput(2), ...
                         this.vgain, this.screensize);
-                    this.sharedMemory.pointer.Value = [xPx; yPx]
+                    this.sharedMemory.pointer.Value = [xPx; yPx];
                     % java.lang.Thread.sleep(0.01);
                     % sleeping is not necessary. daqmxReadAnalogF64 waits for the next sample.
                 end
