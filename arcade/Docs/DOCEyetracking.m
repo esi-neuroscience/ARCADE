@@ -12,7 +12,8 @@
 % * |center|: |[x y]| coordinates of tracked position in pixels
 % * |radius|: Radius of tracking area around tracked position in pixels
 % 
-% For example:
+%% 
+% *Example*
 
 % define trackEye for use in state definition
 trackEye = struct(...
@@ -20,7 +21,7 @@ trackEye = struct(...
     'report', 'enter', ...
     'nextState', 'holdFix', ...
     'center', [0 0], ...
-    'radius', 0.8);
+    'radius', 100); % px
 
 % state definition
 sAcquireFix = [];

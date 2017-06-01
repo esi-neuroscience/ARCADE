@@ -34,15 +34,17 @@ classdef (Sealed) SGLNiEyeServer < ABSEyeServer
 
     methods
         function this = start(this)
-            stopEvent = IPCEvtServer('StopEyeServer');
+            stopEvent = IPCEvent('StopEyeServer');
+            stopEvent.CreateEvent();            
             this.nidaqObj.daqmxStartTask();
             try
-                while stopEvent.wasTriggered
+                while ~stopEvent.wasTriggered
                     analogInput = this.nidaqObj.daqmxReadAnalogF64(1);                    
                     [xPx, yPx] = volts2pixels(analogInput(1),analogInput(2), ...
                         this.vgain, this.screensize);
                     this.sharedMemory.pointer.Value = [xPx; yPx];
-%                     java.lang.Thread.sleep(0.01);
+                    % java.lang.Thread.sleep(0.01);
+                    % sleeping is not necessary. daqmxReadAnalogF64 waits for the next sample.
                 end
             catch me
                 delete(this)

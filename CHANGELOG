@@ -1,0 +1,39 @@
+# Change Log of ARCADE
+
+## [1.0.0b1] - 2017-05-31
+### NEW
+* 	64-bit support: ARCADE runs on 64-bit MATLAB only (currently only 2014a). 
+	This allows for very long sessions (>9000 trials) and slightly improves 
+	performance.
+* 	Rewritten stimulus classes: stimulus definition has been simplified and
+	can now be easily tested outside a running session. This unfortunately means 
+	existing task scripts have to be adapted. See tutorial documentation for an 
+	overview.
+*	Documentation of all user-oriented functions and classes as well as tutorial
+	documentation as been added.
+*	New EyeServers: ARCADE provides now interfaces for eye tracking via 
+    (1) National Instruments Cards (SGLNiEyeServer), (2) ethernet from Eyelink 
+    SR 1000/2000 (SGLEylinkEyeServer) and (3) a test eye signal for debugging 
+    (SGLTestEyeServer). Currently this has to be configured by manually changing 
+    line 44 of SGLEyeServerProc.m
+*	Laptop mode: when no national instruments card can be detected, eventmarkers
+    and reward will not be send out.
+*	No MATLAB toolboxes are required to run ARCADE
+*	Store events to disk: timestamps of eventmarkers are recorded in separate 
+	.evt file. The file can be read with readEvtFile.m
+*	New file naming scheme: behavioral data files are now named according to 
+	the pattern subject_day_experiment_session
+*	In case of crashing, the behavioral .esi and .hdr files can be converted to
+    a MATLAB file using convertEsiFile.m
+*	Eye position is now shared among processes via kernel32 NamedSharedMemory
+*	Starting and stopping of data acquisition is now triggered via kernel32 Events 
+* 	The CoreControlScreenPipe was simplified and now only transfers the trial data
+*	Processes are now managed using the MATLAB Java Runtime with processManager.m
+*	SGLNiEyeServer now samples at a fixed rate
+*	user32 functionality has been removed
+
+### FIXED
+*	Occasional freezing of ARCADE should happen anymore. On pipe write error, 
+    the Core process continued to write instead of raising an error. This may 
+    have cause the hangups.
+* 	Several minor bugs.

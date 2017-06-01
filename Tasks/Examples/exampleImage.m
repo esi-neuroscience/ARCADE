@@ -2,7 +2,7 @@
 
 
 
-
+dbstop in exampleImage at 61
 
 % timing 
 trl.stimDuration  = randi([1900,2100],1); 
@@ -12,13 +12,13 @@ trl.itiDuration   = 500;
 %% DEFINE AND CREATE STIMULI
 TaskFolder = 'C:\Toolboxes\ARCADE\Tasks\Examples'; 
 % image 1
-img1 = Image(fullfile(TaskFolder, 'exampleImage1.bmp'));
+img1 = Picture(fullfile(TaskFolder, 'exampleImage1.bmp'));
 img1.position = [200 350];
 img1.alpha = 128;
 
 
 % image 2
-img2 = Image(fullfile(TaskFolder, 'exampleImage2.bmp'));
+img2 = Picture(fullfile(TaskFolder, 'exampleImage2.bmp'));
 img2.position = [300 350];
 img2.alpha = 100;
 

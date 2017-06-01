@@ -35,7 +35,7 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
             % create diary
             this.mCreateProcessDiary('Core');
             % print header
-            this.mPrintErrorLogHeader('Core Process');
+            this.mPrintErrorLogHeader('Core');
             % seed randomnumber generator
             this.mInitilazeRandomNumberGenerator;
             % ensure command line is writtent to txt file

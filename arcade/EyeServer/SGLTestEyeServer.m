@@ -1,5 +1,6 @@
 classdef SGLTestEyeServer < ABSEyeServer
-    
+    % Eye server class for testing purposes. Eye position can be set by mouse 
+    % click in a figure with screen coordinates.
     properties
         fig
         ax

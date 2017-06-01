@@ -40,8 +40,8 @@
 % This command is not necessary in the actual trial script.
 
 %% General stimulus properties
-% All stimuli share a few properties. They can be made visible, repositioned,
-% protected from clearing or animated (smoothly translated)
+% All stimuli share a few properties. All stimuli can be made visible, 
+% repositioned, or animated (smoothly translated).
 properties('Stimulus')
 %%
 % Visibility can be |true| for on or |false| for off. The |animation| property is empty by
@@ -54,7 +54,7 @@ properties('Stimulus')
 % white and [0 0 0] for black. Alpha values range from fully transparent
 % (0) to fully opaque (255).
 % 
-% _Note_ : For displays with an even number of pixels is
+% _Note_: For displays with an even number of pixels the center |[0 0]| is
 % actually between the two center pixels. To achieve pixel-perfect display of
 % stimuli one should add 0.5 to the coordinate. 
 
@@ -88,10 +88,10 @@ circ3.delete()
 %
 % <<exampleCircle.png>>
 %
-
+% Detailed documentation can be found with <matlab:doc('Circle') doc Circle>
 
 %% Pictures
-% Possible Picture formats are BMP, PNG and JPEG. The position can be defined
+% Possible Picture formats are BMP, PNG, TIFF and JPEG. The position can be defined
 % as an |[x y]| vector in pixels relative to the screen center. An alpha
 % transparency level can be defined between 0 and 255 with 0 being fully
 % transparent and 255 fully opaque. Transparency in PNGs is also supported.
@@ -100,12 +100,12 @@ properties('Picture')
 % *Example*
 %
 imgPath = 'C:\Toolboxes\ARCADE\arcade\Docs';
-img = Picture(fullfile(imgPath, 'Picture.png'));
+img = Picture(fullfile(imgPath, 'image.png'));
 img.position = [0 0];
 img.alpha = 200;
 img.angle = 45;
 
-img2 = Picture(fullfile(imgPath, 'Picture.png'));
+img2 = Picture(fullfile(imgPath, 'image.png'));
 img2.position = [200 0];
 img2.alpha = 200;
 img2.angle = 200;
@@ -118,17 +118,19 @@ img2.delete()
 %
 % <<exampleImage.png>>
 %
-
+% Detailed documentation can be found with <matlab:doc('Picture') doc Picture>
 %% Masked grating
-% Masked gratings are implemented as PixelShader stimuli with various
+% Masked gratings are implemented as |PixelShader| (see below) stimuli with various
 % parameters:
 properties('Grating')
 %%
-% Spatial frequency is defined as |pixelsPerCycle|. Temporal frequency is
-% specified via the |animationIncrement| property in units of cycles per
-% frame. That is, for a 120 Hz display, a |animationIncrement| value of
+% Spatial frequency is defined as |spatialFrequency| in pixel per cycle. 
+% Temporal frequency is
+% specified via the |temporalFrequency| property in units of cycles per
+% s. That is, for a 120 Hz display, a |animationIncrement| value of
 % 1/120 will result in a drifting grating at a speed of 1 cycle/s. 
-% The mask can be circular or elliptical, and can be rotated.
+% The mask can be circular or elliptical (|maskWidth|, |maskHeight|), 
+% and can be rotated (|maskRotation|). 
 % The two colors of the grating are specfied as a vector of 8-bit values for
 % |[red green blue alpha]|. The |smoothing| parameter is 2 for purely
 % sinusoidal gratings. Values > 2 will approach a square wave grating.
@@ -140,9 +142,9 @@ grat1.color1 = [255 0 0 200];
 grat1.color2 = [0 255 0 200];
 grat1.maskRotation = 45;
 grat1.maskWidth = 400;
-grat1.pixelsPerCycle = 60;
+grat1.spatialFrequency = 60;
 grat1.smoothing = 2;
-grat1.animationIncrement = 1/120;
+grat1.temporalFrequency = 1;
 grat1.visible = true;
 
 grat2 = Grating();
@@ -150,11 +152,13 @@ grat2.color1 = [255 0 0 200];
 grat2.color2 = [0 0 0 200];
 grat2.maskRotation = 270;
 grat2.maskWidth = 400;
-grat2.pixelsPerCycle = 20;
+grat2.spatialFrequency = 20;
 grat2.smoothing = 10;
-grat2.animationIncrement = 1/120;
+grat2.temporalFrequency = 1;
 grat2.position = [400 0];
+grat2.direction = 45;
 grat2.visible = true;
+
 
 pause(1);
 grat1.delete();
@@ -163,7 +167,7 @@ grat2.delete();
 %
 % <<exampleGrating.png>>
 %
-
+% Detailed documentation can be found with <matlab:doc('Grating') doc Grating>
 %% Rectangles
 % Rectangles are always filled and have the following properties:
 properties('Rectangle')
@@ -190,6 +194,7 @@ r2.delete();
 %
 % <<exampleRectangle.png>>
 %
+% Detailed documentation can be found with <matlab:doc('Rectangle') doc Rectangle>
 
 %% Animations
 % Every stimulus can be smoothly moved around on the screen. To animate a
@@ -237,7 +242,7 @@ r.visible = true;
 %
 % <<exampleAnimation.png>>
 %
-
+% Detailed documentation can be found with <matlab:doc('LinearMotion') doc LinearMotion>
 
 %% Moving Bars
 % The |MovingBar| class simplifies the creation of animated bars by
@@ -275,6 +280,7 @@ properties('PixelShader')
 % Pixel shaders can currently use up to 4 RGB-Alpha colors and 12
 % parameters that are passed to the shader using the |setColor| and
 % |setParameter| methods.
+% Detailed documentation can be found with <matlab:doc('PixelShader') doc PixelShader>
 
 
 

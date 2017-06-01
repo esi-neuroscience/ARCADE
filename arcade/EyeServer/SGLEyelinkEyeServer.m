@@ -57,7 +57,8 @@ classdef SGLEyelinkEyeServer < ABSEyeServer
         function start(this)
             MISSING_DATA=-32768;
             
-            stopEvent = IPCEvtServer('StopEyeServer');
+            stopEvent = IPCEvent('StopEyeServer');
+            stopEvent.CreateEvent();
             
             
             err =  Eyelink('StartRecording');

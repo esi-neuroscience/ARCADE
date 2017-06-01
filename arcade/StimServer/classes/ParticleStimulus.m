@@ -19,7 +19,7 @@ classdef ParticleStimulus < Stimulus
     % foats). Dots moving out of the rectangular viewport (specified at the
     % creation of the object) wrap to the opposite edge. 
     %     
-    % See also NumericBinaryFile, Stimulus, NumericBinaryFile
+    % See also NumericBinaryFile, Stimulus
     
     properties ( Transient = true )
         

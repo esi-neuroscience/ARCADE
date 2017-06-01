@@ -26,6 +26,7 @@ classdef (Abstract) Animation < hgsetget
     
     properties ( SetAccess = immutable, GetAccess = public, Hidden = true, Transient = true )
         key = [];
+        frameRate
     end
     
     
@@ -36,6 +37,7 @@ classdef (Abstract) Animation < hgsetget
             assert(Key>0, 'Could not create animation')
             obj.key = Key;
             obj.terminalAction = [0 0 0 0 1 0 0 0];
+            obj.frameRate = StimServer.GetFrameRate();
         end
         
         function delete(obj)

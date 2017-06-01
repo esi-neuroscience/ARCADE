@@ -1,10 +1,21 @@
 function reactiontime( setmode, varargin )
+% Measure and store reaction times
+%  
+% INPUT
+% -----
+% Input is always a string plus optional further arguments:   
+% 
+%   'start'    : start timer for reaction time
+%   'end'      : record elapsed time in ms since reactiontime('start')
+%                    in behavioral data file
+%   'writeRT', rt   : write rt as reaction time value to
+%                     behavioral data file, e.g.
+%                     reactiontime('writeRT', 264)
+%   'settic', timer : set start timer to timer handle returned by tic
+% 
+% See also tic
+% 
 persistent startTic
-
-% ----------------------------------------- %
-% 13.8.2015 - Jarrod,
-% - added writeRT which for some reason was not there
-% - added otherwise
 
 switch setmode
     case 'start'
