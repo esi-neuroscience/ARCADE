@@ -175,23 +175,7 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
 
         end
 
-        %# connect to server
-        % 1. create pipe object
-        % 2. wait for server to open pipe
-        % 3. connect as client
-        function thisServer = mConnectToServer(this, xServ)
-            switch xServ
-                case 'ControlScreen'
-                    thisServer = SGLCoreCntlPipe.launch;
-            end
-            % wait to see Eye Server has made pipe available
-            available = thisServer.mWaitForServerAvailable(50);
-            while ~available
-                available = thisServer.mWaitForServerAvailable(10000);
-            end
-            thisServer.mOpenClient;  % connect as client
-            this.mWriteToDiary([xServ,' is Running'], true);
-        end
+
         
         %# RUN user's Session
         function mRunSession(this,cfg)
