@@ -72,7 +72,7 @@ classdef SPCServerProc < AUXDiary
         function mPrintErrorLogHeader(procName)
             
             %procName = 'Control Screen';
-            headerAserisk = '************************************\n';
+            headerAsterisk = '************************************\n';
             % get some details about this run 
             dateTimeString      = datestr(now,'dd-mmm-yyyy HH:MM:SS');
             matlabVersionString = version();
@@ -80,18 +80,20 @@ classdef SPCServerProc < AUXDiary
             computerNameString  = char(java.net.InetAddress.getLocalHost.getHostName);
             
             % PRINT TO COMMAND LINE -> written to log file 
-            fprintf([headerAserisk,...
-                'Launching... %s process\n'], procName);
+            fprintf(headerAsterisk)
+            fprintf('Launching... %s process\n', procName);
             % date and time 
-            fprintf([dateTimeString,'\n']);
+            fprintf('%s\n', dateTimeString);
             % matlab version 
-            fprintf(['MATLAB version: ', matlabVersionString,'\n']); 
+            fprintf('MATLAB version: %s\n', matlabVersionString); 
             % user name 
-            fprintf(['User name: ',      userNameString,'\n']); 
+            fprintf('User name: %s\n',  userNameString); 
             % matlab version 
-            fprintf(['Computer name: ',  computerNameString,'\n']); 
+            fprintf('Computer name: %s\n',  computerNameString); 
+            % ARCADE version
+            fprintf('ARCADE version: %s', arcadeVersion)
             % end information header 
-            fprintf(headerAserisk);
+            fprintf(headerAsterisk);
             % ensure command line is writtent to txt file 
             %this.mFlushDiary; 
         end
