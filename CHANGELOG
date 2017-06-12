@@ -1,5 +1,20 @@
 # Change Log of ARCADE
 
+## [1.0.0b2] - 2017-06-12
+### NEW
+*	Gammatron stimulus
+*	Pixel-shaded picture stimulus (not yet documented)
+* 	PictureWithGaussianPatch stimulus (not yet documented)
+*	Behavioral data form a session is now stored in a unique folder without
+ 	subfolders for experiment and session.
+*	Temporal frequencies of several stimuli are now expressed in cycles per s
+*	ARCADE version is printed in log files if Git is installed
+
+### FIXED
+*	Missing nanmax function in PLTReactionTime
+*	Month and day were swapped in date string
+
+
 ## [1.0.0b1] - 2017-05-31
 ### NEW
 * 	64-bit support: ARCADE runs on 64-bit MATLAB only (currently only 2014a). 
