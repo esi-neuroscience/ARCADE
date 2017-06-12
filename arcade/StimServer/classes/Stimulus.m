@@ -29,7 +29,7 @@ classdef (Abstract) Stimulus < hgsetget % will be matlab.mixin.SetGet after 2014
     methods
         function obj = Stimulus
             Key = StimServer.ReadAck();
-            assert(Key>0, 'Could not create stimulus')
+            assert(Key>0, 'Could not create stimulus. See log window of StimServer.exe')
             obj.key = Key;
         end
         
