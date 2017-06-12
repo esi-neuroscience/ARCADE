@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------
-// File: Grating.fx
+// File: Gammatron.fx
 // Pixel Shader
 //--------------------------------------------------------------------------------------
 
@@ -16,7 +16,6 @@ cbuffer PS_CONSTANT_BUFFER : register (b0)
     float  spatialPeriod : packoffset(c1.x); // pixels per cycle
     float  temporalPeriod: packoffset(c1.y); // frames per cycle
     float  direction     : packoffset(c1.z); // 1: outward, -1:inward
-    float  amplitude     : packoffset(c1.w); // 
 };
 
 cbuffer PS_COLOR_BUFFER : register (b2)
@@ -31,14 +30,12 @@ cbuffer PS_COLOR_BUFFER : register (b2)
 float4 PSmain( float4 Pos : SV_POSITION ) : SV_Target
 {
         
-    if (distance(center, Pos.xy) > width) discard;
-    
+    if (distance(center, Pos.xy) > width/2.0f) discard;    
     static const float pi = 3.141592654;    
 
     float r = sqrt((center.y-Pos.y)*(center.y-Pos.y) + (Pos.x-center.x)*(Pos.x-center.x));
 
-    float phase = frame/temporalPeriod*direction*-1.0f;
-    float bright = amplitude*(sin( 2.0f*pi/spatialPeriod * r + phase) + 1.0f)/2.0f;
-    return float4( bright, bright, bright, 1.0f );
-    // return color0*(float4)(1.0f-bright) + color1*(float4)bright;
+    float phase = 2.0f*pi*frame/temporalPeriod*direction*-1.0f;
+    float bright = (sin( 2.0f*pi/spatialPeriod * r + phase) + 1.0f)/2.0f;    
+    return color0*(float4)(1.0f-bright) + color1*(float4)(bright);
 }
