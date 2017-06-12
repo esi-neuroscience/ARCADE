@@ -22,14 +22,14 @@
 % 
 % *Example*
 % 
-% Contents of |ARCADE\sessionLog\hugo\petalStep2-3c\12\Behaviour| after
-% session 12 with monkey hugo running the petalStep2-3c task:
+% Contents of |ARCADE\sessionLog\hugo_20170523_petalStep2-3c_12\Behaviour| after
+% session 12 with monkey hugo running the petalStep2-3c task on the 23 May 2017:
 % 
 % 
-% * hugo_20172305_petalStep2-3c_12.esi
-% * hugo_20172305_petalStep2-3c_12.hdr
-% * hugo_20172305_petalStep2-3c_12.mat
-% * hugo_20172305_petalStep2-3c_12.evt
+% * hugo_20170523_petalStep2-3c_12.esi
+% * hugo_20170523_petalStep2-3c_12.hdr
+% * hugo_20170523_petalStep2-3c_12.mat
+% * hugo_20170523_petalStep2-3c_12.evt
 % 
 % 
 %% 

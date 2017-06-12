@@ -1,2 +1,2 @@
 function todayStr = today()
-todayStr = datestr(now, 'yyyyddmm');
+todayStr = datestr(now, 'yyyymmdd');
