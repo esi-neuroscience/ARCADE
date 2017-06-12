@@ -118,6 +118,7 @@ classdef MSBackupCopy < AUXBackupCopy & AUXDirectoryManager
             
             % create this session directory 
             sessFilepath = fullfile(sessPath,subj,expt,sess);
+            sessFilepath = fullfile(sessPath,[subj '_' today '_' expt '_' sess]);
             
             warn = true;
             success_sess = this.mCreateDirectory(sessFilepath,warn);
