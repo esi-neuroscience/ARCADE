@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Visual stimuli for ARCADE</title><meta name="generator" content="MATLAB 8.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-05-31"><meta name="DC.source" content="DOCAvailableStimuli.m"><style type="text/css">
+      --><title>Visual stimuli for ARCADE</title><meta name="generator" content="MATLAB 8.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-06-12"><meta name="DC.source" content="DOCAvailableStimuli.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -71,7 +71,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 </pre><p>or by using the <tt>set</tt> command, similar to how figures and axes can be manipulated in MATLAB, e.g.,</p><pre class="language-matlab">set(stim, <span class="string">'property'</span>, 3.14)
 </pre><p>Only the latter variant can be used in the <tt>onEntry</tt> and <tt>onExit</tt> functions of trial states. The former variant is useful for testing your stimuli. To see all properties of a stimulus, use   <tt>properties('MyStimulus')</tt>, e.g. <tt>properties('Rectangle')</tt></p><p>To ensure stable operation of ARCADE, all stimuli should be explicitly deleted at the end of a trial, e.g. in a <tt>cleanUp</tt> state by issuing</p><pre class="language-matlab">stim.delete()
 </pre><p><b>Testing stimuli</b></p><p>All stimuli can be tested from any open MATLAB if ARCADE is in the MATLAB search path and <tt>ARCADE/arcade/StimServer/StimServer.exe</tt> is running. The first command in such a test environment has to be</p><pre class="language-matlab">StimServer.Connect()
-</pre><p>This command is not necessary in the actual trial script.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">General stimulus properties</a></li><li><a href="#3">Circles</a></li><li><a href="#6">Pictures</a></li><li><a href="#9">Masked grating</a></li><li><a href="#13">Rectangles</a></li><li><a href="#16">Animations</a></li><li><a href="#19">Moving Bars</a></li><li><a href="#22">Pixel shader</a></li></ul></div><h2>General stimulus properties<a name="1"></a></h2><p>All stimuli share a few properties. All stimuli can be made visible, repositioned, or animated (smoothly translated).</p><pre class="codeinput">properties(<span class="string">'Stimulus'</span>)
+</pre><p>This command is not necessary in the actual trial script.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">General stimulus properties</a></li><li><a href="#3">Circles</a></li><li><a href="#6">Pictures</a></li><li><a href="#9">Masked grating</a></li><li><a href="#13">Rectangles</a></li><li><a href="#16">Animations</a></li><li><a href="#19">Moving Bars</a></li><li><a href="#22">Gammatron (annular grating)</a></li><li><a href="#25">Pixel shader</a></li></ul></div><h2>General stimulus properties<a name="1"></a></h2><p>All stimuli share a few properties. All stimuli can be made visible, repositioned, or animated (smoothly translated).</p><pre class="codeinput">properties(<span class="string">'Stimulus'</span>)
 </pre><pre class="codeoutput">
 Properties for class Stimulus:
 
@@ -254,7 +254,29 @@ mb.direction = 35;
 mb.visible = true;
 pause(5)
 mb.delete()
-</pre><h2>Pixel shader<a name="22"></a></h2><p>Pixel shader are small programs that run on the graphics card and are written in a specific shader language, HLSL  (see <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb509561(v=vs.85).aspx">here</a> for more information). Using HLSL any stimulus that can be parameterized may be generated and rendered with high performance.</p><p>Programming in HLSL is not trivial, but offers great flexibility. As a starting point you may have a look at the gratings presented above. They are implemented in the file <tt>ARCADE\arcade\StimServer\classes\stimfiles\pixelShader\MaskedGrating.fx</tt>, which is loaded and controlled by the <tt>PixelShader</tt> class with the following properties and methods</p><pre class="codeinput">properties(<span class="string">'PixelShader'</span>)
+</pre><h2>Gammatron (annular grating)<a name="22"></a></h2><p>The <tt>Gammatron</tt> class creates an annular grating pattern with based on two colors that can be drifting inward or outward.</p><pre class="codeinput">properties(<span class="string">'Gammatron'</span>)
+</pre><pre class="codeoutput">
+Properties for class Gammatron:
+
+    temporalFrequency
+    spatialPeriod
+    direction
+    color1
+    color2
+    radius
+    filename
+    shaderWidth
+    shaderHeight
+    animationIncrement
+    animationPhase
+    visible
+    animation
+    position
+
+</pre><p><b>Example</b></p><pre class="codeinput">g = Gammatron;
+g.radius = 200;
+g.visible = true;
+</pre><p><img vspace="5" hspace="5" src="exampleGammatron.png" alt=""> </p><h2>Pixel shader<a name="25"></a></h2><p>Pixel shader are small programs that run on the graphics card and are written in a specific shader language, HLSL  (see <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb509561(v=vs.85).aspx">here</a> for more information). Using HLSL any stimulus that can be parameterized may be generated and rendered with high performance.</p><p>Programming in HLSL is not trivial, but offers great flexibility. As a starting point you may have a look at the gratings presented above. They are implemented in the file <tt>ARCADE\arcade\StimServer\classes\stimfiles\pixelShader\MaskedGrating.fx</tt>, which is loaded and controlled by the <tt>PixelShader</tt> class with the following properties and methods</p><pre class="codeinput">properties(<span class="string">'PixelShader'</span>)
 </pre><pre class="codeoutput">
 Properties for class PixelShader:
 
@@ -532,6 +554,19 @@ mb.direction = 35;
 mb.visible = true;
 pause(5)
 mb.delete()
+
+%% Gammatron (annular grating)
+% The |Gammatron| class creates an annular grating pattern with based on
+% two colors that can be drifting inward or outward.
+properties('Gammatron')
+%%
+% *Example*
+g = Gammatron;
+g.radius = 200;
+g.visible = true;
+%%
+%
+% <<exampleGammatron.png>>
 
 %% Pixel shader
 % Pixel shader are small programs that run on the graphics card and are 

@@ -1,4 +1,6 @@
 classdef Gammatron < PixelShader
+    % Class for annular gratings.
+    % ARCADE/arcade/StimServer/classes/stimfiles/pixelShader/Gammatron.fx
     
     properties  ( Access = public, Transient = true )
         temporalFrequency = 1; % cycles per second;

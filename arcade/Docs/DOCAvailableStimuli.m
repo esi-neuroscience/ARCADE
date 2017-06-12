@@ -262,6 +262,19 @@ mb.visible = true;
 pause(5)
 mb.delete()
 
+%% Gammatron (annular grating)
+% The |Gammatron| class creates an annular grating pattern with based on
+% two colors that can be drifting inward or outward.
+properties('Gammatron')
+%%
+% *Example*
+g = Gammatron;
+g.radius = 200;
+g.visible = true;
+%%
+%
+% <<exampleGammatron.png>>
+
 %% Pixel shader
 % Pixel shader are small programs that run on the graphics card and are 
 % written in a specific shader language, HLSL  (see 
