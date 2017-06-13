@@ -13,23 +13,37 @@
 %% Handling conditions
 % Choosing the condition for each trial is done in user-generated condition
 % and block selection functions. These functions are selected during the
-% configuration of the session. These functions must take the current trial
+% configuration of the session and must take the current trial
 % as first input and return associated condition/block as first output. For
 % example, the following function will return a random condition between 1
 % and 10:
 %
 %   function condition = random_condition(currentTrial)
-%        condition = randi(10)
-%   end
+%   condition = randi(10)
 % 
-% In the task script, the current trial number, condition and block are then
-% available in the |TrialData| struct, e.g.
+% 
+% The block selection script is evaluated first and its outcome can be used
+% in the condition selection script as second input argument, e.g.
+% 
+%   function condition = random_condition(currentTrial, currentBlock)
+%   ... 
+% 
+% 
+% To retrieve the outcomes of past trials for determining the next 
+% condition use the |getPreviousTrialData| function
+help getPreviousTrialData
+
+%% 
+% After the selection was completed, the current trial number, condition 
+% and block are then available in the task script as the |TrialData| struct, e.g.
 % 
 %  TrialData = 
 % 
 %     currentCondition: 8
 %         currentBlock: 1
 %         currentTrial: 1
+% 
+% This information can then be used to determine the flow of the trial. 
 % 
 % If no condition and/or block selection functions are provided, the
 % current condition/block is always 1.

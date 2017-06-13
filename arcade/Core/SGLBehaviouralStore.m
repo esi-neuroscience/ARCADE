@@ -97,17 +97,12 @@ classdef (Sealed) SGLBehaviouralStore < AUXEditableVariables & AUXOutputDataFile
             this.writeDirectory = behavDir;
         end
         
-        %# setup the condition selection functions
-        function [curCond,curBlock] = mCallTrialSelectionFcns(this,currentTrial) %#ok<INUSD,*STOUT>
-            persistent condSelFcn blockSelFcn
-            %---------------------------------------%
-            %      Trial Selection Functions
-            % -
-            % check if files are specified
-            % check if the files exist
+        
+        function [curCond,curBlock] = mCallTrialSelectionFcns(this,currentTrial)
+            persistent condSelFcn blockSelFcn        
             
             if this.currentTrial==0                                
-                % get condition selection function 
+                % get selection functions 
                 if ~strcmp(this.cfg.Files.ConditionSelection, 'n/a')
                     [~,condSelFile,~] = fileparts(this.cfg.Files.ConditionSelection);
                     condSelFcn = str2func(condSelFile);
@@ -122,9 +117,23 @@ classdef (Sealed) SGLBehaviouralStore < AUXEditableVariables & AUXOutputDataFile
                 end
             end
 
-            % --> call users functions             
-            curCond = condSelFcn(currentTrial);
+            % call user functions             
             curBlock = blockSelFcn(currentTrial);
+            
+            % handle nargin of condition selection function                       
+            nCondSelFcnArgs = nargin(condSelFcn);
+            
+            % (currentTrial, currentBlock) | (currentTrial, currentBlock, varargin)
+            if (nCondSelFcnArgs == 2) || nCondSelFcnArgs < -3 
+                curCond = condSelFcn(currentTrial, curBlock);            
+            % (currentTrial) | (currentTrial, varargin)
+            elseif nCondSelFcnArgs == 1 || nCondSelFcnArgs == -2;
+                curCond = condSelFcn(currentTrial);
+            else
+                error('Bad structure of input arguments of trial selecton function %s', ...
+                    this.cfg.Files.ConditionSelection);
+            end
+            
             
             % return values should be positive integers 
             if curCond~=floor(curCond) && ~isscalar(curCond)
@@ -198,6 +207,7 @@ classdef (Sealed) SGLBehaviouralStore < AUXEditableVariables & AUXOutputDataFile
             % [trialError, reactionTime, trialErrorTime]; % previous trial
             % trialErrorTime < set by trialerror loner function
 
+            % write data to pipe
             SGLTrialDataPipe.WriteTrialData(current, trlData) 
             
         end
