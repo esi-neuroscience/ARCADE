@@ -5,7 +5,7 @@ classdef State < handle
         waitEvents = {}; % cell array of names of events to wait for
         waitForAllEvents = false;
         nextStateAfterEvent = {};
-        nextStateAfterTimeout@char
+        nextStateAfterTimeout = 'final';
         onEntry = {};
         onExit = {};        
         duration = 0;
@@ -43,6 +43,7 @@ classdef State < handle
                     'Wait for events failed. Were all events initialized?')
             else
                 java.lang.Thread.sleep(obj.duration);
+                result = State.WAIT_TIMEOUT;
             end
                         
             if obj.runNumber >= obj.maxRepetitions
@@ -91,8 +92,8 @@ classdef State < handle
     methods ( Static, Hidden=true, Access=private )
         function evalFunctions(fHandles)
             if ~isempty(fHandles)
-                for iFunc = numel(fHandles)
-                    fHandles{k}();
+                for iFunc = 1:numel(fHandles)
+                    fHandles{iFunc}();
                 end
             end
         end
