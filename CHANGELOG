@@ -1,5 +1,10 @@
 # Change Log of ARCADE
 
+## [Unreleased]
+*   Enhanced condition/block selection functions: block selection is evaluated 
+    first and its result can be used in the condition selection function as 2nd 
+    argument.
+
 ## [1.0.0b2] - 2017-06-12
 ### NEW
 *	Gammatron stimulus
