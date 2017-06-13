@@ -13,7 +13,7 @@ testEvent1.trigger()
 %%
 clear classes
 eventNames = {'test1', 'test2', 'test3'};
-% MultipleEvents.Init(eventNames);
+
 
 stimOn = State('stimOn');
 stimOn.waitEvents = eventNames;
@@ -22,23 +22,22 @@ stimOn.nextStateAfterTimeout = 'ignore';
 stimOn.waitForAllEvents = false;
 stimOn.duration = 1000;
 stimOn.maxRepetitions = 10;
-stimOn.onEntry = {@(x) disp('stimOn'), @(x) disp('2nd entry function')};
+stimOn.onEntry = {@(x) disp('stimOn')};
 
 ignore = State('ignore');
 ignore.nextStateAfterTimeout = 'stimOn';
 ignore.duration = 1000;
-ignore.onEntry = {@(x) disp('Ignored'), @(x) disp('2nd entry function')};
+ignore.onEntry = {@(x) disp('Ignored')};
 
 cleanUp = State('cleanUp');
 cleanUp.duration = 1000;
 cleanUp.nextStateAfterTimeout = 'stimOn';
-cleanUp.onEntry = {@(x) disp('cleanUp'), @(x) disp('2nd entry function')};
+cleanUp.onEntry = {@(x) disp('cleanUp')};
 
 
 
 %%
-
 stateArc = SGLStateArc.launch;
 stateArc.initialState = 'stimOn';
 stateArc.states = [stimOn ignore cleanUp ];
-stateArc.mRunTrial
+stateArc.mRunTrial()
