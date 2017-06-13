@@ -5,7 +5,7 @@
 *	Gammatron stimulus
 *	Pixel-shaded picture stimulus (not yet documented)
 * 	PictureWithGaussianPatch stimulus (not yet documented)
-*	Behavioral data form a session is now stored in a unique folder without
+*	Behavioral data from a session is now stored in a unique folder without
  	subfolders for experiment and session.
 *	Temporal frequencies of several stimuli are now expressed in cycles per s
 *	ARCADE version is printed in log files if Git is installed
@@ -48,7 +48,7 @@
 *	user32 functionality has been removed
 
 ### FIXED
-*	Occasional freezing of ARCADE should happen anymore. On pipe write error, 
+*	Occasional freezing of ARCADE should not happen anymore. On pipe write error, 
     the Core process continued to write instead of raising an error. This may 
     have cause the hangups.
 * 	Several minor bugs.
