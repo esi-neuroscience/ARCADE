@@ -13,7 +13,6 @@ classdef MSNamedPipe < handle
     methods (Access = private, Hidden=true)
         function obj = MSNamedPipe()
             if ~libisloaded('kernel32'); loadlibrary('kernel32', @win_kernel32); end;
-            mlock;
         end
     end
     

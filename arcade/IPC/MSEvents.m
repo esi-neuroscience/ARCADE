@@ -6,8 +6,7 @@ classdef MSEvents < handle
     
     methods (Access = private, Hidden=true)
         function obj = MSEvents()
-            if ~libisloaded('kernel32'); loadlibrary('kernel32', @win_kernel32); end;
-            mlock;
+            if ~libisloaded('kernel32'); loadlibrary('kernel32', @win_kernel32); end;            
         end
     end
     

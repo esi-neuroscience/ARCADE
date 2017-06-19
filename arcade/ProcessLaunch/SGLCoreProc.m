@@ -139,9 +139,12 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
             controlScreenProcess.stop()
             
             % quit stim server
+            StimServer.delete()
             stimServerProcess.stop()
             
-            
+            % close TrialData pipe
+            SGLTrialDataPipe.delete()
+
             fclose('all'); % close all open files
         end
     end
