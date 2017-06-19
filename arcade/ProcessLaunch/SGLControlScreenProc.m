@@ -157,7 +157,7 @@ classdef (Sealed) SGLControlScreenProc < SPCServerProc
                     drawnow; % flush events
                 end
                 
-                java.lang.Thread.sleep(10); % pause a bit
+                java.lang.Thread.sleep(1); % pause a bit
             end
             this.mWriteToDiary('Exiting loop', true);
             
