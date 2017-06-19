@@ -4,6 +4,7 @@ classdef SGLEyelinkEyeServer < ABSEyeServer
         filename = [];
         usedEye = 0;
         screenSize = [1680 1050]; % x y in px
+        eyeTracker = {};
     end
     
     
@@ -47,6 +48,8 @@ classdef SGLEyelinkEyeServer < ABSEyeServer
                 assert(err == 0, 'Eyelink: Could not open %s', this.filename)
             end
             
+            % Create pipe
+            SGLEyeServerPipe.Create();
         end
     end % private methods
     
@@ -68,6 +71,9 @@ classdef SGLEyelinkEyeServer < ABSEyeServer
             
             
             while ~stopEvent.wasTriggered && Eyelink('CheckRecording') == 0
+                
+                this.setup_eye_tracker();
+                
                 if Eyelink('NewFloatSampleAvailable') > 0
                     % get the sample in the form of an event structure
                     evt = Eyelink('NewestFloatSample');
@@ -75,6 +81,9 @@ classdef SGLEyelinkEyeServer < ABSEyeServer
                     y = -1*(1*evt.gy(this.usedEye+1)-this.screenSize(2)/2);
                     if x~=MISSING_DATA && y~=MISSING_DATA && evt.pa(this.usedEye+1)>0
                         this.sharedMemory.pointer.Value = [x; y];
+                    end
+                    for iTracker = 1:length(this.eyeTracker)
+                        this.eyeTracker{iTracker}.checkEye();
                     end
                 end
                 java.lang.Thread.sleep(1)
@@ -92,15 +101,28 @@ classdef SGLEyelinkEyeServer < ABSEyeServer
                 assert(err == 0, 'Eyelink: Could not close data file')
                 fprintf('Receiving data file\n')
                 nBytes = Eyelink('ReceiveFile');
-                if ~isequal(fullfile(pwd, this.shortFilename), this.filename)                    
+                if ~isequal(fullfile(pwd, this.shortFilename), this.filename)
                     movefile(this.shortFilename, this.filename);
                 end
                 fprintf('Stored %g MB in %s\n', nBytes/1024/1024, this.filename)
             end
             
-        end                
+            
+        end
+        
+        function setup_eye_tracker(this)
+            [position, tolerance, name] = SGLEyeServerPipe.ReadEyeTrackerMsg();
+            if ~isempty(position)
+                obj.eyeTracker{end+1} = EyeTracker(name, position, tolerance);
+            elseif isequal(position, [int16(Inf) int16(Inf)]) && tolerance == uint16(Inf)
+                this.eyeTracker = {};
+            end
+            
+        end
+        
         function delete(this)
             Eyelink('Shutdown');
+            SGLEyeServerPipe.delete();
         end
     end % public methods
     
