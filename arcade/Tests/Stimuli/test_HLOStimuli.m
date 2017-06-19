@@ -48,7 +48,7 @@ grat.color1         = [ 0, 255, 0,150]; % [r,g,b,w] [0...255] color when sinewav
 pause(pauseTime)
 grat.color2         = [255,0,0,150]; % [r,g,b,w] [0...255] color when sinewave is 1
 pause(pauseTime)
-grat.pixelsPerCycle = 100;                % [>=1] pixels per cycle of grating
+grat.spatialFrequency = 100;                % [>=1] pixels per cycle of grating
 pause(pauseTime)
 grat.direction      = 90;                 % direction of movement (orthogonal to orientation)
 pause(pauseTime)
