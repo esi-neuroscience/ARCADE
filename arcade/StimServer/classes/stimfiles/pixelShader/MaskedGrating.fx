@@ -7,8 +7,6 @@
 // color   -> bw or full rgb
 //-------------------------------------------------------------------------
 
-extern float width  = 1000.0f;
-extern float height = 1000.0f;
 
 cbuffer PS_ANIMATION : register (b1)
 {
@@ -19,20 +17,22 @@ cbuffer PS_CONSTANT_BUFFER : register (b0)
 {
     // position
     float2 center       : packoffset(c0.x); // (x,y) [pixels]
+    float  width         : packoffset(c0.z);
+    float  height        : packoffset(c0.w);   
 
     // mask parameters 
-    float  mskWidth     : packoffset(c0.z); // param 1  radius (circle), width (ellipse) [pixels]
-    float  mskHight     : packoffset(c0.w); // param 2, height (ellipse)                 [pixels]         
-    float  mskAngle     : packoffset(c1.x); // param 3, angle  (ellipse)                 [degrees]
+    float  mskWidth     : packoffset(c1.x); // param 1  radius (circle), width (ellipse) [pixels]
+    float  mskHight     : packoffset(c1.y); // param 2, height (ellipse)                 [pixels]         
+    float  mskAngle     : packoffset(c1.z); // param 3, angle  (ellipse)                 [degrees]
 
     // grating parameters
-    float  cycle        : packoffset(c1.y); // param 4  spatial hz                       [pixels per cycle]
-    float  direction    : packoffset(c1.z); // param 5  direction                        [degrees] 
-    float  smoothR      : packoffset(c1.w); // param 6  smoothing parameter (squarewave) [r > 2] 
-    float  phaseOffset  : packoffset(c2.x); // param 7  phase offset                     [degrees]
+    float  cycle        : packoffset(c1.w); // param 4  spatial hz                       [pixels per cycle]
+    float  direction    : packoffset(c2.x); // param 5  direction                        [degrees] 
+    float  smoothR      : packoffset(c2.y); // param 6  smoothing parameter (squarewave) [r > 2] 
+    float  phaseOffset  : packoffset(c2.z); // param 7  phase offset                     [degrees]
     
     // empty
-    float3 dummy        : packoffset(c2.y); 
+    float dummy        : packoffset(c2.w); 
  
 };
 
