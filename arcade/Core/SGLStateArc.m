@@ -66,7 +66,7 @@ classdef (Sealed) SGLStateArc < handle
         
         
         function mRunTrial(obj)                       
-            % initialize event listeneres
+            % initialize event listeners
             if ~isempty(obj.eventNames)
                 MultipleEvents.Init(obj.eventNames);
             end

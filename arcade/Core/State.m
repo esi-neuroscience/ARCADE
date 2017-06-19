@@ -26,10 +26,10 @@ classdef State < handle
         end
         
         function nextState = run(obj)
-            if numel(obj.nextStateAfterEvent)~=numel(obj.waitEvents) && ~obj.waitForAllEvents
-                error('Mismatch between number of events (%d) and next states (%d)', ...
-                    numel(obj.waitEvents), numel(obj.nextStateAfterEvent) );
-            end
+%             if numel(obj.nextStateAfterEvent)~=numel(obj.waitEvents) && ~obj.waitForAllEvents
+%                 error('Mismatch between number of events (%d) and next states (%d)', ...
+%                     numel(obj.waitEvents), numel(obj.nextStateAfterEvent) );
+%             end
                         
             obj.runNumber = obj.runNumber+1;
             obj.evalFunctions(obj.onEntry)            
@@ -50,7 +50,7 @@ classdef State < handle
                 nextState = 'final';
             elseif result == State.WAIT_TIMEOUT
                 nextState = obj.nextStateAfterTimeout;
-            else
+            elseif result >= 1
                 nextState = obj.nextStateAfterEvent{result};
             end
             
