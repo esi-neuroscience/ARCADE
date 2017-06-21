@@ -274,6 +274,26 @@ g.visible = true;
 %%
 %
 % <<exampleGammatron.png>>
+%% Gaussian
+% A 2D patch with Gaussian profile can be created using the |Gaussian|
+% stimulus. Its size, rotation and color can be set:
+properties('Gaussian');
+%% 
+% *Example*
+g1 = Gaussian
+g1.sdx = 100;
+g1.angle = 45;
+g1.color = [128 255 0];
+g1.position = [100 50];
+g2 = Gaussian;
+g2.sdx = 100;
+g2.sdy = 100;
+g3 = Gaussian;
+g3.color = [0 0 0];
+set([g1, g2, g3], 'visible', true);
+%%
+%
+% <<exampleGaussian.png>>
 
 %% Pixel shader
 % Pixel shader are small programs that run on the graphics card and are 
