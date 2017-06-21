@@ -1,11 +1,18 @@
 # Change Log of ARCADE
 
-## [Unreleased]
+##  [1.0.0b3] - 2017-06-21
+### NEW
+*   Added Gaussian stimulus
+
+### CHANGED
 *   Enhanced condition/block selection functions: block selection is evaluated 
     first and its result can be used in the condition selection function as 2nd 
     argument.
 *   Updated Grating stimulus to use new shader implementation
-*   Added Gaussian stimulus
+
+### FIXED
+*   Increased refresh rate of ControlScreen to enhance capturing of key presses 
+
 
 ## [1.0.0b2] - 2017-06-12
 ### NEW
