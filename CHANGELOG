@@ -5,6 +5,7 @@
     first and its result can be used in the condition selection function as 2nd 
     argument.
 *   Updated Grating stimulus to use new shader implementation
+*   Added Gaussian stimulus
 
 ## [1.0.0b2] - 2017-06-12
 ### NEW
