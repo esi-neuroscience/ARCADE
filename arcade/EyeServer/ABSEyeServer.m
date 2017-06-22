@@ -39,7 +39,7 @@ classdef ABSEyeServer < handle
         stop(opj)
     end
     
-    methods ( Access = protected )
+    methods 
         
         function share_eye_position(obj, eyePosition)
             % Write current eye position into shared memory
@@ -49,10 +49,14 @@ classdef ABSEyeServer < handle
         function setup_position_tracker(obj)
             % Check pipe for new tracking positions
             [position, tolerance, name] = SGLEyeServerPipe.ReadEyeTrackerMsg();
-            if ~isempty(position)
-                obj.positionTracker{end+1} = EyeTracker(name, position, tolerance);
-            elseif isequal(position, [int16(Inf) int16(Inf)]) && tolerance == uint16(Inf)
+            if isempty(position)
+                return
+            end
+            if isequal(position, [int16(Inf) int16(Inf)]) && tolerance == uint16(Inf)
                 obj.positionTracker = {};
+            else
+                fprintf('New tracker %s at [%g %g], r=%g\n', name, position(1), position(2), tolerance);
+                obj.positionTracker{end+1} = EyeTracker(name, position, tolerance);            
             end
             
         end
@@ -61,7 +65,7 @@ classdef ABSEyeServer < handle
         function start(obj)
             % Start data acquisition            
             obj.initialize();
-            
+                        
             while ~obj.stopEvent.wasTriggered
                 % check pipe for tracker
                 obj.setup_position_tracker()
@@ -76,6 +80,7 @@ classdef ABSEyeServer < handle
                 for iTracker = 1:length(obj.positionTracker)
                     obj.positionTracker{iTracker}.checkEye(eyePosition)
                 end
+
             end
             
             obj.stop();
