@@ -2,6 +2,7 @@ function eventNames = trackeye(position, tolerance, name)
 
 if nargin == 1 && strcmp(position, 'reset')
     SGLEyeServerPipe.WriteEyeTrackerMsg([inf Inf], Inf, Inf)
+    return
 end
 
 SGLEyeServerPipe.WriteEyeTrackerMsg(position, tolerance, name)
