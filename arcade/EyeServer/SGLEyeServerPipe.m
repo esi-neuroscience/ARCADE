@@ -5,7 +5,7 @@ classdef SGLEyeServerPipe < handle
     end
     
     properties (Access = private, Transient = true, Hidden = true)
-        pipe
+        pipe = [];
         pipeName = '\\.\pipe\EyeServer';
         pipeBuffer = [0 256]; % [serverOut serverIn]
     end
@@ -34,11 +34,14 @@ classdef SGLEyeServerPipe < handle
         
         function WriteEyeTrackerMsg(position, tolerance, name)
             % message = [x y radius name]
+            if isempty(SGLEyeServerPipe.this.pipe)
+                SGLEyeServerPipe.Open();
+            end
             position = position(:)';
             msg = [...
                 typecast(int16(position),'uint8'),...
                 typecast(uint16(tolerance),'uint8'), ...
-                typecast([uint8(name), 0],'uint8'), ...
+                typecast(uint8(name),'uint8'), ...
                 ];
             result = SGLEyeServerPipe.this.pipe.writeMessage(msg);
             assert(result > 0, 'Could not write eye tracker info to pipe');
