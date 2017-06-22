@@ -3,6 +3,7 @@ classdef SGLEyelinkEyeServer < ABSEyeServer
     properties
         usedEye = 0;
         screenSize = [1680 1050]; % x y in px
+        eyeTracker = {};
     end
     
     
@@ -40,15 +41,15 @@ classdef SGLEyelinkEyeServer < ABSEyeServer
             timeout = 5; % wait maximally 5s for sample
             newSampleAvailable = Eyelink('NewFloatSampleAvailable')>0;
             while ~newSampleAvailable && toc(tStart) < timeout
-                newSampleAvailable = Eyelink('NewFloatSampleAvailable')>0; 
+                newSampleAvailable = Eyelink('NewFloatSampleAvailable')>0;
                 java.lang.Thread.sleep(1)
-            end                            
+            end
             % get the sample in the form of an event structure
             evt = Eyelink('NewestFloatSample');
             
             % translate coordinates to rel. to center
             x = evt.gx(obj.usedEye+1)-obj.screenSize(1)/2;
-            y = -1*(1*evt.gy(obj.usedEye+1)-obj.screenSize(2)/2);            
+            y = -1*(1*evt.gy(obj.usedEye+1)-obj.screenSize(2)/2);
             eyePosition = [x y];
         end
         
@@ -67,14 +68,11 @@ classdef SGLEyelinkEyeServer < ABSEyeServer
                 assert(err == 0, 'Eyelink: Could not open %s', obj.filename)
             end
             
-            err =  Eyelink('StartRecording');
-            assert(err == 0, 'Eyelink: Could not start recording')
-            err = Eyelink('Message', 'SYNCTIME');
-            assert(err == 0, 'Eyelink: Could not reset time to zero')
-            
         end
-        
-        
+    end 
+    
+    
+    methods ( Access = public )        
         function stop(obj)
             Eyelink('StopRecording');
             
@@ -83,14 +81,13 @@ classdef SGLEyelinkEyeServer < ABSEyeServer
                 assert(err == 0, 'Eyelink: Could not close data file')
                 fprintf('Receiving data file\n')
                 nBytes = Eyelink('ReceiveFile');
+                
                 if ~isequal(fullfile(pwd, obj.shortFilename), obj.filename)
                     movefile(obj.shortFilename, obj.filename);
                 end
                 fprintf('Stored %g MB in %s\n', nBytes/1024/1024, obj.filename)
             end
-            
-            
-        end        
+        end
         
         function delete(obj)
             Eyelink('Shutdown');
