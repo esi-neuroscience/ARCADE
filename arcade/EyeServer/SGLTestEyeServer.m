@@ -4,8 +4,7 @@ classdef SGLTestEyeServer < ABSEyeServer
     properties
         fig
         ax
-        dot
-        stopEvent
+        dot        
     end
    
     methods (Static)
@@ -31,15 +30,16 @@ classdef SGLTestEyeServer < ABSEyeServer
             obj.dot = line('XData', 0,'YData', 0,...
                 'Marker','o','color','k', 'MarkerSize', 40);
             set(obj.fig,'Pointer','circle');
-            obj.update();
-            set(obj.fig, 'WindowButtonDownFcn', @obj.onClick)
-            obj.stopEvent = IPCEvent('StopEyeServer');
+            
+            set(obj.fig, 'WindowButtonDownFcn', @obj.onClick, ...
+                'CloseRequestFcn', @obj.onClose)
+            
         end
     end
     methods
         
         
-        function obj = onClick(obj, src, callbackdata)
+        function onClick(obj, src, callbackdata)
             seltype = get(src,'SelectionType');
             
             if strcmp(seltype,'normal')
@@ -50,26 +50,41 @@ classdef SGLTestEyeServer < ABSEyeServer
                 y = cp(1,2);
                 
                 set(obj.dot, 'XData', x, 'YData', y)
-                obj.update();
+                
             end
             
         end
         
-        function obj = update(obj)
+        function onClose(obj, src, callbackdata)
+            stopEvent = IPCEvent('StopEyeServer');
+            stopEvent.trigger();   
+            
+        end
+        
+        
+        function initialize(obj)
+            
+        end
+        
+        function eyePosition = acquire_eye_position(obj)
             x = get(obj.dot, 'XData');
             y = get(obj.dot, 'yData');
             titleString = sprintf('x=%.1f, y=%.1f', x, y);
             title(obj.ax, titleString)
-            obj.sharedMemory.pointer.Value = [x; y];
+            eyePosition = [x y];
+            
+            java.lang.Thread.sleep(10);                                
+            drawnow()                
         end
+                
         
-        function obj = start(obj)
-            uiwait
+        function obj = stop(obj)
+            
         end
         
             
         function delete(obj)
-            delete(obj.sharedMemory);    
+            close(obj.fig)
         end
     end
 end
