@@ -1,9 +1,6 @@
 testEvent1 = IPCEvent('test1');
-testEvent1.CreateEvent();
 testEvent2 = IPCEvent('test2');
-testEvent2.CreateEvent();
 testEvent3 = IPCEvent('test3');
-testEvent3.CreateEvent();
 
 
 %%

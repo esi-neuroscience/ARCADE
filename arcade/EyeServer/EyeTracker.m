@@ -19,9 +19,7 @@ classdef EyeTracker < handle
             obj.center = position;
             obj.tolerance = radius;
             obj.enterEvent = IPCEvent([name 'Enter']);
-            obj.enterEvent.CreateEvent();
-            obj.leaveEvent = IPCEvent([name 'Leave']);
-            obj.leaveEvent.CreateEvent();
+            obj.leaveEvent = IPCEvent([name 'Leave']);            
             
         end
         

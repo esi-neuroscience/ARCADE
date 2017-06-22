@@ -35,7 +35,6 @@ classdef (Sealed) SGLNiEyeServer < ABSEyeServer
     methods
         function this = start(this)
             stopEvent = IPCEvent('StopEyeServer');
-            stopEvent.CreateEvent();            
             this.nidaqObj.daqmxStartTask();
             try
                 while ~stopEvent.wasTriggered

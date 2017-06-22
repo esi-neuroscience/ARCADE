@@ -80,13 +80,11 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
             % launch ControlScreen process
             this.mWriteToDiary('Starting ControlScreen', true)
             controlScreenReadyEvt = IPCEvent('controlScreenReady');
-            controlScreenReadyEvt.CreateEvent();            
             controlScreenProcess = this.mLaunchServer('ControlScreen'); 
             
             % launch EyeServer process
             this.mWriteToDiary('Starting EyeServer', true)
             eyeServerReadyEvt = IPCEvent('eyeServerReadyEvt');
-            eyeServerReadyEvt.CreateEvent();            
             eyeProcess = this.mLaunchServer('EyeServer');
             
             % launch StimServer process
@@ -108,7 +106,6 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
             
             % Run session
             startEvent = IPCEvent('startControlScreenLoop');
-            startEvent.OpenEvent();
             startEvent.trigger();
                         
             this.mWriteToDiary('Starting Session', true);
@@ -128,13 +125,11 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
 
             % quit eye server
             stopEyeServerEvt = IPCEvent('StopEyeServer');
-            stopEyeServerEvt.OpenEvent();
             stopEyeServerEvt.trigger();
             eyeProcess.stop()
             
             % quit control screen
-            stopControlScreenEvt = IPCEvent('StopControlScreen');
-            stopControlScreenEvt.OpenEvent();
+            stopControlScreenEvt = IPCEvent('StopControlScreen');            
             stopControlScreenEvt.trigger()           
             controlScreenProcess.stop()
             

@@ -48,7 +48,6 @@ classdef (Sealed) SGLControlScreenProc < SPCServerProc
             % 2. connect to eye server to request/receive eye data
             
             readyEvent = IPCEvent('controlScreenReady');
-            readyEvent.OpenEvent();
             readyEvent.trigger();
             
             
@@ -58,7 +57,6 @@ classdef (Sealed) SGLControlScreenProc < SPCServerProc
             %----------------------------%
             this.mWriteToDiary('Waiting for start commmand', true);
             startEvent = IPCEvent('startControlScreenLoop');
-            startEvent.CreateEvent();
             
             wasTriggered = startEvent.waitForTrigger(30000);
             if ~wasTriggered
@@ -115,10 +113,8 @@ classdef (Sealed) SGLControlScreenProc < SPCServerProc
             this.mWriteToDiary('Entering loop', true);
             
             eyeClient = EyeClient;
-            stopControlScreenEvt = IPCEvent('StopControlScreen');
-            stopControlScreenEvt.CreateEvent();
-            pauseCoreEvt = IPCEvent('PauseCoreRequested');
-            pauseCoreEvt.OpenEvent();
+            stopControlScreenEvt = IPCEvent('StopControlScreen');            
+            pauseCoreEvt = IPCEvent('PauseCoreRequested');            
             while ~stopControlScreenEvt.wasTriggered()
                 
                 if CntlScreen.keyPressed

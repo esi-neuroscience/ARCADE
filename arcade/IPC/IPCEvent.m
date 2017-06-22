@@ -2,11 +2,10 @@ classdef IPCEvent < handle
     
     properties        
         name
-        isServer = [];
     end
     
     properties ( Access = private )
-        hEvent
+        hEvent = libpointer;
     end
     
     properties ( Dependent )
@@ -14,18 +13,13 @@ classdef IPCEvent < handle
     end
     
     methods
-        function this = IPCEvent(eventName)        
+        function this = IPCEvent(eventName, manualReset)        
+            if nargin < 2
+                manualReset = false;
+            end
             this.name = eventName;
-        end
-        
-        function CreateEvent(this)
-            this.hEvent = MSEvents.mCreateEvent(this.name);
-            this.isServer = true;
-        end
-        
-        function OpenEvent(this)
-            this.hEvent = MSEvents.mOpenEvent(this.name);
-            this.isServer = false;
+            this.hEvent = MSEvents.mCreateEvent(this.name, manualReset);
+            
         end
         
         function trigger(this)

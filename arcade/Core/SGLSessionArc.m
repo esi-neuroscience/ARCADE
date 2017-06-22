@@ -55,7 +55,6 @@ classdef (Sealed) SGLSessionArc
             BHVstore    = SGLBehaviouralStore.launch;   % behavioural store (for CFG)
             StimBckgrnd = SGLBackgroundObject.launch;   % allows images for background
             PauseEvent  = IPCEvent('PauseCoreRequested');
-            PauseEvent.CreateEvent();
             %----------------------------------%
             %        get Parameters 
             maxTrials       = BHVstore.cfg.MaximumNumberOfTrials;

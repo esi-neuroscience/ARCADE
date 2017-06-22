@@ -21,10 +21,10 @@ classdef ABSEyeServer < handle
             sharedObject.pointer.Value = [0.0; 0.0];
             obj.sharedMemory = sharedObject;
             obj.stopEvent = IPCEvent('StopEyeServer');
-            obj.stopEvent.CreateEvent();
+
             if nargin == 1
                 obj.filename = filename;
-            else
+            elseif nargin == 0
                 obj.filename = [];
             end
             

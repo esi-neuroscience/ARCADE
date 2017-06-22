@@ -17,10 +17,13 @@ classdef MSEvents < handle
         
         %# create Event
         % event server 
-        function hEvent = mCreateEvent(eventName)
+        function hEvent = mCreateEvent(eventName, manualReset)
+            if nargin < 2
+                manualReset = false;
+            end
             secAttr = libstruct('s_SECURITY_ATTRIBUTES');
             eventName = uint8([eventName 0]);
-            hEvent = calllib('kernel32', 'CreateEventA', secAttr, false, false, eventName);
+            hEvent = calllib('kernel32', 'CreateEventA', secAttr, manualReset, false, eventName);
         end
         
         %# open event
