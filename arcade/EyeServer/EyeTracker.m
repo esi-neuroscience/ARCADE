@@ -6,7 +6,7 @@ classdef EyeTracker < handle
         tolerance
     end
     
-    properties ( Access = private )
+    properties ( GetAccess = public, SetAccess = private )
         isInside = false;
         enterEvent
         leaveEvent
@@ -18,18 +18,19 @@ classdef EyeTracker < handle
             obj.name = name;
             obj.center = position;
             obj.tolerance = radius;
-            obj.enterEvent = IPCEvent([name 'Enter']);
-            obj.leaveEvent = IPCEvent([name 'Leave']);            
-            
+            obj.enterEvent = IPCEvent([name 'Enter'], false);
+            obj.leaveEvent = IPCEvent([name 'Leave'], false);                        
         end
         
         function checkEye(obj, position)
             wasInside = obj.isInside;
-            obj.isInside = sqrt((position(:)'-obj.center).^2) < radius;
+            obj.isInside = sqrt(sum((position(:)'-obj.center).^2)) < obj.tolerance;
             if ~wasInside && obj.isInside
                obj.enterEvent.trigger(); 
+               fprintf('Enter %s\n', obj.name)
             elseif wasInside && ~obj.isInside
                 obj.leaveEvent.trigger(); 
+                fprintf('Leave %s\n', obj.name)
             end                        
         end
         
