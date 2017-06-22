@@ -33,25 +33,22 @@ classdef (Sealed) SGLNiEyeServer < ABSEyeServer
     end
 
     methods
-        function this = start(this)
-            stopEvent = IPCEvent('StopEyeServer');
-            this.nidaqObj.daqmxStartTask();
-            try
-                while ~stopEvent.wasTriggered
-                    analogInput = this.nidaqObj.daqmxReadAnalogF64(1);                    
-                    [xPx, yPx] = volts2pixels(analogInput(1),analogInput(2), ...
-                        this.vgain, this.screensize);
-                    this.sharedMemory.pointer.Value = [xPx; yPx];
-                    % java.lang.Thread.sleep(0.01);
-                    % sleeping is not necessary. daqmxReadAnalogF64 waits for the next sample.
-                end
-            catch me
-                delete(this)
-                rethrow(me)
-            end
-            
+        
+        function eyePosition = acquire_eye_position(this)
+            analogInput = this.nidaqObj.daqmxReadAnalogF64(1);                    
+            [xPx, yPx] = volts2pixels(analogInput(1),analogInput(2), ...
+                this.vgain, this.screensize);
+            eyePosition = [xPx yPx];
         end
         
+        function initialize(this)
+            this.nidaqObj.daqmxStartTask();
+        end
+        
+        function stop(this)
+            this.nidaqObj.daqmxStopTask();
+        end
+            
         function this = delete(this)
             delete(this.nidaqObj);
             delete(this.sharedMemory);
