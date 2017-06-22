@@ -38,11 +38,14 @@ classdef SGLEyelinkEyeServer < ABSEyeServer
         function eyePosition = acquire_eye_position(obj)
             
             tStart = tic;
-            timeout = 5; % wait maximally 5s for sample
+            timeout = 1; % wait maximally 5s for sample
             newSampleAvailable = Eyelink('NewFloatSampleAvailable')>0;
             while ~newSampleAvailable && toc(tStart) < timeout
                 newSampleAvailable = Eyelink('NewFloatSampleAvailable')>0;
                 java.lang.Thread.sleep(1)
+            end
+            if ~newSampleAvailable
+                error('Could not acquire eye position')
             end
             % get the sample in the form of an event structure
             evt = Eyelink('NewestFloatSample');
