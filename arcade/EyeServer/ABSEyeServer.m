@@ -53,6 +53,7 @@ classdef ABSEyeServer < handle
                 return
             end
             if isequal(position, [int16(Inf) int16(Inf)]) && tolerance == uint16(Inf)
+                fprintf('Resetting trackers\n')
                 obj.positionTracker = {};
             else
                 fprintf('New tracker %s at [%g %g], r=%g\n', name, position(1), position(2), tolerance);
