@@ -84,7 +84,7 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
             
             % launch EyeServer process
             this.mWriteToDiary('Starting EyeServer', true)
-            eyeServerReadyEvt = IPCEvent('eyeServerReadyEvt');
+            eyeServerReadyEvt = IPCEvent('EyeServerReady', false);
             eyeProcess = this.mLaunchServer('EyeServer');
             
             % launch StimServer process
@@ -95,15 +95,21 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
                 'printStderr', false);
             
             
-            
+            % Wait for EyeServer and ControlScreen
             this.mWriteToDiary('Waiting for processes', true)
-            controlScreenReadyEvt.waitForTrigger(20000);
-%             eyeServerReadyEvt.waitForTrigger(20000);
+            result = eyeServerReadyEvt.waitForTrigger(20000);
+            assert(result==1, 'Wait for EyeServer failed')
+            result = controlScreenReadyEvt.waitForTrigger(20000);
+            assert(result==1, 'Wait for ControlScreen failed')
+            
                       
                        
             % connect to StimServer            
             StimServer.Connect();
             
+            % connect to EyeServer
+            SGLEyeServerPipe.Open();
+
             % Run session
             startEvent = IPCEvent('startControlScreenLoop');
             startEvent.trigger();
@@ -187,7 +193,7 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
             % Launch a Session
             SESSArc  = SGLSessionArc.launch;
             % Start Session
-            this.mWriteToDiary('Starting Session', true)
+            % this.mWriteToDiary('Starting Session', true)
             SESSArc.mStart;
             
             %----------------------------------------%
