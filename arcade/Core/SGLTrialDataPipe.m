@@ -1,5 +1,11 @@
 classdef SGLTrialDataPipe < handle
-    
+    % Pipe for trial data.
+    % 
+    % The Core process is the server writing the outcome of the last trial
+    % into the pipe. The ControlScreen is the client reading the result.
+    % 
+    % See also MSMessagePipeServer, MSMessagePipeClient, MSMessagePipe
+
     properties (Constant, Access = private, Hidden = true)
         this = SGLTrialDataPipe
     end
@@ -17,7 +23,7 @@ classdef SGLTrialDataPipe < handle
     methods (Static)
         function Create()
             obj = SGLTrialDataPipe.this;
-            obj.pipe = MSMessagePipeServer('\\.\pipe\TrialData', [44 44], true);
+            obj.pipe = MSMessagePipeServer('\\.\pipe\TrialData', [44 0], true);
         end
         
         function Open()
