@@ -1,18 +1,29 @@
 classdef State < handle
-    
+    % Class for experimental state
+    %     
+    % When run, a State instance waits for kernel32 system events and
+    % returns the name of the next state that is associated for the events
+    % that occured during the event (or before with manually reset events).
+    % 
+    % A state can have entry and exit functions, which are run irrespective
+    % of the wait outcome. 
+    %
+    % See also SGLStateArc, IPCEvent, function_handle, anondemo
+    %     
+%     
     properties ( SetAccess = public, GetAccess = public )
         name@char % name of this state
-        waitEvents = {}; % cell array of names of events to wait for
-        waitForAllEvents = false;
-        nextStateAfterEvent = {};
-        nextStateAfterTimeout = 'final';
-        onEntry = {};
-        onExit = {};        
-        duration = 0;
-        maxRepetitions = Inf;
+        waitEvents = {}; % cell array of event names to wait for
+        waitForAllEvents = false; % flag whether to wait for all events
+        nextStateAfterEvent = {}; % cell aray of next state names corresponding to events in waitEvents
+        nextStateAfterTimeout@char = 'final'; % name of next state after timeout
+        onEntry = {}; % cell array of anonymous functions to be executed during state entry
+        onExit = {}; % cell array of anonymous functions to be executed during state exit
+        duration = 0; % tiemout for wait in ms
+        maxRepetitions = Inf; % number of maximal iterations of state
     end
     properties ( GetAccess = public, SetAccess = private)
-        runNumber = 0;
+        runNumber = 0; % number of iterations within current state arc
     end
     
     properties ( Access = private, Constant = true )
