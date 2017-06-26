@@ -29,14 +29,10 @@ classdef SGLEyeServerPipe < handle
         
         function Close()
             obj = SGLEyeServerPipe.this;
-            obj.pipe.delete();
+            delete(obj.pipe);
         end
         
         function WriteEyeTrackerMsg(position, tolerance, name)
-            % message = [x y radius name]
-            if isempty(SGLEyeServerPipe.this.pipe)
-                SGLEyeServerPipe.Open();
-            end
             position = position(:)';
             msg = [...
                 typecast(int16(position),'uint8'),...

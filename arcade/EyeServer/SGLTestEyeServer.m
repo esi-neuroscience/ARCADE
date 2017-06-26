@@ -26,10 +26,14 @@ classdef SGLTestEyeServer < ABSEyeServer
             obj.ax = axes('SortMethod','childorder', ...
                 'XLim', [-1920 1920]/2, 'YLim', [-1080 1080]/2);
             grid on
+            title(obj.ax, 'Eye Position')
+            xlabel(obj.ax, 'x [px]')
+            ylabel(obj.ax, 'x [px]')
             
             obj.dot = line('XData', 0,'YData', 0,...
                 'Marker','o','color','k', 'MarkerSize', 40);
-            set(obj.fig,'Pointer','circle');
+            set(obj.fig,'Pointer','circle', 'NumberTitle', 'off', ...
+                'Name', 'EyeServer');
             
             set(obj.fig, 'WindowButtonDownFcn', @obj.onClick, ...
                 'CloseRequestFcn', @obj.onClose)
@@ -73,8 +77,7 @@ classdef SGLTestEyeServer < ABSEyeServer
             title(obj.ax, titleString)
             eyePosition = [x y];
             
-            java.lang.Thread.sleep(10);                                
-            drawnow()                
+            pause(0.01)
         end
                 
         
@@ -84,6 +87,7 @@ classdef SGLTestEyeServer < ABSEyeServer
         
             
         function delete(obj)
+            delete(obj.fig)
             close(obj.fig)
         end
     end
