@@ -12,10 +12,6 @@ classdef (Sealed) SGLEyeServerProc < SPCServerProc
     %------------------------------------------%
     % 29.4.2016 - Jarrod, wrote class
     
-    properties
-        eyeServerType = 'Test'; % 'NationalInstruments'|'Eyelink'|'Test'
-    end
-
     methods (Static)
         function this = launch
             persistent thisObj
@@ -42,10 +38,10 @@ classdef (Sealed) SGLEyeServerProc < SPCServerProc
     
     
     methods
-        function mRunServer(this)
+        function mRunServer(this, eyeServerType)
             % initialize eye server
             
-            switch this.eyeServerType
+            switch eyeServerType
                 case 'NationalInstruments'
                     eyeServer = SGLNiEyeServer.launch();
                 case 'Test'

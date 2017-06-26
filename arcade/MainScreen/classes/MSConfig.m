@@ -191,7 +191,7 @@ classdef MSConfig < AUXUIControlFunctions
                     
                     % return value based on string
                    % fcnSetFcn = @(hObj,inText) set(hObj,'Value', find(strcmp(inText,get(hObj,'String'))));
-                case {'edit','pushbutton','text','listbox','popupmenu'}
+                case {'edit','pushbutton','text','listbox'}
                     % **listbox callback is only executed on double clicks**
                     % get the String and set the String
                     
@@ -201,6 +201,11 @@ classdef MSConfig < AUXUIControlFunctions
                         fcnGetFcn = @(hObj) get(hObj,'String');
                         fcnSetFcn = @(hObj,inText) set(hObj,'String',inText);
                     end
+                    
+                case 'popupmenu'
+                    getCellElement = @(sStr,sVal) sStr{sVal};
+                    fcnGetFcn = @(hObj) getCellElement(get(hObj,'String'),get(hObj,'Value'));                    
+                    fcnSetFcn = @(hObj,strOpt) set(hObj,'Value', find(strcmp(get(hObj, 'String'), strOpt)));
                     
                 case {'frame'}
                     % frames are used to position java objects

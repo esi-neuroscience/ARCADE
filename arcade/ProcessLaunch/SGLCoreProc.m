@@ -85,7 +85,13 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
             % launch EyeServer process
             this.mWriteToDiary('Starting EyeServer', true)
             eyeServerReadyEvt = IPCEvent('EyeServerReady', false);
-            eyeProcess = this.mLaunchServer('EyeServer');
+            if ~strcmp(cfg.EyeServer, 'None')
+                eyeProcess = processManager('id', 'EyeServer', ...
+                    'command', fullfile(arcaderoot, 'arcade', 'EyeServer', ['EyeServer.bat ' cfg.EyeServer]), ...
+                    'printStdout', false, ...
+                    'printStderr', false);
+            end
+            % eyeProcess = this.mLaunchServer('EyeServer');
             
             % launch StimServer process
             this.mWriteToDiary('Starting StimServer', true)
@@ -108,7 +114,9 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
             StimServer.Connect();
             
             % connect to EyeServer
-            SGLEyeServerPipe.Open();
+            if ~strcmp(cfg.EyeServer, 'None')
+                SGLEyeServerPipe.Open();
+            end
 
             % Run session
             startEvent = IPCEvent('startControlScreenLoop');
@@ -130,9 +138,11 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
             delete(eventServer);
 
             % quit eye server
-            stopEyeServerEvt = IPCEvent('StopEyeServer');
-            stopEyeServerEvt.trigger();
-            eyeProcess.stop()
+            if ~strcmp(cfg.EyeServer, 'None')
+                stopEyeServerEvt = IPCEvent('StopEyeServer');
+                stopEyeServerEvt.trigger();
+                eyeProcess.stop()
+            end
             
             % quit control screen
             stopControlScreenEvt = IPCEvent('StopControlScreen');            
