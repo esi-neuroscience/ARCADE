@@ -1,22 +1,20 @@
 classdef (Sealed) SGLStateArc < handle
-    % [SINGELTON] StateArc
-    % - handles the movement from one state to another
-    % - holds a vector of states,
-    %   which, together, represent the possible states that make up a trial
-    % - the StateArc is blind to the next state,
-    %   as well as all possible state trajectories
-    % - StateArc relies on the return value from each state to determine
-    %   what the next state is    
-      
+    % Singleton class for the state machine that holds and runs the states.
+    %
+    % Starting from the intitial state tateArc alwasy moves to the state that
+    % is returned when a state is run. The StateArc stops when a state returns
+    % 'final' as next state.
+    % 
+    % See also State
     
-    properties (AbortSet = true)
+    properties (AbortSet = false)
         states = []; % vector of states
-        initialState
+        initialState % name of initial state
     end
     
     properties (Dependent = true, GetAccess = public)
-        eventNames
-        stateNames
+        eventNames % cell vector of all event names referenced in states
+        stateNames % cell vector of all state names 
     end
     
     methods (Static)
@@ -29,15 +27,14 @@ classdef (Sealed) SGLStateArc < handle
         end
     end
     
-    methods (Access = private)
-        %# constructor
+    methods (Access = private)        
         function obj = SGLStateArc
             
         end
     end
     
     methods
-        function set.states(obj, states)            
+        function set.states(obj, states)                  
             stateNames = {states.name};
             referencedStates = unique([[states.nextStateAfterEvent] ...
                 {states.nextStateAfterTimeout}]);
@@ -52,7 +49,7 @@ classdef (Sealed) SGLStateArc < handle
             if ~ismember('final', referencedStates) && all(isinf([states.maxRepetitions]))
                 error('No end point for state system defined.')
             end
-            obj.states = states;            
+            obj.states = states;   
         end
         
         function stateNames = get.stateNames(obj)
@@ -62,25 +59,20 @@ classdef (Sealed) SGLStateArc < handle
         function eventNames = get.eventNames(obj)
             eventNames = unique([obj.states.waitEvents]);
         end
+                
         
-        
-        
-        function mRunTrial(obj)                       
-            % initialize event listeners
-            if ~isempty(obj.eventNames)
-                MultipleEvents.Init(obj.eventNames);
-            end
-            
+        function mRunTrial(obj)                                    
             nextState = obj.initialState;
                         
             while ~strcmp(nextState, 'final')                
                 currentState = obj.states(strcmp(nextState, obj.stateNames));
                 nextState = currentState.run();                
-            end
+            end                
+        
         end
         
-        function delete(obj)
-            MultipleEvents.delete();
+        function delete(obj)   
+            
         end
     end
    
