@@ -12,6 +12,10 @@ classdef (Sealed) SGLEyeServerProc < SPCServerProc
     %------------------------------------------%
     % 29.4.2016 - Jarrod, wrote class
     
+    properties
+        eyeServerType = 'Test'; % 'NationalInstruments'|'Eyelink'|'Test'
+    end
+
     methods (Static)
         function this = launch
             persistent thisObj
@@ -24,7 +28,7 @@ classdef (Sealed) SGLEyeServerProc < SPCServerProc
      
     methods (...
             Access = private,...
-            Hidden = true)
+            Hidden = true) 
         %# constructor
         function this = SGLEyeServerProc
             % create diary
@@ -41,10 +45,16 @@ classdef (Sealed) SGLEyeServerProc < SPCServerProc
         function mRunServer(this)
             % initialize eye server
             
-            eyeServer = SGLNiEyeServer.launch();
-            % eyeServer = SGLTestEyeServer.launch();
-            % eyeServer = SGLEyelinkEyeServer.launch();
-            
+            switch this.eyeServerType
+                case 'NationalInstruments'
+                    eyeServer = SGLNiEyeServer.launch();
+                case 'Test'
+                    eyeServer = SGLTestEyeServer.launch();
+                case 'Eyelink'
+                    eyeServer = SGLEyelinkEyeServer.launch();                
+            end
+            readyEvent = IPCEvent('EyeServerReady');
+            readyEvent.trigger();
             
             %----------------------------%
             this.mWriteToDiary('Starting eye data acquisition', true);
