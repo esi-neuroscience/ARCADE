@@ -1,5 +1,6 @@
 classdef EyeClient < handle
-    
+    % EYECLIENT - Class for retrieving the current eye position from shared
+    % memory
     properties
         sharedMemoryName = 'EyePosition';
     end
