@@ -99,6 +99,15 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
                 'command', 'StimServer.exe', ...
                 'printStdout', false, ...
                 'printStderr', false);
+
+            % launch DaqServer process
+            if ~strcmp(cfg.DaqServer, 'None')
+                this.mWriteToDiary('Starting DaqServer', true)                
+                daqProcess = processManager('id', 'DaqServer', ...
+                    'command', fullfile(arcaderoot, 'arcade', 'DaqServer', 'NidaqServer.exe'), ...
+                    'printStdout', false, ...
+                    'printStderr', false);
+            end
             
             
             % Wait for EyeServer and ControlScreen
@@ -155,6 +164,13 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
             StimServer.delete()
             stimServerProcess.stop()
             
+            % quit DaqServer
+            if ~strcmp(cfg.DaqServer, 'None')
+                NidaqServer.delete()
+                daqProcess.stop();
+            end
+
+
             % close TrialData pipe
             SGLTrialDataPipe.delete()
 
