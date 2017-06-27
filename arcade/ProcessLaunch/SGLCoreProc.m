@@ -103,8 +103,10 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
             
             % Wait for EyeServer and ControlScreen
             this.mWriteToDiary('Waiting for processes', true)
-            result = eyeServerReadyEvt.waitForTrigger(20000);
-            assert(result==1, 'Wait for EyeServer failed')
+            if ~strcmp(cfg.EyeServer, 'None')
+                result = eyeServerReadyEvt.waitForTrigger(20000);
+                assert(result==1, 'Wait for EyeServer failed')
+            end
             result = controlScreenReadyEvt.waitForTrigger(20000);
             assert(result==1, 'Wait for ControlScreen failed')
             

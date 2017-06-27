@@ -73,7 +73,7 @@ classdef (Sealed) SGLControlScreenProc < SPCServerProc
             this.mWriteToDiary('Quit process command', false);
             this.mWriteToDiary('Cleaning up', true);
             
-            % setup better disconnect
+            
             delete(CorePipe);
             
         end
@@ -112,7 +112,12 @@ classdef (Sealed) SGLControlScreenProc < SPCServerProc
             %CntlScreen.mForceFocus;
             this.mWriteToDiary('Entering loop', true);
             
-            eyeClient = EyeClient;
+            try 
+                eyeClient = EyeClient;
+            catch me
+                warning('Could not open current eye position')
+                eyeClient = [];
+            end
             stopControlScreenEvt = IPCEvent('StopControlScreen');            
             pauseCoreEvt = IPCEvent('PauseCoreRequested');            
             while ~stopControlScreenEvt.wasTriggered()
@@ -126,7 +131,11 @@ classdef (Sealed) SGLControlScreenProc < SPCServerProc
                 end
                 
                 % update eye position
-                eye_pos = eyeClient.eyePosition;
+                if ~isempty(eyeClient)
+                    eye_pos = eyeClient.eyePosition;
+                else
+                    eye_pos = [NaN NaN];
+                end
                 PltEyePos.mUpdate(eye_pos);
                 drawnow('expose');
                 
