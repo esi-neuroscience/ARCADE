@@ -123,7 +123,11 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
                        
             % connect to StimServer            
             StimServer.Connect();
+
+            % connect to DaqServer
+            NidaqServer.Connect();
             
+
             % connect to EyeServer
             if ~strcmp(cfg.EyeServer, 'None')
                 SGLEyeServerPipe.Open();
