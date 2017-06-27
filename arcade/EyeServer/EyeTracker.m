@@ -1,10 +1,12 @@
 classdef EyeTracker < handle
-    % Checks if current eye position matches a position and triggers events
+    % EYETRACKER - Checks if current eye position matches a position and
+    % triggers events
+
     properties
-        name
-        center = [0 0];
-        tolerance
-        verbose = true;
+        name % name of tracked position
+        center = [0 0]; % screen coordinates in px rel. to center
+        tolerance % fixation radius
+        verbose = false; % flag for verbosity. true=report eye tracker events
     end
     
     properties ( GetAccess = public, SetAccess = private )

@@ -1,5 +1,5 @@
 function reward(rMode,varargin)
-% Give a reward pulse or pulse sequence.
+% REWARD - Give a reward pulse or pulse sequence.
 % 
 % INPUT
 % -----

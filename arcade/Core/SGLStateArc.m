@@ -1,5 +1,5 @@
 classdef (Sealed) SGLStateArc < handle
-    % Singleton class for the state machine that holds and runs the states.
+    % SGLStateArc - Singleton class for state machine managing the trial flow
     %
     % Starting from the intitial state tateArc alwasy moves to the state that
     % is returned when a state is run. The StateArc stops when a state returns

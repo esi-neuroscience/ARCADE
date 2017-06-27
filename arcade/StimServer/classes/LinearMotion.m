@@ -1,5 +1,5 @@
 classdef LinearMotion < Animation
-    % Class for linear motion of a stimulus along a polygon.
+    % LINEARMOTION - Class for linear motion of a stimulus along a polygon.
     %
     % Usage
     % -----

@@ -1,4 +1,14 @@
 classdef SGLEyeServerPipe < handle
+    % SGLEyeServerPipe - Singleton helper class for creating or opening
+    % the pipe to the EyeServer for setting eye trackers.
+    %     
+    %     
+    % USAGE
+    % -----
+    % To open the pipe to the EyeServer for sending commands, use 
+    %   SGLEyeServerPipe.Open()
+    %     
+    % See also trackeye, MSMessagePipe
     
     properties (Constant, Access = private, Hidden = true)
         this = SGLEyeServerPipe

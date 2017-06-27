@@ -1,5 +1,6 @@
 classdef Grating < PixelShader
-    % Class for a (drifting) grating with a circular mask. Pixel shader file:
+    % GRATING - Class for a (drifting) grating with a circular mask. 
+    % Pixel shader file:
     % ARCADE/arcade/StimServer/classes/stimfiles/pixelShader/MaskedGrating.fx
     
     properties ( Transient = true )

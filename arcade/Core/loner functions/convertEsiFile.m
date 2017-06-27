@@ -1,5 +1,6 @@
 function convertEsiFile(filename)
-% Convert behavioral data stored in .esi file written by ARCADE to .mat
+% CONVERTESIFILE - Convert behavioral data stored in .esi file written by
+% ARCADE to .mat
 %
 
 if nargin == 0

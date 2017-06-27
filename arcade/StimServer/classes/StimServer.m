@@ -1,10 +1,11 @@
 classdef (Sealed = true) StimServer < handle
-    % Matlab interface for communication with StimServer.exe via a named pipe.
+    % STIMSERVER - Matlab interface for communication with StimServer.exe via
+    % a named pipe.
     %
     % StimServer.exe must be started before using this class.
     % Commands and stimuli can be passed after StimServer.Connect() was called.
     %
-    % See also Stimulus
+    % See also Stimulus, MSMessagePipe
     
     properties (Constant, Access = private, Hidden = true)
         this = StimServer

@@ -1,5 +1,6 @@
 classdef (Abstract) Animation < hgsetget
-    % Abstract base class for animations to be passed to the StimServer.
+    % ANIMATION - Abstract base class for animations to be passed to the
+    % StimServer.
     %
     % Animations are started immediately if the stimulus is already visible,
     % otherwise when the stimulus becomes visible.

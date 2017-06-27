@@ -1,7 +1,7 @@
 function allStimuliVisible(visible)
-% Change visibility of all stimuli
-% 
-% This function should only be used for debugging.
+% ALLSTIMULIVISIBLE - Change visibility of all stimuli
+%
+% ONLY FOR DEBUGGING. DO NOT USE FOR REAL EXPERIMENTS!
 
 StimServer.ShowAll(visible)
 

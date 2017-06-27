@@ -1,12 +1,14 @@
 classdef Rectangle < Stimulus
-    
-    
+    % RECTANGLE - Class for rectangular stimuli
+    % 
+    % See also Stimulus
+
     properties ( SetAccess = public, GetAccess = public, Transient = true )
-        width = 11;
-        height = 21;
-        angle = 0;
-        color = [255 255 255];
-        alpha = 255;
+        width = 11; % width of rectangle in px for angle=0
+        height = 21; % height of rectangle in px for angle=0
+        angle = 0; % counter-clockise rotation of rectangle in degrees, 0=horizontal
+        color = [255 255 255]; % 24-bit [r g b] value
+        alpha = 255; % alpha transparency, 0=transparent, 255=opaque
     end       
         
     methods

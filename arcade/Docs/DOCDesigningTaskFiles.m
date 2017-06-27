@@ -48,7 +48,7 @@ help getPreviousTrialData
 % If no condition and/or block selection functions are provided, the
 % current condition/block is always 1.
 
-%% Creating the stimuli
+%% Creating visual stimuli
 % Each stimulus is first defined with several stimulus type-specific
 % parameters. The stimulus will then be turned on in the entry or exit 
 % functions of the trial states.
@@ -81,14 +81,19 @@ help getPreviousTrialData
 % <<state.png>>
 % 
 % A trial consists of a sequence of these trial states starting at an 
-% _initial state_ and ending in a _final state_. States are defined as
-% structs with specific fields and then passed to the |createTrial|
-% function to create the state sequence.
-help createTrial
-
+% _initial state_ and ending in a _final state_. States are defined via
+% the |State| class
+help State
+properties('State')
 %%
-% The specification of the eye tracking in the |trackEye| field is 
-% documented <DOCEyeTracking.html here>.
+% The states are then passed to the |createTrial| function to create the
+% state sequence.
+help createTrial
+%%
+% Events can be triggered by any process and provide a flexible tool for
+% managing the flow of the experiment. For example, the EyeServer can set
+% events when the eye enters a specific area of the screen. See
+% <DOCEyetracking.html here> for the documentation of eye tracking. 
 
 %%
 % *Example*
@@ -99,19 +104,14 @@ help createTrial
 % <<exampleStateSequence.png>>
 % 
 % The definition of the states would start like this 
-acqFix = [];
-acqFix.name = 'acqFix';
+acqFix = State('acqFix');
 acqFix.duration = 5000;
-acqFix.nextState = 'noFix';
-acqFix.trackEye = struct(...
-    'method', 'circle', ...
-    'report', 'enter', ...
-    'nextState', 'holdFix', ...
-    'center', [0 0], ...
-    'radius', 200);
+acqFix.waitEvents = {'fixIn'};
+acqFix.nextStateAfterEvent = {'holdFix'};
+acqFix.nextStateAfterTimeout = 'noFix';
 acqFix.onEntry = {...
-    {@(x) eventmarker(1)}, ...
-    {@(x) set(fp, 'visible', true)}, ...
+    @(x) eventmarker(1), ...
+    @(x) set(fp, 'visible', true), ...
     };
 
 %%
