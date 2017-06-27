@@ -82,10 +82,10 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
             controlScreenReadyEvt = IPCEvent('controlScreenReady');
             controlScreenProcess = this.mLaunchServer('ControlScreen'); 
             
-            % launch EyeServer process
-            this.mWriteToDiary('Starting EyeServer', true)
-            eyeServerReadyEvt = IPCEvent('EyeServerReady', false);
+            % launch EyeServer process            
             if ~strcmp(cfg.EyeServer, 'None')
+                this.mWriteToDiary('Starting EyeServer', true)
+                eyeServerReadyEvt = IPCEvent('EyeServerReady', false);
                 eyeProcess = processManager('id', 'EyeServer', ...
                     'command', fullfile(arcaderoot, 'arcade', 'EyeServer', ['EyeServer.bat ' cfg.EyeServer]), ...
                     'printStdout', false, ...

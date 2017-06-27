@@ -76,8 +76,8 @@ classdef SPCServerProc < AUXDiary
             % get some details about this run 
             dateTimeString      = datestr(now,'dd-mmm-yyyy HH:MM:SS');
             matlabVersionString = version();
-            userNameString      = char(java.lang.System.getProperty('user.name'));
-            computerNameString  = char(java.net.InetAddress.getLocalHost.getHostName);
+            userNameString      = getenv('username');
+            computerNameString  = getenv('computername');
             
             % PRINT TO COMMAND LINE -> written to log file 
             fprintf(headerAsterisk)

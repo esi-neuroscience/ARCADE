@@ -9,10 +9,8 @@ if "%1"=="" (
 	) else (
 	SET EYESERVER="%1"
 	)
-
-
-SET RUNCMD=matlab -automation -r "addpath %EYESERVERDIR%; runEyeServer('%EYESERVER%')";
-
-
-
+TITLE "EyeServer"
+echo Running %EYESERVER% EyeServer
+SET RUNCMD=matlab -nodesktop -nosplash -minimize -wait -r "addpath %EYESERVERDIR%; runEyeServer('%EYESERVER%')";
 %RUNCMD%
+
