@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Visual stimuli for ARCADE</title><meta name="generator" content="MATLAB 8.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-06-21"><meta name="DC.source" content="DOCAvailableStimuli.m"><style type="text/css">
+      --><title>Visual stimuli for ARCADE</title><meta name="generator" content="MATLAB 8.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-06-28"><meta name="DC.source" content="DOCAvailableStimuli.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -157,7 +157,7 @@ Properties for class Grating:
     animation
     position
 
-</pre><p>Spatial frequency is defined as <tt>spatialFrequency</tt> in pixel per cycle. Temporal frequency is specified via the <tt>temporalFrequency</tt> property in units of cycles per s. That is, for a 120 Hz display, a <tt>animationIncrement</tt> value of 1/120 will result in a drifting grating at a speed of 1 cycle/s. The mask can be circular or elliptical (<tt>maskWidth</tt>, <tt>maskHeight</tt>), and can be rotated (<tt>maskRotation</tt>). The two colors of the grating are specfied as a vector of 8-bit values for <tt>[red green blue alpha]</tt>. The <tt>smoothing</tt> parameter is 2 for purely sinusoidal gratings. Values &gt; 2 will approach a square wave grating.</p><p><b>Example</b></p><pre class="codeinput">grat1 = Grating();
+</pre><p>Spatial frequency is defined as <tt>spatialFrequency</tt> in pixel per cycle. Temporal frequency is specified via the <tt>temporalFrequency</tt> property in units of cycles per s. The mask can be circular or elliptical (<tt>maskWidth</tt>, <tt>maskHeight</tt>), and can be rotated (<tt>maskRotation</tt>). The two colors of the grating are specfied as a vector of 8-bit values for <tt>[red green blue alpha]</tt>. The <tt>smoothing</tt> parameter is 2 for purely sinusoidal gratings. Values &gt; 2 will approach a square wave grating.</p><p><b>Example</b></p><pre class="codeinput">grat1 = Grating();
 grat1.color1 = [255 0 0 200];
 grat1.color2 = [0 255 0 200];
 grat1.maskRotation = 45;
@@ -466,9 +466,7 @@ properties('Grating')
 % Spatial frequency is defined as |spatialFrequency| in pixel per cycle. 
 % Temporal frequency is
 % specified via the |temporalFrequency| property in units of cycles per
-% s. That is, for a 120 Hz display, a |animationIncrement| value of
-% 1/120 will result in a drifting grating at a speed of 1 cycle/s. 
-% The mask can be circular or elliptical (|maskWidth|, |maskHeight|), 
+% s. The mask can be circular or elliptical (|maskWidth|, |maskHeight|), 
 % and can be rotated (|maskRotation|). 
 % The two colors of the grating are specfied as a vector of 8-bit values for
 % |[red green blue alpha]|. The |smoothing| parameter is 2 for purely
