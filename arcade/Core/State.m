@@ -1,18 +1,29 @@
 classdef State < handle
-    
+    % STATE - Class for experimental states
+    %     
+    % When run, a State instance waits for specified system events and
+    % returns the name of the next state that is associated for the events
+    % that occured during or before the wait.
+    % 
+    % A state can have entry and exit functions, which are run irrespective
+    % of the wait outcome. 
+    %
+    % See also trackeye, SGLStateArc, IPCEvent, function_handle, anondemo
+    %     
+     
     properties ( SetAccess = public, GetAccess = public )
         name@char % name of this state
-        waitEvents = {}; % cell array of names of events to wait for
-        waitForAllEvents = false;
-        nextStateAfterEvent = {};
-        nextStateAfterTimeout = 'final';
-        onEntry = {};
-        onExit = {};        
-        duration = 0;
-        maxRepetitions = Inf;
+        waitEvents = {}; % cell array of event names to wait for
+        waitForAllEvents = false; % flag whether to wait for all events
+        nextStateAfterEvent = {}; % cell aray of next state names corresponding to events in waitEvents
+        nextStateAfterTimeout@char = 'final'; % name of next state after timeout
+        onEntry = {}; % cell array of anonymous functions to be executed during state entry
+        onExit = {}; % cell array of anonymous functions to be executed during state exit
+        duration = 0; % tiemout for wait in ms
+        maxRepetitions = Inf; % number of maximal iterations of state
     end
     properties ( GetAccess = public, SetAccess = private)
-        runNumber = 0;
+        runNumber = 0; % number of iterations within current state arc
     end
     
     properties ( Access = private, Constant = true )
@@ -26,10 +37,8 @@ classdef State < handle
         end
         
         function nextState = run(obj)
-%             if numel(obj.nextStateAfterEvent)~=numel(obj.waitEvents) && ~obj.waitForAllEvents
-%                 error('Mismatch between number of events (%d) and next states (%d)', ...
-%                     numel(obj.waitEvents), numel(obj.nextStateAfterEvent) );
-%             end
+            % Execute entry functions, wait for events/timeout and call
+            % exit functions
                         
             obj.runNumber = obj.runNumber+1;
             obj.evalFunctions(obj.onEntry)            

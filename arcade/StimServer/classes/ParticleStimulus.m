@@ -1,6 +1,6 @@
 classdef ParticleStimulus < Stimulus
-    % Class for a particle stimulus in the StimServer. Particle positions are
-    % loaded from a NumericBinaryFile.
+    % PARTICLESTIMULUS - Class for a particle stimulus in the StimServer.
+    % Particle positions are loaded from a NumericBinaryFile.
     %
     % This stimulus is still under development and should not be used for
     % important experiments yet.

@@ -82,10 +82,16 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
             controlScreenReadyEvt = IPCEvent('controlScreenReady');
             controlScreenProcess = this.mLaunchServer('ControlScreen'); 
             
-            % launch EyeServer process
-            this.mWriteToDiary('Starting EyeServer', true)
-            eyeServerReadyEvt = IPCEvent('eyeServerReadyEvt');
-            eyeProcess = this.mLaunchServer('EyeServer');
+            % launch EyeServer process            
+            if ~strcmp(cfg.EyeServer, 'None')
+                this.mWriteToDiary('Starting EyeServer', true)
+                eyeServerReadyEvt = IPCEvent('EyeServerReady', false);
+                eyeProcess = processManager('id', 'EyeServer', ...
+                    'command', fullfile(arcaderoot, 'arcade', 'EyeServer', ['EyeServer.bat ' cfg.EyeServer]), ...
+                    'printStdout', false, ...
+                    'printStderr', false);
+            end
+            % eyeProcess = this.mLaunchServer('EyeServer');
             
             % launch StimServer process
             this.mWriteToDiary('Starting StimServer', true)
@@ -93,17 +99,40 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
                 'command', 'StimServer.exe', ...
                 'printStdout', false, ...
                 'printStderr', false);
+
+            % launch DaqServer process
+            if ~strcmp(cfg.DaqServer, 'None')
+                this.mWriteToDiary('Starting DaqServer', true)                
+                daqProcess = processManager('id', 'DaqServer', ...
+                    'command', fullfile(arcaderoot, 'arcade', 'DaqServer', 'NidaqServer.exe'), ...
+                    'printStdout', false, ...
+                    'printStderr', false);
+            end
             
             
-            
+            % Wait for EyeServer and ControlScreen
             this.mWriteToDiary('Waiting for processes', true)
-            controlScreenReadyEvt.waitForTrigger(20000);
-%             eyeServerReadyEvt.waitForTrigger(20000);
+            if ~strcmp(cfg.EyeServer, 'None')
+                result = eyeServerReadyEvt.waitForTrigger(20000);
+                assert(result==1, 'Wait for EyeServer failed')
+            end
+            result = controlScreenReadyEvt.waitForTrigger(20000);
+            assert(result==1, 'Wait for ControlScreen failed')
+            
                       
                        
             % connect to StimServer            
             StimServer.Connect();
+
+            % connect to DaqServer
+            NidaqServer.Connect();
             
+
+            % connect to EyeServer
+            if ~strcmp(cfg.EyeServer, 'None')
+                SGLEyeServerPipe.Open();
+            end
+
             % Run session
             startEvent = IPCEvent('startControlScreenLoop');
             startEvent.trigger();
@@ -124,9 +153,11 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
             delete(eventServer);
 
             % quit eye server
-            stopEyeServerEvt = IPCEvent('StopEyeServer');
-            stopEyeServerEvt.trigger();
-            eyeProcess.stop()
+            if ~strcmp(cfg.EyeServer, 'None')
+                stopEyeServerEvt = IPCEvent('StopEyeServer');
+                stopEyeServerEvt.trigger();
+                eyeProcess.stop()
+            end
             
             % quit control screen
             stopControlScreenEvt = IPCEvent('StopControlScreen');            
@@ -137,6 +168,13 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
             StimServer.delete()
             stimServerProcess.stop()
             
+            % quit DaqServer
+            if ~strcmp(cfg.DaqServer, 'None')
+                NidaqServer.delete()
+                daqProcess.stop();
+            end
+
+
             % close TrialData pipe
             SGLTrialDataPipe.delete()
 
@@ -187,7 +225,7 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
             % Launch a Session
             SESSArc  = SGLSessionArc.launch;
             % Start Session
-            this.mWriteToDiary('Starting Session', true)
+            % this.mWriteToDiary('Starting Session', true)
             SESSArc.mStart;
             
             %----------------------------------------%

@@ -1,5 +1,5 @@
 classdef Picture < Stimulus
-    % Class for image stimuli to be passed to the StimServer.
+    % PICTURE - Class for image stimuli to be passed to the StimServer.
     %
     % Usage
     % -----

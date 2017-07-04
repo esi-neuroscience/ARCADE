@@ -1,6 +1,7 @@
 classdef SGLTestEyeServer < ABSEyeServer
-    % Eye server class for testing purposes. Eye position can be set by mouse 
-    % click in a figure with screen coordinates.
+    % SGLTESTEYESERVER - Eye server class for testing purposes. 
+    % Eye position can be set by mouse click in a figure with screen
+    % coordinates.
     properties
         fig
         ax
@@ -21,15 +22,27 @@ classdef SGLTestEyeServer < ABSEyeServer
     methods ( Access = private )
         function obj = SGLTestEyeServer
             obj = obj@ABSEyeServer;
+                        
             
-            obj.fig = figure('WindowStyle', 'normal', 'MenuBar', 'None');
-            obj.ax = axes('SortMethod','childorder', ...
-                'XLim', [-1920 1920]/2, 'YLim', [-1080 1080]/2);
-            grid on
+            obj.fig = figure('WindowStyle', 'normal', 'MenuBar', 'None', ...
+                'Color', 'white');
+            set(obj.fig, 'Units', 'normalized', 'Position', [0.65 0.65 0.33 0.33], ...
+                'Resize', 'off')
+
+            obj.ax = axes('SortMethod','childorder');
+           axis(obj.ax, 'equal')
+            set(obj.ax, 'XGrid', 'on', 'YGrid', 'on',  ...
+                'XTick', -1000:100:1000, 'YTick', -1000:100:1000, ...
+                'XLim', [-1920 1920]/2, 'YLim', [-1080 1080]/2)
+            
+            title(obj.ax, 'Eye Position')
+            xlabel(obj.ax, 'x [px]')
+            ylabel(obj.ax, 'y [px]')
             
             obj.dot = line('XData', 0,'YData', 0,...
-                'Marker','o','color','k', 'MarkerSize', 40);
-            set(obj.fig,'Pointer','circle');
+                'Marker','o','color','k', 'MarkerSize', 20);
+            set(obj.fig,'Pointer','circle', 'NumberTitle', 'off', ...
+                'Name', 'EyeServer');
             
             set(obj.fig, 'WindowButtonDownFcn', @obj.onClick, ...
                 'CloseRequestFcn', @obj.onClose)
@@ -73,8 +86,7 @@ classdef SGLTestEyeServer < ABSEyeServer
             title(obj.ax, titleString)
             eyePosition = [x y];
             
-            java.lang.Thread.sleep(10);                                
-            drawnow()                
+            pause(0.01)
         end
                 
         
@@ -84,7 +96,8 @@ classdef SGLTestEyeServer < ABSEyeServer
         
             
         function delete(obj)
-            close(obj.fig)
+            delete(obj.fig)
+            % close(obj.fig)
         end
     end
 end

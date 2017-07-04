@@ -1,5 +1,5 @@
 function storeUserVariables(var) 
-% Store a variable in the behavioral data file of ARCADE. 
+% STOREUSERVARIABLES - Store a variable in the behavioral data file of ARCADE.
 % 
 % INPUT
 % -----

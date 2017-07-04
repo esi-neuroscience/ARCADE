@@ -1,11 +1,15 @@
 classdef MovingBar < Rectangle
-    
+    % MOVINGBAR - Helper class for a moving bar
+    % 
+    % See also Stimulus, Rectangle, Animation
     
     properties
-       direction = 0
-       travelDistance = 500;        
-       startPosition = [0 0];
-       linkedOrientationDirection = true;
+       direction = 0 % traveling direction of bar in degrees
+       travelDistance = 500; % distance of travel
+       startPosition = [0 0]; % starting position of bar sweep
+       % linkedOrientationDirection - boolean flag
+       % If true, bar will be orthogonal to motion direction
+       linkedOrientationDirection = true; 
     end
         
     methods 

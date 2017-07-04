@@ -11,6 +11,7 @@ classdef ABSEyeServer < handle
     properties ( Access = protected )
         sharedMemory % shared memory for current eye position
         stopEvent % system event for stopping data acquisition
+        readyEvent % system event to confirm creation of eye tracker
     end
     
     methods
@@ -21,7 +22,7 @@ classdef ABSEyeServer < handle
             sharedObject.pointer.Value = [0.0; 0.0];
             obj.sharedMemory = sharedObject;
             obj.stopEvent = IPCEvent('StopEyeServer');
-
+            obj.readyEvent = IPCEvent('EyeTrackerReady', false);
             if nargin == 1
                 obj.filename = filename;
             elseif nargin == 0
@@ -53,13 +54,17 @@ classdef ABSEyeServer < handle
                 return
             end
             if isequal(position, [int16(Inf) int16(Inf)]) && tolerance == uint16(Inf)
-                fprintf('Resetting trackers\n')
+                logmessage('Resetting trackers')
+                for iTracker = 1:length(obj.positionTracker)
+                    delete(obj.positionTracker{iTracker})
+                end
                 obj.positionTracker = {};
             else
-                fprintf('New tracker %s at [%g %g], r=%g\n', name, position(1), position(2), tolerance);
+                msg = sprintf('New tracker %s at [%g %g], r=%g', name, position(1), position(2), tolerance);
+                logmessage(msg);
                 obj.positionTracker{end+1} = EyeTracker(name, position, tolerance);            
             end
-            
+            obj.readyEvent.trigger();
         end
         
         
@@ -91,6 +96,9 @@ classdef ABSEyeServer < handle
         function delete(obj)
             SGLEyeServerPipe.delete();
             obj.sharedMemory.delete();
+            for iTracker = 1:length(obj.positionTracker)
+                delete(obj.positionTracker{iTracker})
+            end
         end
     end
 end

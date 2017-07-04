@@ -1,12 +1,12 @@
 classdef Gaussian < PixelShader
-    % Class for a (drifting) Gaussian 
+    % GAUSSIAN - Class for a Gaussian patch stimulus
     % ARCADE/arcade/StimServer/classes/stimfiles/pixelShader/Gaussian.fx
     % 
     % Size of pixel shader is always at least 5*max(sdx, sdy).
     %
     properties ( Transient = true )
-        color = [255 255 255]; % [r g b]        
-        angle = 0; % degrees
+        color = [255 255 255]; % color as 24-bit [r g b] value
+        angle = 0; % rotation in degrees, 0=horizontal, 90=vertical
         sdx = 5; % standard deviation in x-direction in pixels
         sdy = 5; % standard deviation in y-direction in pixels
     end

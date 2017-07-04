@@ -1,6 +1,6 @@
 function eventmarker(value,varargin)
-% Send a digital marker for an event to the DAQ card (if available) and
-% store the corresponding timestamp in the .evt file.
+% EVENTMARKER - Send a digital marker for an event to the DAQ card (if
+% available) and store the corresponding timestamp in the .evt file.
 % 
 % INPUT
 % -----

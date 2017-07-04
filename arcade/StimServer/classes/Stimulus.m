@@ -1,7 +1,7 @@
 classdef (Abstract) Stimulus < hgsetget % will be matlab.mixin.SetGet after 2014b
-    % Abstract base class for StimServer stimuli providing the general
-    % stimulus properties visible, position and animation. Stimulus properties
-    % can be changed either struct-like or using set:
+    % STIMULUS - Abstract base class for StimServer stimuli providing the
+    % general stimulus properties visible, position and animation. Stimulus
+    % properties can be changed either struct-like or using set:
     %
     %   stim.position = [0 0];
     %   set(stim, 'position', [0 0])

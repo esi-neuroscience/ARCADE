@@ -1,10 +1,4 @@
-
-
-
-%------------------------------------------%
-% 2.5.2016 - Jarrod, wrote function 
-
-function runEyeServer 
+function runEyeServer(eyeServer) 
 %--------------------------%
 % turn on all warnings
 warning('on','all');
@@ -21,7 +15,7 @@ PROC = SGLEyeServerProc.launch;
 % move back to original working directory
 cd(initialWorkingDirectory);
 % run server
-PROC.mRunServer; 
+PROC.mRunServer(eyeServer)
 
 % cleaup
 delete(PROC);

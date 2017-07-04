@@ -1,14 +1,16 @@
-classdef Circle < Stimulus            
-   
-    
+classdef Circle < Stimulus               
+    % CIRCLE - Class for circle stimuli in StimServer
+    %
+    % See also Stimulus
+
     properties ( SetAccess = immutable, GetAccess = public )
         type
     end
     
     properties ( SetAccess = public, GetAccess = public, Transient = true )
-        diameter        
-        color = [255 255 255];
-        alpha = 255;
+        diameter % diameter of stimulus in px
+        color = [255 255 255]; % color of circle as 24-bit [r g b] value
+        alpha = 255; % alpha transparency value
     end       
         
     methods

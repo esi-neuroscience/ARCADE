@@ -1,5 +1,5 @@
 function groupStimuli(setmode)
-% Group changes to stimuli together.
+% GROUPSTIMULI - Group changes to stimuli together.
 % 
 % INPUT
 % -----
@@ -19,7 +19,7 @@ function groupStimuli(setmode)
 % 	groupStimuli('end')
 
 switch lower(setmode)
-    case 'start'
+    case {'start', 'begin'}
         StimServer.Defer(1); % begin deferred mode
     case 'end'
         StimServer.Defer(0); % end deferred mode
