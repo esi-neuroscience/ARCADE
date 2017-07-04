@@ -105,6 +105,13 @@ void mexFunction(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[])
                     break;
                 case 2: // reset the requeseted events
                     nHandles = (DWORD) mxGetNumberOfElements(prhs[1]);
+                    if (nHandles > nInitializedHandles)
+                    {
+                        mexErrMsgIdAndTxt("WaitForEvents:Reset",
+"Argument to Reset method of MultipleEvents has to be a cell array containing no more than %u event names.",
+                                nInitializedHandles);
+                        return;
+                    }
                     for (unsigned char i=0; i<nHandles; i++)
                     {
                         if (mxGetString(mxGetCell(prhs[1], i), eventName, 32))
@@ -130,7 +137,12 @@ void mexFunction(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[])
             }
             break;
         case 3: // delete
-            Delete();
+            if (nInitializedHandles == 0)
+            {
+                mexWarnMsgIdAndTxt("WaitForEvents:Delete",
+                      "MultipleEvents not initialized or already deleted.");
+            }
+            else Delete();
     }
 //    mexPrintf("Number of arguments: %i\n", nrhs);
     return;

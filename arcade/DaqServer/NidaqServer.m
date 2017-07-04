@@ -24,9 +24,8 @@ classdef (Sealed = true) NidaqServer < handle
                 return;
             end;
             if ~libisloaded('kernel32')
-                loadlibrary('kernel32', @win_kernel32);                            
+                loadlibrary('kernel32', @win_kernel32);
             end;
-        
             if isequal(nargin, 0); server='.'; else server = varargin{1}; end;
             GENERIC_READ_WRITE = uint32(hex2dec('C0000000'));
            obj.hPipe = calllib('kernel32', 'CreateFileA', ...
@@ -69,7 +68,6 @@ classdef (Sealed = true) NidaqServer < handle
             clear NidaqServer;
         end
         
-        
         function AddLine(lineNumber, varargin)
             % AddLine(lineNumber, pulseEventName)
             % AddLine(lineNumber, onEventName, offEventName)
@@ -79,7 +77,7 @@ classdef (Sealed = true) NidaqServer < handle
                 case 3
                     NidaqServer.Write(uint8([2 lineNumber varargin{1} 0 varargin{2} 0]));
                 otherwise
-                    error(NidaqServer:AddLine, ...
+                    error('NidaqServer:AddLine', ...
                         'Bad number of arguments in call to NidaqServer.AddLine.');
             end
         end
@@ -87,11 +85,23 @@ classdef (Sealed = true) NidaqServer < handle
         function Start()
             NidaqServer.Write(uint8(3));
         end
+        
+        function SetRewardTime(timems)
+            NidaqServer.Write(uint8([4 typecast(uint16(timems), 'uint8')]));
+        end
+        
+        function Reward(times)
+            NidaqServer.Write(uint8([5 typecast(uint16(times), 'uint8')]));
+        end
     end
     
     methods (Static, Hidden=true)
         
         function Write(cmdMessage)
+            if isNull(NidaqServer.this.hPipe)
+                error('NidaqServer:Unconnected', ...
+                    'No connection to NidaqServer.');
+            end
             nWritten = uint32(0);
             [result, ~, cmdMessage, nWritten] = ...
                 calllib('kernel32', 'WriteFile', ...
@@ -106,6 +116,6 @@ classdef (Sealed = true) NidaqServer < handle
             end
             assert(nWritten == length(cmdMessage));
         end
-    end    
+    end
 end
 
