@@ -39,7 +39,7 @@ classdef CalibrateEyelink < handle
             
          
             
-            for iCalTarget = 1:2:numel(obj.eyelinkConfig.calibration_targets)/2
+            for iCalTarget = 1:2:numel(obj.eyelinkConfig.calibration_targets)
                 pos = obj.eyelinkConfig.calibration_targets(iCalTarget:iCalTarget+1);
                 line('XData', pos(1),'YData', pos(2),...
                     'Marker','o','color', [0.2 0.2 0.2], 'MarkerSize', 20);
