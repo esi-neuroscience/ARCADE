@@ -6,6 +6,7 @@ classdef (Sealed = true) NidaqServer < handle
     
     properties (Access = private, Transient = true, Hidden = true)
         hPipe = libpointer;
+        isConnected = false;
     end
     
     methods (Access = private, Hidden=true)
@@ -52,6 +53,7 @@ classdef (Sealed = true) NidaqServer < handle
                 error('NidaqServer:Constructor:failed', ...
                     'Can''t connect to NidaqServer''s pipe. Is the server running ?');
             end
+            obj.isConnected = true;
             disp('Connected to pipe');
         end
         
@@ -60,6 +62,12 @@ classdef (Sealed = true) NidaqServer < handle
             assert(~isequal(0, calllib('kernel32', 'CloseHandle', temp.hPipe)));
             temp.hPipe = libpointer;
             disp('Disconnected from pipe');
+            temp.isConnected = false;
+        end
+        
+        function isConnected = GetConnectionStatus()
+            temp = NidaqServer.this;
+            isConnected = temp.isConnected;
         end
         
         function delete()

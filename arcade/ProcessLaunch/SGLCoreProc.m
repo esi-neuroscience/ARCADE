@@ -125,7 +125,9 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
             StimServer.Connect();
 
             % connect to DaqServer
-            NidaqServer.Connect();
+             if ~strcmp(cfg.DaqServer, 'None')
+                NidaqServer.Connect();
+            end
             
 
             % connect to EyeServer
