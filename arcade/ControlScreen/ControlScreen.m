@@ -105,9 +105,11 @@ classdef (Sealed) ControlScreen < SPCPanelRegister & SPCGUIDefinition
                 case {'P','p', 'escape'}
                     % pause
                     this.pauseEvent.trigger();
+                    logmessage('Pause requested')
                 case {'R','r'}
                     % reward
                     this.rewardEvent.trigger();                    
+                    logmessage('Manual reward')
                 otherwise
                     % nothing
             end
