@@ -1,5 +1,26 @@
 # Change Log of ARCADE
 
+## Unreleased
+### NEW
+*   Buttons and hotkeys for reward in ControlScreen
+*   Support for arbitrary digital input devices, e.g. levers.
+*   NidaqServer for National Instruments Cards PCI(e)-6221 and PCI-6503
+*   EyeServer and DaqServer can be selected from the configuration GUI
+*   A trial can be terminated after a maximal number of iterations of a
+    specific state (maxRepetitions property of State)
+
+### CHANGED
+*   Definition of State: states now wait for kernel32 events and select the
+    next state according to which event was triggered or a timeout occurred.
+    The syntax for State definition has completely changed (see new
+    documentation).
+*   Reward is delivered via DaqServer
+*   Eye position is monitored in EyeServer processes and status signaled via
+    events
+
+### REMOVED
+*   onRun functionality of States. If necessary this will be re-added later.
+
 ##  [1.0.0b3] - 2017-06-21
 ### NEW
 *   Added Gaussian stimulus
