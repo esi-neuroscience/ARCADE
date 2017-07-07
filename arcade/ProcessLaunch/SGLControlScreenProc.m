@@ -137,7 +137,7 @@ classdef (Sealed) SGLControlScreenProc < SPCServerProc
                     eye_pos = [NaN NaN];
                 end
                 PltEyePos.mUpdate(eye_pos);
-                drawnow('expose');
+                drawnow
                 
                 
                 % check for trial data from Core
@@ -162,7 +162,7 @@ classdef (Sealed) SGLControlScreenProc < SPCServerProc
                     drawnow; % flush events
                 end
                 
-                java.lang.Thread.sleep(1); % pause a bit
+                java.lang.Thread.sleep(10); % pause a bit
             end
             this.mWriteToDiary('Exiting loop', true);
             
