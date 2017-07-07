@@ -1,6 +1,6 @@
 # Change Log of ARCADE
 
-## Unreleased
+## [2.0.0a1]
 ### NEW
 *   Buttons and hotkeys for reward in ControlScreen
 *   Support for arbitrary digital input devices, e.g. levers.
