@@ -4,8 +4,7 @@ function reward(rewardTimes)
 % INPUT
 % -----
 % 
-%   rewardTime : durations of reward pulses and inter-reward intervals in
-%   ms
+%  rewardTime : durations of reward pulses and inter-reward intervals in ms
 % 
 % 
 % EXAMPLE
