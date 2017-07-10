@@ -33,6 +33,7 @@ function trackdigitalinput(lineNumber, eventName)
 %     (done automatically by ARCADE).
 % 
 % See also State
+
 persistent wasStarted
 if isempty(wasStarted)
 	wasStarted = false;
@@ -42,10 +43,10 @@ if wasStarted
 	return
 end
 if nargin == 1 & strcmp(lineNumber, 'start')
-	DaqServer.Start()
+	NidaqServer.Start()
 	wasStarted = true;
 elseif nargin == 2 && iscell(eventName)
-	DaqServer.Addline(lineNumber, eventName{:})
+	NidaqServer.Addline(lineNumber, eventName{:})
 elseif nargin == 2 && ischar(eventName)
-	DaqServer.Addline(lineNumber, eventName)
+	NidaqServer.Addline(lineNumber, eventName)
 end
