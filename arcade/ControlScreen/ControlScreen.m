@@ -31,6 +31,7 @@ classdef (Sealed) ControlScreen < SPCPanelRegister & SPCGUIDefinition
         hfig            % figure handle
         pauseEvent
         rewardEvent
+        skipEvent
     end
     
     properties (Access = protected)
@@ -62,7 +63,7 @@ classdef (Sealed) ControlScreen < SPCPanelRegister & SPCGUIDefinition
             
             this.rewardEvent = IPCEvent('Reward');
             this.pauseEvent = IPCEvent('PauseCoreRequested');
-            
+            this.skipEvent = IPCEvent('SkipTrial');
             
             % Set a Callback for User Keyboard Events 
             set(this.hfig,'WindowKeyPressFcn',...
@@ -106,6 +107,9 @@ classdef (Sealed) ControlScreen < SPCPanelRegister & SPCGUIDefinition
                     % pause
                     this.pauseEvent.trigger();
                     logmessage('Pause requested')
+                case {'S','s'}
+                    this.skipEvent.trigger();
+                    logmessage('SkipTrial event was triggered')
                 case {'R','r'}
                     % reward
                     this.rewardEvent.trigger();                    
