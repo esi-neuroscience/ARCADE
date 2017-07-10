@@ -1,5 +1,13 @@
 # Change Log of ARCADE
 
+## [2.0.0a2] - 2017-07-10
+### NEW
+*   Helper function for tracking digital input
+*   Buttons and hotkeys in ControlScreen for setting an event to skip a trial.
+*   NidaqServer.exe 1.0.4.0 sets a RewardDone event when the reward sequence
+    is over
+*   Example task for tracking a lever
+
 ## [2.0.0a1]
 ### NEW
 *   Buttons and hotkeys for reward in ControlScreen
