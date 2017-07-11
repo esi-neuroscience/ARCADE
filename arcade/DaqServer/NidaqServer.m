@@ -101,6 +101,10 @@ classdef (Sealed = true) NidaqServer < handle
         function Reward(times)
             NidaqServer.Write(uint8([5 typecast(uint16(times), 'uint8')]));
         end
+        
+        function EventMarker(markerCode)
+            NidaqServer.Write(uint8([6 typecast(uint16(markerCode), 'uint8')]));
+        end
     end
     
     methods (Static, Hidden=true)
