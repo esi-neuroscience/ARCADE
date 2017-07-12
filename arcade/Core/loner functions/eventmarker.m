@@ -8,17 +8,8 @@ function eventmarker(value,varargin)
 % 
 
 % if there is a value, and it is an unsigned 16-bit integer
-if ~isempty(value) && isnumeric(value) && value<2^16 && value>=0
-    % get event server
-    EventServer = SGLEventMarkerServer.launch;
-    
-    value = round(value); % ensure it is an integer 
-    
-    if isempty(varargin)
-        EventServer.mSendEventMarker(value);% send eventmarker
-    else
-        EventServer.mSendEventMarker(value,varargin{1});% send eventmarker
-    end
+if ~isempty(value) && isnumeric(value) && value<2^16 && value>=0            
+    NidaqServer.EventMarker(round(value));    
 else
     error('Eventmarker value (%g) is not a 16-bit integer', value)
 end
