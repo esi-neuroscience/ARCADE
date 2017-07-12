@@ -3,7 +3,7 @@ classdef SGLEyelinkEyeServer < ABSEyeServer
     properties
         usedEye = 0;
         screenSize = [1680 1050]; % x y in px
-        eyeTracker = {};
+        config
     end
     
     
@@ -29,6 +29,10 @@ classdef SGLEyelinkEyeServer < ABSEyeServer
     methods ( Access = private )
         function obj = SGLEyelinkEyeServer(filename)
             obj = obj@ABSEyeServer(filename);
+            obj.config = EyelinkConfig;
+            obj.config.read_config_from_tracker;
+            scrSz = str2num(obj.config.screen_pixel_coords);
+            obj.screenSize = [max(scrSz([1 3])) max(scrSz([2 4]))];
         end
     end
     
@@ -38,7 +42,7 @@ classdef SGLEyelinkEyeServer < ABSEyeServer
         function eyePosition = acquire_eye_position(obj)
             
             tStart = tic;
-            timeout = 1; % wait maximally 5s for sample
+            timeout = 5; % wait maximally 5s for sample
             newSampleAvailable = Eyelink('NewFloatSampleAvailable')>0;
             while ~newSampleAvailable && toc(tStart) < timeout
                 newSampleAvailable = Eyelink('NewFloatSampleAvailable')>0;
@@ -52,11 +56,12 @@ classdef SGLEyelinkEyeServer < ABSEyeServer
             
             % translate coordinates to rel. to center
             x = evt.gx(obj.usedEye+1)-obj.screenSize(1)/2;
-            y = -1*(1*evt.gy(obj.usedEye+1)-obj.screenSize(2)/2);
+            y = (1*evt.gy(obj.usedEye+1)-obj.screenSize(2)/2);
             eyePosition = [x y];
         end
         
-        function intialize(obj)
+        function initialize(obj)
+                                   
             err = Eyelink('Initialize');
             assert(err == 0, 'Eyelink: Could not initialize link')
             Eyelink('Command', 'link_sample_data = LEFT,RIGHT,GAZE,AREA');
@@ -70,7 +75,7 @@ classdef SGLEyelinkEyeServer < ABSEyeServer
                 err = Eyelink('OpenFile', obj.shortFilename);
                 assert(err == 0, 'Eyelink: Could not open %s', obj.filename)
             end
-            
+            Eyelink('StartRecording')
         end
     end 
     

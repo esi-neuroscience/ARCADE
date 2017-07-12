@@ -33,7 +33,7 @@ classdef EyelinkConfig < handle
         
         % screen
         screen_phys_coords = [-238.38, 148.05, 238.38, -148.05]; % SAMSUNG 2233RZ
-        screen_pixel_coords = [0 0 1680 1050]; % SAMSUNG 2233RZ
+        screen_pixel_coords = [0 1050 1680 0]; % SAMSUNG 2233RZ
         
         
         file_event_data = 'GAZE,GAZERES,HREF,AREA,VELOCITY';
