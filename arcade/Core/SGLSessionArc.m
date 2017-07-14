@@ -51,7 +51,7 @@ classdef (Sealed) SGLSessionArc
             %----------------------------------%
             %            Objects 
             
-            %EventServer = SGLEventMarkerServer.launch;  % eventmarkers 
+            EventServer = SGLEventMarkerServer.launch;  % eventmarkers 
             BHVstore    = SGLBehaviouralStore.launch;   % behavioural store (for CFG)
             StimBckgrnd = SGLBackgroundObject.launch;   % allows images for background
             PauseEvent  = IPCEvent('PauseCoreRequested');
@@ -113,7 +113,7 @@ classdef (Sealed) SGLSessionArc
                 delete(stateArc); % delete StateArc
                 clear stateArc
 
-%                 EventServer.writeEvents();
+                EventServer.writeEvents();
                 
                 quitSession = false;
                 
