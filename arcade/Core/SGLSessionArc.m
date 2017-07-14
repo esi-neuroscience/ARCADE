@@ -51,7 +51,7 @@ classdef (Sealed) SGLSessionArc
             %----------------------------------%
             %            Objects 
             
-            EventServer = SGLEventMarkerServer.launch;  % eventmarkers 
+            %EventServer = SGLEventMarkerServer.launch;  % eventmarkers 
             BHVstore    = SGLBehaviouralStore.launch;   % behavioural store (for CFG)
             StimBckgrnd = SGLBackgroundObject.launch;   % allows images for background
             PauseEvent  = IPCEvent('PauseCoreRequested');
@@ -113,7 +113,7 @@ classdef (Sealed) SGLSessionArc
                 delete(stateArc); % delete StateArc
                 clear stateArc
 
-                EventServer.writeEvents();
+%                 EventServer.writeEvents();
                 
                 quitSession = false;
                 
@@ -121,13 +121,13 @@ classdef (Sealed) SGLSessionArc
                 % also allows the user to quit the current session
                 if PauseEvent.wasTriggered;
                     % launch pause GUI 
-                    EventServer.mSendEventMarker(eventPause);      % send enter Pause marker event 
+                    eventmarker(eventPause);      % send enter Pause marker event 
                     StimBckgrnd.setPauseScreen;
                     
                     % user manually requests quit 
                     quitSession = this.mUserPauseScreen(BHVstore); % returns user request
                     
-                    EventServer.mSendEventMarker(eventResume);     % send enter Pause marker event 
+                    eventmarker(eventResume);     % send enter Pause marker event 
                     StimBckgrnd.setBackground;
                 end
                 
