@@ -1,5 +1,14 @@
 # Change Log of ARCADE
 
+## [2.0.0a3] - 2017-06-14
+### CHANGED
+*   Eventmarkers are now controlled via NidaqServer.exe (port 0-1, strobe on
+    port2/line7 (PCI-6221) or port2/line0 (PCI-503)
+  
+### FIXED
+*   Bugs in EyelinkEyeServer
+
+
 ## [2.0.0a2] - 2017-07-10
 ### NEW
 *   Helper function for tracking digital input
