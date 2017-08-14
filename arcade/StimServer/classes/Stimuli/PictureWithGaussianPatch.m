@@ -9,8 +9,8 @@ classdef PictureWithGaussianPatch < PixelShadedPicture
     
     methods
         function obj = PictureWithGaussianPatch(filename)
-            shaderFile = fullfile(arcaderoot, 'arcade', 'StimServer', ...
-                'classes', 'stimfiles', 'pixelShader', 'PSPGaussianPatch.fx');
+            shaderFile = fullfile(...
+                fileparts(mfilename('fullpath')), 'PSPGaussianPatch.fx');
             obj = obj@PixelShadedPicture(filename, shaderFile);
             obj.patchPosition = obj.patchPosition;
             obj.patchAmplitude = obj.patchAmplitude;

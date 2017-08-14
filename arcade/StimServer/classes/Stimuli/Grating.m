@@ -25,7 +25,7 @@ classdef Grating < PixelShader
             % file for this stimulus
             gratfxFile = 'MaskedGrating.fx';
             filename = fullfile(...
-                fileparts(mfilename('fullpath')),'stimfiles','pixelShader', gratfxFile);
+                fileparts(mfilename('fullpath')), gratfxFile);
             obj = obj@PixelShader(filename);
             
             % set defaults
