@@ -15,6 +15,13 @@ classdef Rectangle < Stimulus
         function obj = Rectangle            
             StimServer.Command(0, uint8(20));
             obj = obj@Stimulus();
+
+            % set defaults
+            obj.width = obj.width;
+            obj.height = obj.height;
+            obj.angle = obj.angle;
+            obj.color = obj.color;
+            obj.alpha = obj.alpha;
             
         end
         
@@ -43,8 +50,7 @@ classdef Rectangle < Stimulus
             obj.alpha = alpha;
         end
         
-        function delete(obj)
-            delete@Stimulus(obj)
+        function delete(obj)            
         end
         
     end
