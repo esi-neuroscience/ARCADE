@@ -4,6 +4,9 @@
 ### NEW
 *   Flash animation, StimServer 1.2.3.0
 
+### FIXED
+*   Wrong file name of trackdigitalinput function
+
 ### CHANGED
 *   Restructured StimServer folder
 *   terminalAction property of Animation is now a string
@@ -12,10 +15,10 @@
 *   Bugs in Rectangle destructor
 *   Animations are unassigned in Stimulus destructor
 
-## [2.0.0a3] - 2017-06-14
+## [2.0.0a3] - 2017-07-14
 ### CHANGED
 *   Eventmarkers are now controlled via NidaqServer.exe (port 0-1, strobe on
-    port2/line7 (PCI-6221) or port2/line0 (PCI-503)
+    port2/line7 (PCI-6221) or port2/line0 (PCI-6503)
   
 ### FIXED
 *   Bugs in EyelinkEyeServer
