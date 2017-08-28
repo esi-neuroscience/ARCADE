@@ -58,7 +58,10 @@ classdef (Abstract) Animation < hgsetget
             %   128 end deferred mode
             % Setting a to 0 restores the default behaviour of deassigning
             % the animation from the stimulus.
-            action = bin2dec(bitmask);
+            if ischar(bitmask)
+                action = bin2dec(bitmask);
+            end
+                
             StimServer.Command(obj.key, [0, action]);
             obj.terminalAction = action;
         end
