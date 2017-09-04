@@ -16,7 +16,7 @@ classdef Gaussian < PixelShader
             % file for this stimulus
             gratfxFile = 'Gaussian.fx';
             filename = fullfile(...
-                fileparts(mfilename('fullpath')),'stimfiles','pixelShader', gratfxFile);
+                fileparts(mfilename('fullpath')), gratfxFile);
             obj = obj@PixelShader(filename);
             
             % set defaults

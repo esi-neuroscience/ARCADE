@@ -69,7 +69,12 @@ classdef (Abstract) Stimulus < hgsetget % will be matlab.mixin.SetGet after 2014
         end
         
         function delete(obj)
+
             if ~isequal(obj.key, 0)
+                if ~isempty(obj.animation)
+                    StimServer.Command(obj.animation.key, ...
+                        [0 0 typecast(uint16(obj.key), 'uint8')])
+                end            
                 StimServer.Command(obj.key, 0);
             end
         end

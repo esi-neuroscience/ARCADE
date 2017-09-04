@@ -20,10 +20,8 @@ classdef Picture < Stimulus
             % img = Picture(filename);
             assert(exist(filename, 'file') == 2, 'Picture %s file not found', filename)
             [~,~,ext] = fileparts(filename);
-            validExts = {'.png', '.bmp', '.jpeg'};
-            if ~ismember(ext, validExts)
-                error('%s is not a valid image file (png, bmp, jpeg)', filename)
-            end
+            validExts = {'.png', '.bmp', '.jpeg', '.jpg'};
+            validatestring(ext, validExts);                        
             
             StimServer.Command(0, uint8([2 filename 0]));
             obj = obj@Stimulus();

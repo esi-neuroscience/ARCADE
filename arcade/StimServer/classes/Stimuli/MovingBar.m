@@ -47,9 +47,7 @@ classdef MovingBar < Rectangle
             obj.travelDistance = travelDistance;
         end
         
-        function delete(obj)
-            delete(obj.animation)
-            delete@Rectangle(obj)
+        function delete(obj)                        
         end
         
     end

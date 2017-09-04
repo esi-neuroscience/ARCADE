@@ -121,13 +121,13 @@ classdef (Sealed) SGLSessionArc
                 % also allows the user to quit the current session
                 if PauseEvent.wasTriggered;
                     % launch pause GUI 
-                    EventServer.mSendEventMarker(eventPause);      % send enter Pause marker event 
+                    eventmarker(eventPause);      % send enter Pause marker event 
                     StimBckgrnd.setPauseScreen;
                     
                     % user manually requests quit 
                     quitSession = this.mUserPauseScreen(BHVstore); % returns user request
                     
-                    EventServer.mSendEventMarker(eventResume);     % send enter Pause marker event 
+                    eventmarker(eventResume);     % send enter Pause marker event 
                     StimBckgrnd.setBackground;
                 end
                 
