@@ -2,6 +2,7 @@
 
 ## Unreleased
 ### NEW
+*   Linear range animation for image alpha values, StimServer 1.2.3.0
 *   Flash animation, StimServer 1.2.3.0
 
 ### FIXED
@@ -9,7 +10,7 @@
 
 ### CHANGED
 *   Restructured StimServer folder
-*   terminalAction property of Animation is now a string
+*   terminalAction property of Animation is now a binary string or a number
 
 ### FIXED
 *   Bugs in Rectangle destructor

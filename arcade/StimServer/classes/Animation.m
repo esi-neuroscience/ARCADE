@@ -60,6 +60,10 @@ classdef (Abstract) Animation < hgsetget
             % the animation from the stimulus.
             if ischar(bitmask)
                 action = bin2dec(bitmask);
+            elseif isnumeric(bitmask) && numel(bitmask) == 1
+                action = bitmask;
+            else
+                error('Terimnal action bitmask must be either 8-bit binary string or a single number')
             end
                 
             StimServer.Command(obj.key, [0, action]);
