@@ -1,6 +1,6 @@
 # Change Log of ARCADE
 
-## Unreleased
+## [2.0.0] - 2017-09-08
 ### NEW
 *   Linear range animation for image alpha values, StimServer 1.2.3.0
 *   Flash animation, StimServer 1.2.3.0
