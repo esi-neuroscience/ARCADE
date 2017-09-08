@@ -2,7 +2,7 @@ classdef (Sealed) SGLNiEyeServer < ABSEyeServer
     
     properties ( Constant )
         eyelines = {'Dev1/ai0:1'};
-        samplingRate = 1000; % Hz, tested up to 4000 Hz        
+        samplingRate = 500; % Hz, tested up to 4000 Hz        
         vgain = [10 10]; % V
         screensize = [1680 1050]; % x y in px
     end
@@ -33,26 +33,23 @@ classdef (Sealed) SGLNiEyeServer < ABSEyeServer
     end
 
     methods
-        function this = start(this)
-            stopEvent = IPCEvent('StopEyeServer');
-            stopEvent.CreateEvent();            
-            this.nidaqObj.daqmxStartTask();
-            try
-                while ~stopEvent.wasTriggered
-                    analogInput = this.nidaqObj.daqmxReadAnalogF64(1);                    
-                    [xPx, yPx] = volts2pixels(analogInput(1),analogInput(2), ...
-                        this.vgain, this.screensize);
-                    this.sharedMemory.pointer.Value = [xPx; yPx];
-                    % java.lang.Thread.sleep(0.01);
-                    % sleeping is not necessary. daqmxReadAnalogF64 waits for the next sample.
-                end
-            catch me
-                delete(this)
-                rethrow(me)
-            end
-            
+        
+        function eyePosition = acquire_eye_position(this)
+            analogInput = this.nidaqObj.daqmxReadAnalogF64(1);                    
+            [xPx, yPx] = volts2pixels(analogInput(1),analogInput(2), ...
+                this.vgain, this.screensize);
+            eyePosition = [xPx yPx];
+            drawnow()
         end
         
+        function initialize(this)
+            this.nidaqObj.daqmxStartTask();
+        end
+        
+        function stop(this)
+            this.nidaqObj.daqmxStopTask();
+        end
+            
         function this = delete(this)
             delete(this.nidaqObj);
             delete(this.sharedMemory);

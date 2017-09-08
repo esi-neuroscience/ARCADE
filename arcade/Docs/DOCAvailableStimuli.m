@@ -127,7 +127,9 @@ properties('Grating')
 % Spatial frequency is defined as |spatialFrequency| in pixel per cycle. 
 % Temporal frequency is
 % specified via the |temporalFrequency| property in units of cycles per
-% s. The mask can be circular or elliptical (|maskWidth|, |maskHeight|), 
+% s. That is, for a 120 Hz display, a |animationIncrement| value of
+% 1/120 will result in a drifting grating at a speed of 1 cycle/s. 
+% The mask can be circular or elliptical (|maskWidth|, |maskHeight|), 
 % and can be rotated (|maskRotation|). 
 % The two colors of the grating are specfied as a vector of 8-bit values for
 % |[red green blue alpha]|. The |smoothing| parameter is 2 for purely

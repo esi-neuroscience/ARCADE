@@ -1,5 +1,5 @@
 function reactiontime( setmode, varargin )
-% Measure and store reaction times
+% REACTIONTIME - Measure and store reaction times.
 %  
 % INPUT
 % -----

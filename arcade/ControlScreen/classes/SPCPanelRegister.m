@@ -41,6 +41,7 @@ classdef  SPCPanelRegister < handle
                     pnlObjs.RTH = PNLRecenTrialHistory(hfig);  % mUpdate(sessData,currCond)
                     pnlObjs.PB_ = PNLPerformanceBars(hfig);    % mUpdate(trialErrCounts, idxCurrCond, idxCurrBlock)
                     pnlObjs.SDT = PNLSessionDateTime(hfig);    % auto-sets current date and time  
+                    pnlObjs.BTN = PNLButtons(hfig);
                     %pnlObjs.PT  = PNLPreviousTrial(hfig);
                     
                     % fectch shared data object

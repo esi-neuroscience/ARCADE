@@ -1,48 +1,32 @@
 function createTrial(initialState, varargin)
-% Create and start a trial from several trial states
+% CREATETRIAL - Create and start a trial from several trial states
 % 
 % INPUT 
 % -----
 %   initialState : name of first state as string
-%   state1 : definitions of state as struct array with fields
-%       .name    :  name of state as string
-%       .onEntry :  cell array of anonymous functions to be executed when
-%                   the state is started
-%       .onExit  :  cell array of anonymous functions to be executed when
-%                   the state ends
-%       .duration:  duration of state in ms if no eye tracking event is
-%                   triggered
-%       .nextState: name of next state to be run if duration expires and no
-%                   eye tracking event is triggered
-%       .trackEye:  definition of eye tracking behavior
-%   state2 : ...
-%   state3 : ...
+%   states : experimental states of class State
 % 
-% The state with nextStat='final' will be the last state of the trial.
 %
-%
-% Example
+% EXAMPLE
 % -------
 %   initialState = 'acqFix';
-%   sAcquireFix = [];
-%   sAcquireFix.name      = 'acqFix';
-%   sAcquireFix.duration  = 5000;
-%   sAcquireFix.nextState = 'ignore';         
-%   sAcquireFix.trackEye  = eyesEnterFixation;  
-%   sAcquireFix.onEntry   = {...
-%       {@() eventmarker(1)}, ...
-%       {@() set(fixationPoint, 'visible', true)};
+%   sAcquireFix = State('acqFix')
 %   ... 
 %   createTrial(initialState, sAcquireFix, ...)
 %   
-% See also <a
-% href="https://de.mathworks.com/help/matlab/matlab_prog/anonymous-functions.html">Anonymous Functions</a>, TRLState
+% See also State, SGLStateArc
 
 
 % add states to state arc
 stateArc = SGLStateArc.launch;
-stateArc.mAddState(varargin{:});
+MultipleEvents.delete();
+stateArc.states = [varargin{:}];
+if ~ismember(initialState, stateArc.stateNames)
+    error('Initial state %s is not among defined states', initialState)
+end
 stateArc.initialState = initialState;
-
+if ~isempty(unique([stateArc.states.waitEvents]))
+    MultipleEvents.Init(stateArc.eventNames);
+end    
 end
 

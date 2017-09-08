@@ -1,9 +1,9 @@
 classdef SGLEyelinkEyeServer < ABSEyeServer
     
     properties
-        filename = [];
         usedEye = 0;
         screenSize = [1680 1050]; % x y in px
+        config
     end
     
     
@@ -13,93 +13,91 @@ classdef SGLEyelinkEyeServer < ABSEyeServer
     end
     
     methods (Static)
-        function this = launch(filename)
-            persistent thisObj
-            if isempty(thisObj) || ~isvalid(thisObj)
+        function obj = launch(filename)
+            persistent objObj
+            if isempty(objObj) || ~isvalid(objObj)
                 if nargin == 0
                     filename = [];
                 end
-                thisObj = SGLEyelinkEyeServer(filename);
+                objObj = SGLEyelinkEyeServer(filename);
                 
             end
-            this = thisObj;
+            obj = objObj;
         end
     end
     
     methods ( Access = private )
-        function this = SGLEyelinkEyeServer(filename)
-            this = this@ABSEyeServer;
-            this.filename = filename;
-            
-            
-            
-            err = Eyelink('Initialize');
-            assert(err == 0, 'Eyelink: Could not initialize link')
-            Eyelink('Command', 'link_sample_data = LEFT,RIGHT,GAZE,AREA');
-            if ~isempty(this.filename)
-                [this.folder,base,ext] = fileparts(filename);
-                if length(base) > 8
-                    warning('Eyelink: filename will be shortened on Eyelink PC to %s', base(1:8))
-                    base = base(1:8);
-                end
-                this.shortFilename = [base ext];
-                err = Eyelink('OpenFile', this.shortFilename);
-                assert(err == 0, 'Eyelink: Could not open %s', this.filename)
-            end
-            
+        function obj = SGLEyelinkEyeServer(filename)
+            obj = obj@ABSEyeServer(filename);
+            obj.config = EyelinkConfig;
+            obj.config.read_config_from_tracker;
+            scrSz = str2num(obj.config.screen_pixel_coords);
+            obj.screenSize = [max(scrSz([1 3])) max(scrSz([2 4]))];
         end
-    end % private methods
+    end
     
     
     methods ( Access = public )
         
-        
-        function start(this)
-            MISSING_DATA=-32768;
+        function eyePosition = acquire_eye_position(obj)
             
-            stopEvent = IPCEvent('StopEyeServer');
-            stopEvent.CreateEvent();
-            
-            
-            err =  Eyelink('StartRecording');
-            assert(err == 0, 'Eyelink: Could not start recording')
-            err = Eyelink('Message', 'SYNCTIME');
-            assert(err == 0, 'Eyelink: Could not reset time to zero')
-            
-            
-            while ~stopEvent.wasTriggered && Eyelink('CheckRecording') == 0
-                if Eyelink('NewFloatSampleAvailable') > 0
-                    % get the sample in the form of an event structure
-                    evt = Eyelink('NewestFloatSample');
-                    x = evt.gx(this.usedEye+1)-this.screenSize(1)/2;
-                    y = -1*(1*evt.gy(this.usedEye+1)-this.screenSize(2)/2);
-                    if x~=MISSING_DATA && y~=MISSING_DATA && evt.pa(this.usedEye+1)>0
-                        this.sharedMemory.pointer.Value = [x; y];
-                    end
-                end
+            tStart = tic;
+            timeout = 5; % wait maximally 5s for sample
+            newSampleAvailable = Eyelink('NewFloatSampleAvailable')>0;
+            while ~newSampleAvailable && toc(tStart) < timeout
+                newSampleAvailable = Eyelink('NewFloatSampleAvailable')>0;
                 java.lang.Thread.sleep(1)
-                drawnow
             end
-            this.stop()
+            if ~newSampleAvailable
+                error('Could not acquire eye position')
+            end
+            % get the sample in the form of an event structure
+            evt = Eyelink('NewestFloatSample');
+            
+            % translate coordinates to rel. to center
+            x = evt.gx(obj.usedEye+1)-obj.screenSize(1)/2;
+            y = (1*evt.gy(obj.usedEye+1)-obj.screenSize(2)/2);
+            eyePosition = [x y];
         end
         
-        
-        function stop(this)
+        function initialize(obj)
+                                   
+            err = Eyelink('Initialize');
+            assert(err == 0, 'Eyelink: Could not initialize link')
+            Eyelink('Command', 'link_sample_data = LEFT,RIGHT,GAZE,AREA');
+            if ~isempty(obj.filename)
+                [obj.folder,base,ext] = fileparts(obj.filename);
+                if length(base) > 8
+                    warning('Eyelink: filename will be shortened on Eyelink PC to %s', base(1:8))
+                    base = base(1:8);
+                end
+                obj.shortFilename = [base ext];
+                err = Eyelink('OpenFile', obj.shortFilename);
+                assert(err == 0, 'Eyelink: Could not open %s', obj.filename)
+            end
+            Eyelink('StartRecording')
+        end
+    end 
+    
+    
+    methods ( Access = public )        
+        function stop(obj)
             Eyelink('StopRecording');
             
-            if ~isempty(this.filename);
+            if ~isempty(obj.filename);
                 err = Eyelink('CloseFile');
                 assert(err == 0, 'Eyelink: Could not close data file')
                 fprintf('Receiving data file\n')
                 nBytes = Eyelink('ReceiveFile');
-                if ~isequal(fullfile(pwd, this.shortFilename), this.filename)                    
-                    movefile(this.shortFilename, this.filename);
+                
+                if ~isequal(fullfile(pwd, obj.shortFilename), obj.filename)
+                    movefile(obj.shortFilename, obj.filename);
                 end
-                fprintf('Stored %g MB in %s\n', nBytes/1024/1024, this.filename)
+                fprintf('Stored %g MB in %s\n', nBytes/1024/1024, obj.filename)
             end
-            
-        end                
-        function delete(this)
+        end
+        
+        function delete(obj)
             Eyelink('Shutdown');
         end
     end % public methods

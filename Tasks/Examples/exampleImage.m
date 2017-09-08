@@ -1,7 +1,4 @@
 
-
-
-
 % timing 
 trl.stimDuration  = randi([1900,2100],1); 
 trl.itiDuration   = 500;
@@ -21,41 +18,32 @@ img2.position = [300 350];
 img2.alpha = 100;
 
 
-
 %% DEFINE AND CREATE TRIAL STATES
 
-%# STIMULUS ON
-sStimOn = [];
-sStimOn.name      = 'stimOn';
+% STIMULUS ON
+sStimOn = State('stimOn');
 sStimOn.duration  = trl.stimDuration;
-sStimOn.nextState = 'cleanUp';
+sStimOn.nextStateAfterTimeout = 'cleanUp';
 sStimOn.onEntry   = {...    
-    {@() set(img1, 'visible', true)},...
-    {@() set(img2, 'visible', true)},...
-    };
-sStimOn.onExit    = {...
+    @() set([img1, img2], 'visible', true),...    
     };
 
 
-%# END OF TRIAL CLEANUP 
-sCleanUp = [];
-sCleanUp.name      = 'cleanUp';
+% END OF TRIAL CLEANUP 
+sCleanUp = State('cleanUp');
 sCleanUp.duration  = 0;
-sCleanUp.nextState = 'iti';
+sCleanUp.nextStateAfterTimeout = 'iti';
 sCleanUp.onEntry = {...    
-    {@() set(img1, 'visible', false)},...
-    {@() set(img2, 'visible', false)},...
+    @() set([img1, img2], 'visible', false),...    
     };
 sCleanUp.onExit  = {...
-    {@() delete([img1, img2])}, ...    
+    @() delete([img1, img2]), ...    
     };
 
-%# ITI
-sITI = [];
-sITI.name      = 'iti';
+% ITI
+sITI = State('iti');
 sITI.duration  = trl.itiDuration;
-sITI.nextState = 'final';
-
+sITI.nextStateAfterTimeout = 'final';
 
 initialState = 'stimOn';
 createTrial(initialState,...

@@ -8,12 +8,12 @@ TESTFOLDER = 'C:\Toolboxes\ARCADE\arcade\Tests\Stimuli';
 
 
 %% TEST: image 
-img2 =  Image(fullfile(TESTFOLDER, 'test.png'));
+img2 =  Picture(fullfile(TESTFOLDER, 'test.png'));
 img2.position = [200 0];
 img2.alpha = 200;
 img2.angle = 200;
 
-img =  Image(fullfile(TESTFOLDER, 'test.png'));
+img =  Picture(fullfile(TESTFOLDER, 'test.png'));
 img.position = [0 0];
 img.alpha = 200;
 img.angle = 45;
@@ -26,7 +26,7 @@ set([img, img2], 'visible', true)
 
 
 %% TEST: filled dot
-dot = Symbol(100);
+dot = Circle(100);
 dot.visible = true;
 pause(pauseTime)
 dot.position = [0 250];

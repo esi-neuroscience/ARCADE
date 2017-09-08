@@ -47,7 +47,7 @@ classdef (Sealed) SGLSessionArc
     methods 
         %# Trial Loop
         function mRunSession(this) % run session 
-            %** TODO: replace StimControl **
+            
             %----------------------------------%
             %            Objects 
             
@@ -55,7 +55,7 @@ classdef (Sealed) SGLSessionArc
             BHVstore    = SGLBehaviouralStore.launch;   % behavioural store (for CFG)
             StimBckgrnd = SGLBackgroundObject.launch;   % allows images for background
             PauseEvent  = IPCEvent('PauseCoreRequested');
-            PauseEvent.CreateEvent();
+            SkipEvent   = IPCEvent('SkipTrial');
             %----------------------------------%
             %        get Parameters 
             maxTrials       = BHVstore.cfg.MaximumNumberOfTrials;
@@ -73,15 +73,7 @@ classdef (Sealed) SGLSessionArc
             % this function will be asked whether to quit the session or
             % not, after the task script has been run 
             requestQuitSession('init');
-            
-            % find the control screen
-            % how best to handle the name 
-            % this.hwnd_ctrl = this.mGetGUIWindow('Control Screen');
-            java.lang.Thread.sleep(20);
-            %result = this.mSetActiveWindow(this.hwnd_ctrl);
-            % result = this.mSetForegroundWindow(this.hwnd_ctrl);
-            
-            
+                                   
             %** session is running, break point ***
             % startTrial
             % time the loop time, 
@@ -99,7 +91,7 @@ classdef (Sealed) SGLSessionArc
                 % includes update ControlScreen
                 BHVstore.mCreateTrialData; 
                 % Create an instance of StateArc
-                StateArc = SGLStateArc.launch;
+                stateArc = SGLStateArc.launch;
                 %---------------------------------------%
                 % Run User's Task Script in separate WS 
                 EditableVars = BHVstore.mGetEditableVariables;
@@ -109,28 +101,17 @@ classdef (Sealed) SGLSessionArc
                 % return from User's Workspace
 
                 trialerror_tic('start'); % Start trial
-                
                 try
-                    % try to run user's script
-                    StateArc.mRunTrial; % user vars are destroyed
-                catch ME
-                    % turn of eye timer
-                    %EyeServer = SGLEyeServer.launch;
-                    % EyeServer.mPollEye(false);
-                    % issue with the user's script
-                    %
-                    % add a kill processes here
-                    % although some errors are a result
-                    % the StimServer freezing and then 
-                    % everything must be shut down 
-                    
+                    % try to run states
+                    stateArc.mRunTrial; % user vars are destroyed
+                catch ME                    
                     rethrow(ME)
                     keyboard
                 end
 
-                % trial is Done!
-                % -> this is where I would send an 'EndOfTrial' trigger 
-                delete(StateArc); % delete StateArc
+                % delete state arc, i.e. stimuli stored in anonymous functions
+                delete(stateArc); % delete StateArc
+                clear stateArc
 
                 EventServer.writeEvents();
                 
@@ -140,13 +121,13 @@ classdef (Sealed) SGLSessionArc
                 % also allows the user to quit the current session
                 if PauseEvent.wasTriggered;
                     % launch pause GUI 
-                    EventServer.mSendEventMarker(eventPause);      % send enter Pause marker event 
+                    eventmarker(eventPause);      % send enter Pause marker event 
                     StimBckgrnd.setPauseScreen;
                     
                     % user manually requests quit 
                     quitSession = this.mUserPauseScreen(BHVstore); % returns user request
                     
-                    EventServer.mSendEventMarker(eventResume);     % send enter Pause marker event 
+                    eventmarker(eventResume);     % send enter Pause marker event 
                     StimBckgrnd.setBackground;
                 end
                 
@@ -220,29 +201,6 @@ classdef (Sealed) SGLSessionArc
                 assignin('caller',fields{k},strct.(fields{k}))
             end
         end
-        
-%{
-        % move this to a separate static class
-        % use it for finding variable, objects, etc 
-        %# find name of class
-        function objStr = mGetWSVariable(varname)
-            w = evalin('caller','whos');
-            varClass = {w.class}';
-            varName  = {w.name}';
-            obj_idx  = find(strcmp(varClass,varname));
-            % ensure there is one and only one instance of StateArc
-            if numel(obj_idx)==0
-                disp('Failed to find an instance of StateArc');
-            elseif numel(obj_idx)>1
-                disp('Found more than one instance of StateArc');
-            end
-            objStr = varName{obj_idx};
-        end
-        %}
-        %# delete class
-       % function mDeleteObject(objname)
-       %     evalin('caller',[objname,'.delete']);
-       % end
         
     end
     

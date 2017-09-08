@@ -48,7 +48,6 @@ classdef (Sealed) SGLControlScreenProc < SPCServerProc
             % 2. connect to eye server to request/receive eye data
             
             readyEvent = IPCEvent('controlScreenReady');
-            readyEvent.OpenEvent();
             readyEvent.trigger();
             
             
@@ -58,7 +57,6 @@ classdef (Sealed) SGLControlScreenProc < SPCServerProc
             %----------------------------%
             this.mWriteToDiary('Waiting for start commmand', true);
             startEvent = IPCEvent('startControlScreenLoop');
-            startEvent.CreateEvent();
             
             wasTriggered = startEvent.waitForTrigger(30000);
             if ~wasTriggered
@@ -75,7 +73,7 @@ classdef (Sealed) SGLControlScreenProc < SPCServerProc
             this.mWriteToDiary('Quit process command', false);
             this.mWriteToDiary('Cleaning up', true);
             
-            % setup better disconnect
+            
             delete(CorePipe);
             
         end
@@ -114,11 +112,14 @@ classdef (Sealed) SGLControlScreenProc < SPCServerProc
             %CntlScreen.mForceFocus;
             this.mWriteToDiary('Entering loop', true);
             
-            eyeClient = EyeClient;
-            stopControlScreenEvt = IPCEvent('StopControlScreen');
-            stopControlScreenEvt.CreateEvent();
-            pauseCoreEvt = IPCEvent('PauseCoreRequested');
-            pauseCoreEvt.OpenEvent();
+            try 
+                eyeClient = EyeClient;
+            catch me
+                warning('Could not open current eye position')
+                eyeClient = [];
+            end
+            stopControlScreenEvt = IPCEvent('StopControlScreen');            
+            pauseCoreEvt = IPCEvent('PauseCoreRequested');            
             while ~stopControlScreenEvt.wasTriggered()
                 
                 if CntlScreen.keyPressed
@@ -130,9 +131,13 @@ classdef (Sealed) SGLControlScreenProc < SPCServerProc
                 end
                 
                 % update eye position
-                eye_pos = eyeClient.eyePosition;
+                if ~isempty(eyeClient)
+                    eye_pos = eyeClient.eyePosition;
+                else
+                    eye_pos = [NaN NaN];
+                end
                 PltEyePos.mUpdate(eye_pos);
-                drawnow('expose');
+                drawnow
                 
                 
                 % check for trial data from Core
@@ -157,7 +162,7 @@ classdef (Sealed) SGLControlScreenProc < SPCServerProc
                     drawnow; % flush events
                 end
                 
-                java.lang.Thread.sleep(1); % pause a bit
+                java.lang.Thread.sleep(10); % pause a bit
             end
             this.mWriteToDiary('Exiting loop', true);
             

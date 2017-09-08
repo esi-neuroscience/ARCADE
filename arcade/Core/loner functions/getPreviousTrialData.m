@@ -1,12 +1,13 @@
 function trialdata = getPreviousTrialData()
-% Retreive behavioral outcomes and conditions of previous trials
+% GETPREVIOUSTRIALDATA - Retreive behavioral outcomes and conditions of
+% previous trials
 % 
 % USAGE
 % ------
 %   trialdata = getPreviousTrialData();
 % 
-% If this function is called during the task script, the last entry
-% of the data is already the current trial.
+% If this function is called during the task script, the last entry of the
+% data is already the current trial.
 %
 % EXAMPLE
 % -------

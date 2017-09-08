@@ -1,5 +1,5 @@
 function trialerror( trlerr )
-% Store outcome of trial in behavioral record file
+% TRIALERROR - Store outcome of trial in behavioral record file
 % 
 % INPUT
 % -----

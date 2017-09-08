@@ -1,5 +1,6 @@
 classdef (Abstract) Animation < hgsetget
-    % Abstract base class for animations to be passed to the StimServer.
+    % ANIMATION - Abstract base class for animations to be passed to the
+    % StimServer.
     %
     % Animations are started immediately if the stimulus is already visible,
     % otherwise when the stimulus becomes visible.
@@ -36,7 +37,7 @@ classdef (Abstract) Animation < hgsetget
             Key = StimServer.ReadAck();
             assert(Key>0, 'Could not create animation')
             obj.key = Key;
-            obj.terminalAction = [0 0 0 0 1 0 0 0];
+            obj.terminalAction = '00000001';
             obj.frameRate = StimServer.GetFrameRate();
         end
         
@@ -57,7 +58,14 @@ classdef (Abstract) Animation < hgsetget
             %   128 end deferred mode
             % Setting a to 0 restores the default behaviour of deassigning
             % the animation from the stimulus.
-            action = sum(bitmask .* 2.^(0:7));
+            if ischar(bitmask)
+                action = bin2dec(bitmask);
+            elseif isnumeric(bitmask) && numel(bitmask) == 1
+                action = bitmask;
+            else
+                error('Terimnal action bitmask must be either 8-bit binary string or a single number')
+            end
+                
             StimServer.Command(obj.key, [0, action]);
             obj.terminalAction = action;
         end

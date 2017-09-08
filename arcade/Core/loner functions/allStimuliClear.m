@@ -1,6 +1,7 @@
 function allStimuliClear
-% Remove all stimuli from StimServer
-% This function should only be used for debugging.
+% ALLSTIMULICLEAR - Remove all stimuli from StimServer.
+%
+% ONLY FOR DEBUGGING. DO NOT USE FOR REAL EXPERIMENTS!
 
 StimServer.ShowAll(false)
 StimServer.RemoveAll()

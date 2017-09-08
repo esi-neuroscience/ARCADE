@@ -1,5 +1,5 @@
 function photodiode(setmode)
-% Set the mode of the photodiode stimulus
+% PHOTODIODE - Set the mode of the photodiode stimulus
 % 
 % INPUT
 % -----
