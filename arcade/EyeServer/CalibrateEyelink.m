@@ -93,7 +93,7 @@ classdef CalibrateEyelink < handle
                 stim1.color = [255 255 255]; stim1.sdx = 10; stim1.sdy = 10;
                 
                 stim2 = Gaussian;
-                stim2.color = [0 0 0]; stim2.sdx = 2; stim2.sdy = 2;
+                stim2.color = [0 0 0]; stim2.sdx = 1; stim2.sdy = 1;
                 
                 obj.stim = [stim1 stim2];
             else 
@@ -101,13 +101,16 @@ classdef CalibrateEyelink < handle
             end
             
             
-            obj.stopEvent = IPCEvent('StopEyelinkCalibration');            
-            obj.start()
-            
+            obj.stopEvent = IPCEvent('StopEyelinkCalibration');     
             if ~exist('rewardDuration', 'var')
-                rewardDuration = 100;
+                rewardDuration = 80
             end
             obj.rewardDuration = rewardDuration;
+            
+            
+            obj.start()
+            
+
             
             if nargout == 0
                 clear obj
