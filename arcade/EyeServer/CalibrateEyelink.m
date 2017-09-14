@@ -6,6 +6,7 @@ classdef CalibrateEyelink < handle
         dot
         eyelinkConfig
         stim
+        rewardDuration
     end
     
     properties ( Constant, Access = private, Hidden=true )
@@ -21,25 +22,18 @@ classdef CalibrateEyelink < handle
     
     properties ( GetAccess=private, SetAccess=immutable )
         stimServerProcess
+        daqServerProcess
         stopEvent
     end
     
     methods
-        function obj = CalibrateEyelink(eyelinkConfig, stim)
+        function obj = CalibrateEyelink(rewardDuration, stim)
             if ~Eyelink('IsConnected')
                 assert(Eyelink('Initialize') == 0, 'Eyelink: could not initialize')
             end
             
-            if nargin == 0
-                eyelinkConfig = EyelinkConfig();
-            end
-            
-            if ischar(eyelinkConfig)
-                cfg = load(eyelinkConfig);
-                eyelinkConfig = cfg.eyelinkConfig;
-            end
-            obj.eyelinkConfig = eyelinkConfig;
-            obj.eyelinkConfig.send_config_to_tracker();
+            obj.eyelinkConfig = EyelinkConfig;
+            obj.eyelinkConfig.read_config_from_tracker();
             
             
             obj.fig = figure('Color', 'w', 'WindowStyle', 'normal', 'MenuBar', 'None');
@@ -47,17 +41,18 @@ classdef CalibrateEyelink < handle
                 'CloseRequestFcn', @obj.onClose)
             
             obj.ax = axes('SortMethod','childorder', ...
-                'XLim', eyelinkConfig.screen_pixel_coords([1 3]), ...
-                'YLim', eyelinkConfig.screen_pixel_coords([2 4]) ...
+                'XLim', obj.eyelinkConfig.screen_pixel_coords([1 3]), ...
+                'YLim', obj.eyelinkConfig.screen_pixel_coords([4 2]) ...
                 );
             obj.dot = line('XData', 0,'YData', 0,...
                 'Marker','o','color','k', 'MarkerSize', 40);                             
             
-            % start StimServer
-            cmd = fullfile(arcaderoot, 'arcade', 'StimServer', 'StimServer.exe');
-            obj.stimServerProcess = processManager('command', cmd);
+  
             
+            cmd = fullfile(arcaderoot, 'arcade', 'DaqServer', 'NidaqServer.exe');
+            obj.daqServerProcess = processManager('command', cmd);
             
+            % Connect to StimServer or start it if it's not running 
             tWait = tic;
             success = false;
             while ~success && toc(tWait) < 5
@@ -65,11 +60,35 @@ classdef CalibrateEyelink < handle
                     StimServer.Connect();
                     success = true;
                 catch
+                    % start StimServer
+                    if isempty(obj.stimServerProcess)
+                        cmd = fullfile(arcaderoot, 'arcade', 'StimServer', 'StimServer.exe');
+                        obj.stimServerProcess = processManager('command', cmd);
+                    end
                 end
                 pause(0.5);
             end
+            assert(success, 'Could not connect to StimServer')
             
-            if nargin < 2
+            % Connect to NidaqServer or start it if it's not running 
+            tWait = tic;
+            success = false;
+            while ~success && toc(tWait) < 5
+                try 
+                    NidaqServer.Connect();
+                    success = true;
+                catch
+                    % start StimServer
+                    if isempty(obj.daqServerProcess)
+                        cmd = fullfile(arcaderoot, 'arcade', 'DaqServer', 'NidaqServer.exe');
+                        obj.daqServerProcess = processManager('command', cmd);
+                    end
+                end
+                pause(0.5);
+            end
+            assert(success, 'Could not connect to NidaqServer')
+            
+            if ~exist('stim', 'var')
                 stim1 = Gaussian;
                 stim1.color = [255 255 255]; stim1.sdx = 10; stim1.sdy = 10;
                 
@@ -77,7 +96,7 @@ classdef CalibrateEyelink < handle
                 stim2.color = [0 0 0]; stim2.sdx = 2; stim2.sdy = 2;
                 
                 obj.stim = [stim1 stim2];
-            elseif nargin == 2
+            else 
                 obj.stim = stim;
             end
             
@@ -85,6 +104,10 @@ classdef CalibrateEyelink < handle
             obj.stopEvent = IPCEvent('StopEyelinkCalibration');            
             obj.start()
             
+            if ~exist('rewardDuration', 'var')
+                rewardDuration = 100;
+            end
+            obj.rewardDuration = rewardDuration;
             
             if nargout == 0
                 clear obj
@@ -112,7 +135,7 @@ classdef CalibrateEyelink < handle
                 title(obj.ax, statusStr)
                 if ~strcmp(status{3}, '0') % visible
                     newPosition = [x-obj.eyelinkConfig.screen_pixel_coords(3)/2, ...
-                        y-obj.eyelinkConfig.screen_pixel_coords(4)/2];
+                        y-obj.eyelinkConfig.screen_pixel_coords(2)/2];
                     groupStimuli('start')
                     set(obj.stim, 'position', newPosition)
                     set(obj.stim, 'visible', true);
@@ -139,6 +162,9 @@ classdef CalibrateEyelink < handle
                 else
                     fprintf('Keypress %s ignored\n', key)
                 end
+                if strcmp(key, 'return')
+                   NidaqServer.Reward(obj.rewardDuration);
+                end
             end
         end
         
@@ -150,13 +176,12 @@ classdef CalibrateEyelink < handle
         
         
         function delete(obj)
-            %             close('all')
             delete(obj.stim)
-            
             StimServer.Disconnect();
             delete(obj.stimServerProcess);
+            NidaqServer.Disconnect();
+            delete(obj.daqServerProcess);
             delete(obj.stopEvent);
-            %             delete(obj.fig);
         end
     end
     

@@ -115,6 +115,12 @@ classdef EyelinkConfig < handle
                 name = props{iProp};
                 try
                     value = EyelinkConfig.read_param(name);
+                    switch name
+                        case {'screen_phys_coords','screen_pixel_coords'}
+                            value = sscanf(value,'%f,%f,%f,%f')';
+                        otherwise
+                            
+                    end
                     obj.(name) = value;
                     pause(0.05);
                 catch me
