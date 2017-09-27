@@ -31,7 +31,7 @@ classdef SGLEyelinkEyeServer < ABSEyeServer
             obj = obj@ABSEyeServer(filename);
             obj.config = EyelinkConfig;
             obj.config.read_config_from_tracker;
-            scrSz = str2num(obj.config.screen_pixel_coords);
+            scrSz = obj.config.screen_pixel_coords;
             obj.screenSize = [max(scrSz([1 3])) max(scrSz([2 4]))];
         end
     end
