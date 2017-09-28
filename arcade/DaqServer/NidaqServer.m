@@ -105,6 +105,12 @@ classdef (Sealed = true) NidaqServer < handle
         function EventMarker(markerCode)
             NidaqServer.Write(uint8([6 typecast(uint16(markerCode), 'uint8')]));
         end
+
+	   % set the event marker code for manual reward 
+        function SetRewardCode(code)
+            NidaqServer.Write(uint8([7 typecast(uint16(code), 'uint8')]));
+        end
+        
     end
     
     methods (Static, Hidden=true)
