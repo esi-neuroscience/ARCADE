@@ -16,8 +16,8 @@ function reward(rewardTimes)
 %   reward([50 40 50]) 
 % 
 % 
-if NidaqServer.GetConnectionStatus
-    NidaqServer.Reward(rewardTimes);
+if DaqServer.GetConnectionStatus()
+    DaqServer.Reward(rewardTimes);
 else
     warning('Reward triggered but not connected to DAQ/Reward server')
 end

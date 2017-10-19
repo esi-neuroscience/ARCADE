@@ -1,7 +1,8 @@
-classdef (Sealed = true) NidaqServer < handle
+classdef DaqServer < handle
+    % DAQSERVER - Class for communicating with DaqServer
     
     properties (Constant, Access = private, Hidden = true)
-        this = NidaqServer
+        this = DaqServer
     end
     
     properties (Access = private, Transient = true, Hidden = true)
@@ -10,18 +11,18 @@ classdef (Sealed = true) NidaqServer < handle
     end
     
     methods (Access = private, Hidden=true)
-        function obj = NidaqServer()
-%            mlock;
+        function obj = DaqServer()
+            %            mlock;
         end
     end
     
-    methods (Static)
-        
+    methods (Static)        
         function Connect(varargin)
-            obj = NidaqServer.this;
+            % Connect to DaqServer
+            obj = DaqServer.this;
             if ~obj.hPipe.isNull()
-                warning('NidaqServer:Connect:failed', ...
-                    'NidaqServer connection was already established.');
+                warning('DaqServer:Connect:failed', ...
+                    'DaqServer connection was already established.');
                 return;
             end;
             if ~libisloaded('kernel32')
@@ -29,7 +30,7 @@ classdef (Sealed = true) NidaqServer < handle
             end;
             if isequal(nargin, 0); server='.'; else server = varargin{1}; end;
             GENERIC_READ_WRITE = uint32(hex2dec('C0000000'));
-           obj.hPipe = calllib('kernel32', 'CreateFileA', ...
+            obj.hPipe = calllib('kernel32', 'CreateFileA', ...
                 uint8(['\\' server '\pipe\NidaqServerPipe' 0]), ...
                 GENERIC_READ_WRITE, ...
                 0, ...  % no sharing
@@ -50,65 +51,73 @@ classdef (Sealed = true) NidaqServer < handle
                 if ~isequal(ConstructorResult, 0)
                     ConstructorResult
                 end
-                error('NidaqServer:Constructor:failed', ...
-                    'Can''t connect to NidaqServer''s pipe. Is the server running ?');
+                error('DaqServer:Constructor:failed', ...
+                    'Can''t connect to DaqServer''s pipe. Is the server running ?');
             end
             obj.isConnected = true;
-            disp('Connected to pipe');
         end
         
         function Disconnect()
-            temp = NidaqServer.this;
-            assert(~isequal(0, calllib('kernel32', 'CloseHandle', temp.hPipe)));
-            temp.hPipe = libpointer;
-            disp('Disconnected from pipe');
-            temp.isConnected = false;
+            % Disconnect from DaqServer
+            temp = DaqServer.this;
+            if temp.isConnected
+                assert(~isequal(0, calllib('kernel32', 'CloseHandle', temp.hPipe)));
+                temp.hPipe = libpointer;
+                temp.isConnected = false;
+            end
         end
         
         function isConnected = GetConnectionStatus()
-            temp = NidaqServer.this;
+            % Retreive connection status with DaqServer
+            temp = DaqServer.this;
             isConnected = temp.isConnected;
         end
         
         function delete()
-            NidaqServer.Disconnect();
+            DaqServer.Disconnect();
             munlock;
-            clear NidaqServer;
+            clear DaqServer;
         end
         
         function AddLine(lineNumber, varargin)
-            % AddLine(lineNumber, pulseEventName)
-            % AddLine(lineNumber, onEventName, offEventName)
+            % Track status of digital input lines
+            %   AddLine(lineNumber, pulseEventName)
+            %   AddLine(lineNumber, onEventName, offEventName)
             switch nargin
                 case 2
-                    NidaqServer.Write(uint8([1 lineNumber varargin{1} 0]));
+                    DaqServer.Write(uint8([1 lineNumber varargin{1} 0]));
                 case 3
-                    NidaqServer.Write(uint8([2 lineNumber varargin{1} 0 varargin{2} 0]));
+                    DaqServer.Write(uint8([2 lineNumber varargin{1} 0 varargin{2} 0]));
                 otherwise
-                    error('NidaqServer:AddLine', ...
-                        'Bad number of arguments in call to NidaqServer.AddLine.');
+                    error('DaqServer:AddLine', ...
+                        'Bad number of arguments in call to DaqServer.AddLine.');
             end
         end
         
         function Start()
-            NidaqServer.Write(uint8(3));
+            % Start tracking of digital input lines defined with AddLine
+            DaqServer.Write(uint8(3));
         end
         
         function SetRewardTime(timems)
-            NidaqServer.Write(uint8([4 typecast(uint16(timems), 'uint8')]));
+            % Set reward duration for event-triggered (manual) reward
+            DaqServer.Write(uint8([4 typecast(uint16(timems), 'uint8')]));
         end
         
         function Reward(times)
-            NidaqServer.Write(uint8([5 typecast(uint16(times), 'uint8')]));
+            % Send reward duration times in ms
+            DaqServer.Write(uint8([5 typecast(uint16(times), 'uint8')]));
         end
         
         function EventMarker(markerCode)
-            NidaqServer.Write(uint8([6 typecast(uint16(markerCode), 'uint8')]));
+            % Send eventmarker code to DaqServer
+            DaqServer.Write(uint8([6 typecast(uint16(markerCode), 'uint8')]));
         end
-
-	   % set the event marker code for manual reward 
+        
+        
         function SetRewardCode(code)
-            NidaqServer.Write(uint8([7 typecast(uint16(code), 'uint8')]));
+            % Set the event marker code for manual reward
+            DaqServer.Write(uint8([7 typecast(uint16(code), 'uint8')]));
         end
         
     end
@@ -116,14 +125,14 @@ classdef (Sealed = true) NidaqServer < handle
     methods (Static, Hidden=true)
         
         function Write(cmdMessage)
-            if isNull(NidaqServer.this.hPipe)
-                error('NidaqServer:Unconnected', ...
-                    'No connection to NidaqServer.');
+            if isNull(DaqServer.this.hPipe)
+                error('DaqServer:Unconnected', ...
+                    'No connection to DaqServer.');
             end
             nWritten = uint32(0);
             [result, ~, cmdMessage, nWritten] = ...
                 calllib('kernel32', 'WriteFile', ...
-                NidaqServer.this.hPipe, ...
+                DaqServer.this.hPipe, ...
                 cmdMessage, ...
                 length(cmdMessage), ...
                 nWritten, ...
