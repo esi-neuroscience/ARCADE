@@ -5,6 +5,14 @@
 *   Gabor stimulus
 *   NidaqServer can be configured to give out an event marker for manual rewards
 
+### CHANGED
+*   Animations should now be played and stopped via the play_animation and
+    stop_animation methods of a stimulus. Using the animation property is
+    still supported but deprecated.
+*   Default terminal action of animations now 0, i.e., the stimulus persists
+    after the animation
+
+
 ### FIXED
 *   Wrong path of pixel shader file of Gammatron stimulus
 
