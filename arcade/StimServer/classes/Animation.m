@@ -37,7 +37,7 @@ classdef (Abstract) Animation < hgsetget
             Key = StimServer.ReadAck();
             assert(Key>0, 'Could not create animation')
             obj.key = Key;
-            obj.terminalAction = '00000001';
+            obj.terminalAction = '00000000';
             obj.frameRate = StimServer.GetFrameRate();
         end
         

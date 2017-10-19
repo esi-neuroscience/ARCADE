@@ -10,13 +10,13 @@ classdef LinearMotion < Animation
     % -------
     %   a = LinearMotion(200, [0 0 200 200]);
     %   c = Circle;
-    %   c.animation = a;
+    %   c.play_animation(a);
     %   c.visible = true;
     %     
     % See also Animation, Stimulus
     
     properties ( SetAccess = immutable, Transient = true )       
-       velocity = []; % px / s for 120 Hz refresh rate
+       velocity = []; % px / s 
     end
     
     properties ( Transient = true )
