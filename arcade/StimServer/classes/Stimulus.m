@@ -13,7 +13,10 @@ classdef (Abstract) Stimulus < hgsetget % will be matlab.mixin.SetGet after 2014
     % ParticleStimulus, Animation, LinearMotion, GeneralMotion, StimServer
     
     properties ( SetAccess = public, GetAccess = public, Transient = true )
-        visible = false; % Visibilty of stimulus, true for on, false for off
+        visible = false; % Visibilty of stimulus, true for on, false for off        
+    end
+    
+    properties ( Hidden = true, Access = public, Transient = true )
         animation = []; % empty for static stimuli, LinearMotion or GeneralMotion for animated stimuli
     end
     
@@ -23,6 +26,10 @@ classdef (Abstract) Stimulus < hgsetget % will be matlab.mixin.SetGet after 2014
     
     properties ( Dependent = true )
         position % Position in pixel relative to screen center
+    end
+    
+    properties ( GetAccess = protected, Hidden = true )
+        assignedAnimations = [];
     end
     
     
@@ -57,6 +64,9 @@ classdef (Abstract) Stimulus < hgsetget % will be matlab.mixin.SetGet after 2014
         
         
         function set.animation(obj, animation)
+            warning(sprintf(['Using the animation property for playing animations ' ...
+                'is deprecated and will be removed in the future. \n' ...
+                '\tUse the play_animation/stop_animation methods instead']))
             if ~isempty(animation)
                 StimServer.Command(animation.key, ...
                     [0 1 typecast(uint16(obj.key), 'uint8')])
@@ -68,13 +78,31 @@ classdef (Abstract) Stimulus < hgsetget % will be matlab.mixin.SetGet after 2014
             
         end
         
+        function play_animation(obj, animation)
+            % play animation
+            StimServer.Command(animation.key, ...
+                [0 1 typecast(uint16(obj.key), 'uint8')])
+            obj.assignedAnimations(end+1) = animation.key;
+        end
+        
+        function stop_animation(obj)
+            for iAnimation = 1:length(obj.assignedAnimations)
+                StimServer.Command(obj.assignedAnimations(iAnimation), ...
+                    [0 0 typecast(uint16(obj.key), 'uint8')])
+            end
+            obj.assignedAnimations = [];
+        end
+        
         function delete(obj)
-
             if ~isequal(obj.key, 0)
+                if ~isempty(obj.assignedAnimations)
+                    obj.stop_animation()
+                end
+                
                 if ~isempty(obj.animation)
                     StimServer.Command(obj.animation.key, ...
                         [0 0 typecast(uint16(obj.key), 'uint8')])
-                end            
+                end
                 StimServer.Command(obj.key, 0);
             end
         end
