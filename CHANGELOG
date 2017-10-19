@@ -1,5 +1,13 @@
 # Change Log of ARCADE
 
+## Unreleased
+### NEW
+*   Gabor stimulus
+*   NidaqServer can be configured to give out an event marker for manual rewards
+
+### FIXED
+*   Wrong path of pixel shader file of Gammatron stimulus
+
 ## [2.0.1] - 2017-09-29
 ### FIXED
 *   Fixed bugs related to CalibrateEyelink
