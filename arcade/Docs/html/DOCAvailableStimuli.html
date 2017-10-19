@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Visual stimuli for ARCADE</title><meta name="generator" content="MATLAB 8.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-06-21"><meta name="DC.source" content="DOCAvailableStimuli.m"><style type="text/css">
+      --><title>Visual stimuli for ARCADE</title><meta name="generator" content="MATLAB 8.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-10-19"><meta name="DC.source" content="DOCAvailableStimuli.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -71,7 +71,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 </pre><p>or by using the <tt>set</tt> command, similar to how figures and axes can be manipulated in MATLAB, e.g.,</p><pre class="language-matlab">set(stim, <span class="string">'property'</span>, 3.14)
 </pre><p>Only the latter variant can be used in the <tt>onEntry</tt> and <tt>onExit</tt> functions of trial states. The former variant is useful for testing your stimuli. To see all properties of a stimulus, use   <tt>properties('MyStimulus')</tt>, e.g. <tt>properties('Rectangle')</tt></p><p>To ensure stable operation of ARCADE, all stimuli should be explicitly deleted at the end of a trial, e.g. in a <tt>cleanUp</tt> state by issuing</p><pre class="language-matlab">stim.delete()
 </pre><p><b>Testing stimuli</b></p><p>All stimuli can be tested from any open MATLAB if ARCADE is in the MATLAB search path and <tt>ARCADE/arcade/StimServer/StimServer.exe</tt> is running. The first command in such a test environment has to be</p><pre class="language-matlab">StimServer.Connect()
-</pre><p>This command is not necessary in the actual trial script.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">General stimulus properties</a></li><li><a href="#3">Circles</a></li><li><a href="#6">Pictures</a></li><li><a href="#9">Masked grating</a></li><li><a href="#13">Rectangles</a></li><li><a href="#16">Animations</a></li><li><a href="#19">Moving Bars</a></li><li><a href="#22">Gammatron (annular grating)</a></li><li><a href="#25">Gaussian</a></li><li><a href="#28">Pixel shader</a></li></ul></div><h2>General stimulus properties<a name="1"></a></h2><p>All stimuli share a few properties. All stimuli can be made visible, repositioned, or animated (smoothly translated).</p><pre class="codeinput">properties(<span class="string">'Stimulus'</span>)
+</pre><p>This command is not necessary in the actual trial script.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">General stimulus properties</a></li><li><a href="#3">Circles</a></li><li><a href="#6">Pictures</a></li><li><a href="#9">Masked grating</a></li><li><a href="#13">Gabor</a></li><li><a href="#17">Rectangles</a></li><li><a href="#20">Animations</a></li><li><a href="#23">Moving Bars</a></li><li><a href="#26">Gammatron (annular grating)</a></li><li><a href="#29">Gaussian</a></li><li><a href="#32">Pixel shader</a></li></ul></div><h2>General stimulus properties<a name="1"></a></h2><p>All stimuli share a few properties. All stimuli can be made visible, repositioned, or animated (smoothly translated).</p><pre class="codeinput">properties(<span class="string">'Stimulus'</span>)
 </pre><pre class="codeoutput">
 Properties for class Stimulus:
 
@@ -134,7 +134,7 @@ set([img, img2], <span class="string">'visible'</span>, true)
 pause(1)
 img.delete()
 img2.delete()
-</pre><p><img vspace="5" hspace="5" src="exampleImage.png" alt=""> </p><p>Detailed documentation can be found with <a href="matlab:doc('Picture')">doc Picture</a></p><h2>Masked grating<a name="9"></a></h2><p>Masked gratings are implemented as <tt>PixelShader</tt> (see below) stimuli with various parameters:</p><pre class="codeinput">properties(<span class="string">'Grating'</span>)
+</pre><p><img vspace="5" hspace="5" src="exampleImage.png" alt=""> </p><p>Detailed documentation can be found with <a href="matlab:doc('Picture')">doc Picture</a></p><h2>Masked grating<a name="9"></a></h2><p>Gratings with a hard circular mask are implemented as <tt>PixelShader</tt> (see below) stimuli with various parameters:</p><pre class="codeinput">properties(<span class="string">'Grating'</span>)
 </pre><pre class="codeoutput">
 Properties for class Grating:
 
@@ -183,7 +183,56 @@ grat2.visible = true;
 pause(1);
 grat1.delete();
 grat2.delete();
-</pre><p><img vspace="5" hspace="5" src="exampleGrating.png" alt=""> </p><p>Detailed documentation can be found with <a href="matlab:doc('Grating')">doc Grating</a></p><h2>Rectangles<a name="13"></a></h2><p>Rectangles are always filled and have the following properties:</p><pre class="codeinput">properties(<span class="string">'Rectangle'</span>)
+</pre><p><img vspace="5" hspace="5" src="exampleGrating.png" alt=""> </p><p>Detailed documentation can be found with <a href="matlab:doc('Grating')">doc Grating</a></p><h2>Gabor<a name="13"></a></h2><p>Gabors are gratings with a Gaussian mask and also are implemented as <tt>PixelShader</tt> (see below) stimuli with various parameters:</p><pre class="codeinput">properties(<span class="string">'Gabor'</span>)
+</pre><pre class="codeoutput">
+Properties for class Gabor:
+
+    color1
+    color2
+    maskRotation
+    spatialPeriod
+    direction
+    smoothing
+    phaseOffset
+    maskWidth
+    maskHeight
+    temporalFrequency
+    filename
+    shaderWidth
+    shaderHeight
+    animationIncrement
+    animationPhase
+    visible
+    animation
+    position
+
+</pre><p>Spatial frequency is defined via <tt>spatialPeriod</tt> in pixel per cycle (actually the inverse of the spatial frequency). Temporal frequency is specified via the <tt>temporalFrequency</tt> property in units of cycles per s. The gaussian mask can be circular or elliptical (<tt>maskWidth</tt>, <tt>maskHeight</tt>), and can be rotated (<tt>maskRotation</tt>).  The two colors of the grating are specfied as a vector of 8-bit values for <tt>[red green blue ]</tt>. The <tt>smoothing</tt> parameter is 2 for purely can be used to achieve square-wave instead of of sinusoidal gratings: values &gt; 2 will approach a square wave grating.</p><p><b>Example</b></p><pre class="codeinput">gabor1 = Gabor();
+gabor1.color1 = [255 0 0];
+gabor1.color2 = [0 255 0];
+gabor1.maskRotation = 45;
+gabor1.maskWidth = 50;
+gabor1.spatialPeriod = 60;
+gabor1.smoothing = 2;
+gabor1.temporalFrequency = 1;
+gabor1.visible = true;
+
+gabor2 = Gabor();
+gabor2.color1 = [255 0 0];
+gabor2.color2 = [0 0 0];
+gabor2.maskRotation = 50;
+gabor2.maskWidth = 20;
+gabor2.spatialPeriod = 20;
+gabor2.smoothing = 10;
+gabor2.temporalFrequency = 1;
+gabor2.position = [400 0];
+gabor2.direction = 45;
+gabor2.visible = true;
+
+
+pause(1);
+gabor1.delete();
+gabor2.delete();
+</pre><p><img vspace="5" hspace="5" src="exampleGabor.png" alt=""> </p><p>Detailed documentation can be found with <a href="matlab:doc('Gabor')">doc Gabor</a></p><h2>Rectangles<a name="17"></a></h2><p>Rectangles are always filled and have the following properties:</p><pre class="codeinput">properties(<span class="string">'Rectangle'</span>)
 </pre><pre class="codeoutput">
 Properties for class Rectangle:
 
@@ -212,7 +261,7 @@ r2.visible = true;
 pause(1)
 r1.delete();
 r2.delete();
-</pre><p><img vspace="5" hspace="5" src="exampleRectangle.png" alt=""> </p><p>Detailed documentation can be found with <a href="matlab:doc('Rectangle')">doc Rectangle</a></p><h2>Animations<a name="16"></a></h2><p>Every stimulus can be smoothly moved around on the screen. To animate a stimulus, the <tt>animation</tt> parameter of the stimulus should be set with the required animation. Currently there are two types of animation</p><div><ol><li><tt>LinearMotion</tt>: This moves the stimulus along a polygon.</li><li><tt>GeneralMotion</tt>: This moves the stimulus along an arbitrary path defined in a file. <b>NOT IMPLEMENTED YET</b></li></ol></div><p>The <tt>LinearMotion</tt> needs two input arguments, the <tt>velocity</tt> defined in pixels per second at 120 Hz and the <tt>vertices=[x1 y1 x2 y2 ...]</tt>, which are the center coordinates that the stimulus will be moved to one after the other. The <tt>terminalAction</tt> property defines what happens at the end of the animation and is an 8-bit mask. The bits have the following meaning</p><pre>  1 disable the assigned stimulus
+</pre><p><img vspace="5" hspace="5" src="exampleRectangle.png" alt=""> </p><p>Detailed documentation can be found with <a href="matlab:doc('Rectangle')">doc Rectangle</a></p><h2>Animations<a name="20"></a></h2><p>Every stimulus can be smoothly moved around on the screen. To animate a stimulus, the <tt>animation</tt> parameter of the stimulus should be set with the required animation. Currently there are two types of animation</p><div><ol><li><tt>LinearMotion</tt>: This moves the stimulus along a polygon.</li><li><tt>GeneralMotion</tt>: This moves the stimulus along an arbitrary path defined in a file. <b>NOT IMPLEMENTED YET</b></li></ol></div><p>The <tt>LinearMotion</tt> needs two input arguments, the <tt>velocity</tt> defined in pixels per second at 120 Hz and the <tt>vertices=[x1 y1 x2 y2 ...]</tt>, which are the center coordinates that the stimulus will be moved to one after the other. The <tt>terminalAction</tt> property defines what happens at the end of the animation and is an 8-bit mask. The bits have the following meaning</p><pre>  1 disable the assigned stimulus
   2
   4 toggle the photodiode signal1
   8 signal an event (see section 3 on page 4)
@@ -230,7 +279,7 @@ speed = 150; <span class="comment">% px/s</span>
 a = LinearMotion(speed, vertices);
 r.animation = a;
 r.visible = true;
-</pre><p><img vspace="5" hspace="5" src="exampleAnimation.png" alt=""> </p><p>Detailed documentation can be found with <a href="matlab:doc('LinearMotion')">doc LinearMotion</a></p><h2>Moving Bars<a name="19"></a></h2><p>The <tt>MovingBar</tt> class simplifies the creation of animated bars by automatically creating the animation.</p><pre class="codeinput">properties(<span class="string">'MovingBar'</span>)
+</pre><p><img vspace="5" hspace="5" src="exampleAnimation.png" alt=""> </p><p>Detailed documentation can be found with <a href="matlab:doc('LinearMotion')">doc LinearMotion</a></p><h2>Moving Bars<a name="23"></a></h2><p>The <tt>MovingBar</tt> class simplifies the creation of animated bars by automatically creating the animation.</p><pre class="codeinput">properties(<span class="string">'MovingBar'</span>)
 </pre><pre class="codeoutput">
 Properties for class MovingBar:
 
@@ -254,7 +303,7 @@ mb.direction = 35;
 mb.visible = true;
 pause(5)
 mb.delete()
-</pre><h2>Gammatron (annular grating)<a name="22"></a></h2><p>The <tt>Gammatron</tt> class creates an annular grating pattern with based on two colors that can be drifting inward or outward.</p><pre class="codeinput">properties(<span class="string">'Gammatron'</span>)
+</pre><h2>Gammatron (annular grating)<a name="26"></a></h2><p>The <tt>Gammatron</tt> class creates an annular grating pattern with based on two colors that can be drifting inward or outward.</p><pre class="codeinput">properties(<span class="string">'Gammatron'</span>)
 </pre><pre class="codeoutput">
 Properties for class Gammatron:
 
@@ -276,7 +325,7 @@ Properties for class Gammatron:
 </pre><p><b>Example</b></p><pre class="codeinput">g = Gammatron;
 g.radius = 200;
 g.visible = true;
-</pre><p><img vspace="5" hspace="5" src="exampleGammatron.png" alt=""> </p><h2>Gaussian<a name="25"></a></h2><p>A 2D patch with Gaussian profile can be created using the <tt>Gaussian</tt> stimulus. Its size, rotation and color can be set:</p><pre class="codeinput">properties(<span class="string">'Gaussian'</span>);
+</pre><p><img vspace="5" hspace="5" src="exampleGammatron.png" alt=""> </p><h2>Gaussian<a name="29"></a></h2><p>A 2D patch with Gaussian profile can be created using the <tt>Gaussian</tt> stimulus. Its size, rotation and color can be set:</p><pre class="codeinput">properties(<span class="string">'Gaussian'</span>);
 </pre><pre class="codeoutput">
 Properties for class Gaussian:
 
@@ -313,7 +362,7 @@ g1 =
                  angle: 0
                    sdx: 5
                    sdy: 5
-              filename: 'C:\Toolboxes\ARCADE\arcade\StimServer\classes\sti...'
+              filename: 'C:\Toolboxes\ARCADE\arcade\StimServer\classes\Sti...'
            shaderWidth: 1000
           shaderHeight: 1000
     animationIncrement: 1
@@ -322,7 +371,7 @@ g1 =
              animation: []
               position: [0 0]
 
-</pre><p><img vspace="5" hspace="5" src="exampleGaussian.png" alt=""> </p><h2>Pixel shader<a name="28"></a></h2><p>Pixel shader are small programs that run on the graphics card and are written in a specific shader language, HLSL  (see <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb509561(v=vs.85).aspx">here</a> for more information). Using HLSL any stimulus that can be parameterized may be generated and rendered with high performance.</p><p>Programming in HLSL is not trivial, but offers great flexibility. As a starting point you may have a look at the gratings presented above. They are implemented in the file <tt>ARCADE\arcade\StimServer\classes\stimfiles\pixelShader\MaskedGrating.fx</tt>, which is loaded and controlled by the <tt>PixelShader</tt> class with the following properties and methods</p><pre class="codeinput">properties(<span class="string">'PixelShader'</span>)
+</pre><p><img vspace="5" hspace="5" src="exampleGaussian.png" alt=""> </p><h2>Pixel shader<a name="32"></a></h2><p>Pixel shader are small programs that run on the graphics card and are written in a specific shader language, HLSL  (see <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb509561(v=vs.85).aspx">here</a> for more information). Using HLSL any stimulus that can be parameterized may be generated and rendered with high performance.</p><p>Programming in HLSL is not trivial, but offers great flexibility. As a starting point you may have a look at the gratings presented above. They are implemented in the file <tt>ARCADE\arcade\StimServer\classes\stimfiles\pixelShader\MaskedGrating.fx</tt>, which is loaded and controlled by the <tt>PixelShader</tt> class with the following properties and methods</p><pre class="codeinput">properties(<span class="string">'PixelShader'</span>)
 </pre><pre class="codeoutput">
 Properties for class PixelShader:
 
@@ -459,8 +508,8 @@ img2.delete()
 %
 % Detailed documentation can be found with <matlab:doc('Picture') doc Picture>
 %% Masked grating
-% Masked gratings are implemented as |PixelShader| (see below) stimuli with various
-% parameters:
+% Gratings with a hard circular mask are implemented as |PixelShader| 
+% (see below) stimuli with various parameters:
 properties('Grating')
 %%
 % Spatial frequency is defined as |spatialFrequency| in pixel per cycle. 
@@ -507,6 +556,58 @@ grat2.delete();
 % <<exampleGrating.png>>
 %
 % Detailed documentation can be found with <matlab:doc('Grating') doc Grating>
+
+%% Gabor
+% Gabors are gratings with a Gaussian mask and also are implemented 
+% as |PixelShader| (see below) stimuli with various
+% parameters:
+properties('Gabor')
+%%
+% Spatial frequency is defined via |spatialPeriod| in pixel per cycle
+% (actually the inverse of the spatial frequency).
+% Temporal frequency is specified via the |temporalFrequency| property in 
+% units of cycles per s. 
+% The gaussian mask can be circular or elliptical (|maskWidth|, |maskHeight|), 
+% and can be rotated (|maskRotation|).  The two colors of the grating are 
+% specfied as a vector of 8-bit values for |[red green blue ]|. The 
+% |smoothing| parameter is 2 for purely can be used to achieve square-wave 
+% instead of of sinusoidal gratings: values > 2 will approach a square wave grating.
+%%
+% *Example*
+%
+gabor1 = Gabor();
+gabor1.color1 = [255 0 0];
+gabor1.color2 = [0 255 0];
+gabor1.maskRotation = 45;
+gabor1.maskWidth = 50;
+gabor1.spatialPeriod = 60;
+gabor1.smoothing = 2;
+gabor1.temporalFrequency = 1;
+gabor1.visible = true;
+
+gabor2 = Gabor();
+gabor2.color1 = [255 0 0];
+gabor2.color2 = [0 0 0];
+gabor2.maskRotation = 50;
+gabor2.maskWidth = 20;
+gabor2.spatialPeriod = 20;
+gabor2.smoothing = 10;
+gabor2.temporalFrequency = 1;
+gabor2.position = [400 0];
+gabor2.direction = 45;
+gabor2.visible = true;
+
+
+pause(1);
+gabor1.delete();
+gabor2.delete();
+%%
+%
+% <<exampleGabor.png>>
+%
+% Detailed documentation can be found with <matlab:doc('Gabor') doc Gabor>
+
+
 %% Rectangles
 % Rectangles are always filled and have the following properties:
 properties('Rectangle')
