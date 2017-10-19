@@ -120,8 +120,8 @@ img2.delete()
 %
 % Detailed documentation can be found with <matlab:doc('Picture') doc Picture>
 %% Masked grating
-% Masked gratings are implemented as |PixelShader| (see below) stimuli with various
-% parameters:
+% Gratings with a hard circular mask are implemented as |PixelShader| 
+% (see below) stimuli with various parameters:
 properties('Grating')
 %%
 % Spatial frequency is defined as |spatialFrequency| in pixel per cycle. 
@@ -168,6 +168,58 @@ grat2.delete();
 % <<exampleGrating.png>>
 %
 % Detailed documentation can be found with <matlab:doc('Grating') doc Grating>
+
+%% Gabor
+% Gabors are gratings with a Gaussian mask and also are implemented 
+% as |PixelShader| (see below) stimuli with various
+% parameters:
+properties('Gabor')
+%%
+% Spatial frequency is defined via |spatialPeriod| in pixel per cycle
+% (actually the inverse of the spatial frequency).
+% Temporal frequency is specified via the |temporalFrequency| property in 
+% units of cycles per s. 
+% The gaussian mask can be circular or elliptical (|maskWidth|, |maskHeight|), 
+% and can be rotated (|maskRotation|).  The two colors of the grating are 
+% specfied as a vector of 8-bit values for |[red green blue ]|. The 
+% |smoothing| parameter is 2 for purely can be used to achieve square-wave 
+% instead of of sinusoidal gratings: values > 2 will approach a square wave grating.
+%%
+% *Example*
+%
+gabor1 = Gabor();
+gabor1.color1 = [255 0 0];
+gabor1.color2 = [0 255 0];
+gabor1.maskRotation = 45;
+gabor1.maskWidth = 50;
+gabor1.spatialPeriod = 60;
+gabor1.smoothing = 2;
+gabor1.temporalFrequency = 1;
+gabor1.visible = true;
+
+gabor2 = Gabor();
+gabor2.color1 = [255 0 0];
+gabor2.color2 = [0 0 0];
+gabor2.maskRotation = 50;
+gabor2.maskWidth = 20;
+gabor2.spatialPeriod = 20;
+gabor2.smoothing = 10;
+gabor2.temporalFrequency = 1;
+gabor2.position = [400 0];
+gabor2.direction = 45;
+gabor2.visible = true;
+
+
+pause(1);
+gabor1.delete();
+gabor2.delete();
+%%
+%
+% <<exampleGabor.png>>
+%
+% Detailed documentation can be found with <matlab:doc('Gabor') doc Gabor>
+
+
 %% Rectangles
 % Rectangles are always filled and have the following properties:
 properties('Rectangle')
