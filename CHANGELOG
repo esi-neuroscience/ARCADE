@@ -4,6 +4,7 @@
 ### NEW
 *   Gabor stimulus
 *   NidaqServer can be configured to give out an event marker for manual rewards
+*   Added tutorial documentation for digital input/output
 
 ### CHANGED
 *   Animations should now be played and stopped via the play_animation and
