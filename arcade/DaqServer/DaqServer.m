@@ -10,7 +10,7 @@ classdef DaqServer < handle
         isConnected = false;
     end
     
-    methods (Access = private, Hidden=true)
+    methods (Access = protected, Hidden=true)
         function obj = DaqServer()
             %            mlock;
         end
@@ -28,10 +28,17 @@ classdef DaqServer < handle
             if ~libisloaded('kernel32')
                 loadlibrary('kernel32', @win_kernel32);
             end;
-            if isequal(nargin, 0); server='.'; else server = varargin{1}; end;
+            if isequal(nargin, 0); 
+                server='.'; 
+                pipeName='\pipe\NidaqServerPipe';
+            else                 
+                server = varargin{1}; 
+                pipeName = varargin{2}; 
+            end;
+
             GENERIC_READ_WRITE = uint32(hex2dec('C0000000'));
             obj.hPipe = calllib('kernel32', 'CreateFileA', ...
-                uint8(['\\' server '\pipe\NidaqServerPipe' 0]), ...
+                uint8(['\\' server pipeName 0]), ...
                 GENERIC_READ_WRITE, ...
                 0, ...  % no sharing
                 [], ...
@@ -100,7 +107,7 @@ classdef DaqServer < handle
         end
         
         function SetRewardTime(timems)
-            % Set reward duration for event-triggered (manual) reward
+            % Set reward duration for event-triggered (manual) reward in ms
             DaqServer.Write(uint8([4 typecast(uint16(timems), 'uint8')]));
         end
         

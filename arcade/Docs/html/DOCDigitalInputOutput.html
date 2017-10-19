@@ -1,0 +1,179 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Digital input and output</title><meta name="generator" content="MATLAB 8.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-10-19"><meta name="DC.source" content="DOCDigitalInputOutput.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Digital input and output</h1><!--introduction--><p>Handling digital input and output in ARCADE is done via the DaqServer module, to which the Core sends commands for input and output.</p><p>Currently  only a DaqServer for National Instruments Cards is implemented, NidaqServer.exe. Detailed documentation for it can be found in arcade/DaqServer/NidaqServer.pdf.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Reward</a></li><li><a href="#5">Event markers</a></li><li><a href="#6">Tracking digital inputs</a></li></ul></div><h2>Reward<a name="1"></a></h2><p>Reward signals can be triggered as as on and off times of a digital output line via the <tt>reward</tt> command:</p><pre class="codeinput">help <span class="string">reward</span>
+</pre><pre class="codeoutput">  REWARD - Give a reward pulse or pulse sequence.
+  
+  INPUT
+  -----
+  
+   rewardTime : durations of reward pulses and inter-reward intervals in ms
+  
+  
+  EXAMPLE
+  -------
+  Give 100 ms reward pulse
+    reward(100)  
+  
+  Give 2x50 ms pulse with a pause of 40 ms 
+    reward([50 40 50]) 
+  
+  
+
+</pre><p>Alternatively, reward can be triggered by using an event</p><pre class="language-matlab">reward = IPCEvent(<span class="string">'Reward'</span>);
+reward.trigger();
+</pre><p>The reward button in the Control Screen uses this mechanism. The duration of the manual reward can be configured using the <tt>DaqServer.SetRewardDuration</tt> command. Optionally, the DaqServer can be configured to send out an event marker with the manual reward by using <tt>DaqServer.SetRewardCode</tt>.</p><h2>Event markers<a name="5"></a></h2><p>Events occuring during the experiment, e.g. stimulus onset times, can be signalled to a recording system via digital event markers, usually 8-bit values. An eventmarker can be triggered using the <tt>eventmarker</tt> function.</p><pre class="codeinput">help <span class="string">eventmarker</span>
+</pre><pre class="codeoutput">  EVENTMARKER - Send a digital marker for an event to the DAQ card (if
+  available) and store the corresponding timestamp in the .evt file.
+  
+  INPUT
+  -----
+    value : event code number &gt;=0 and &lt;2^16
+  
+
+</pre><h2>Tracking digital inputs<a name="6"></a></h2><p>ARCADE can track and respond to digitial inputs delivered via National Instruments PCI(e) cards such as the PCI-6221 and PCI-6503 models.</p><p>Tracking a digital input line is configured via the <tt>trackdigitalinput</tt> function, which sends a message to the <tt>DaqServer</tt>, which is currently always the <tt>NidaqServer.exe</tt>.</p><pre class="codeinput">help <span class="string">trackdigitalinput</span>
+</pre><pre class="codeoutput">  TRACKDIGITALINPUT - Tell DaqServer to signal events when digitial input line
+  state changes
+  
+  INPUT
+  -----
+    lineNumber  : input line of DAQ card to be tracked. For PCI-6221 cards
+  				  this can be 0-7 of port 2, for PCI-6503 only lines 4-7 of
+  				  port 2a re available as input
+ 	eventName   : event name to be triggered when pulse arrives on input line
+  				  or 2-element cell array with event names for line on and off
+  
+  	or
+  
+  	'start'     : start tracking of digitial input. Call trackdigitalinput
+  	              with this option after all lines were added.
+  
+  
+  EXAMPLE
+  -------
+ 
+  Track state of button connected to line 2 of port 2.
+ 
+  	if TrialData.currentTrial == 1
+    	trackdigitalinput(2, {'leverOn', 'leverOff'})
+ 		trackdigitalinput('start')
+ 	end
+  
+  
+  Notes: 
+    * To add more than one input position, trackdigitalinput has to be called repeatedly.  
+    * Before calling trackdigitalinput, the pipe to the DaqServer has to be opened
+      (done automatically by ARCADE).
+  
+  See also State
+
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Digital input and output
+% Handling digital input and output in ARCADE is done via the DaqServer
+% module, to which the Core sends commands for input and output. 
+% 
+% Currently  only a DaqServer for National Instruments Cards is
+% implemented, NidaqServer.exe. Detailed documentation for it can be found
+% in arcade/DaqServer/NidaqServer.pdf.
+%
+%% Reward
+% Reward signals can be triggered as as on and off times of a digital output
+% line via the |reward| command:
+help reward
+%%
+% Alternatively, reward can be triggered by using an event
+%%
+% 
+%   reward = IPCEvent('Reward');
+%   reward.trigger();
+% 
+%%
+% The reward button in the Control Screen uses this mechanism. The duration
+% of the manual reward can be configured using the
+% |DaqServer.SetRewardDuration| command. Optionally, the DaqServer can be
+% configured to send out an event marker with the manual reward by using
+% |DaqServer.SetRewardCode|.
+
+%% Event markers
+% Events occuring during the experiment, e.g. stimulus onset times, can be
+% signalled to a recording system via digital event markers, usually 8-bit 
+% values. An eventmarker can be triggered using the |eventmarker| function.
+help eventmarker
+
+%% Tracking digital inputs
+% ARCADE can track and respond to digitial inputs delivered via National
+% Instruments PCI(e) cards such as the PCI-6221 and PCI-6503 models.
+%
+% Tracking a digital input line is configured via the |trackdigitalinput| 
+% function, which sends a message to the |DaqServer|, which is currently
+% always the |NidaqServer.exe|.
+help trackdigitalinput
+
+##### SOURCE END #####
+--></body></html>
