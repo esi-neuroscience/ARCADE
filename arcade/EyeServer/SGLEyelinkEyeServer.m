@@ -10,6 +10,10 @@ classdef SGLEyelinkEyeServer < ABSEyeServer
     properties ( Access = private )
         folder = [];
         shortFilename = [];
+        blinkStartEvent
+        blinkEndEvent
+        saccadeStartEvent
+        saccadeEndEvent
     end
     
     methods (Static)
@@ -33,6 +37,12 @@ classdef SGLEyelinkEyeServer < ABSEyeServer
             obj.config.read_config_from_tracker;
             scrSz = obj.config.screen_pixel_coords;
             obj.screenSize = [max(scrSz([1 3])) max(scrSz([2 4]))];
+            
+            obj.blinkStartEvent = IPCEvent('BlinkStart');
+            obj.blinkEndEvent = IPCEvent('BlinkEnd');
+            obj.saccadeStartEvent = IPCEvent('SaccadeStart');
+            obj.saccadeEndEvent = IPCEvent('SaccadeEnd');
+            
         end
     end
     
@@ -41,30 +51,40 @@ classdef SGLEyelinkEyeServer < ABSEyeServer
         
         function eyePosition = acquire_eye_position(obj)
             
-            tStart = tic;
-            timeout = 5; % wait maximally 5s for sample
-            newSampleAvailable = Eyelink('NewFloatSampleAvailable')>0;
-            while ~newSampleAvailable && toc(tStart) < timeout
-                newSampleAvailable = Eyelink('NewFloatSampleAvailable')>0;
-                java.lang.Thread.sleep(1)
-            end
-            if ~newSampleAvailable
-                error('Could not acquire eye position')
-            end
-            % get the sample in the form of an event structure
+            % get the newest sample in the form of an event structure
             evt = Eyelink('NewestFloatSample');
             
             % translate coordinates to rel. to center
             x = evt.gx(obj.usedEye+1)-obj.screenSize(1)/2;
             y = (1*evt.gy(obj.usedEye+1)-obj.screenSize(2)/2);
             eyePosition = [x y];
+            
+            % Handle events
+            evtype = Eyelink('GetNextDataType');
+            switch evtype
+                case 3
+                    obj.blinkStartEvent.trigger();                    
+                case 4
+                    obj.blinkEndEvent.trigger();                    
+                case 5
+                    obj.saccadeStartEvent.trigger();                    
+                case 6
+                    obj.saccadeEndEvent.trigger();
+                otherwise
+                    
+            end
+            java.lang.Thread.sleep(1)
+            
         end
         
         function initialize(obj)
-                                   
+            
             err = Eyelink('Initialize');
             assert(err == 0, 'Eyelink: Could not initialize link')
             Eyelink('Command', 'link_sample_data = LEFT,RIGHT,GAZE,AREA');
+            Eyelink('Command', 'link_event_data = GAZE,GAZERES,HREF,AREA,VELOCITY');
+            Eyelink('Command', 'link_event_filter = LEFT,RIGHT,BLINK,SACCADE')
+            
             if ~isempty(obj.filename)
                 [obj.folder,base,ext] = fileparts(obj.filename);
                 if length(base) > 8
@@ -76,11 +96,16 @@ classdef SGLEyelinkEyeServer < ABSEyeServer
                 assert(err == 0, 'Eyelink: Could not open %s', obj.filename)
             end
             Eyelink('StartRecording')
+            obj.usedEye = Eyelink('EyeAvailable'); % get eye that's tracked
+            if  obj.usedEye == 2; % if both eyes are tracked
+                obj.usedEye  = 0; % use left eye
+            end
+            
         end
-    end 
+    end
     
     
-    methods ( Access = public )        
+    methods ( Access = public )
         function stop(obj)
             Eyelink('StopRecording');
             
@@ -103,6 +128,3 @@ classdef SGLEyelinkEyeServer < ABSEyeServer
     end % public methods
     
 end % classdef
-
-
-%  Eyelink('Command', 'screen_pixel_coords = %d %d %d %d',rect(1),rect(2),rect(3)-1,rect(4)-1);
