@@ -149,7 +149,6 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
             % delete objects
             this.mWriteToDiary('Closing', true);
             
-            delete(rewServer);
             delete(eventServer);
 
             % quit eye server
