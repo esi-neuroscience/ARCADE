@@ -1,6 +1,6 @@
 # Change Log of ARCADE
 
-## Unreleased
+## [2.1.0] - 2017-10-30
 ### NEW
 *   Gabor stimulus
 *   NidaqServer can be configured to give out an event marker for manual rewards
@@ -12,7 +12,8 @@
     still supported but deprecated.
 *   Default terminal action of animations now 0, i.e., the stimulus persists
     after the animation
-
+*   getPreviousTrialdata now also returns user variables stored with
+    storeUserVariables
 
 ### FIXED
 *   Wrong path of pixel shader file of Gammatron stimulus
