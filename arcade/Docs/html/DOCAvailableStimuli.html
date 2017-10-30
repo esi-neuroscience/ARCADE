@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Visual stimuli for ARCADE</title><meta name="generator" content="MATLAB 8.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-10-19"><meta name="DC.source" content="DOCAvailableStimuli.m"><style type="text/css">
+      --><title>Visual stimuli for ARCADE</title><meta name="generator" content="MATLAB 8.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-10-30"><meta name="DC.source" content="DOCAvailableStimuli.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -76,7 +76,6 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 Properties for class Stimulus:
 
     visible
-    animation
     position
 
 </pre><p>Visibility can be <tt>true</tt> for on or <tt>false</tt> for off. The <tt>animation</tt> property is empty by default and can be set if a stimulus should be animated (see below). Coordinates are usually in pixels. The stimulus <tt>position</tt> is always relative to the screen center. Angles are defined in degree with 0 being rightward (--) and 90 upward (|).</p><p>Colors are always specified as 24-bit RGB values, e.g. [255 255 255] for white and [0 0 0] for black. Alpha values range from fully transparent (0) to fully opaque (255).</p><p><i>Note</i>: For displays with an even number of pixels the center <tt>[0 0]</tt> is actually between the two center pixels. To achieve pixel-perfect display of stimuli one should add 0.5 to the coordinate.</p><h2>Circles<a name="3"></a></h2><p>Filled circles can be created as a <tt>Circle</tt>. Type 1 circles are filled, type 2 circles are outlined circles (5 px width, currently not flexible).</p><pre class="codeinput">properties(<span class="string">'Circle'</span>)
@@ -88,7 +87,6 @@ Properties for class Circle:
     color
     alpha
     visible
-    animation
     position
 
 </pre><p><b>Example</b></p><pre class="codeinput">circ1 = Circle(1);
@@ -117,7 +115,6 @@ Properties for class Picture:
     alpha
     angle
     visible
-    animation
     position
 
 </pre><p><b>Example</b></p><pre class="codeinput">imgPath = <span class="string">'C:\Toolboxes\ARCADE\arcade\Docs'</span>;
@@ -154,7 +151,6 @@ Properties for class Grating:
     animationIncrement
     animationPhase
     visible
-    animation
     position
 
 </pre><p>Spatial frequency is defined as <tt>spatialFrequency</tt> in pixel per cycle. Temporal frequency is specified via the <tt>temporalFrequency</tt> property in units of cycles per s. That is, for a 120 Hz display, a <tt>animationIncrement</tt> value of 1/120 will result in a drifting grating at a speed of 1 cycle/s. The mask can be circular or elliptical (<tt>maskWidth</tt>, <tt>maskHeight</tt>), and can be rotated (<tt>maskRotation</tt>). The two colors of the grating are specfied as a vector of 8-bit values for <tt>[red green blue alpha]</tt>. The <tt>smoothing</tt> parameter is 2 for purely sinusoidal gratings. Values &gt; 2 will approach a square wave grating.</p><p><b>Example</b></p><pre class="codeinput">grat1 = Grating();
@@ -203,7 +199,6 @@ Properties for class Gabor:
     animationIncrement
     animationPhase
     visible
-    animation
     position
 
 </pre><p>Spatial frequency is defined via <tt>spatialPeriod</tt> in pixel per cycle (actually the inverse of the spatial frequency). Temporal frequency is specified via the <tt>temporalFrequency</tt> property in units of cycles per s. The gaussian mask can be circular or elliptical (<tt>maskWidth</tt>, <tt>maskHeight</tt>), and can be rotated (<tt>maskRotation</tt>).  The two colors of the grating are specfied as a vector of 8-bit values for <tt>[red green blue ]</tt>. The <tt>smoothing</tt> parameter is 2 for purely can be used to achieve square-wave instead of of sinusoidal gratings: values &gt; 2 will approach a square wave grating.</p><p><b>Example</b></p><pre class="codeinput">gabor1 = Gabor();
@@ -242,7 +237,6 @@ Properties for class Rectangle:
     color
     alpha
     visible
-    animation
     position
 
 </pre><p><b>Example</b></p><pre class="codeinput">r1 = Rectangle;
@@ -261,14 +255,7 @@ r2.visible = true;
 pause(1)
 r1.delete();
 r2.delete();
-</pre><p><img vspace="5" hspace="5" src="exampleRectangle.png" alt=""> </p><p>Detailed documentation can be found with <a href="matlab:doc('Rectangle')">doc Rectangle</a></p><h2>Animations<a name="20"></a></h2><p>Every stimulus can be smoothly moved around on the screen. To animate a stimulus, the <tt>animation</tt> parameter of the stimulus should be set with the required animation. Currently there are two types of animation</p><div><ol><li><tt>LinearMotion</tt>: This moves the stimulus along a polygon.</li><li><tt>GeneralMotion</tt>: This moves the stimulus along an arbitrary path defined in a file. <b>NOT IMPLEMENTED YET</b></li></ol></div><p>The <tt>LinearMotion</tt> needs two input arguments, the <tt>velocity</tt> defined in pixels per second at 120 Hz and the <tt>vertices=[x1 y1 x2 y2 ...]</tt>, which are the center coordinates that the stimulus will be moved to one after the other. The <tt>terminalAction</tt> property defines what happens at the end of the animation and is an 8-bit mask. The bits have the following meaning</p><pre>  1 disable the assigned stimulus
-  2
-  4 toggle the photodiode signal1
-  8 signal an event (see section 3 on page 4)
- 16 restart animation (cyclic execution)
- 32
- 64
-128 end deferred mode</pre><p>Animations start immediatly when the stimulus is visible or when it becomes visible. An animation can be stopped by setting the <tt>animation</tt> property of the stimulus to <tt>[]</tt>.</p><p><b>Example</b></p><pre class="codeinput">r = Rectangle;
+</pre><p><img vspace="5" hspace="5" src="exampleRectangle.png" alt=""> </p><p>Detailed documentation can be found with <a href="matlab:doc('Rectangle')">doc Rectangle</a></p><h2>Animations<a name="20"></a></h2><p>ARCADE allows several kinds of animations. All stimulus types can be smoothly translated around on the screen. To animate a stimulus, an animation has to be created first and then assigned to a stimulus by using the <tt>play_animation</tt> method of a stimulus.</p><p>Currently there are three types of animation</p><div><ol><li><tt>LinearMotion</tt>: This moves the stimulus along a polygon.</li><li><tt>GeneralMotion</tt>: This moves the stimulus along an arbitrary path defined in a file. <b>NOT FULLY TESTED YET</b></li><li><tt>LineareRange</tt>: Change certain scalar stimulus properties linearily from a starting value to an end value within a specified duration</li></ol></div><p>To start an animation is has to be passed to the <tt>play_animation</tt> methpd of a stimulus. Animations start immediatly when the stimulus is visible or when it becomes visible. An animation can be stopped by using the <tt>stop_animation</tt> method of the animated stimulus.</p><p><b>Example</b></p><pre class="codeinput">r = Rectangle;
 r.color = [255 255 255];
 r.height = 200;
 r.angle = 45;
@@ -277,7 +264,7 @@ pause(1)
 vertices = [0 0 100 0 500 500]; <span class="comment">% [x1 y2 x2 y2 x3 y3]</span>
 speed = 150; <span class="comment">% px/s</span>
 a = LinearMotion(speed, vertices);
-r.animation = a;
+r.play_animation(a);
 r.visible = true;
 </pre><p><img vspace="5" hspace="5" src="exampleAnimation.png" alt=""> </p><p>Detailed documentation can be found with <a href="matlab:doc('LinearMotion')">doc LinearMotion</a></p><h2>Moving Bars<a name="23"></a></h2><p>The <tt>MovingBar</tt> class simplifies the creation of animated bars by automatically creating the animation.</p><pre class="codeinput">properties(<span class="string">'MovingBar'</span>)
 </pre><pre class="codeoutput">
@@ -293,7 +280,6 @@ Properties for class MovingBar:
     color
     alpha
     visible
-    animation
     position
 
 </pre><p>Only the <tt>startPosition</tt>, <tt>direction</tt> and <tt>travelDistance</tt> have to bet set. If <tt>linkedOrientationDirection</tt> is set, the bar will always be orthogonal to the travel direction.</p><p><b>Example</b></p><pre class="codeinput">speed = 200;
@@ -303,6 +289,9 @@ mb.direction = 35;
 mb.visible = true;
 pause(5)
 mb.delete()
+</pre><pre class="codeoutput">Warning: Using the animation property for playing animations is deprecated and
+will be removed in the future.
+	Use the play_animation/stop_animation methods instead 
 </pre><h2>Gammatron (annular grating)<a name="26"></a></h2><p>The <tt>Gammatron</tt> class creates an annular grating pattern with based on two colors that can be drifting inward or outward.</p><pre class="codeinput">properties(<span class="string">'Gammatron'</span>)
 </pre><pre class="codeoutput">
 Properties for class Gammatron:
@@ -319,7 +308,6 @@ Properties for class Gammatron:
     animationIncrement
     animationPhase
     visible
-    animation
     position
 
 </pre><p><b>Example</b></p><pre class="codeinput">g = Gammatron;
@@ -339,7 +327,6 @@ Properties for class Gaussian:
     animationIncrement
     animationPhase
     visible
-    animation
     position
 
 </pre><p><b>Example</b></p><pre class="codeinput">g1 = Gaussian
@@ -368,7 +355,6 @@ g1 =
     animationIncrement: 1
         animationPhase: 0
                visible: 0
-             animation: []
               position: [0 0]
 
 </pre><p><img vspace="5" hspace="5" src="exampleGaussian.png" alt=""> </p><h2>Pixel shader<a name="32"></a></h2><p>Pixel shader are small programs that run on the graphics card and are written in a specific shader language, HLSL  (see <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb509561(v=vs.85).aspx">here</a> for more information). Using HLSL any stimulus that can be parameterized may be generated and rendered with high performance.</p><p>Programming in HLSL is not trivial, but offers great flexibility. As a starting point you may have a look at the gratings presented above. They are implemented in the file <tt>ARCADE\arcade\StimServer\classes\stimfiles\pixelShader\MaskedGrating.fx</tt>, which is loaded and controlled by the <tt>PixelShader</tt> class with the following properties and methods</p><pre class="codeinput">properties(<span class="string">'PixelShader'</span>)
@@ -381,7 +367,6 @@ Properties for class PixelShader:
     animationIncrement
     animationPhase
     visible
-    animation
     position
 
 </pre><p>Pixel shaders can currently use up to 4 RGB-Alpha colors and 12 parameters that are passed to the shader using the <tt>setColor</tt> and <tt>setParameter</tt> methods. Detailed documentation can be found with <a href="matlab:doc('PixelShader')">doc PixelShader</a></p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014a</a><br></p></div><!--
@@ -637,33 +622,24 @@ r2.delete();
 % Detailed documentation can be found with <matlab:doc('Rectangle') doc Rectangle>
 
 %% Animations
-% Every stimulus can be smoothly moved around on the screen. To animate a
-% stimulus, the |animation| parameter of the stimulus should be set with
-% the required animation. Currently there are two types of animation
+% ARCADE allows several kinds of animations. All stimulus types can be 
+% smoothly translated around on the screen. To animate a
+% stimulus, an animation has to be created first and then assigned to a
+% stimulus by using the |play_animation| method of a stimulus.
+% 
+% Currently there are three types of animation
 % 
 % # |LinearMotion|: This moves the stimulus along a polygon.
 % # |GeneralMotion|: This moves the stimulus along an arbitrary path
-% defined in a file. *NOT IMPLEMENTED YET*
+% defined in a file. *NOT FULLY TESTED YET*
+% # |LineareRange|: Change certain scalar stimulus properties linearily from a
+% starting value to an end value within a specified duration 
 % 
-% The |LinearMotion| needs two input arguments, the |velocity| defined in
-% pixels per second at 120 Hz and the |vertices=[x1 y1 x2 y2 ...]|, which are the
-% center coordinates that the stimulus will be moved to one after the
-% other. The |terminalAction| property defines what happens at the end of
-% the animation and is an 8-bit mask. The bits have the following meaning
-% 
-% 
-%    1 disable the assigned stimulus
-%    2
-%    4 toggle the photodiode signal1
-%    8 signal an event (see section 3 on page 4)
-%   16 restart animation (cyclic execution)
-%   32 
-%   64 
-%  128 end deferred mode
-% 
+% To start an animation is has to be passed to the |play_animation| methpd
+% of a stimulus. 
 % Animations start immediatly when the stimulus is visible or when it
-% becomes visible. An animation can be stopped by setting the |animation|
-% property of the stimulus to |[]|.
+% becomes visible. An animation can be stopped by using the
+% |stop_animation| method of the animated stimulus.
 % 
 %%
 % *Example*
@@ -676,7 +652,7 @@ pause(1)
 vertices = [0 0 100 0 500 500]; % [x1 y2 x2 y2 x3 y3]
 speed = 150; % px/s
 a = LinearMotion(speed, vertices);
-r.animation = a;
+r.play_animation(a);
 r.visible = true;
 %%
 %

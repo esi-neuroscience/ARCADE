@@ -16,10 +16,10 @@ classdef (Abstract) Animation < hgsetget
     %   64 
     %   128 end deferred mode
     % 
-    % Setting a to 0 restores the default behaviour of deassigning
+    % Setting a to 0 restores the default behavior of deassigning
     % the animation from the stimulus.
     %
-    % See also LinearMotion, GeneralMotion
+    % See also LinearMotion, GeneralMotion, LinearRange
     %
     properties
         terminalAction %

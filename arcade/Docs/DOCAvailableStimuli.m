@@ -249,33 +249,24 @@ r2.delete();
 % Detailed documentation can be found with <matlab:doc('Rectangle') doc Rectangle>
 
 %% Animations
-% Every stimulus can be smoothly moved around on the screen. To animate a
-% stimulus, the |animation| parameter of the stimulus should be set with
-% the required animation. Currently there are two types of animation
+% ARCADE allows several kinds of animations. All stimulus types can be 
+% smoothly translated around on the screen. To animate a
+% stimulus, an animation has to be created first and then assigned to a
+% stimulus by using the |play_animation| method of a stimulus.
+% 
+% Currently there are three types of animation
 % 
 % # |LinearMotion|: This moves the stimulus along a polygon.
 % # |GeneralMotion|: This moves the stimulus along an arbitrary path
-% defined in a file. *NOT IMPLEMENTED YET*
+% defined in a file. *NOT FULLY TESTED YET*
+% # |LineareRange|: Change certain scalar stimulus properties linearily from a
+% starting value to an end value within a specified duration 
 % 
-% The |LinearMotion| needs two input arguments, the |velocity| defined in
-% pixels per second at 120 Hz and the |vertices=[x1 y1 x2 y2 ...]|, which are the
-% center coordinates that the stimulus will be moved to one after the
-% other. The |terminalAction| property defines what happens at the end of
-% the animation and is an 8-bit mask. The bits have the following meaning
-% 
-% 
-%    1 disable the assigned stimulus
-%    2
-%    4 toggle the photodiode signal1
-%    8 signal an event (see section 3 on page 4)
-%   16 restart animation (cyclic execution)
-%   32 
-%   64 
-%  128 end deferred mode
-% 
+% To start an animation is has to be passed to the |play_animation| methpd
+% of a stimulus. 
 % Animations start immediatly when the stimulus is visible or when it
-% becomes visible. An animation can be stopped by setting the |animation|
-% property of the stimulus to |[]|.
+% becomes visible. An animation can be stopped by using the
+% |stop_animation| method of the animated stimulus.
 % 
 %%
 % *Example*
@@ -288,7 +279,7 @@ pause(1)
 vertices = [0 0 100 0 500 500]; % [x1 y2 x2 y2 x3 y3]
 speed = 150; % px/s
 a = LinearMotion(speed, vertices);
-r.animation = a;
+r.play_animation(a);
 r.visible = true;
 %%
 %
