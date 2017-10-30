@@ -1,5 +1,23 @@
 # Change Log of ARCADE
 
+## [2.1.0] - 2017-10-30
+### NEW
+*   Gabor stimulus
+*   NidaqServer can be configured to give out an event marker for manual rewards
+*   Added tutorial documentation for digital input/output
+
+### CHANGED
+*   Animations should now be played and stopped via the play_animation and
+    stop_animation methods of a stimulus. Using the animation property is
+    still supported but deprecated.
+*   Default terminal action of animations now 0, i.e., the stimulus persists
+    after the animation
+*   getPreviousTrialdata now also returns user variables stored with
+    storeUserVariables
+
+### FIXED
+*   Wrong path of pixel shader file of Gammatron stimulus
+
 ## [2.0.1] - 2017-09-29
 ### FIXED
 *   Fixed bugs related to CalibrateEyelink

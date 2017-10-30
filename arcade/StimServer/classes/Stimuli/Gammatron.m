@@ -18,9 +18,8 @@ classdef Gammatron < PixelShader
     methods
         function obj = Gammatron()
             
-            fxFile = 'Gammatron.fx';
-            filename = fullfile(...
-                fileparts(mfilename('fullpath')),'stimfiles','pixelShader', fxFile);
+            fxFile = 'Gammatron.fx';                
+            filename = fullfile(fileparts(mfilename('fullpath')), fxFile);                                
             obj = obj@PixelShader(filename);
             obj.frameRate = StimServer.GetFrameRate();
             

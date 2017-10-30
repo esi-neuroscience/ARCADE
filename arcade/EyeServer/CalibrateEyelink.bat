@@ -5,6 +5,6 @@ SET PATH="C:\Program Files\MATLAB\R2014a\bin\";"C:\Program Files\MATLAB\R2014a\b
 SET EYESERVERDIR="%~dp0"\..
 TITLE "Calibrate Eyelink"
 echo "Starting eye calibration for Eyelink"
-SET RUNCMD=matlab -nodesktop -minimize -wait -r "addpath(genpath('%EYESERVERDIR%')); CalibrateEyelink; exit";
+SET RUNCMD=matlab -nodesktop -minimize -wait -r "restoredefaultpath(); cd %EYESERVERDIR%; addpath(genpath(pwd)); CalibrateEyelink; exit";
 start /min %RUNCMD%
 

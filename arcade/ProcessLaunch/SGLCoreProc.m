@@ -67,8 +67,6 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
             delete(MSgui);
             drawnow()
             
-            this.mWriteToDiary('Starting Reward Server', true);
-            rewServer   = SGLRewardServer.launch;
             
             this.mWriteToDiary('Starting Event Server', true);
             evtFile = fullfile(cfg.filepaths.Behaviour, [cfg.Subject '_' today() '_' cfg.Experiment '_' cfg.Session '.evt']);
@@ -151,7 +149,6 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
             % delete objects
             this.mWriteToDiary('Closing', true);
             
-            delete(rewServer);
             delete(eventServer);
 
             % quit eye server
