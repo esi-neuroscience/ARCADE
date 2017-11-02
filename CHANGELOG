@@ -1,5 +1,10 @@
 # Change Log of ARCADE
 
+## [2.1.1] - 2017-11-02
+### FIXED
+*   NidaqServer.exe 1.0.8.0 sends sufficiently long and spaced eventmarkers for
+    TDT's RZ2 (40 microseconds)
+
 ## [2.1.0] - 2017-10-30
 ### NEW
 *   Gabor stimulus
