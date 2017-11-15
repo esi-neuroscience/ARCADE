@@ -1,5 +1,11 @@
 # Change Log of ARCADE
 
+## [2.1.2] - 2017-11-15
+### NEW
+*   NidaqServer.exe: support for USB-6353
+### FIXED
+*   Bugs introduced due to renaming NidaqServer
+
 ## [2.1.1] - 2017-11-02
 ### FIXED
 *   NidaqServer.exe 1.0.8.0 sends sufficiently long and spaced eventmarkers for
