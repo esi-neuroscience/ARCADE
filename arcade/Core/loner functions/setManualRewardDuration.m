@@ -6,4 +6,4 @@ function setManualRewardDuration(duration)
 %   duration : reward duration in ms
 % 
 
-NidaqServer.SetRewardTime(duration)
+DaqServer.SetRewardTime(duration)

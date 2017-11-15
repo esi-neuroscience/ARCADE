@@ -8,14 +8,14 @@ function eventmarker(value,varargin)
 % 
 persistent hasDaqServer
 if isempty(hasDaqServer)
-	hasDaqServer = NidaqServer.GetConnectionStatus();
+	hasDaqServer = DaqServer.GetConnectionStatus();
 end
 evtServer = SGLEventMarkerServer.launch();
 
 % if there is a value, and it is an unsigned 16-bit integer
 if ~isempty(value) && isnumeric(value) && value<2^16 && value>=0 
     if hasDaqServer
-        NidaqServer.EventMarker(round(value));    
+        DaqServer.EventMarker(round(value));    
     end
     evtServer.storeEvent(value);
 else

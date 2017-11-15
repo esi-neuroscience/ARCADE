@@ -43,12 +43,12 @@ if wasStarted
 	return
 end
 if nargin == 1 & strcmp(lineNumber, 'start')
-	NidaqServer.Start()
+	DaqServer.Start()
 	wasStarted = true;
 elseif nargin == 2 && iscell(eventName) && numel(eventName) == 2
-	NidaqServer.AddLine(lineNumber, eventName{:})
+	DaqServer.AddLine(lineNumber, eventName{:})
 elseif nargin == 2 && ischar(eventName)
-	NidaqServer.AddLine(lineNumber, eventName)
+	DaqServer.AddLine(lineNumber, eventName)
 else
 	error('Wrong inputs')
 end

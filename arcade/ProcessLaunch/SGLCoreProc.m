@@ -124,7 +124,7 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
 
             % connect to DaqServer
              if ~strcmp(cfg.DaqServer, 'None')
-                NidaqServer.Connect();
+                DaqServer.Connect();
             end
             
 
@@ -163,13 +163,13 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
             stopControlScreenEvt.trigger()           
             controlScreenProcess.stop()
             
-            % quit stim server
+            % quit stim server            
             StimServer.delete()
             stimServerProcess.stop()
             
             % quit DaqServer
             if ~strcmp(cfg.DaqServer, 'None')
-                NidaqServer.delete()
+                DaqServer.delete();
                 daqProcess.stop();
             end
 
