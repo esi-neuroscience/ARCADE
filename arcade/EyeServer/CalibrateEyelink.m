@@ -83,11 +83,11 @@ classdef CalibrateEyelink < handle
             % Connect to StimServer or start it if it's not running 
             tWait = tic;
             success = false;
-            while ~success && toc(tWait) < 5
+            while ~success && toc(tWait) < 10
                 try 
                     StimServer.Connect();
                     success = true;
-                catch
+                catch me
                     % start StimServer
                     if isempty(obj.stimServerProcess)
                         cmd = fullfile(arcaderoot, 'arcade', 'StimServer', 'StimServer.exe');
@@ -96,16 +96,18 @@ classdef CalibrateEyelink < handle
                 end
                 pause(0.5);
             end
-            assert(success, 'Could not connect to StimServer')
+            if ~success
+                rethrow(me)
+            end                   
             
             % Connect to NidaqServer or start it if it's not running 
             tWait = tic;
             success = false;
-            while ~success && toc(tWait) < 5
+            while ~success && toc(tWait) < 10
                 try 
-                    NidaqServer.Connect();
+                    DaqServer.Connect();
                     success = true;
-                catch
+                catch me
                     % start StimServer
                     if isempty(obj.daqServerProcess)
                         cmd = fullfile(arcaderoot, 'arcade', 'DaqServer', 'NidaqServer.exe');
@@ -114,8 +116,9 @@ classdef CalibrateEyelink < handle
                 end
                 pause(0.5);
             end
-            assert(success, 'Could not connect to NidaqServer')
-            
+            if ~success
+                rethrow(me)
+            end
             if ~exist('stim', 'var')
                 obj.stim = CalibrationStimulusGaussian();
             else 
@@ -197,7 +200,7 @@ classdef CalibrateEyelink < handle
                     fprintf('Keypress %s ignored\n', key)
                 end
                 if strcmp(key, 'return')
-                   NidaqServer.Reward(obj.rewardDuration);
+                   DaqServer.Reward(obj.rewardDuration);
                 end
             end
         end
@@ -213,7 +216,7 @@ classdef CalibrateEyelink < handle
             cellfun(@(x) delete(x), obj.stim)
             StimServer.Disconnect();
             delete(obj.stimServerProcess);
-            NidaqServer.Disconnect();
+            DaqServer.Disconnect();
             delete(obj.daqServerProcess);
             delete(obj.stopEvent);
         end
