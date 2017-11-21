@@ -20,7 +20,7 @@ help reward
 %%
 % The reward button in the Control Screen uses this mechanism. The duration
 % of the manual reward can be configured using the
-% |DaqServer.SetRewardDuration| command. Optionally, the DaqServer can be
+% |DaqServer.SetRewardTime| command. Optionally, the DaqServer can be
 % configured to send out an event marker with the manual reward by using
 % |DaqServer.SetRewardCode|.
 
