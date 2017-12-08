@@ -29,7 +29,6 @@ classdef ExternalPositionControl < Animation
         end
     
         function setOffset(obj, offset)
-            % 
             StimServer.Command(obj.key, [uint8(3), typecast(single(offset),'uint8')])
         end
     end
