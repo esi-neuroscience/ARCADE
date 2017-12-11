@@ -18,12 +18,12 @@ classdef EyeClient < handle
         function this = EyeClient
             sharedObject = MSNamedSharedMemory;
             sharedObject.mOpenFileMapping(this.sharedMemoryName);
-            setdatatype(sharedObject.pointer, 'doublePtr', 2);
+            setdatatype(sharedObject.pointer, 'singlePtr', 4);
             this.sharedMemory = sharedObject;
         end
         
         function value = get.eyePosition(this)
-            value = (this.sharedMemory.pointer.Value)';
+            value = double(this.sharedMemory.pointer.Value([1 2]))';
         end
     end
     
