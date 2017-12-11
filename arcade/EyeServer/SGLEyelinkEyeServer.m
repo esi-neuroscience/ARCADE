@@ -63,11 +63,11 @@ classdef SGLEyelinkEyeServer < ABSEyeServer
             evtype = Eyelink('GetNextDataType');
             switch evtype
                 case 3
-                    obj.blinkStartEvent.trigger();                    
+                    obj.blinkStartEvent.trigger();
                 case 4
-                    obj.blinkEndEvent.trigger();                    
+                    obj.blinkEndEvent.trigger();
                 case 5
-                    obj.saccadeStartEvent.trigger();                    
+                    obj.saccadeStartEvent.trigger();
                 case 6
                     obj.saccadeEndEvent.trigger();
                 otherwise
@@ -77,13 +77,30 @@ classdef SGLEyelinkEyeServer < ABSEyeServer
             
         end
         
+        function draw_tracker(obj, tracker)
+            if isempty(tracker)
+                Eyelink('Command', 'clear_screen 0');
+                return
+            end
+            
+            position = tracker.center;
+            tolerance = tracker.tolerance;
+            x1 = position(1)-tolerance+obj.screenSize(1)/2;
+            y1 = position(2)-tolerance+obj.screenSize(2)/2;
+            x2 = x1+2*tolerance;
+            y2 = y1+2*tolerance;
+            cmd = sprintf('draw_box %u %u %u %u 15', x1, y1, x2, y2);
+            Eyelink('Command',  cmd);
+            
+        end
+        
         function initialize(obj)
             
             err = Eyelink('Initialize');
             assert(err == 0, 'Eyelink: Could not initialize link')
             Eyelink('Command', 'link_sample_data = LEFT,RIGHT,GAZE,AREA');
             Eyelink('Command', 'link_event_data = GAZE,GAZERES,HREF,AREA,VELOCITY');
-            Eyelink('Command', 'link_event_filter = LEFT,RIGHT,BLINK,SACCADE')
+            Eyelink('Command', 'link_event_filter = LEFT,RIGHT,BLINK,SACCADE');
             
             if ~isempty(obj.filename)
                 [obj.folder,base,ext] = fileparts(obj.filename);
@@ -95,12 +112,12 @@ classdef SGLEyelinkEyeServer < ABSEyeServer
                 err = Eyelink('OpenFile', obj.shortFilename);
                 assert(err == 0, 'Eyelink: Could not open %s', obj.filename)
             end
-            Eyelink('StartRecording')
+            Eyelink('StartRecording');
             obj.usedEye = Eyelink('EyeAvailable'); % get eye that's tracked
             if  obj.usedEye == 2; % if both eyes are tracked
                 obj.usedEye  = 0; % use left eye
             end
-            
+            obj.draw_tracker([])
         end
     end
     
@@ -123,6 +140,7 @@ classdef SGLEyelinkEyeServer < ABSEyeServer
         end
         
         function delete(obj)
+            obj.draw_tracker([])
             Eyelink('Shutdown');
         end
     end % public methods
