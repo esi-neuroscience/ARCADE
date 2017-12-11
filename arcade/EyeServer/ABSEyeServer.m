@@ -59,14 +59,20 @@ classdef ABSEyeServer < handle
                     delete(obj.positionTracker{iTracker})
                 end
                 obj.positionTracker = {};
+                obj.draw_tracker([]);
             else
                 msg = sprintf('New tracker %s at [%g %g], r=%g', name, position(1), position(2), tolerance);
                 logmessage(msg);
-                obj.positionTracker{end+1} = EyeTracker(name, position, tolerance);            
+                obj.positionTracker{end+1} = EyeTracker(name, position, tolerance);     
+                obj.draw_tracker(obj.positionTracker{end})
             end
             obj.readyEvent.trigger();
         end
         
+        function draw_tracker(~)
+            
+        end
+                
         
         function start(obj)
             % Start data acquisition            
