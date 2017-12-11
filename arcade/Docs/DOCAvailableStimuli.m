@@ -44,8 +44,7 @@
 % repositioned, or animated (smoothly translated).
 properties('Stimulus')
 %%
-% Visibility can be |true| for on or |false| for off. The |animation| property is empty by
-% default and can be set if a stimulus should be animated (see below). 
+% Visibility can be |true| for on or |false| for off. 
 % Coordinates are usually in pixels. The stimulus |position| is always relative
 % to the screen center. Angles are defined in degree with 0 being rightward
 % (--) and 90 upward (|). 
@@ -254,15 +253,18 @@ r2.delete();
 % stimulus, an animation has to be created first and then assigned to a
 % stimulus by using the |play_animation| method of a stimulus.
 % 
-% Currently there are three types of animation
+% Currently there are five types of animation
 % 
-% # |LinearMotion|: This moves the stimulus along a polygon.
+% # |LinearMotion|: Move a stimulus along a polygon.
 % # |GeneralMotion|: This moves the stimulus along an arbitrary path
 % defined in a file. *NOT FULLY TESTED YET*
-% # |LineareRange|: Change certain scalar stimulus properties linearily from a
+% # |LinearRange|: Change certain scalar stimulus properties linearily from a
 % starting value to an end value within a specified duration 
+% # |Flash|: Flash (turn on) a stimulus for a defined number of frames
+% # |ExternalPositionControl|: Couple the position of a stimulus to a
+% position in a shared memory, e.g. the eye position.
 % 
-% To start an animation is has to be passed to the |play_animation| methpd
+% To start an animation is has to be passed to the |play_animation| method
 % of a stimulus. 
 % Animations start immediatly when the stimulus is visible or when it
 % becomes visible. An animation can be stopped by using the

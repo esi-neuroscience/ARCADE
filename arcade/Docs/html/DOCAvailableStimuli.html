@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Visual stimuli for ARCADE</title><meta name="generator" content="MATLAB 8.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-10-30"><meta name="DC.source" content="DOCAvailableStimuli.m"><style type="text/css">
+      --><title>Visual stimuli for ARCADE</title><meta name="generator" content="MATLAB 8.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-12-11"><meta name="DC.source" content="DOCAvailableStimuli.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -78,7 +78,7 @@ Properties for class Stimulus:
     visible
     position
 
-</pre><p>Visibility can be <tt>true</tt> for on or <tt>false</tt> for off. The <tt>animation</tt> property is empty by default and can be set if a stimulus should be animated (see below). Coordinates are usually in pixels. The stimulus <tt>position</tt> is always relative to the screen center. Angles are defined in degree with 0 being rightward (--) and 90 upward (|).</p><p>Colors are always specified as 24-bit RGB values, e.g. [255 255 255] for white and [0 0 0] for black. Alpha values range from fully transparent (0) to fully opaque (255).</p><p><i>Note</i>: For displays with an even number of pixels the center <tt>[0 0]</tt> is actually between the two center pixels. To achieve pixel-perfect display of stimuli one should add 0.5 to the coordinate.</p><h2>Circles<a name="3"></a></h2><p>Filled circles can be created as a <tt>Circle</tt>. Type 1 circles are filled, type 2 circles are outlined circles (5 px width, currently not flexible).</p><pre class="codeinput">properties(<span class="string">'Circle'</span>)
+</pre><p>Visibility can be <tt>true</tt> for on or <tt>false</tt> for off. Coordinates are usually in pixels. The stimulus <tt>position</tt> is always relative to the screen center. Angles are defined in degree with 0 being rightward (--) and 90 upward (|).</p><p>Colors are always specified as 24-bit RGB values, e.g. [255 255 255] for white and [0 0 0] for black. Alpha values range from fully transparent (0) to fully opaque (255).</p><p><i>Note</i>: For displays with an even number of pixels the center <tt>[0 0]</tt> is actually between the two center pixels. To achieve pixel-perfect display of stimuli one should add 0.5 to the coordinate.</p><h2>Circles<a name="3"></a></h2><p>Filled circles can be created as a <tt>Circle</tt>. Type 1 circles are filled, type 2 circles are outlined circles (5 px width, currently not flexible).</p><pre class="codeinput">properties(<span class="string">'Circle'</span>)
 </pre><pre class="codeoutput">
 Properties for class Circle:
 
@@ -255,7 +255,7 @@ r2.visible = true;
 pause(1)
 r1.delete();
 r2.delete();
-</pre><p><img vspace="5" hspace="5" src="exampleRectangle.png" alt=""> </p><p>Detailed documentation can be found with <a href="matlab:doc('Rectangle')">doc Rectangle</a></p><h2>Animations<a name="20"></a></h2><p>ARCADE allows several kinds of animations. All stimulus types can be smoothly translated around on the screen. To animate a stimulus, an animation has to be created first and then assigned to a stimulus by using the <tt>play_animation</tt> method of a stimulus.</p><p>Currently there are three types of animation</p><div><ol><li><tt>LinearMotion</tt>: This moves the stimulus along a polygon.</li><li><tt>GeneralMotion</tt>: This moves the stimulus along an arbitrary path defined in a file. <b>NOT FULLY TESTED YET</b></li><li><tt>LineareRange</tt>: Change certain scalar stimulus properties linearily from a starting value to an end value within a specified duration</li></ol></div><p>To start an animation is has to be passed to the <tt>play_animation</tt> methpd of a stimulus. Animations start immediatly when the stimulus is visible or when it becomes visible. An animation can be stopped by using the <tt>stop_animation</tt> method of the animated stimulus.</p><p><b>Example</b></p><pre class="codeinput">r = Rectangle;
+</pre><p><img vspace="5" hspace="5" src="exampleRectangle.png" alt=""> </p><p>Detailed documentation can be found with <a href="matlab:doc('Rectangle')">doc Rectangle</a></p><h2>Animations<a name="20"></a></h2><p>ARCADE allows several kinds of animations. All stimulus types can be smoothly translated around on the screen. To animate a stimulus, an animation has to be created first and then assigned to a stimulus by using the <tt>play_animation</tt> method of a stimulus.</p><p>Currently there are five types of animation</p><div><ol><li><tt>LinearMotion</tt>: Move a stimulus along a polygon.</li><li><tt>GeneralMotion</tt>: This moves the stimulus along an arbitrary path defined in a file. <b>NOT FULLY TESTED YET</b></li><li><tt>LinearRange</tt>: Change certain scalar stimulus properties linearily from a starting value to an end value within a specified duration</li><li><tt>Flash</tt>: Flash (turn on) a stimulus for a defined number of frames</li><li><tt>ExternalPositionControl</tt>: Couple the position of a stimulus to a position in a shared memory, e.g. the eye position.</li></ol></div><p>To start an animation is has to be passed to the <tt>play_animation</tt> method of a stimulus. Animations start immediatly when the stimulus is visible or when it becomes visible. An animation can be stopped by using the <tt>stop_animation</tt> method of the animated stimulus.</p><p><b>Example</b></p><pre class="codeinput">r = Rectangle;
 r.color = [255 255 255];
 r.height = 200;
 r.angle = 45;
@@ -417,8 +417,7 @@ Properties for class PixelShader:
 % repositioned, or animated (smoothly translated).
 properties('Stimulus')
 %%
-% Visibility can be |true| for on or |false| for off. The |animation| property is empty by
-% default and can be set if a stimulus should be animated (see below). 
+% Visibility can be |true| for on or |false| for off. 
 % Coordinates are usually in pixels. The stimulus |position| is always relative
 % to the screen center. Angles are defined in degree with 0 being rightward
 % (REPLACE_WITH_DASH_DASH) and 90 upward (|). 
@@ -627,15 +626,18 @@ r2.delete();
 % stimulus, an animation has to be created first and then assigned to a
 % stimulus by using the |play_animation| method of a stimulus.
 % 
-% Currently there are three types of animation
+% Currently there are five types of animation
 % 
-% # |LinearMotion|: This moves the stimulus along a polygon.
+% # |LinearMotion|: Move a stimulus along a polygon.
 % # |GeneralMotion|: This moves the stimulus along an arbitrary path
 % defined in a file. *NOT FULLY TESTED YET*
-% # |LineareRange|: Change certain scalar stimulus properties linearily from a
+% # |LinearRange|: Change certain scalar stimulus properties linearily from a
 % starting value to an end value within a specified duration 
+% # |Flash|: Flash (turn on) a stimulus for a defined number of frames
+% # |ExternalPositionControl|: Couple the position of a stimulus to a
+% position in a shared memory, e.g. the eye position.
 % 
-% To start an animation is has to be passed to the |play_animation| methpd
+% To start an animation is has to be passed to the |play_animation| method
 % of a stimulus. 
 % Animations start immediatly when the stimulus is visible or when it
 % becomes visible. An animation can be stopped by using the
