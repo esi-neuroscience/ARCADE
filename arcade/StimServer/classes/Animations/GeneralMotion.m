@@ -6,7 +6,7 @@ classdef GeneralMotion < Animation
     % single(2,n) array. The array has to contain pixel coordinates for 
     % each frame.    
     %     
-    % THIS STIMULUS IS STILL UNTESTED.
+    % THIS ANIMATION IS STILL UNTESTED.
     %     
     % See also Animation, Stimulus, NumericBinaryFile
     
