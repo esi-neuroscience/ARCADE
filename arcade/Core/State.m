@@ -17,6 +17,7 @@ classdef State < handle
         waitForAllEvents = false; % flag whether to wait for all events
         nextStateAfterEvent = {}; % cell aray of next state names corresponding to events in waitEvents
         nextStateAfterTimeout@char = 'final'; % name of next state after timeout
+        nextStateAfterMaxRepetitions = 'final'; % name of next state after maximal iterations
         onEntry = {}; % cell array of anonymous functions to be executed during state entry
         onExit = {}; % cell array of anonymous functions to be executed during state exit
         duration = 0; % tiemout for wait in ms
@@ -56,7 +57,7 @@ classdef State < handle
             end
                         
             if obj.runNumber >= obj.maxRepetitions
-                nextState = 'final';
+                nextState = obj.nextStateAfterMaxRepetitions;
             elseif result == State.WAIT_TIMEOUT
                 nextState = obj.nextStateAfterTimeout;
             elseif result >= 1
