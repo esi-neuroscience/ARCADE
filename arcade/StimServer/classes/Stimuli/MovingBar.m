@@ -3,15 +3,16 @@ classdef MovingBar < Rectangle
     % 
     % See also Stimulus, Rectangle, Animation
     
-    properties
+    properties ( Transient = true ) 
        direction = 0 % traveling direction of bar in degrees
        travelDistance = 500; % distance of travel
        startPosition = [0 0]; % starting position of bar sweep
        % linkedOrientationDirection - boolean flag
        % If true, bar will be orthogonal to motion direction
        linkedOrientationDirection = true; 
+       barAnimation % animation of bar
     end
-        
+           
     methods 
         function obj = MovingBar(speed, distance)
             obj = obj@Rectangle;            
@@ -20,20 +21,22 @@ classdef MovingBar < Rectangle
            
             vertices = obj.calc_vertices(obj.startPosition, ...
                 obj.direction, distance);
-            obj.animation = LinearMotion(speed, vertices);
+            obj.barAnimation = LinearMotion(speed, vertices);
+            obj.barAnimation.terminalAction = '00010000';
             obj.travelDistance = distance;
+            obj.play_animation(obj.barAnimation);
             
         end
         
         function set.startPosition(obj, position)
-            obj.animation.vertices = obj.calc_vertices(position, ...
+            obj.barAnimation.vertices = obj.calc_vertices(position, ...
                 obj.direction, obj.travelDistance);
             obj.startPosition = position;
         end
             
             
         function set.direction(obj, direction)                        
-            obj.animation.vertices = obj.calc_vertices(obj.startPosition, ...
+            obj.barAnimation.vertices = obj.calc_vertices(obj.startPosition, ...
                 direction, obj.travelDistance);
             obj.direction = direction;
             if obj.linkedOrientationDirection
@@ -42,7 +45,7 @@ classdef MovingBar < Rectangle
         end
         
         function set.travelDistance(obj, travelDistance)
-            obj.animation.vertices = obj.calc_vertices(obj.startPosition, ...
+            obj.barAnimation.vertices = obj.calc_vertices(obj.startPosition, ...
                 obj.direction, travelDistance);
             obj.travelDistance = travelDistance;
         end

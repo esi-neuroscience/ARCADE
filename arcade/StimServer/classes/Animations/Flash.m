@@ -10,7 +10,7 @@ classdef Flash < Animation
     % -------
     %   a = Flash(2);
     %   c = Circle;
-    %   c.animation = a;
+    %   c.play_animation(a);
     %   c.visible = true;
     %     
     % See also Animation, Stimulus

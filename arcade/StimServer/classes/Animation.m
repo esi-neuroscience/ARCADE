@@ -19,7 +19,7 @@ classdef (Abstract) Animation < hgsetget
     % Setting a to 0 restores the default behavior of deassigning
     % the animation from the stimulus.
     %
-    % See also LinearMotion, GeneralMotion, LinearRange
+    % See also LinearMotion, GeneralMotion, LinearRange, Flash, ExternalPositionControl
     %
     properties
         terminalAction %
