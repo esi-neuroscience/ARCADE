@@ -69,7 +69,6 @@ classdef ABSEyeServer < handle
             obj.readyEvent.trigger();
         end
         
-
         function draw_tracker(varargin)
             
         end
