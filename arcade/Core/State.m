@@ -43,9 +43,9 @@ classdef State < handle
             obj.runNumber = obj.runNumber+1;
             obj.evalFunctions(obj.onEntry)            
             
-            
-            result = [];
-            while (toc(tStart) < obj.duration/1000) && isempty(result)
+            tStart = tic;
+            result = State.WAIT_TIMEOUT;
+            while (toc(tStart) < obj.duration/1000) && result == State.WAIT_TIMEOUT
                 java.lang.Thread.sleep(1)
                 if ~isempty(obj.waitEvents)
                     result = WaitForEvents(1, ...
@@ -53,11 +53,8 @@ classdef State < handle
                         obj.waitForAllEvents, ...
                         0);
                 end
-            end
-            if isempty(result)
-                result = State.WAIT_TIMEOUT;
-            end
-            
+            end  
+            assert(result ~= State.WAIT_FAILED, 'Wait for events failed');
                         
             if obj.runNumber >= obj.maxRepetitions
                 nextState = 'final';
