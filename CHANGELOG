@@ -1,8 +1,17 @@
 # Change Log of ARCADE
 
+## [2.1.3] - 2017-12-18
+### FIXED
+*   Bugs due to renaming of NidaqServer to DaqServer
+*   Due to MATLAB black magic, states lasted ca. 10% longer than defined by
+    the user. Timings of eventmarkers etc. should still have been correct.
+    This is fixed with a workaround now. It will be fixed more elegantly in a
+    future version of ARCADE.
+
 ## [2.1.2] - 2017-11-15
 ### NEW
 *   NidaqServer.exe: support for USB-6353
+
 ### FIXED
 *   Bugs introduced due to renaming NidaqServer
 
