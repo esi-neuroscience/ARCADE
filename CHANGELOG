@@ -1,5 +1,11 @@
 # Change Log of ARCADE
 
+## [2.1.4] - 2018-01-08
+### FIXED
+*   StimServer 1.2.5.1: deleting PixelShader-based stimuli (gratings, gammatrons, 
+    gaussians, gabors)) without making them visible was crashing StimServer.exe 
+    in 1.2.4.0 and 1.2.5.0 (ARCADE 2.0.2-2.1.3)
+
 ## [2.1.3] - 2017-12-18
 ### FIXED
 *   Bugs due to renaming of NidaqServer to DaqServer
