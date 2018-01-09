@@ -53,18 +53,28 @@ classdef (Sealed) SGLStateArc < handle
         end
         
         function stateNames = get.stateNames(obj)
-            stateNames = {obj.states.name};
+            if ~isempty(obj.states)
+                stateNames = {obj.states.name};
+            else
+                stateNames = [];
+            end
         end
         
         function eventNames = get.eventNames(obj)
-            eventNames = unique([obj.states.waitEvents]);
+            if ~isempty(obj.states)
+                eventNames = unique([obj.states.waitEvents]);
+            else
+                eventNames = [];
+            end
         end
                 
         
-        function mRunTrial(obj)                                    
-            nextState = obj.initialState;
-                        
-            while ~strcmp(nextState, 'final')                
+        function mRunTrial(obj)              
+            if isempty(obj.states)
+                return
+            end
+            nextState = obj.initialState;                        
+            while ~strcmp(nextState, 'final')
                 currentState = obj.states(strcmp(nextState, obj.stateNames));
                 nextState = currentState.run();                
             end                
