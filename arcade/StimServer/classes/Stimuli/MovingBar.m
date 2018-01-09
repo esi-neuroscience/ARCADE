@@ -1,4 +1,4 @@
-classdef MovingBar ( Sealed )< Rectangle
+classdef ( Sealed ) MovingBar < Rectangle
     % MOVINGBAR - Helper class for a moving bar
     %
     %
@@ -17,6 +17,9 @@ classdef MovingBar ( Sealed )< Rectangle
     %   bar.width = 10;
     %   bar.play_animation();
     %
+    % Note: Only the changing the startPosition property will affect the
+    % moving bar. The position property has no effect.
+    % 
     % See also Stimulus, Rectangle, Animation
     
     properties ( Transient = true )
