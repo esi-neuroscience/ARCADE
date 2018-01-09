@@ -59,7 +59,7 @@ classdef (Sealed) SGLBackgroundObject
         %# Turn ON Pause Screen
         function setPauseScreen(this) % turn on
             % set pause color
-            StimServer.SetBackgroundColor(this.backgroundColor);
+            StimServer.SetBackgroundColor(this.pauseColor);
         end
     end
     
