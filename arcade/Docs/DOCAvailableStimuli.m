@@ -55,7 +55,7 @@ properties('Stimulus')
 % 
 % _Note_: For displays with an even number of pixels the center |[0 0]| is
 % actually between the two center pixels. To achieve pixel-perfect display of
-% stimuli one should add 0.5 to the coordinate. 
+% stimuli you should add 0.5 to the coordinate. 
 
 %% Circles
 % Filled circles can be created as a |Circle|. Type 1 circles are filled, 
@@ -126,9 +126,7 @@ properties('Grating')
 % Spatial frequency is defined as |spatialFrequency| in pixel per cycle. 
 % Temporal frequency is
 % specified via the |temporalFrequency| property in units of cycles per
-% s. That is, for a 120 Hz display, a |animationIncrement| value of
-% 1/120 will result in a drifting grating at a speed of 1 cycle/s. 
-% The mask can be circular or elliptical (|maskWidth|, |maskHeight|), 
+% s. The mask can be circular or elliptical (|maskWidth|, |maskHeight|), 
 % and can be rotated (|maskRotation|). 
 % The two colors of the grating are specfied as a vector of 8-bit values for
 % |[red green blue alpha]|. The |smoothing| parameter is 2 for purely
@@ -270,6 +268,16 @@ r2.delete();
 % becomes visible. An animation can be stopped by using the
 % |stop_animation| method of the animated stimulus.
 % 
+% When an animation ends several actions can be triggered, which is
+% controlled via the |terminalAction| property of the animation.
+help Animation.terminalAction
+
+%%
+% To keep the stimulus presentation and the experimental |State| in sync,
+% it is *strongly recommended* to set the 4th bit of the |terminalAction| property
+% such that the |StimServerAnimationDone| event is triggered. Otherwise the
+% next state might already start before the animation is finished.
+
 %%
 % *Example*
 r = Rectangle;
@@ -296,14 +304,15 @@ properties('MovingBar')
 %%
 % Only the |startPosition|, |direction| and |travelDistance| have to bet set.
 % If |linkedOrientationDirection| is set, the bar will always be
-% orthogonal to the travel direction.
+% orthogonal to the travel direction. To start the sweep animation of the
+% |MovingBar| use the |play_animation| method without arguments.
 %%
 % *Example*
 speed = 200;
 travelDistance = 500;
 mb = MovingBar(speed, travelDistance);
 mb.direction = 35;
-mb.visible = true;
+mb.play_animation()
 pause(5)
 mb.delete()
 
@@ -325,7 +334,7 @@ g.visible = true;
 properties('Gaussian');
 %% 
 % *Example*
-g1 = Gaussian
+g1 = Gaussian;
 g1.sdx = 100;
 g1.angle = 45;
 g1.color = [128 255 0];
@@ -345,7 +354,8 @@ set([g1, g2, g3], 'visible', true);
 % written in a specific shader language, HLSL  (see 
 % <https://msdn.microsoft.com/en-us/library/windows/desktop/bb509561(v=vs.85).aspx here>
 % for more information). Using HLSL any stimulus that 
-% can be parameterized may be generated and rendered with high performance.
+% can be parameterized based on pixel location and time
+% may be generated and rendered with high performance.
 % 
 % Programming in HLSL is not trivial, but offers great flexibility. As a
 % starting point you may have a look at the gratings presented above.
