@@ -1,5 +1,28 @@
 # Change Log of ARCADE
 
+## [2.2.0] - 2018-01-10
+### NEW
+*   EyelinkEyeServer: positions tracked via trackeye are not drawn on the
+    Eyelink Host PC's screen.
+*   A stimulus position can now be coupled to a coordinate stored in shared
+    memory using the animation ExternalPositionControl. This allows for
+    example gaze-contingent stimulus presentation and manual receptive field
+    mapping.
+*   The next state after the maximum number of repetitions of a State can now
+    be defined using the nextStateAfterMaxRepetitions property.
+
+### CHANGED
+*   Updated the MovingBar class: Playing the bar animation is now triggered
+    via MovingBar.play_animation() (see help MovingBar). Also, the animation
+    of the bar is now configured by default to trigger the
+    StimServerAnimationDone event once the bar has reached it's final
+    position.
+
+### FIXED
+*   Setting the background color for the pause screen had no effect.
+*   Trialscripts that do not use the createTrial function, i.e. put States
+    into the StateArc, crashed ARCADE.
+
 ## [2.1.4] - 2018-01-08
 ### FIXED
 *   StimServer 1.2.5.1: deleting PixelShader-based stimuli (gratings, gammatrons, 

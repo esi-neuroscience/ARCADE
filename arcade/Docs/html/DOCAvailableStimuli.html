@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Visual stimuli for ARCADE</title><meta name="generator" content="MATLAB 8.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-10-30"><meta name="DC.source" content="DOCAvailableStimuli.m"><style type="text/css">
+      --><title>Visual stimuli for ARCADE</title><meta name="generator" content="MATLAB 8.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-01-09"><meta name="DC.source" content="DOCAvailableStimuli.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -71,14 +71,14 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 </pre><p>or by using the <tt>set</tt> command, similar to how figures and axes can be manipulated in MATLAB, e.g.,</p><pre class="language-matlab">set(stim, <span class="string">'property'</span>, 3.14)
 </pre><p>Only the latter variant can be used in the <tt>onEntry</tt> and <tt>onExit</tt> functions of trial states. The former variant is useful for testing your stimuli. To see all properties of a stimulus, use   <tt>properties('MyStimulus')</tt>, e.g. <tt>properties('Rectangle')</tt></p><p>To ensure stable operation of ARCADE, all stimuli should be explicitly deleted at the end of a trial, e.g. in a <tt>cleanUp</tt> state by issuing</p><pre class="language-matlab">stim.delete()
 </pre><p><b>Testing stimuli</b></p><p>All stimuli can be tested from any open MATLAB if ARCADE is in the MATLAB search path and <tt>ARCADE/arcade/StimServer/StimServer.exe</tt> is running. The first command in such a test environment has to be</p><pre class="language-matlab">StimServer.Connect()
-</pre><p>This command is not necessary in the actual trial script.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">General stimulus properties</a></li><li><a href="#3">Circles</a></li><li><a href="#6">Pictures</a></li><li><a href="#9">Masked grating</a></li><li><a href="#13">Gabor</a></li><li><a href="#17">Rectangles</a></li><li><a href="#20">Animations</a></li><li><a href="#23">Moving Bars</a></li><li><a href="#26">Gammatron (annular grating)</a></li><li><a href="#29">Gaussian</a></li><li><a href="#32">Pixel shader</a></li></ul></div><h2>General stimulus properties<a name="1"></a></h2><p>All stimuli share a few properties. All stimuli can be made visible, repositioned, or animated (smoothly translated).</p><pre class="codeinput">properties(<span class="string">'Stimulus'</span>)
+</pre><p>This command is not necessary in the actual trial script.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">General stimulus properties</a></li><li><a href="#3">Circles</a></li><li><a href="#6">Pictures</a></li><li><a href="#9">Masked grating</a></li><li><a href="#13">Gabor</a></li><li><a href="#17">Rectangles</a></li><li><a href="#20">Animations</a></li><li><a href="#24">Moving Bars</a></li><li><a href="#27">Gammatron (annular grating)</a></li><li><a href="#30">Gaussian</a></li><li><a href="#33">Pixel shader</a></li></ul></div><h2>General stimulus properties<a name="1"></a></h2><p>All stimuli share a few properties. All stimuli can be made visible, repositioned, or animated (smoothly translated).</p><pre class="codeinput">properties(<span class="string">'Stimulus'</span>)
 </pre><pre class="codeoutput">
 Properties for class Stimulus:
 
     visible
     position
 
-</pre><p>Visibility can be <tt>true</tt> for on or <tt>false</tt> for off. The <tt>animation</tt> property is empty by default and can be set if a stimulus should be animated (see below). Coordinates are usually in pixels. The stimulus <tt>position</tt> is always relative to the screen center. Angles are defined in degree with 0 being rightward (--) and 90 upward (|).</p><p>Colors are always specified as 24-bit RGB values, e.g. [255 255 255] for white and [0 0 0] for black. Alpha values range from fully transparent (0) to fully opaque (255).</p><p><i>Note</i>: For displays with an even number of pixels the center <tt>[0 0]</tt> is actually between the two center pixels. To achieve pixel-perfect display of stimuli one should add 0.5 to the coordinate.</p><h2>Circles<a name="3"></a></h2><p>Filled circles can be created as a <tt>Circle</tt>. Type 1 circles are filled, type 2 circles are outlined circles (5 px width, currently not flexible).</p><pre class="codeinput">properties(<span class="string">'Circle'</span>)
+</pre><p>Visibility can be <tt>true</tt> for on or <tt>false</tt> for off. Coordinates are usually in pixels. The stimulus <tt>position</tt> is always relative to the screen center. Angles are defined in degree with 0 being rightward (--) and 90 upward (|).</p><p>Colors are always specified as 24-bit RGB values, e.g. [255 255 255] for white and [0 0 0] for black. Alpha values range from fully transparent (0) to fully opaque (255).</p><p><i>Note</i>: For displays with an even number of pixels the center <tt>[0 0]</tt> is actually between the two center pixels. To achieve pixel-perfect display of stimuli one should add 0.5 to the coordinate.</p><h2>Circles<a name="3"></a></h2><p>Filled circles can be created as a <tt>Circle</tt>. Type 1 circles are filled, type 2 circles are outlined circles (5 px width, currently not flexible).</p><pre class="codeinput">properties(<span class="string">'Circle'</span>)
 </pre><pre class="codeoutput">
 Properties for class Circle:
 
@@ -153,7 +153,7 @@ Properties for class Grating:
     visible
     position
 
-</pre><p>Spatial frequency is defined as <tt>spatialFrequency</tt> in pixel per cycle. Temporal frequency is specified via the <tt>temporalFrequency</tt> property in units of cycles per s. That is, for a 120 Hz display, a <tt>animationIncrement</tt> value of 1/120 will result in a drifting grating at a speed of 1 cycle/s. The mask can be circular or elliptical (<tt>maskWidth</tt>, <tt>maskHeight</tt>), and can be rotated (<tt>maskRotation</tt>). The two colors of the grating are specfied as a vector of 8-bit values for <tt>[red green blue alpha]</tt>. The <tt>smoothing</tt> parameter is 2 for purely sinusoidal gratings. Values &gt; 2 will approach a square wave grating.</p><p><b>Example</b></p><pre class="codeinput">grat1 = Grating();
+</pre><p>Spatial frequency is defined as <tt>spatialFrequency</tt> in pixel per cycle. Temporal frequency is specified via the <tt>temporalFrequency</tt> property in units of cycles per s. The mask can be circular or elliptical (<tt>maskWidth</tt>, <tt>maskHeight</tt>), and can be rotated (<tt>maskRotation</tt>). The two colors of the grating are specfied as a vector of 8-bit values for <tt>[red green blue alpha]</tt>. The <tt>smoothing</tt> parameter is 2 for purely sinusoidal gratings. Values &gt; 2 will approach a square wave grating.</p><p><b>Example</b></p><pre class="codeinput">grat1 = Grating();
 grat1.color1 = [255 0 0 200];
 grat1.color2 = [0 255 0 200];
 grat1.maskRotation = 45;
@@ -255,7 +255,22 @@ r2.visible = true;
 pause(1)
 r1.delete();
 r2.delete();
-</pre><p><img vspace="5" hspace="5" src="exampleRectangle.png" alt=""> </p><p>Detailed documentation can be found with <a href="matlab:doc('Rectangle')">doc Rectangle</a></p><h2>Animations<a name="20"></a></h2><p>ARCADE allows several kinds of animations. All stimulus types can be smoothly translated around on the screen. To animate a stimulus, an animation has to be created first and then assigned to a stimulus by using the <tt>play_animation</tt> method of a stimulus.</p><p>Currently there are three types of animation</p><div><ol><li><tt>LinearMotion</tt>: This moves the stimulus along a polygon.</li><li><tt>GeneralMotion</tt>: This moves the stimulus along an arbitrary path defined in a file. <b>NOT FULLY TESTED YET</b></li><li><tt>LineareRange</tt>: Change certain scalar stimulus properties linearily from a starting value to an end value within a specified duration</li></ol></div><p>To start an animation is has to be passed to the <tt>play_animation</tt> methpd of a stimulus. Animations start immediatly when the stimulus is visible or when it becomes visible. An animation can be stopped by using the <tt>stop_animation</tt> method of the animated stimulus.</p><p><b>Example</b></p><pre class="codeinput">r = Rectangle;
+</pre><p><img vspace="5" hspace="5" src="exampleRectangle.png" alt=""> </p><p>Detailed documentation can be found with <a href="matlab:doc('Rectangle')">doc Rectangle</a></p><h2>Animations<a name="20"></a></h2><p>ARCADE allows several kinds of animations. All stimulus types can be smoothly translated around on the screen. To animate a stimulus, an animation has to be created first and then assigned to a stimulus by using the <tt>play_animation</tt> method of a stimulus.</p><p>Currently there are five types of animation</p><div><ol><li><tt>LinearMotion</tt>: Move a stimulus along a polygon.</li><li><tt>GeneralMotion</tt>: This moves the stimulus along an arbitrary path defined in a file. <b>NOT FULLY TESTED YET</b></li><li><tt>LinearRange</tt>: Change certain scalar stimulus properties linearily from a starting value to an end value within a specified duration</li><li><tt>Flash</tt>: Flash (turn on) a stimulus for a defined number of frames</li><li><tt>ExternalPositionControl</tt>: Couple the position of a stimulus to a position in a shared memory, e.g. the eye position.</li></ol></div><p>To start an animation is has to be passed to the <tt>play_animation</tt> method of a stimulus. Animations start immediatly when the stimulus is visible or when it becomes visible. An animation can be stopped by using the <tt>stop_animation</tt> method of the animated stimulus.</p><p>When an animation ends several actions can be triggered, which is controlled via the <tt>terminalAction</tt> property of the animation.</p><pre class="codeinput">help <span class="string">Animation.terminalAction</span>
+</pre><pre class="codeoutput">  8-bit mask as string to define actions after the end of the animation.
+  The bits have the following meaning:
+    1 disable the assigned stimulus
+    2
+    4 toggle the photodiode signal1
+    8 signal StimServerAnimatioNDone event
+    16 restart animation (cyclic execution)
+    32 
+    64 
+    128 end deferred mode
+  
+  Default = '00000000', i.e. the stimulus remains visible after the
+  animation ends.
+
+</pre><p>To keep the stimulus presentation and the experimental <tt>State</tt> in sync, it is <b>strongly recommended</b> to set the 4th bit of the <tt>terminalAction</tt> property such that the <tt>StimServerAnimationDone</tt> event is triggered. Otherwise the next state might already start before the animation is finished.</p><p><b>Example</b></p><pre class="codeinput">r = Rectangle;
 r.color = [255 255 255];
 r.height = 200;
 r.angle = 45;
@@ -266,7 +281,7 @@ speed = 150; <span class="comment">% px/s</span>
 a = LinearMotion(speed, vertices);
 r.play_animation(a);
 r.visible = true;
-</pre><p><img vspace="5" hspace="5" src="exampleAnimation.png" alt=""> </p><p>Detailed documentation can be found with <a href="matlab:doc('LinearMotion')">doc LinearMotion</a></p><h2>Moving Bars<a name="23"></a></h2><p>The <tt>MovingBar</tt> class simplifies the creation of animated bars by automatically creating the animation.</p><pre class="codeinput">properties(<span class="string">'MovingBar'</span>)
+</pre><p><img vspace="5" hspace="5" src="exampleAnimation.png" alt=""> </p><p>Detailed documentation can be found with <a href="matlab:doc('LinearMotion')">doc LinearMotion</a></p><h2>Moving Bars<a name="24"></a></h2><p>The <tt>MovingBar</tt> class simplifies the creation of animated bars by automatically creating the animation.</p><pre class="codeinput">properties(<span class="string">'MovingBar'</span>)
 </pre><pre class="codeoutput">
 Properties for class MovingBar:
 
@@ -274,6 +289,7 @@ Properties for class MovingBar:
     travelDistance
     startPosition
     linkedOrientationDirection
+    barAnimation
     width
     height
     angle
@@ -282,17 +298,14 @@ Properties for class MovingBar:
     visible
     position
 
-</pre><p>Only the <tt>startPosition</tt>, <tt>direction</tt> and <tt>travelDistance</tt> have to bet set. If <tt>linkedOrientationDirection</tt> is set, the bar will always be orthogonal to the travel direction.</p><p><b>Example</b></p><pre class="codeinput">speed = 200;
+</pre><p>Only the <tt>startPosition</tt>, <tt>direction</tt> and <tt>travelDistance</tt> have to bet set. If <tt>linkedOrientationDirection</tt> is set, the bar will always be orthogonal to the travel direction. To start the sweep animation of the <tt>MovingBar</tt> use the <tt>play_animation</tt> method without arguments.</p><p><b>Example</b></p><pre class="codeinput">speed = 200;
 travelDistance = 500;
 mb = MovingBar(speed, travelDistance);
 mb.direction = 35;
-mb.visible = true;
+mb.play_animation()
 pause(5)
 mb.delete()
-</pre><pre class="codeoutput">Warning: Using the animation property for playing animations is deprecated and
-will be removed in the future.
-	Use the play_animation/stop_animation methods instead 
-</pre><h2>Gammatron (annular grating)<a name="26"></a></h2><p>The <tt>Gammatron</tt> class creates an annular grating pattern with based on two colors that can be drifting inward or outward.</p><pre class="codeinput">properties(<span class="string">'Gammatron'</span>)
+</pre><h2>Gammatron (annular grating)<a name="27"></a></h2><p>The <tt>Gammatron</tt> class creates an annular grating pattern with based on two colors that can be drifting inward or outward.</p><pre class="codeinput">properties(<span class="string">'Gammatron'</span>)
 </pre><pre class="codeoutput">
 Properties for class Gammatron:
 
@@ -313,7 +326,7 @@ Properties for class Gammatron:
 </pre><p><b>Example</b></p><pre class="codeinput">g = Gammatron;
 g.radius = 200;
 g.visible = true;
-</pre><p><img vspace="5" hspace="5" src="exampleGammatron.png" alt=""> </p><h2>Gaussian<a name="29"></a></h2><p>A 2D patch with Gaussian profile can be created using the <tt>Gaussian</tt> stimulus. Its size, rotation and color can be set:</p><pre class="codeinput">properties(<span class="string">'Gaussian'</span>);
+</pre><p><img vspace="5" hspace="5" src="exampleGammatron.png" alt=""> </p><h2>Gaussian<a name="30"></a></h2><p>A 2D patch with Gaussian profile can be created using the <tt>Gaussian</tt> stimulus. Its size, rotation and color can be set:</p><pre class="codeinput">properties(<span class="string">'Gaussian'</span>);
 </pre><pre class="codeoutput">
 Properties for class Gaussian:
 
@@ -329,7 +342,7 @@ Properties for class Gaussian:
     visible
     position
 
-</pre><p><b>Example</b></p><pre class="codeinput">g1 = Gaussian
+</pre><p><b>Example</b></p><pre class="codeinput">g1 = Gaussian;
 g1.sdx = 100;
 g1.angle = 45;
 g1.color = [128 255 0];
@@ -340,24 +353,7 @@ g2.sdy = 100;
 g3 = Gaussian;
 g3.color = [0 0 0];
 set([g1, g2, g3], <span class="string">'visible'</span>, true);
-</pre><pre class="codeoutput">
-g1 = 
-
-  Gaussian with properties:
-
-                 color: [255 255 255]
-                 angle: 0
-                   sdx: 5
-                   sdy: 5
-              filename: 'C:\Toolboxes\ARCADE\arcade\StimServer\classes\Sti...'
-           shaderWidth: 1000
-          shaderHeight: 1000
-    animationIncrement: 1
-        animationPhase: 0
-               visible: 0
-              position: [0 0]
-
-</pre><p><img vspace="5" hspace="5" src="exampleGaussian.png" alt=""> </p><h2>Pixel shader<a name="32"></a></h2><p>Pixel shader are small programs that run on the graphics card and are written in a specific shader language, HLSL  (see <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb509561(v=vs.85).aspx">here</a> for more information). Using HLSL any stimulus that can be parameterized may be generated and rendered with high performance.</p><p>Programming in HLSL is not trivial, but offers great flexibility. As a starting point you may have a look at the gratings presented above. They are implemented in the file <tt>ARCADE\arcade\StimServer\classes\stimfiles\pixelShader\MaskedGrating.fx</tt>, which is loaded and controlled by the <tt>PixelShader</tt> class with the following properties and methods</p><pre class="codeinput">properties(<span class="string">'PixelShader'</span>)
+</pre><p><img vspace="5" hspace="5" src="exampleGaussian.png" alt=""> </p><h2>Pixel shader<a name="33"></a></h2><p>Pixel shader are small programs that run on the graphics card and are written in a specific shader language, HLSL  (see <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb509561(v=vs.85).aspx">here</a> for more information). Using HLSL any stimulus that can be parameterized based on pixel location and time may be generated and rendered with high performance.</p><p>Programming in HLSL is not trivial, but offers great flexibility. As a starting point you may have a look at the gratings presented above. They are implemented in the file <tt>ARCADE\arcade\StimServer\classes\stimfiles\pixelShader\MaskedGrating.fx</tt>, which is loaded and controlled by the <tt>PixelShader</tt> class with the following properties and methods</p><pre class="codeinput">properties(<span class="string">'PixelShader'</span>)
 </pre><pre class="codeoutput">
 Properties for class PixelShader:
 
@@ -417,8 +413,7 @@ Properties for class PixelShader:
 % repositioned, or animated (smoothly translated).
 properties('Stimulus')
 %%
-% Visibility can be |true| for on or |false| for off. The |animation| property is empty by
-% default and can be set if a stimulus should be animated (see below). 
+% Visibility can be |true| for on or |false| for off. 
 % Coordinates are usually in pixels. The stimulus |position| is always relative
 % to the screen center. Angles are defined in degree with 0 being rightward
 % (REPLACE_WITH_DASH_DASH) and 90 upward (|). 
@@ -500,9 +495,7 @@ properties('Grating')
 % Spatial frequency is defined as |spatialFrequency| in pixel per cycle. 
 % Temporal frequency is
 % specified via the |temporalFrequency| property in units of cycles per
-% s. That is, for a 120 Hz display, a |animationIncrement| value of
-% 1/120 will result in a drifting grating at a speed of 1 cycle/s. 
-% The mask can be circular or elliptical (|maskWidth|, |maskHeight|), 
+% s. The mask can be circular or elliptical (|maskWidth|, |maskHeight|), 
 % and can be rotated (|maskRotation|). 
 % The two colors of the grating are specfied as a vector of 8-bit values for
 % |[red green blue alpha]|. The |smoothing| parameter is 2 for purely
@@ -627,20 +620,33 @@ r2.delete();
 % stimulus, an animation has to be created first and then assigned to a
 % stimulus by using the |play_animation| method of a stimulus.
 % 
-% Currently there are three types of animation
+% Currently there are five types of animation
 % 
-% # |LinearMotion|: This moves the stimulus along a polygon.
+% # |LinearMotion|: Move a stimulus along a polygon.
 % # |GeneralMotion|: This moves the stimulus along an arbitrary path
 % defined in a file. *NOT FULLY TESTED YET*
-% # |LineareRange|: Change certain scalar stimulus properties linearily from a
+% # |LinearRange|: Change certain scalar stimulus properties linearily from a
 % starting value to an end value within a specified duration 
+% # |Flash|: Flash (turn on) a stimulus for a defined number of frames
+% # |ExternalPositionControl|: Couple the position of a stimulus to a
+% position in a shared memory, e.g. the eye position.
 % 
-% To start an animation is has to be passed to the |play_animation| methpd
+% To start an animation is has to be passed to the |play_animation| method
 % of a stimulus. 
 % Animations start immediatly when the stimulus is visible or when it
 % becomes visible. An animation can be stopped by using the
 % |stop_animation| method of the animated stimulus.
 % 
+% When an animation ends several actions can be triggered, which is
+% controlled via the |terminalAction| property of the animation.
+help Animation.terminalAction
+
+%%
+% To keep the stimulus presentation and the experimental |State| in sync,
+% it is *strongly recommended* to set the 4th bit of the |terminalAction| property
+% such that the |StimServerAnimationDone| event is triggered. Otherwise the
+% next state might already start before the animation is finished.
+
 %%
 % *Example*
 r = Rectangle;
@@ -667,14 +673,15 @@ properties('MovingBar')
 %%
 % Only the |startPosition|, |direction| and |travelDistance| have to bet set.
 % If |linkedOrientationDirection| is set, the bar will always be
-% orthogonal to the travel direction.
+% orthogonal to the travel direction. To start the sweep animation of the
+% |MovingBar| use the |play_animation| method without arguments.
 %%
 % *Example*
 speed = 200;
 travelDistance = 500;
 mb = MovingBar(speed, travelDistance);
 mb.direction = 35;
-mb.visible = true;
+mb.play_animation()
 pause(5)
 mb.delete()
 
@@ -696,7 +703,7 @@ g.visible = true;
 properties('Gaussian');
 %% 
 % *Example*
-g1 = Gaussian
+g1 = Gaussian;
 g1.sdx = 100;
 g1.angle = 45;
 g1.color = [128 255 0];
@@ -716,7 +723,8 @@ set([g1, g2, g3], 'visible', true);
 % written in a specific shader language, HLSL  (see 
 % <https://msdn.microsoft.com/en-us/library/windows/desktop/bb509561(v=vs.85).aspx here>
 % for more information). Using HLSL any stimulus that 
-% can be parameterized may be generated and rendered with high performance.
+% can be parameterized based on pixel location and time
+% may be generated and rendered with high performance.
 % 
 % Programming in HLSL is not trivial, but offers great flexibility. As a
 % starting point you may have a look at the gratings presented above.

@@ -18,8 +18,8 @@ classdef ABSEyeServer < handle
         function obj = ABSEyeServer(filename)
             sharedObject = MSNamedSharedMemory;
             sharedObject.mCreateFileMapping(obj.sharedMemoryName, 16);
-            setdatatype(sharedObject.pointer, 'doublePtr', 2);
-            sharedObject.pointer.Value = [0.0; 0.0];
+            setdatatype(sharedObject.pointer, 'singlePtr', 2);
+            sharedObject.pointer.Value = single([0.0; 0.0]);
             obj.sharedMemory = sharedObject;
             obj.stopEvent = IPCEvent('StopEyeServer');
             obj.readyEvent = IPCEvent('EyeTrackerReady', false);
@@ -44,7 +44,7 @@ classdef ABSEyeServer < handle
         
         function share_eye_position(obj, eyePosition)
             % Write current eye position into shared memory
-            obj.sharedMemory.pointer.Value = [eyePosition(1); eyePosition(2)];
+            obj.sharedMemory.pointer.Value = single([eyePosition(1); eyePosition(2)]);
         end
         
         function setup_position_tracker(obj)
@@ -59,14 +59,20 @@ classdef ABSEyeServer < handle
                     delete(obj.positionTracker{iTracker})
                 end
                 obj.positionTracker = {};
+                obj.draw_tracker([]);
             else
                 msg = sprintf('New tracker %s at [%g %g], r=%g', name, position(1), position(2), tolerance);
                 logmessage(msg);
-                obj.positionTracker{end+1} = EyeTracker(name, position, tolerance);            
+                obj.positionTracker{end+1} = EyeTracker(name, position, tolerance);     
+                obj.draw_tracker(obj.positionTracker{end})
             end
             obj.readyEvent.trigger();
         end
         
+        function draw_tracker(varargin)
+            
+        end
+                
         
         function start(obj)
             % Start data acquisition            

@@ -12,17 +12,38 @@ classdef (Abstract) Animation < hgsetget
     %   4 toggle the photodiode signal1
     %   8 signal an event (see section 3 on page 4 of StimServer documentation)
     %   16 restart animation (cyclic execution)
-    %   32 
-    %   64 
+    %   32
+    %   64
     %   128 end deferred mode
-    % 
-    % Setting a to 0 restores the default behavior of deassigning
-    % the animation from the stimulus.
     %
-    % See also LinearMotion, GeneralMotion, LinearRange
+    % Setting a to 0 restores the default behavior of deassigning
+    % the animation from the stimulus. 
+    % 
+    % Example
+    % -------
+    %   Setting the terminalAction property to the following will disable
+    %   the simulus after the animation and signal the
+    %   'StimServerAnimationDone' event.
+    %
+    %      animation.terminalAction = '00001001';
+    %
+    % See also LinearMotion, GeneralMotion, LinearRange, Flash, ExternalPositionControl
     %
     properties
-        terminalAction %
+        % 8-bit mask as string to define actions after the end of the animation.
+        % The bits have the following meaning:
+        %   1 disable the assigned stimulus
+        %   2
+        %   4 toggle the photodiode signal1
+        %   8 signal StimServerAnimatioNDone event
+        %   16 restart animation (cyclic execution)
+        %   32 
+        %   64 
+        %   128 end deferred mode
+        % 
+        % Default = '00000000', i.e. the stimulus remains visible after the
+        % animation ends.
+        terminalAction 
     end
     
     properties ( SetAccess = immutable, GetAccess = public, Hidden = true, Transient = true )
@@ -65,7 +86,7 @@ classdef (Abstract) Animation < hgsetget
             else
                 error('Terimnal action bitmask must be either 8-bit binary string or a single number')
             end
-                
+            
             StimServer.Command(obj.key, [0, action]);
             obj.terminalAction = action;
         end
