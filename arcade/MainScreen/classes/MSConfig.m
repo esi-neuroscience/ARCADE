@@ -42,7 +42,8 @@ classdef MSConfig < AUXUIControlFunctions
     %   - main edit to modified mSetGeneralCfgSetGetFunctions(this)
     %   - main differences between HG1 vs HG2 
     %   -- schema.prop (HG1), dynamic property class (HG2)
-    
+    % 23.2.2018 - Jarrod, fixed some code that needlessly assigned a value
+    %   to a newly created property 
     
     properties (...
             Abstract      = true,...
@@ -115,14 +116,10 @@ classdef MSConfig < AUXUIControlFunctions
                     case 'uitable'
                         fcnGetFcn = @(hObj) get(hObj,'data');
                         fcnSetFcn = @(hObj,data) set(hObj,'data',data);
-                        
-                        fcnSelectInds = @(hObj,evt) set(hObj,'selectedIndices',evt.Indices);
-                        
                         % UITABLE ONLY
-                        addProp(controlObject, 'selectedIndices', fcnSelectInds); % create/set 'selectedIndices' property
-                        
+                        addProp(controlObject, 'selectedIndices', []); % create/ selected indicies are set by 'CellSelectionCallback'
                         % cell edit and selection callbacks 
-                        set(controlObject, 'CellSelectionCallback', @(hObj,evt) set(hObj,'selectedIndices',evt.Indices))
+                        set(controlObject, 'CellSelectionCallback', @(hObj,evt) set(hObj,'selectedIndices',evt.Indices));
                         set(controlObject, 'CellEditCallback',      @(hObj,evt) this.mGeneralCallback(hObj, evt, struct_fieldname));  
                 end
                 
@@ -196,8 +193,6 @@ classdef MSConfig < AUXUIControlFunctions
                     else
                         disp('Java Object Set/Get functions not set.');
                     end
-                    
-                    
                 otherwise
                     fcnGetFcn = [];
                     fcnSetFcn = [];
@@ -252,6 +247,7 @@ classdef MSConfig < AUXUIControlFunctions
         %            CALLBACKS 
         
         %# UIObject - general callback function
+        % this is called any time a value is entered in an individual  cell
         function mGeneralCallback(this,hObj,~,field)
             % ------ gets the data, and sets it as it is -------
             % get user input & convert to appropriate value
@@ -259,7 +255,7 @@ classdef MSConfig < AUXUIControlFunctions
             uiinput       = fcnGetUIInput(hObj);        % has all params, only needs object handle
             
             this.mSetFieldCfg(field, uiinput);
-            
+
             % frames are used for marking the position/location 
             % of a java object in the gui, set the value of the frame
             % on the callback to signal that the java object callback has
