@@ -1,33 +1,35 @@
-classdef Picture < Stimulus
-    % PICTURE - Class for image stimuli to be passed to the StimServer.
+classdef MotionPicture < Stimulus
+    % MOTIONPICTURE - Class for image sequence stimuli to be passed to the
+    %   StimServer.
     %
     % Usage
     % -----
-    %   img = Picture(filename);
+    %   images = MotionPicture(filename);
     %
     % See also Stimulus, Animation
     
     properties ( SetAccess = immutable )
-        filename % full filename of image
+        filename % full filename of image sequence
     end
     
     properties ( SetAccess = public, GetAccess = public )
         alpha = 255; % alpha transparency value between 0 (transparent) and 255 (opaque)
         angle = 0; % angle in degrees of image, 0=horizontal, 90=vertical
     end
+    
     methods
-        function obj = Picture(filename)
-            % img = Picture(filename);
+        function obj = MotionPicture(filename)
+            % images = MotionPicture(filename);
             assert(exist(filename, 'file') == 2, 'Picture %s file not found', filename)
             [~,~,ext] = fileparts(filename);
-            validExts = {'.png', '.bmp', '.jpeg', '.jpg', '.tif'};
-            validatestring(ext, validExts);
+            validExts = {'.gif', '.tif'};
+            validatestring(ext, validExts);                        
             
-            StimServer.Command(0, uint8([2 filename 0]));
+            StimServer.Command(0, uint8([24 filename 0]));
             obj = obj@Stimulus();
             obj.filename = filename;
         end
-        
+                
         function set.alpha(obj, alpha)
             assert(alpha>=0 && alpha <=255, 'Picture alpha value must between 0 (transparent) and 255 (opaque)')
             StimServer.Command(obj.key, uint8([1 alpha]));
@@ -39,6 +41,16 @@ classdef Picture < Stimulus
             StimServer.Command(obj.key, ...
                 uint8([4 typecast(single(angle), 'uint8')]));
             obj.angle = angle;
+        end
+        
+        function setFrame(obj, frame)
+            StimServer.Command(obj.key, ...
+                uint8([6 typecast(uint32(frame), 'uint8')]));
+        end
+        
+        function setFrameRateFraction(obj, fraction)
+            StimServer.Command(obj.key, ...
+                uint8([9 typecast(uint16(fraction), 'uint8')]));
         end
         
     end
