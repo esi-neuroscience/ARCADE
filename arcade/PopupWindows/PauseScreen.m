@@ -18,6 +18,7 @@ classdef (Sealed) PauseScreen < AUXEditableVariables & SPCGUIDefinition
     % 29.4.2016 - Jarrod, added some documentation
     % 23.2.2018 - Jarrod, HG1/HG2 Compatibility 
     % - dependance on addProp() in ARCADE\arcade\MainScreen\classes
+    %  1.3.2018 - Jarrod, fixed issue #87 (hTbl -> controlObject)
     
     properties 
        userQuitRequest = false; 
@@ -93,7 +94,7 @@ classdef (Sealed) PauseScreen < AUXEditableVariables & SPCGUIDefinition
             data = this.cfg.EditableVariables;
             
             % set editable variables 
-            set(hTbl,'data',data);
+            set(controlObject,'data',data);
             
 
             nRows = size(data,1); % number of editable variables
