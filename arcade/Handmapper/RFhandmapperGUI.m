@@ -4,12 +4,13 @@ classdef RFhandmapperGUI < handle
         fig
         ax
         stimPanel
-        eyePanel
         centerCross
+
         hHide
         hFlash
-
+        hStimpos
         hBackground
+        
         ppd
 
         main
@@ -68,6 +69,7 @@ classdef RFhandmapperGUI < handle
 
             % make panels
             panelSize = [screenCenter(1) 58];
+
             obj.main.make_stim_buttons(obj.fig, [0,  screenCenter(2)+82, panelSize]);
             obj.make_stim_panel(screenCenter, [0, screenCenter(2)+80+62, panelSize]);
             obj.eye.make_eye_panel(obj.fig, screenCenter, [0, 0, panelSize]);
@@ -115,12 +117,12 @@ classdef RFhandmapperGUI < handle
                 'BorderType', 'none', ...
                 'Title', 'Stimulus Control',...
                 'FontSize', 12,...
-                'BackgroundColor', get(gcf, 'Color'),...
+                'BackgroundColor', get(obj.fig, 'Color'),...
                 'Units','Pixels', ...
                 'Position', pos);
 
             % dropdown box to select each stimulus. Callback creates currstim which enables stim buttons
-            liststim = cellfun(@(x)get(x.hUipanel, 'Tag'), obj.main.stim, 'UniformOutput', 0);
+            liststim = cellfun(@(x)x.name, obj.main.stim, 'UniformOutput', 0);
             hSelStim = HandmapButtons.dropdown(obj.stimPanel,'Select Stimulus', 1, liststim, [20,0], @obj.onChooseStimulus);
             
             % on/off
@@ -128,7 +130,7 @@ classdef RFhandmapperGUI < handle
                 'Style','togglebutton', ...
                 'String','Stim Off', ...
                 'Value',0, ...
-                'Position',[120,0,60,30], ...
+                'Position',[120,4,60,30], ...
                 'Callback',@obj.onOff);
 
             % hide
@@ -136,30 +138,33 @@ classdef RFhandmapperGUI < handle
                 'Style','togglebutton', ...
                 'String','Invisible', ...
                 'Value',1, ...
-                'Position',[200,0,60,30], ...
+                'Position',[200,4,60,30], ...
                 'Callback',@obj.onInvisible);
 
             % flash rate
-            obj.hFlash = HandmapButtons.editbox(obj.stimPanel, 'Flash', obj.main.flash(1), [280,0], @obj.onFlash);
-            %set(obj.hFlash, 'Enable', 'inactive') % until Flicker animation ready
-
-            % background flash?
-            %HandmapButtons.editbox(obj.stimPanel, 'Flash', obj.main.flashSpeed, [360,0], @obj.onFlash);            
+            obj.hFlash = HandmapButtons.editbox(obj.stimPanel, 'Flash', obj.main.flash(1), [280,4], @obj.onFlash);
+            
+            % Stim position in visual degrees
+            obj.hStimpos = uicontrol(obj.stimPanel, ...
+                'BackgroundColor', get(obj.fig, 'Color'), ...
+                'Style','text', ...
+                'String',sprintf('%.1f,%.1f',obj.main.stimpos./obj.ppd), ...
+                'Position',[340,4,80,30]);
 
             % background dropdown
             col = {'gray','white','black'};
             HandmapButtons.dropdown(obj.stimPanel,'Select Background', 1, col, ...
-                [screenCenter(1)-300,0], @obj.onChooseBackground);
+                [screenCenter(1)-300,4], @obj.onChooseBackground);
 
             % background colour
             obj.hBackground = HandmapButtons.editbox_rgb(obj.stimPanel, 'BackgroundColor', obj.main.background, 0, 255, ...
-                [screenCenter(1)-200,0], @obj.onBackground);
+                [screenCenter(1)-200,4], @obj.onBackground);
 
             % save stimulus
             uicontrol(obj.stimPanel, ...
                 'Style','pushbutton', ...
                 'String','Save', ...
-                'Position',[screenCenter(1)-80,0,60,30], ...
+                'Position',[screenCenter(1)-80,4,60,30], ...
                 'Callback',@obj.onSave);
 
         end
@@ -210,7 +215,6 @@ classdef RFhandmapperGUI < handle
             mousePosition = get(obj.ax, 'CurrentPoint');
             screenCoords = mousePosition(1,1:2)*2; % this could be made flexible 
             obj.main.stimpos = screenCoords;
-            %obj.main.share_stim_position(screenCoords);
             obj.makeCenterCross();
         end
         
@@ -284,7 +288,7 @@ classdef RFhandmapperGUI < handle
 
             todayDate = datestr(now,'yyyyMMdd');
             nowTime = datestr(now,'HHmm-ss');
-            savename = sprintf('RFhandmapStimulus_%s_t%s', todayDate, nowTime);
+            savename = sprintf('RFhandmapStimulus_%s_%s_t%s', obj.main.currstim.name, todayDate, nowTime);
 
             stim = obj.main.currstim.stim;
             save(savename, 'stim')

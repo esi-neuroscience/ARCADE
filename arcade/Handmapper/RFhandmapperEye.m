@@ -142,7 +142,6 @@ classdef RFhandmapperEye < handle
         end
 
         %% reward timer
-
         function rew = make_reward_timer(obj)
 
             rew = timer;

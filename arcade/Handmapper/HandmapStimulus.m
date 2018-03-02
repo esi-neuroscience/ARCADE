@@ -2,6 +2,7 @@ classdef HandmapStimulus < HandmapButtons
 
 properties
     stim
+    name
     hUipanel
     animation
 end
@@ -9,6 +10,21 @@ end
 methods
     
     function obj = HandmapStimulus()
+    end
+
+    function make_uipanel(obj,hFig,pos)
+        % make stimulus control panel
+
+        bgColor = get(hFig, 'Color');
+
+        obj.hUipanel = uipanel(hFig, ...
+            'BorderType', 'none', ...
+            'Title','Grating Control',...
+            'FontSize',12,...
+            'BackgroundColor', bgColor,...
+            'Units','Pixels', ...
+            'Position', pos,...
+            'Visible', 'Off');
     end
 
     function hide(obj)

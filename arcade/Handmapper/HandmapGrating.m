@@ -11,9 +11,11 @@ classdef HandmapGrating < HandmapStimulus
     methods
 
         function obj = HandmapGrating(hFig,pos)
+            obj.name = 'Grating'; %need this to choose stim
 
             obj.make_stimulus();
             obj.make_uipanel(hFig,pos);
+            obj.make_grating_buttons();
 
         end
 
@@ -33,20 +35,8 @@ classdef HandmapGrating < HandmapStimulus
 
         end
 
-        function make_uipanel(obj,hFig,pos)
+        function make_grating_buttons(obj)
             % make grating buttons
-
-            bgColor = get(gcf, 'Color');
-
-            obj.hUipanel = uipanel(hFig, ...
-                'BorderType', 'none', ...
-                'Title','Grating Control',...
-                'FontSize',12,...
-                'BackgroundColor', bgColor,...
-                'Units','Pixels', ...
-                'Position', pos,...
-                'Tag', 'Grating',... %need this to choose stim
-                'Visible', 'Off');
 
             stim = obj.stim{1};
 

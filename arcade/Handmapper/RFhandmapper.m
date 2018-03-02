@@ -11,7 +11,7 @@ classdef RFhandmapper < handle
     %   reward         : reward duration in ms, default=80 
     %   fixPoint       : function handle specifying custom fixation point stimulus 
     %   customStim     : class handle specifying custom Handmap stimulus 
-    %                    inbuilt stimuli = grating (default), bar, gammatron, image 
+    %                    inbuilt stimuli = grating (default), rectangle, gammatron, image 
     % 
 
     % To do:    Zoom slider to resize stimuli. Issue: each stimulus type has differently named size property
@@ -186,9 +186,12 @@ classdef RFhandmapper < handle
             end
         end
         
-        function set.stimpos(obj, stimpos) % to get around shared memory
+        function set.stimpos(obj, stimpos)
             obj.currstim.position(stimpos);
             obj.stimpos = stimpos;
+            % Display
+            set(obj.gui.hStimpos, 'String', ...
+                sprintf('%.1f,%.1f', obj.stimpos./obj.gui.ppd))
         end
 
         function set.background(obj, background)

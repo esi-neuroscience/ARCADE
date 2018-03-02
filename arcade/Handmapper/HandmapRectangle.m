@@ -12,10 +12,11 @@ classdef HandmapRectangle < HandmapStimulus
     methods
 
         function obj = HandmapRectangle(hFig,pos)
+            obj.name ='Rectangle'; %need this to choose stim
 
             obj.make_stimulus();
-
             obj.make_uipanel(hFig,pos);
+            obj.make_rectangle_buttons();
 
         end
 
@@ -32,20 +33,8 @@ classdef HandmapRectangle < HandmapStimulus
 
         end
 
-        function make_uipanel(obj,hFig,pos)
+        function make_rectangle_buttons(obj)
             % make rectangle buttons
-
-            bgColor = get(gcf, 'Color');
-
-            obj.hUipanel = uipanel(hFig, ...
-                'BorderType', 'none', ...
-                'Title','Rectangle Control',...
-                'FontSize',12,...
-                'BackgroundColor', bgColor,...
-                'Units','Pixels', ...
-                'Position', pos,...
-                'Tag', 'Rectangle',... %need this to choose stim
-                'Visible', 'Off');
 
             stim = obj.stim{1};
 

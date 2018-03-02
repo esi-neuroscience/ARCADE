@@ -10,9 +10,11 @@ classdef HandmapGammatron < HandmapStimulus
     methods
 
         function obj = HandmapGammatron(hFig,pos)
+            obj.name = 'Gammatron';
 
             obj.make_stimulus();
             obj.make_uipanel(hFig,pos);
+            obj.make_gammatron_buttons();
 
         end
 
@@ -30,20 +32,8 @@ classdef HandmapGammatron < HandmapStimulus
 
         end
 
-        function make_uipanel(obj,hFig,pos)
-            % make grating buttons
-
-            bgColor = get(gcf, 'Color');
-
-            obj.hUipanel = uipanel(hFig, ...
-                'BorderType', 'none', ...
-                'Title','Gammatron Control',...
-                'FontSize',12,...
-                'BackgroundColor', bgColor,...
-                'Units','Pixels', ...
-                'Position', pos,...
-                'Tag', 'Gammatron',... %need this to choose stim
-                'Visible', 'Off');
+        function make_gammatron_buttons(obj)
+            % make gammatron buttons
 
             stim = obj.stim{1};
 
@@ -58,7 +48,7 @@ classdef HandmapGammatron < HandmapStimulus
             obj.editbox(obj.hUipanel, 'Speed', stim.temporalFrequency, [270 4], @obj.onSpeed)
 
             % direction
-            obj.hFull = uicontrol(obj.hUipanel, ...
+            uicontrol(obj.hUipanel, ...
                 'Style','togglebutton', ...
                 'String','Direction', ...
                 'Value',1, ...

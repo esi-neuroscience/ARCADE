@@ -11,10 +11,11 @@ classdef HandmapImage < HandmapStimulus
 
     methods
         function obj = HandmapImage(hFig,pos)
+            obj.name = 'Image';%need this to choose stim
 
             obj.make_stimulus();
-
             obj.make_uipanel(hFig,pos);
+            obj.make_image_buttons();
 
         end
 
@@ -33,19 +34,8 @@ classdef HandmapImage < HandmapStimulus
 
         end
 
-        function make_uipanel(obj,hFig,pos)
-            % make buttons
-            bgColor = get(gcf, 'Color');
-
-            obj.hUipanel = uipanel(hFig, ...
-                'BorderType', 'none', ...
-                'Title','Image Control',...
-                'FontSize',12,...
-                'BackgroundColor', bgColor,...
-                'Units','Pixels', ...
-                'Position', pos,...
-                'Tag', 'Image',... %need this to choose stim
-                'Visible', 'Off');
+        function make_image_buttons(obj)
+            % make image buttons
 
             stim = obj.stim{1};
 
