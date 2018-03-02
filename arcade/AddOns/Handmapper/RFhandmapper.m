@@ -5,34 +5,35 @@ classdef RFhandmapper < handle
     % USAGE
     % -----
     %   RFhandmapper({reward, fixPoint, customStim})
-    % 
+    %
     % INPUT (optional)
     % -----------------
-    %   reward         : reward duration in ms, default=80 
-    %   fixPoint       : function handle specifying custom fixation point stimulus 
-    %   customStim     : class handle specifying custom Handmap stimulus 
-    %                    inbuilt stimuli = grating (default), rectangle, gammatron, image 
-    % 
-
+    %   reward         : reward duration in ms, default=80
+    %   fixPoint       : function handle specifying custom fixation point stimulus
+    %   customStim     : class handle specifying custom Handmap stimulus
+    %                    inbuilt stimuli = grating (default), rectangle, gammatron, image
+    %
+    
     % To do:    Zoom slider to resize stimuli. Issue: each stimulus type has differently named size property
     
-
+    
     properties
         %stimuli
         stim = {@HandmapGrating,...
-                @HandmapRectangle,...
-                @HandmapGammatron,...
-                @HandmapImage}% cell array of class handles
+            @HandmapRectangle,...
+            @HandmapGammatron,...
+            @HandmapImage}% cell array of class handles
         currstim
         stimpos = [200,-200]
         custom
         flash = 0 %frames, 0 means no flash
         background = [127, 127, 127]
-
+        ppd
+        
         % other handmapper objects
         gui
         eye
-
+        
         % processes
         EyeServer = 'Eyelink' %'Eyelink' 'NationalInstruments' 'Test'
         stimServerProcess
@@ -41,9 +42,17 @@ classdef RFhandmapper < handle
         stopEvent
     end
 
+    properties ( Constant, Hidden=true )
+        %screen parameters
+        screenX = 1680 %pix
+        screenY = 1050 %pix
+        screenDiag = 51 %cm
+        screenDist = 70 %cm
+    end
+    
     methods
         function obj = RFhandmapper(reward, fixPoint, customStim)
-
+            
             % setup
             if ~exist('reward', 'var')
                 reward = [];
@@ -54,7 +63,7 @@ classdef RFhandmapper < handle
             if ~exist('customStim','var')
                 customStim = {};
             end
-
+            
             if iscell(customStim)
                 obj.custom = customStim;
             else
@@ -62,33 +71,34 @@ classdef RFhandmapper < handle
             end
             
             % connect processes
-            obj.stopEvent = IPCEvent('StopRFhandmapper');     
-
+            obj.stopEvent = IPCEvent('StopRFhandmapper');
+            
             obj.connectStimServer();
             obj.connectNidaqServer();
             obj.connectEyeServer();
 
             % setup eye tracking
+            obj.calc_ppd();
             obj.eye = RFhandmapperEye(obj,reward,fixPoint);
-
+            
             % make gui
             obj.gui = RFhandmapperGUI(obj,obj.eye);
-
+            
             % start displaying
             obj.currstim = obj.stim{1};
             obj.start();
-
+            
             % close
             obj.delete();
-
+            
         end
-
+        
         function connectStimServer(obj)
-            % Connect to StimServer or start it if it's not running 
+            % Connect to StimServer or start it if it's not running
             tWait = tic;
             success = false;
             while ~success && toc(tWait) < 10
-                try 
+                try
                     StimServer.Connect();
                     success = true;
                 catch me
@@ -103,15 +113,15 @@ classdef RFhandmapper < handle
             if ~success
                 rethrow(me)
             end
-
+            
         end
-
+        
         function connectNidaqServer(obj)
-            % Connect to NidaqServer or start it if it's not running 
+            % Connect to NidaqServer or start it if it's not running
             tWait = tic;
             success = false;
             while ~success && toc(tWait) < 10
-                try 
+                try
                     DaqServer.Connect();
                     success = true;
                 catch me
@@ -157,8 +167,18 @@ classdef RFhandmapper < handle
             end
         end
 
-        %% set properties
+        function ppd = calc_ppd(obj)
 
+            % Calculate pixels per degree
+            diagpix = sqrt((obj.screenX^2) + (obj.screenY^2));
+            viewdeg = 2*atan2(obj.screenDiag/2, obj.screenDist)*180/pi;
+            ppd = diagpix/viewdeg;
+            obj.ppd = ppd;
+
+        end
+        
+        %% set properties
+        
         function set.currstim(obj, stim)
             % any updating of currstim will also change the buttons
             try
@@ -174,7 +194,7 @@ classdef RFhandmapper < handle
             else
                 obj.currstim.rm_animation();
             end
-
+            
             obj.currstim.show();
             obj.currstim.position(obj.stimpos);
             if exist('isOn','var')
@@ -191,26 +211,26 @@ classdef RFhandmapper < handle
             obj.stimpos = stimpos;
             % Display
             set(obj.gui.hStimpos, 'String', ...
-                sprintf('%.1f,%.1f', obj.stimpos./obj.gui.ppd))
+                sprintf('%.1f,%.1f', obj.stimpos./obj.ppd))
         end
-
+        
         function set.background(obj, background)
             obj.background = background;
             backgroundColor(background);
-
+            
             for iBox = 1:length(obj.gui.hBackground)
                 set(obj.gui.hBackground(iBox),'String',background(iBox));
             end
-
+            
         end
-
+        
         %% functions
-
+        
         function make_stim_buttons(obj,hFig,pos)
             
             cellfun(@(x)assert(isa(x,'function_handle'),...
                 'Stimulus input is not a function handle'), obj.stim);
-
+            
             for iStim = 1:length(obj.custom)
                 tmp = obj.custom{iStim};
                 if ~isempty(tmp)
@@ -222,14 +242,14 @@ classdef RFhandmapper < handle
             
             tmp = cellfun(@(x)x(hFig,pos), obj.stim, 'uniformoutput', 0);
             obj.stim = tmp;
-
+            
         end
         
         function delete(obj)
-
+            
             StimServer.Disconnect();
             delete(obj.stimServerProcess);
-
+            
             DaqServer.Disconnect();
             delete(obj.daqServerProcess);
             
@@ -237,25 +257,25 @@ classdef RFhandmapper < handle
             stopEvent = IPCEvent('StopEyeServer');
             stopEvent.trigger();
             delete(obj.eyeServerProcess);
-
+            
             delete(obj.currstim)
             cellfun(@(x) delete(x), obj.stim)
-
+            
             delete(timerfind)
-
+            
             obj.stopEvent.trigger();
             delete(obj.stopEvent);
         end
         
         function start(obj)
-
+            
             % background flash?
-
+            
             % make gui active
             set(obj.gui.fig, 'Visible', 'On');
             
             rewTimer = obj.eye.make_reward_timer();
-
+            
             % main loop
             while ~obj.stopEvent.wasTriggered
                 pause(0.05)
@@ -266,9 +286,9 @@ classdef RFhandmapper < handle
                     delete(obj.gui)
                     rethrow(me)
                 end
-
+                
             end
-
+            
             stop(rewTimer)
         end
     end
