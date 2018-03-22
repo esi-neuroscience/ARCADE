@@ -251,9 +251,7 @@ classdef RFhandmapperGUI < handle
             try
                 stop_animation(obj.main.currstim)
             end
-            if flash == 0
-                obj.main.currstim.rm_animation();
-            else
+            if flash ~= 0
                 anim = Flicker(flash,flash);
                 obj.main.currstim.add_animation(anim);
                 obj.main.currstim.play_animation();

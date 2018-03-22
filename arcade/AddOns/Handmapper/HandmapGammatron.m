@@ -9,8 +9,9 @@ classdef HandmapGammatron < HandmapStimulus
     
     methods
         
-        function obj = HandmapGammatron(hFig,pos)
+        function obj = HandmapGammatron(main,hFig,pos)
             obj.name = 'Gammatron';
+            obj.ppd = main.ppd;
             
             obj.make_stimulus();
             obj.make_uipanel(hFig,pos);
@@ -37,7 +38,9 @@ classdef HandmapGammatron < HandmapStimulus
             
             stim = obj.stim{1};
             
-            obj.hRadius = obj.editbox(obj.hUipanel, 'Radius', stim.radius, [10 4], @obj.onRadius);
+            obj.hRadius = obj.editbox(obj.hUipanel, 'Radius', ...
+                sprintf('%0.2f', obj.stim{1}.radius/obj.ppd), ...
+                [10 4], @obj.onRadius);
             
             col = {'white','red','green','blue','yellow','black'};
             obj.dropdown(obj.hUipanel, 'Color1', 1, col, [70 4], @obj.onColor1);
@@ -71,7 +74,7 @@ classdef HandmapGammatron < HandmapStimulus
         
         function onRadius(obj,src,~)
             
-            obj.stim{1}.radius = str2double(get(src, 'String'));
+            obj.stim{1}.radius = str2double(get(src, 'String'))*obj.ppd;
             
         end
         
@@ -132,7 +135,8 @@ classdef HandmapGammatron < HandmapStimulus
                 
             end
             
-            set(obj.hRadius, 'String', obj.stim{1}.radius)
+            set(obj.hRadius, 'String', ...
+                sprintf('%0.2f', obj.stim{1}.radius/obj.ppd));
             
         end
         

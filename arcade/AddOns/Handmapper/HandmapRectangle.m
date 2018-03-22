@@ -11,8 +11,9 @@ classdef HandmapRectangle < HandmapStimulus
     
     methods
         
-        function obj = HandmapRectangle(hFig,pos)
+        function obj = HandmapRectangle(main,hFig,pos)
             obj.name ='Rectangle'; %need this to choose stim
+            obj.ppd = main.ppd;
             
             obj.make_stimulus();
             obj.make_uipanel(hFig,pos);
@@ -25,7 +26,7 @@ classdef HandmapRectangle < HandmapStimulus
             obj.stim = cell(1,1);
             
             obj.stim{1} = Rectangle;
-            obj.stim{1}.width = 60; % width of rectangle in px for angle=0
+            obj.stim{1}.width = 30; % width of rectangle in px for angle=0
             obj.stim{1}.height = 2000; % height of rectangle in px for angle=0
             obj.stim{1}.angle = 0; % counter-clockise rotation of rectangle in degrees, 0=horizontal
             obj.stim{1}.color = [255 255 255]; % 24-bit [r g b] value
@@ -38,9 +39,11 @@ classdef HandmapRectangle < HandmapStimulus
             
             stim = obj.stim{1};
             
-            obj.hWid = obj.editbox(obj.hUipanel, 'Width', stim.width, [10 0], @obj.onWidth);
+            obj.hWid = obj.editbox(obj.hUipanel, 'Width', ...
+                sprintf('%0.2f', stim.width/obj.ppd), [10 0], @obj.onWidth);
             
-            obj.hHeight = obj.editbox(obj.hUipanel, 'Height', stim.height, [70 0], @obj.onHeight);
+            obj.hHeight = obj.editbox(obj.hUipanel, 'Height', ...
+                sprintf('%0.2f', stim.height/obj.ppd), [70 0], @obj.onHeight);
             
             cols = {'white','red','green','blue','yellow','black'};
             obj.hCol = obj.dropdown(obj.hUipanel, 'Color', 1, cols, [130 0], @obj.onColor);
@@ -59,22 +62,24 @@ classdef HandmapRectangle < HandmapStimulus
         
         function update_buttons(obj)
             
-            set(obj.hHeight, 'String', obj.stim{1}.height)
-            set(obj.hWid, 'String', obj.stim{1}.width)
+            set(obj.hHeight, 'String', ...
+                sprintf('%0.2f', obj.stim{1}.height/obj.ppd));
+            set(obj.hWid, 'String', ...
+                sprintf('%0.2f', obj.stim{1}.width/obj.ppd));
             
         end
         
         %% callbacks
         
         function onWidth(obj,src,~)
-            
-            obj.stim{1}.width = str2double(get(src, 'String'));
+            sz = str2double(get(src, 'String'))*obj.ppd;
+            obj.stim{1}.width = sz;
             
         end
         
         function onHeight(obj,src,~)
-            
-            obj.stim{1}.height = str2double(get(src, 'String'));
+            sz = str2double(get(src, 'String'))*obj.ppd;
+            obj.stim{1}.height = sz;
             
         end
         

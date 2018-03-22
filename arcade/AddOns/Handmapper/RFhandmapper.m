@@ -47,7 +47,7 @@ classdef RFhandmapper < handle
         screenX = 1680 %pix
         screenY = 1050 %pix
         screenDiag = 51 %cm
-        screenDist = 70 %cm
+        screenDist = 81 %cm
     end
     
     methods
@@ -240,7 +240,7 @@ classdef RFhandmapper < handle
                 end
             end
             
-            tmp = cellfun(@(x)x(hFig,pos), obj.stim, 'uniformoutput', 0);
+            tmp = cellfun(@(x)x(obj,hFig,pos), obj.stim, 'uniformoutput', 0);
             obj.stim = tmp;
             
         end

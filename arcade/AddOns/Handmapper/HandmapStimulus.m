@@ -2,9 +2,11 @@ classdef HandmapStimulus < HandmapButtons
     
     properties
         stim
-        name
         hUipanel
         animation
+        
+        name
+        ppd
     end
     
     methods
@@ -69,7 +71,7 @@ classdef HandmapStimulus < HandmapButtons
                 % range check
                 for iAng = 1:length(angles)
                     tmp = angles{iAng} + addAngle;
-                    if tmp > 360
+                    if tmp >= 360
                         tmp = tmp - 360;
                     elseif tmp < 0
                         tmp = tmp + 360;
@@ -86,7 +88,7 @@ classdef HandmapStimulus < HandmapButtons
         end
         
         function rm_animation(obj)
-            obj.animation = [];
+            obj.animation = []; %this deletes stimulus??
         end
         
         function play_animation(obj)
