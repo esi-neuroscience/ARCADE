@@ -55,7 +55,7 @@ classdef RFhandmapper < handle
         function obj = RFhandmapper(screenDist, reward, fixPoint, customStim)
             
             % setup
-            if exist('screenDist', 'var')
+            if exist('screenDist', 'var') && ~isempty(screenDist)
                 obj.screenDist = screenDist;
             end
             if ~exist('reward', 'var')
