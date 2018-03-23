@@ -8,6 +8,7 @@ classdef RFhandmapper < handle
     %
     % INPUT (optional)
     % -----------------
+    %   screenDist     : distance of monkey from screen (cm), default=81
     %   reward         : reward duration in ms, default=80
     %   fixPoint       : function handle specifying custom fixation point stimulus
     %   customStim     : class handle specifying custom Handmap stimulus
@@ -42,18 +43,21 @@ classdef RFhandmapper < handle
         stopEvent
     end
 
-    properties ( Constant, Hidden=true )
+    properties ( Hidden=true )
         %screen parameters
         screenX = 1680 %pix
         screenY = 1050 %pix
         screenDiag = 51 %cm
-        screenDist = 70 %cm
+        screenDist = 81 %cm
     end
     
     methods
-        function obj = RFhandmapper(reward, fixPoint, customStim)
+        function obj = RFhandmapper(screenDist, reward, fixPoint, customStim)
             
             % setup
+            if exist('screenDist', 'var') && ~isempty(screenDist)
+                obj.screenDist = screenDist;
+            end
             if ~exist('reward', 'var')
                 reward = [];
             end
@@ -240,7 +244,7 @@ classdef RFhandmapper < handle
                 end
             end
             
-            tmp = cellfun(@(x)x(hFig,pos), obj.stim, 'uniformoutput', 0);
+            tmp = cellfun(@(x)x(obj,hFig,pos), obj.stim, 'uniformoutput', 0);
             obj.stim = tmp;
             
         end

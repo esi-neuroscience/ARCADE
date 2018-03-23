@@ -68,7 +68,8 @@ classdef RFhandmapperEye < handle
                 'Callback',@obj.onEyeOff);
             
             % Fixation radius
-            HandmapButtons.editbox(obj.eyePanel, 'Fix radius', obj.fixRadius/obj.main.ppd, ...
+            HandmapButtons.editbox(obj.eyePanel, 'Fix radius', ...
+                sprintf('%0.2f', obj.fixRadius/obj.main.ppd), ...
                 [80,4], @obj.onFixRadius);
             
             % Fixation time

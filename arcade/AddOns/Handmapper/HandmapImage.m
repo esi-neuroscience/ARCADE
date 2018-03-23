@@ -10,8 +10,9 @@ classdef HandmapImage < HandmapStimulus
     
     
     methods
-        function obj = HandmapImage(hFig,pos)
+        function obj = HandmapImage(main,hFig,pos)
             obj.name = 'Image';%need this to choose stim
+            obj.ppd = main.ppd;
             
             obj.make_stimulus();
             obj.make_uipanel(hFig,pos);
