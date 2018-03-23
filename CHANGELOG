@@ -1,5 +1,15 @@
 # Change Log of ARCADE
 
+## Unreleased
+### NEW
+*   Handmapper: an ARCADE add-on for manual receptive field mapping, which can
+    be started via arcade/AddOns/Handmapper/RFhandmapper.bat
+*   bring_to_front: The drawing order of overlapping stimuli can now be
+    adjusted by bringing individual stimuli to the frontmost layer using the
+    bring_to_front method.
+*   Flicker animation
+*   MotionPicture stimulus
+
 ## [2.2.0] - 2018-01-10
 ### NEW
 *   EyelinkEyeServer: positions tracked via trackeye are not drawn on the
