@@ -122,13 +122,18 @@ classdef RFhandmapperEye < handle
         end
 
         function onFixCenter(obj,src,~)
+            % Get new fixation center
             fixCenter= str2num(get(src,'String'));
             if length(fixCenter) ~= 2
                 fixCenter = [0,0];
                 set(src, 'String', sprintf('%0.2f, %0.2f', fixCenter));
             end
             obj.fixCenter = fixCenter*obj.main.ppd;
+
+            % Move fixation point
+            cellfun(@(x)set(x,'position',obj.fixCenter), obj.fixPoint);
             
+            % Track new fixation position
             trackeye('reset');
             obj.fpEvents = trackeye(obj.fixCenter, obj.fixRadius, 'fp');
         end
