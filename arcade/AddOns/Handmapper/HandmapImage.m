@@ -44,6 +44,7 @@ classdef HandmapImage < HandmapStimulus
                 'String','Load Image', ...
                 'Position',[10,0,60,30], ...
                 'Callback',@obj.onLoadImage);
+            set(obj.hSelect,'TooltipString',sprintf('WARNING: If you choose a huge image Matlab may crash!'))
             
             set( findall(obj.hUipanel, '-property', 'Enable'), 'Enable', 'off')
             

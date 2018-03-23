@@ -54,9 +54,10 @@ classdef HandmapStimulus < HandmapButtons
             cellfun(@(x) set(x, 'visible', false), obj.stim);
         end
         
-        function toggle(obj)
+        function isOn = toggle(obj)
             isOn = cellfun(@(x) get(x, 'visible'), obj.stim, 'UniformOutput', 0);
             cellfun(@(x,y)set(x, 'visible', ~y),obj.stim, isOn);
+            isOn = ~isOn;
         end
         
         function position(obj,stimpos)

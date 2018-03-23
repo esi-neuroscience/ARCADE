@@ -41,9 +41,11 @@ classdef HandmapRectangle < HandmapStimulus
             
             obj.hWid = obj.editbox(obj.hUipanel, 'Width', ...
                 sprintf('%0.2f', stim.width/obj.ppd), [10 0], @obj.onWidth);
+            set(obj.hWid,'TooltipString',sprintf('ppd'))
             
             obj.hHeight = obj.editbox(obj.hUipanel, 'Height', ...
                 sprintf('%0.2f', stim.height/obj.ppd), [70 0], @obj.onHeight);
+            set(obj.hHeight,'TooltipString',sprintf('ppd'))
             
             cols = {'white','red','green','blue','yellow','black'};
             obj.hCol = obj.dropdown(obj.hUipanel, 'Color', 1, cols, [130 0], @obj.onColor);
