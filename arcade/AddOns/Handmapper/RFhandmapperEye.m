@@ -16,6 +16,7 @@ classdef RFhandmapperEye < handle
         % handles
         eyePanel
         rewTimer
+        hEyeOff
         
         main
     end
@@ -50,7 +51,8 @@ classdef RFhandmapperEye < handle
         end
         
         function make_eye_panel(obj, fig, screenCenter, pos)
-            % buttons for eye tracking on off, boxes for fixation window, fixation time, reward amount,  and button for manual reward
+            % buttons for eye tracking on off, boxes for fixation center and window, fixation time, 
+            % reward amount,  and button for manual reward
             obj.eyePanel = uipanel(fig,...
                 'BorderType', 'none', ...
                 'Title','Eye Reward Control',...
@@ -60,31 +62,41 @@ classdef RFhandmapperEye < handle
                 'Position',pos);
             
             % on/off
-            uicontrol(obj.eyePanel, ...
+            obj.hEyeOff = uicontrol(obj.eyePanel, ...
                 'Style','togglebutton', ...
                 'String','Eye Off', ...
                 'Value',1, ...
                 'Position',[10,4,60,30], ...
                 'Callback',@obj.onEyeOff);
+            set(obj.hEyeOff,'TooltipString',sprintf('Fixation point and eye tracking on/off'))
+
+            % Fixation location
+            h = HandmapButtons.editbox(obj.eyePanel, 'Fix center', ...
+                sprintf('%0.2f, %0.2f', obj.fixCenter/obj.main.ppd), ...
+                [80,4], @obj.onFixCenter);
+            set(h,'TooltipString',sprintf('ppd'))
             
             % Fixation radius
-            HandmapButtons.editbox(obj.eyePanel, 'Fix radius', ...
+            h = HandmapButtons.editbox(obj.eyePanel, 'Fix radius', ...
                 sprintf('%0.2f', obj.fixRadius/obj.main.ppd), ...
-                [80,4], @obj.onFixRadius);
+                [140,4], @obj.onFixRadius);
+            set(h,'TooltipString',sprintf('ppd'))
             
             % Fixation time
-            HandmapButtons.editbox_range(obj.eyePanel, 'Fix time', obj.fixDuration, 500, Inf, ...
-                [140,4], @obj.onFixDur);
+            h = HandmapButtons.editbox_range(obj.eyePanel, 'Fix time', obj.fixDuration, 500, Inf, ...
+                [200,4], @obj.onFixDur);
+            set(h,'TooltipString',sprintf('ms'))
             
             % Reward duration
-            HandmapButtons.editbox(obj.eyePanel, 'Reward time', obj.rewardDuration, ...
-                [210,4], @obj.onRewardDur);
+            h = HandmapButtons.editbox(obj.eyePanel, 'Reward time', obj.rewardDuration, ...
+                [270,4], @obj.onRewardDur);
+            set(h,'TooltipString',sprintf('ms'))
             
             % Manual reward
             uicontrol(obj.eyePanel, ...
                 'Style','pushbutton', ...
                 'String','Reward', ...
-                'Position',[290,4,60,30], ...
+                'Position',[350,4,60,30], ...
                 'Callback',@obj.onManualReward);
         end
         
@@ -107,6 +119,23 @@ classdef RFhandmapperEye < handle
                 obj.eyeIn = 0;
                 obj.eyeTracking = 1;
             end
+        end
+
+        function onFixCenter(obj,src,~)
+            % Get new fixation center
+            fixCenter= str2num(get(src,'String'));
+            if length(fixCenter) ~= 2
+                fixCenter = [0,0];
+                set(src, 'String', sprintf('%0.2f, %0.2f', fixCenter));
+            end
+            obj.fixCenter = fixCenter*obj.main.ppd;
+
+            % Move fixation point
+            cellfun(@(x)set(x,'position',obj.fixCenter), obj.fixPoint);
+            
+            % Track new fixation position
+            trackeye('reset');
+            obj.fpEvents = trackeye(obj.fixCenter, obj.fixRadius, 'fp');
         end
         
         function onFixRadius(obj,src,~)

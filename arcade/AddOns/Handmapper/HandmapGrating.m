@@ -42,18 +42,19 @@ classdef HandmapGrating < HandmapStimulus
             obj.hSz = obj.editbox(obj.hUipanel, 'Size', ...
                 sprintf('%0.2f', obj.stim{1}.maskWidth/obj.ppd), ...
                 [10 4], @obj.onSize);
-            
-            %obj.hHeight = obj.editbox(obj.hUipanel, 'Height', stim.maskHeight, [70 4], @obj.onHeight);
+            set(obj.hSz,'TooltipString',sprintf('ppd'))
             
             col = {'white','red','green','blue','yellow','black'};
             obj.dropdown(obj.hUipanel, 'Color1', 1, col, [70 4], @obj.onColor1);
             obj.dropdown(obj.hUipanel, 'Color2', 6, col, [140 4], @obj.onColor2);
             
-            obj.editbox(obj.hUipanel, 'SpatialFreq', stim.spatialFrequency, ...
-                [210 4], @obj.onSpatialFreq)
+            h = obj.editbox(obj.hUipanel, 'SpatialFreq', stim.spatialFrequency, ...
+                [210 4], @obj.onSpatialFreq);
+            set(h,'TooltipString',sprintf('pixels per cycle'))
             
-            obj.editbox(obj.hUipanel, 'Speed', stim.temporalFrequency, ...
-                [270 4], @obj.onSpeed)
+            h = obj.editbox(obj.hUipanel, 'Speed', stim.temporalFrequency, ...
+                [270 4], @obj.onSpeed);
+            set(h,'TooltipString',sprintf('cycles per second'))
             
             % fullscreen
             obj.hFull = uicontrol(obj.hUipanel, ...

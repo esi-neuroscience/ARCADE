@@ -31,6 +31,7 @@ classdef RFhandmapperGUI < handle
                 'NumberTitle','off', ...
                 'CloseRequestFcn',@obj.onClose, ...
                 'WindowScrollWheelFcn',@obj.onScrollWheel, ...
+                'WindowKeyPressFcn',@obj.onKeyPress,...
                 'MenuBar','none', ...
                 'Units','pixels', ...
                 'Position', figPos,...
@@ -129,9 +130,10 @@ classdef RFhandmapperGUI < handle
             
             % flash rate
             obj.hFlash = HandmapButtons.editbox(obj.stimPanel, 'Flash', obj.main.flash(1), [280,4], @obj.onFlash);
+            set(obj.hFlash,'TooltipString',sprintf('# frames on, # frames off\n0 is no flashing'))
             
             % Stim position in visual degrees
-            uicontrol(obj.stimPanel, ...
+            h = uicontrol(obj.stimPanel, ...
                 'BackgroundColor', get(obj.fig, 'Color'), ...
                 'Style','text', ...
                 'String','Position', ...
@@ -141,6 +143,7 @@ classdef RFhandmapperGUI < handle
                 'Style','text', ...
                 'String',sprintf('%.1f,%.1f',obj.main.stimpos./obj.main.ppd), ...
                 'Position',[370,4,80,15]);
+            set([h,obj.hStimpos],'TooltipString',sprintf('Stimulus position in ppd'))
             
             % background dropdown
             col = {'gray','white','black'};
@@ -150,13 +153,17 @@ classdef RFhandmapperGUI < handle
             % background colour
             obj.hBackground = HandmapButtons.editbox_rgb(obj.stimPanel, 'Background', obj.main.background, 0, 255, ...
                 [screenCenter(1)-200,4], @obj.onBackground);
+            set(obj.hBackground,'TooltipString',sprintf('256 color value (0-255)'))
             
             % save stimulus
-            uicontrol(obj.stimPanel, ...
+            h = uicontrol(obj.stimPanel, ...
                 'Style','pushbutton', ...
                 'String','Save', ...
                 'Position',[screenCenter(1)-80,4,60,30], ...
                 'Callback',@obj.onSave);
+            set(h,'TooltipString',...
+                sprintf(['Save properties and position of current stimulus\n',...
+                    'Filename: RFhandmapStimulus_name_currdate_currtime']))
             
         end
         
@@ -218,6 +225,28 @@ classdef RFhandmapperGUI < handle
         function obj = onScrollWheel(obj, ~, callbackdata)
             degrees = 15*callbackdata.VerticalScrollCount;
             obj.main.currstim.add_angle(degrees);
+        end
+
+        function obj = onKeyPress(obj, ~, callbackdata)
+            % if possible run callbacks of buttons attached to keypress
+            keyPressed = callbackdata.Key;
+
+            switch keyPressed
+                case 'space' % currstim invisible/visible
+                    buttonStat = get(obj.hHide,'Value');
+                    set(obj.hHide,'Value', ~buttonStat);
+
+                    obj.onInvisible(obj.hHide,~);
+
+                case 'r' %reward
+                    obj.eye.onManualReward(~,~);
+
+                case 'e' %fixation and eyetracking off
+                    buttonStat = get(obj.eye.hEyeOff,'Value');
+                    set(obj.eye.hEyeOff,'Value', ~buttonStat);
+
+                    obj.eye.onEyeOff(obj,obj.eye.hEyeOff,~);
+            end
         end
         
         %% stim panel callbacks
