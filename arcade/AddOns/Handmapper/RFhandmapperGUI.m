@@ -53,7 +53,8 @@ classdef RFhandmapperGUI < handle
             
             obj.makeGridLines(screenCenter);
             obj.makeCenterCross();
-            
+            obj.eye.makeFixationCircle();
+
             % make panels
             panelSize = [screenCenter(1) 58];
             
@@ -191,7 +192,7 @@ classdef RFhandmapperGUI < handle
                 'ButtonDownFcn', @obj.onStartMove);
             
             obj.centerCross(3) = rectangle(...
-                'Position', [axisCoords sz sz], ...
+                'Position', [axisCoords-sz sz*2 sz*2], ...
                 'Curvature',[1 1], ...
                 'LineStyle','none', ...
                 'ButtonDownFcn', @obj.onStartMove);

@@ -3,6 +3,7 @@ classdef RFhandmapperEye < handle
     properties
         rewardDuration = 70 %ms
         fixDuration = 3000
+        countRew = 0
         
         fixPoint = @CalibrationStimulusGaussian;
         
@@ -17,6 +18,8 @@ classdef RFhandmapperEye < handle
         eyePanel
         rewTimer
         hEyeOff
+        hCountRew
+        hFixCircle
         
         main
     end
@@ -48,6 +51,17 @@ classdef RFhandmapperEye < handle
             obj.fixPoint = tmp;
             cellfun(@(x)set(x,'position',obj.fixCenter), obj.fixPoint);
             
+        end
+
+        function makeFixationCircle(obj)
+            sz = obj.fixRadius;
+
+            obj.hFixCircle = rectangle(...
+                'Position', [obj.fixCenter-sz, sz*2 sz*2], ...
+                'Curvature',[1 1], ...
+                'LineWidth', 3, ...
+                'EdgeColor', [0 0 0]);
+
         end
         
         function make_eye_panel(obj, fig, screenCenter, pos)
@@ -98,6 +112,50 @@ classdef RFhandmapperEye < handle
                 'String','Reward', ...
                 'Position',[350,4,60,30], ...
                 'Callback',@obj.onManualReward);
+
+            % Reward counter
+            h = uicontrol(obj.eyePanel, ...
+                'BackgroundColor', get(fig, 'Color'), ...
+                'Style','text', ...
+                'String','Reward Counter', ...
+                'Position',[screenCenter(1)-100,19,80,15]);
+            obj.hCountRew = uicontrol(obj.eyePanel, ...
+                'BackgroundColor', get(fig, 'Color'), ...
+                'Style','text', ...
+                'String',obj.countRew, ...
+                'Position',[screenCenter(1)-100,4,80,15]);
+            set([h,obj.hCountRew],'TooltipString',sprintf('Number of reward pulses given during fixation'))
+        end
+
+        %% set/get
+
+        function set.countRew(obj,countRew)
+            set(obj.hCountRew, 'String', countRew);
+            obj.countRew = countRew;
+        end
+
+        function set.eyeIn(obj,eyeIn)
+            obj.eyeIn = eyeIn;
+            set(obj.hFixCircle,'EdgeColor',[eyeIn eyeIn eyeIn]*255)
+            drawnow;
+        end
+
+        function set.fixCenter(obj,fixCenter)
+
+            sz = obj.fixRadius;
+            newPos = [fixCenter-sz, sz*2 sz*2];
+            set(obj.hFixCircle,'Position', newPos);
+            obj.fixCenter = fixCenter;
+
+        end
+
+        function set.fixRadius(obj,fixRadius)
+            
+            sz = fixRadius;
+            newPos = [obj.fixCenter-sz, sz*2 sz*2];
+            set(obj.hFixCircle,'Position', newPos);
+            obj.fixRadius = fixRadius;
+
         end
         
         %% callbacks
@@ -188,6 +246,7 @@ classdef RFhandmapperEye < handle
         
         function rew_timer_fnc(obj, ~, ~)
             reward(obj.rewardDuration);
+            obj.countRew = obj.countRew + 1;
         end
         
         %% eye tracking
@@ -220,12 +279,12 @@ classdef RFhandmapperEye < handle
                 
                 if result == 1
                     % start and stop timer
-                    obj.eyeIn = ~obj.eyeIn;
-                    if obj.eyeIn == 1 && strcmp(obj.rewTimer.running, 'off')
+                    if obj.eyeIn == 0 && strcmp(obj.rewTimer.running, 'off')
                         start(obj.rewTimer)
                     else
                         stop(obj.rewTimer)
                     end
+                    obj.eyeIn = ~obj.eyeIn;
                 end
                 
             end
