@@ -57,7 +57,7 @@ classdef RFhandmapperEye < handle
             sz = obj.fixRadius;
 
             obj.hFixCircle = rectangle(...
-                'Position', [obj.fixCenter-sz, sz*2 sz*2], ...
+                'Position', [obj.fixCenter/2 - sz/2, sz sz], ...
                 'Curvature',[1 1], ...
                 'LineWidth', 3, ...
                 'EdgeColor', [0 0 0]);
@@ -86,7 +86,7 @@ classdef RFhandmapperEye < handle
 
             % Fixation location
             h = HandmapButtons.editbox(obj.eyePanel, 'Fix center', ...
-                sprintf('%0.2f, %0.2f', obj.fixCenter/obj.main.ppd), ...
+                sprintf('%0.1f, %0.1f', obj.fixCenter/obj.main.ppd), ...
                 [80,4], @obj.onFixCenter);
             set(h,'TooltipString',sprintf('ppd'))
             
@@ -136,14 +136,14 @@ classdef RFhandmapperEye < handle
 
         function set.eyeIn(obj,eyeIn)
             obj.eyeIn = eyeIn;
-            set(obj.hFixCircle,'EdgeColor',[eyeIn eyeIn eyeIn]*255)
+            set(obj.hFixCircle,'EdgeColor',[eyeIn eyeIn eyeIn])
             drawnow;
         end
 
         function set.fixCenter(obj,fixCenter)
 
             sz = obj.fixRadius;
-            newPos = [fixCenter-sz, sz*2 sz*2];
+            newPos = [fixCenter/2 - sz/2, sz sz];
             set(obj.hFixCircle,'Position', newPos);
             obj.fixCenter = fixCenter;
 
@@ -152,7 +152,7 @@ classdef RFhandmapperEye < handle
         function set.fixRadius(obj,fixRadius)
             
             sz = fixRadius;
-            newPos = [obj.fixCenter-sz, sz*2 sz*2];
+            newPos = [obj.fixCenter/2 - sz/2, sz sz];
             set(obj.hFixCircle,'Position', newPos);
             obj.fixRadius = fixRadius;
 
@@ -164,6 +164,7 @@ classdef RFhandmapperEye < handle
             if get(src,'Value')
                 cellfun(@(x)set(x,'visible',false),obj.fixPoint);
                 obj.eyeTracking = 0;
+                obj.eyeIn = 0;
                 stop(obj.rewTimer);
             else
                 
@@ -184,7 +185,7 @@ classdef RFhandmapperEye < handle
             fixCenter= str2num(get(src,'String'));
             if length(fixCenter) ~= 2
                 fixCenter = [0,0];
-                set(src, 'String', sprintf('%0.2f, %0.2f', fixCenter));
+                set(src, 'String', sprintf('%0.1f, %0.1f', fixCenter));
             end
             obj.fixCenter = fixCenter*obj.main.ppd;
 

@@ -40,22 +40,22 @@ classdef HandmapRectangle < HandmapStimulus
             stim = obj.stim{1};
             
             obj.hWid = obj.editbox(obj.hUipanel, 'Width', ...
-                sprintf('%0.2f', stim.width/obj.ppd), [10 0], @obj.onWidth);
+                sprintf('%0.2f', stim.width/obj.ppd), [10 4], @obj.onWidth);
             set(obj.hWid,'TooltipString',sprintf('ppd'))
             
             obj.hHeight = obj.editbox(obj.hUipanel, 'Height', ...
-                sprintf('%0.2f', stim.height/obj.ppd), [70 0], @obj.onHeight);
+                sprintf('%0.2f', stim.height/obj.ppd), [70 4], @obj.onHeight);
             set(obj.hHeight,'TooltipString',sprintf('ppd'))
             
             cols = {'white','red','green','blue','yellow','black'};
-            obj.hCol = obj.dropdown(obj.hUipanel, 'Color', 1, cols, [130 0], @obj.onColor);
+            obj.hCol = obj.dropdown(obj.hUipanel, 'Color', 1, cols, [130 4], @obj.onColor);
             
             % fullscreen
             obj.hFull = uicontrol(obj.hUipanel, ...
                 'Style','togglebutton', ...
                 'String','Fullscreen', ...
                 'Value',0, ...
-                'Position',[200,0,60,30], ...
+                'Position',[200,4,60,30], ...
                 'Callback',@obj.onFullscreen);
             
             set( findall(obj.hUipanel, '-property', 'Enable'), 'Enable', 'off')

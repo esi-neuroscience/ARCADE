@@ -70,7 +70,7 @@ classdef HandmapGrating < HandmapStimulus
         
         function update_buttons(obj)
             
-            set(obj.hSize, 'String', ...
+            set(obj.hSz, 'String', ...
                 sprintf('%0.2f', obj.stim{1}.maskWidth/obj.ppd));
             
         end
