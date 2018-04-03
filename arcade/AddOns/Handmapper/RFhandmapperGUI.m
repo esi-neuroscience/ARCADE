@@ -24,7 +24,7 @@ classdef RFhandmapperGUI < handle
             screenCenter = [obj.main.screenX, obj.main.screenY]./2;
             screenQuart = screenCenter./2;
             
-            figPos = [screenQuart(1), screenQuart(2)-90, screenCenter(1), screenCenter(2)+200];
+            figPos = [screenQuart(1), 100, screenCenter(1), screenCenter(2)+200];
             
             %% Initilise GUI
             obj.fig = figure('Name','RF_Handmapper', ...
@@ -111,7 +111,7 @@ classdef RFhandmapperGUI < handle
             
             % dropdown box to select each stimulus. Callback creates currstim which enables stim buttons
             liststim = cellfun(@(x)x.name, obj.main.stim, 'UniformOutput', 0);
-            HandmapButtons.dropdown(obj.stimPanel,'Stimulus', 1, liststim, [20,0], @obj.onChooseStimulus);
+            HandmapButtons.dropdown(obj.stimPanel,'Stimulus', 1, liststim, [20,4], @obj.onChooseStimulus);
             
             % on/off
             uicontrol(obj.stimPanel, ...
@@ -237,16 +237,16 @@ classdef RFhandmapperGUI < handle
                     buttonStat = get(obj.hHide,'Value');
                     set(obj.hHide,'Value', ~buttonStat);
 
-                    obj.onInvisible(obj.hHide,~);
+                    obj.onInvisible(obj.hHide);
 
                 case 'r' %reward
-                    obj.eye.onManualReward(~,~);
+                    obj.eye.onManualReward();
 
                 case 'e' %fixation and eyetracking off
                     buttonStat = get(obj.eye.hEyeOff,'Value');
                     set(obj.eye.hEyeOff,'Value', ~buttonStat);
 
-                    obj.eye.onEyeOff(obj,obj.eye.hEyeOff,~);
+                    obj.eye.onEyeOff(obj.eye.hEyeOff);
             end
         end
         
