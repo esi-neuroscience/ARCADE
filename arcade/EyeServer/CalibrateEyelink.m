@@ -75,50 +75,13 @@ classdef CalibrateEyelink < handle
             obj.dot = line('XData', 0,'YData', 0,...
                 'Marker','o','color','k', 'MarkerSize', 40);                             
             
-  
             
-            cmd = fullfile(arcaderoot, 'arcade', 'DaqServer', 'NidaqServer.exe');
-            obj.daqServerProcess = processManager('command', cmd);
+            % Start and connect to StimServer
+            obj.stimServerProcess = obj.start_server('StimServer');                 
             
-            % Connect to StimServer or start it if it's not running 
-            tWait = tic;
-            success = false;
-            while ~success && toc(tWait) < 10
-                try 
-                    StimServer.Connect();
-                    success = true;
-                catch me
-                    % start StimServer
-                    if isempty(obj.stimServerProcess)
-                        cmd = fullfile(arcaderoot, 'arcade', 'StimServer', 'StimServer.exe');
-                        obj.stimServerProcess = processManager('command', cmd);
-                    end
-                end
-                pause(0.5);
-            end
-            if ~success
-                rethrow(me)
-            end                   
-            
-            % Connect to NidaqServer or start it if it's not running 
-            tWait = tic;
-            success = false;
-            while ~success && toc(tWait) < 10
-                try 
-                    DaqServer.Connect();
-                    success = true;
-                catch me
-                    % start StimServer
-                    if isempty(obj.daqServerProcess)
-                        cmd = fullfile(arcaderoot, 'arcade', 'DaqServer', 'NidaqServer.exe');
-                        obj.daqServerProcess = processManager('command', cmd);
-                    end
-                end
-                pause(0.5);
-            end
-            if ~success
-                rethrow(me)
-            end
+            % Start and connect to DaqServer            
+            obj.daqServerProcess = obj.start_server('DaqServer');
+
             if ~exist('stim', 'var')
                 obj.stim = CalibrationStimulusGaussian();
             else 
@@ -206,12 +169,23 @@ classdef CalibrateEyelink < handle
         end
         
         function onClose(obj, varargin)
-            obj.stopEvent.trigger();
-            delete(obj.fig);
+            try
+                obj.stopEvent.trigger();            
+                
+            catch eventError
+                warning('Could not properly close CalibrateEyelink')
+            end
             
+            try
+                delete(obj.fig);
+            catch figureError
+                warning('Could not properly close CalibrateEyelink')
+            end
+                            
         end
         
         
+
         function delete(obj)
             cellfun(@(x) delete(x), obj.stim)
             StimServer.Disconnect();
@@ -221,5 +195,41 @@ classdef CalibrateEyelink < handle
             delete(obj.stopEvent);
         end
     end
+    
+    methods ( Static = true )
+        
+         function process = start_server(server)
+            switch server
+            case 'StimServer'
+                cmd = fullfile(arcaderoot, 'arcade', 'StimServer', 'StimServer.exe');                                
+            case 'DaqServer'
+                cmd = fullfile(arcaderoot, 'arcade', 'DaqServer', 'NidaqServer.exe');            
+            end
+            
+            process = processManager('command', cmd);
+            % Connect to StimServer or start it if it's not running
+            tWait = tic;
+            success = false;
+            while ~success && toc(tWait) < 10
+                try 
+                    switch server
+                        case 'StimServer'
+                            StimServer.Connect();
+                        case 'DaqServer'
+                            DaqServer.Connect();
+                    end
+                    success = true;
+                catch me
+                end
+                pause(0.5);
+            end
+            if ~success
+                rethrow(me)
+            end    
+        end
+        
+        
+    end
+    
     
 end
