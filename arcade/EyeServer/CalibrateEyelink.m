@@ -35,8 +35,6 @@ classdef CalibrateEyelink < handle
         eyelinkConfig
         stim
         rewardDuration
-        currentTargetPosition
-        rewardedPositions
     end
     
     properties ( Constant, Access = private, Hidden=true )
@@ -214,9 +212,6 @@ classdef CalibrateEyelink < handle
                     Eyelink('SendKeyButton', double(key), 0, obj.KB_PRESS );
                 else
                     fprintf('Keypress %s ignored\n', key)
-                end
-                if strcmp(key, 'return')
-%                     DaqServer.Reward(obj.rewardDuration);
                 end
             end
         end
