@@ -99,6 +99,14 @@ classdef (Abstract) Stimulus < hgsetget % will be matlab.mixin.SetGet after 2014
             assert(Key>0, 'Could not bring stimulus to front. See log window of StimServer.exe')
             obj.key = Key;
         end
+
+        function toggle_visibility(obj)
+            if obj.visible
+                obj.visible = false;
+            else
+                obj.visible = true;
+            end
+        end
         
         function delete(obj)
             if ~isequal(obj.key, 0)
