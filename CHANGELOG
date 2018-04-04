@@ -7,8 +7,14 @@
 *   bring_to_front: The drawing order of overlapping stimuli can now be
     adjusted by bringing individual stimuli to the frontmost layer using the
     bring_to_front method.
-*   Flicker animation
+*   Flicker animation: stimuli can be turned on and off periodically for
+    speficied number of frames
 *   MotionPicture stimulus
+
+### CHANGED
+*   Grating: the spatialFrequency property was renamed to spatialPeriod as it
+    was actually specifying the period in px/cycle. spatialFrequency will
+    still work but produce a warning
 
 ## [2.2.0] - 2018-01-10
 ### NEW
