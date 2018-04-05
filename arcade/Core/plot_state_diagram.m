@@ -14,7 +14,27 @@ function [G,h] = plot_state_diagram(varargin)
 %       G   :  digraph object
 %       h   :  GraphPlot object
 %
-% Note: This function only works with MATLAB > 2014b/
+% Note: This function only works with MATLAB >= 2014b
+% 
+% EXAMPLE
+% -------
+% 
+% waitForResponse = State('waitForResponse');
+% waitForResponse.duration = 5000;
+% waitForResponse.nextStateAfterTimeout = 'noResponse';
+% waitForResponse.waitEvents = {'leverPull', 'leverPush'} ;
+% waitForResponse.nextStateAfterEvent = {'pull', 'push'};
+% 
+% pull = State('pull');
+% pull.nextStateAfterTimeout = 'final';
+% 
+% push = State('push');
+% push.nextStateAfterTimeout = 'final';
+% 
+% noResponse = State('noResponse');
+% noResponse.nextStateAfterTimeout = 'final';
+% 
+% plot_state_diagram(waitForResponse, pull, push, noResponse)
 % 
 % See also State, digraph
 
@@ -40,7 +60,7 @@ G = digraph(A, nodenames);
 h = plot(G);
 
 h.EdgeCData = nonzeros(A);
-colormap(jet);
+colormap(lines(3));
 
 
 if nargout == 0
