@@ -51,6 +51,7 @@ classdef State < handle
         function nextState = run(obj)
             % Execute entry functions, wait for events/timeout and call
             % exit functions
+            obj.completed = false;
             obj.startTic = tic;
             obj.runNumber = obj.runNumber+1;
             obj.evalFunctions(obj.onEntry)            
