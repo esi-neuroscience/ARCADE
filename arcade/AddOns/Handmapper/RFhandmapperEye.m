@@ -254,13 +254,12 @@ classdef RFhandmapperEye < handle
         
         function result = waitfor_eye(obj)
             
-            if obj.eyeTracking
-                
-                MultipleEvents.Reset();
+            while obj.eyeTracking
                 
                 if isempty(obj.fpEvents)
                     trackeye('reset');
                     obj.fpEvents = trackeye(obj.fixCenter, obj.fixRadius, 'fp');
+                    MultipleEvents.Init(obj.fpEvents);
                 end
                 
                 if obj.eyeIn
@@ -270,10 +269,10 @@ classdef RFhandmapperEye < handle
                 end
                 
                 result = obj.WAIT_TIMEOUT;
-                MultipleEvents.Init(obj.fpEvents);
+                
                 while obj.eyeTracking && result == obj.WAIT_TIMEOUT && ~obj.main.stopEvent.wasTriggered
                     result = MultipleEvents.WaitFor(event, false, 0);
-                    pause(0.05)
+                    pause(0.005)
                 end
                 
                 assert(result ~= obj.WAIT_FAILED, 'Waiting for eye event failed, check trackeye inputs')
