@@ -44,6 +44,7 @@ classdef MSConfig < AUXUIControlFunctions
     %   -- schema.prop (HG1), dynamic property class (HG2)
     % 23.2.2018 - Jarrod, fixed some code that needlessly assigned a value
     %   to a newly created property 
+    % 12.4.2018 - Jarrod, fixed bug that caused cfg load to fail 
     
     properties (...
             Abstract      = true,...
@@ -121,6 +122,14 @@ classdef MSConfig < AUXUIControlFunctions
                         % cell edit and selection callbacks 
                         set(controlObject, 'CellSelectionCallback', @(hObj,evt) set(hObj,'selectedIndices',evt.Indices));
                         set(controlObject, 'CellEditCallback',      @(hObj,evt) this.mGeneralCallback(hObj, evt, struct_fieldname));  
+                        
+                        % https://de.mathworks.com/help/matlab/ref/matlab.ui.control.table-properties.html
+                        % When the user edits a table cell, MATLAB performs these steps:
+                        % 1. Tries to store the new value into the Data property of the table
+                        % 2. Calls the CellEditCallback function (if it exists)
+                        % If the value results in an error and there is no CellEditCallback function, 
+                        % then the cell data reverts to its previous value and no error displays.
+                        
                 end
                 
                 % ---- add properties -----
@@ -211,7 +220,7 @@ classdef MSConfig < AUXUIControlFunctions
         
         %# Create CFG structure
         function mCreateCfgStruct(this)
-            cfgUIHandles = this.cfgControlHandles;
+            cfgUIHandles = this.cfgControlHandles; % cell
             
             % accumulate all get functions
             getFuncs = cellfun(@(h) get(h,'getPropertyFcn'),cfgUIHandles,'unif',0);
@@ -520,35 +529,35 @@ classdef MSConfig < AUXUIControlFunctions
             
             cfg     = load(cfgFile); % load cfg file
             currcfg = this.cfg;
-            % fieldnames {1}, handles {2}
-            cfgTagPaths = this.cfgElements{1};
-            cfgUIHandle = this.cfgElements{2};
-            
+
+            cfgUIHandle = this.cfgControlHandles; % cell vector (no longer array!)
+
             % get the generalized set functions
             % fcnSetFuncs = get(cfgUIHandle,'setPropertyFcn');
             getSetFcn   = @(hUI) get(hUI,'setPropertyFcn');
-            fcnSetFuncs = arrayfun(getSetFcn,cfgUIHandle,'unif',0);
+            fcnSetFuncs = cellfun(getSetFcn,cfgUIHandle,'unif',0);
             
             % try assign to cfg, and to GUI
-            for k = 1:length(cfgTagPaths)
+            for k = 1:length(cfgUIHandle)
 
                 % select this set function
                 thisSetFcn = fcnSetFuncs{k};
                 
+                struct_fieldname = this.mReplaceChar(get(cfgUIHandle{k},'Tag'),'_','.');
                 % 1. check if default, assign default if empty?
                 % 2. else, check if valid input
                 % - class should match default
                 % - if file, file must exist/be accessible
                 try
                     % get value from loaded cfg
-                    value = eval(cfgTagPaths{k}); % this new config file
+                    value = eval(struct_fieldname); % this new config file
                 catch ME
-                    fprintf('Field %s missing in config file.\n', cfgTagPaths{k});
+                    fprintf('Field %s missing in config file.\n', struct_fieldname);
                     continue;
                 end
                 
                 % error check and default check
-                [result,newValue,errMsg] = this.mGeneralErrorCheck(cfgUIHandle(k),cfgTagPaths{k},value);
+                [result,newValue,errMsg] = this.mGeneralErrorCheck(cfgUIHandle{k},struct_fieldname,value);
                 
                 if ~result
                     % value needs to be re-assigned
@@ -558,19 +567,19 @@ classdef MSConfig < AUXUIControlFunctions
                 try
                     % try to set value in cfg
                     err = 1;
-                    this.mSetFieldCfg(cfgTagPaths{k},value);
+                    this.mSetFieldCfg(struct_fieldname,value);
                     
                     % try to update gui
                     err = 2;
-                    eval('thisSetFcn(cfgUIHandle(k),value)');
+                    eval('thisSetFcn(cfgUIHandle{k},value)');
                     
                 catch
                     % if either one does not go through, retore to previous
-                    prevValue = eval(['curr',cfgTagPaths{k}]);
-                    this.mSetFieldCfg(cfgTagPaths{k},prevValue); % set cfg
-                    eval('thisSetFcn(cfgUIHandle(k),prevValue)'); % set uicontrol
+                    prevValue = eval(['curr',struct_fieldname]);
+                    this.mSetFieldCfg(struct_fieldname,prevValue); % set cfg
+                    eval('thisSetFcn(cfgUIHandle{k},prevValue)'); % set uicontrol
                     
-                    disp(['Failed to load: ', cfgTagPaths{k},' ...']);
+                    disp(['Failed to load: ', struct_fieldname,' ...']);
                     switch err
                         case 1
                             disp('Unable to set value to configuration structure');
