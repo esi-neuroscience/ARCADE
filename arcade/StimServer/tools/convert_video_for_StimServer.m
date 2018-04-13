@@ -24,12 +24,14 @@ end
 [folder, file, ~] = fileparts(filename);
 vr = VideoReader(filename);
 
-fprintf('Read %d frames from %s\n', vr.NumberOfFrames, filename)
 if ~exist('iFrame', 'var')
-    frames = read(vr);
-else
-    frames = read(vr, iFrame);
+    iFrame = [1 vr.NumberOfFrames];
 end
+fprintf('Read frames %g-%g from %s\n', iFrame, filename)
+
+
+
+frames = read(vr, iFrame);
 nFrames = size(frames,4);
 tiffName = fullfile(folder, [file '.tiff']);
 
@@ -44,3 +46,6 @@ end
 fprintf('\b\b\b\b\b\n')
 filesize = dir(tiffName);
 fprintf('Total file size: %.1f MB\n',  filesize.bytes/1024/1024);
+if filesize.bytes/1024/1024 > 512
+    warning('The tiff file is relatively large. File sizes approaching the video RAM of the GPU will cause frame drops and erratic playback')
+end
