@@ -16,7 +16,10 @@ classdef (Sealed) PauseScreen < AUXEditableVariables & SPCGUIDefinition
     % unknown   - Jarrod, wrote class
     % 21.4.2016 - Jarrod, added some documentation
     % 29.4.2016 - Jarrod, added some documentation
-    
+    % 23.2.2018 - Jarrod, HG1/HG2 Compatibility 
+    % - dependance on addProp() in ARCADE\arcade\MainScreen\classes
+    %  1.3.2018 - Jarrod, fixed issue #87 (hTbl -> controlObject)
+    %  4.4.2018 - Jarrod, fixed issue #87 
     
     properties 
        userQuitRequest = false; 
@@ -74,43 +77,30 @@ classdef (Sealed) PauseScreen < AUXEditableVariables & SPCGUIDefinition
             
             % ----------- uitable ----------- %
             % get table for Editable Variables 
-            hTbl = findobj(this.hfig,'Tag','tbl_EditableVariables');
+            controlObject = findobj(this.hfig,'Tag','tbl_EditableVariables');
             
-            % add properties
-            schema.prop(hTbl, 'getPropertyFcn', 'mxArray');
-            schema.prop(hTbl, 'setPropertyFcn', 'mxArray');
-            schema.prop(hTbl, 'selectedIndices','mxArray');
+            % -- add propertiesand set them -- 
+            % UITABLE ONLY
+            addProp(controlObject, 'selectedIndices', []); 
             
+            % cell edit and selection callbacks
+            set(controlObject, 'CellSelectionCallback', @(hObj,evt) set(hObj,'selectedIndices',evt.Indices))
+            set(controlObject, 'CellEditCallback',      @(hObj,evt) this.mGeneralCallback(hObj, evt, 'EditableVariables'));
+            
+            % UICONTROL and UITABLE 
+            isReadOnly = true;
+            addProp(controlObject, 'getPropertyFcn', @(hObj) get(hObj,'data'), isReadOnly); % create/set get property function
+
+            % fetch data and set it 
             data = this.cfg.EditableVariables;
             
             % set editable variables 
-            set(hTbl,'data',data);
+            set(controlObject,'data',data);
             
-            set(hTbl, 'getPropertyFcn', @(hObj) get(hObj,'data'));
-            
-            % cell selection 
-            set(hTbl,'CellSelectionCallback',@(hObj,evt) set(hObj,'selectedIndices',evt.Indices));
-            % cell edit callback 
-            set(hTbl,'CellEditCallback',@(hObj,evt) this.mGeneralCallback(hObj,evt,'EditableVariables'));
-            
-            %EdVars  = this.cfg.EditableVariables;
-            %cellmat = this.struct2cellmat(EdVars);
-            
-            
-            % set editCallback
-            % Set Cell Selection Callback
-            %set(hTbl,'CellSelectionCallback',@(hObj,evt) set(hObj,'UserData',evt.Indices));
-            % set Cell Edit Callback
-            
-            
+
             nRows = size(data,1); % number of editable variables
-            this.mAdjustTableWidth(hTbl,this.maxVarRows,nRows,1);
-           
-            
-            %uiTblGetProp = @(cellmat) this.setEdVarCfg(cellmat);
-            %set(handle(hTbl),'getCfgProperty',uiTblGetProp);
-            
-            
+            this.mAdjustTableWidth(controlObject,this.maxVarRows,nRows,1);
+ 
             % ----------- buttons ----------- %
             % QUIT
             btnQuit   = findobj(this.hfig,'Tag','btn_QUIT');

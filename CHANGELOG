@@ -1,5 +1,39 @@
 # Change Log of ARCADE
 
+## [2.3.0b1] - 2018-04-13
+### NEW
+*   Handmapper: an ARCADE add-on for manual receptive field mapping, which can
+    be started via arcade/AddOns/Handmapper/RFhandmapper.bat
+*   bring_to_front: The drawing order of overlapping stimuli can now be
+    adjusted by bringing individual stimuli to the frontmost layer using the
+    bring_to_front method.
+*   Flicker animation: stimuli can be turned on and off periodically for
+    speficied number of frames
+*   MotionPicture stimulus (alpha version): image sequences stored in a multi-
+    frame TIFF file can be presented as movies. Use
+    convert_video_for_StimServer to convert compressed movie files to an
+    uncompressed TIFF.
+*   NidaqServer: logging option for debugging event-triggered reward
+*   Function for plotting a state flow diagram based on trialscript code
+*   State: set and get methods for duration and elapsedTime to determine State
+    duration at runtime
+*   StateRuntimeVariable: a class for holding and retreiving data created at
+    runtime of the session, e.g. reaction times. See help StateRuntimeVariable
+*   Improvements for CalibrateEyelink: reward is now coupled to advancing to
+    the next calibration target, reward and stimulus visibility can be
+    triggered via hotkeys
+
+### CHANGED
+*   Grating: the spatialFrequency property was renamed to spatialPeriod as it
+    was actually specifying the period in px/cycle. spatialFrequency will
+    still work but produce a warning
+
+### FIXED
+*   Editable variables where not removed from the configuration file when they
+    were removed from the GUI    
+*   Manually adding files to backup in main GUI deleted existing files
+
+
 ## [2.2.0] - 2018-01-10
 ### NEW
 *   EyelinkEyeServer: positions tracked via trackeye are not drawn on the

@@ -7,13 +7,19 @@ classdef Grating < PixelShader
         color1 = [255 255 255 255]; % [r g b alpha]
         color2 = [0 0 0 255]; % [r g b alpha]
         maskRotation = 0; % angle of circular mask in degree
-        spatialFrequency = 25; % px / cycle
+        spatialPeriod = 25; % px / cycle        
         direction = 0;  % drift direction in degree
         smoothing = 2; % 2 = sinusoidal grating, 10 = square wave grating
         phaseShift = 0;
-        maskWidth = 200; % width of circular mask in px
-        maskHeight = 200; % height of circular mask in px
+        % horizontal radius of circular mask in px for direction = 0
+        maskWidth = 200; 
+        % vertical radius of circular mask in px for direction = 0
+        maskHeight = 200; 
         temporalFrequency = 1; % cycles / s
+    end
+    
+    properties ( Transient = true, Dependent = true, Hidden = true )
+        spatialFrequency % wrongly named legacy property
     end
     
     properties ( Access = private, Transient = true )
@@ -32,7 +38,7 @@ classdef Grating < PixelShader
             obj.color1 = obj.color1;
             obj.color2 = obj.color2;
             obj.maskRotation = obj.maskRotation;
-            obj.spatialFrequency = obj.spatialFrequency;
+            obj.spatialPeriod = obj.spatialPeriod;
             obj.direction = obj.direction;
             obj.smoothing = obj.smoothing;
             obj.phaseShift = obj.phaseShift;
@@ -68,8 +74,17 @@ classdef Grating < PixelShader
         end
         
         function set.spatialFrequency(obj, ppc)
+            warning('The Grating property spatialFrequency has been renamed to spatialPeriod. Please use spatialPeriod instead.')
+            obj.spatialPeriod = ppc;
+        end
+        
+        function value = get.spatialFrequency(obj)
+            value = obj.spatialPeriod;
+        end
+        
+        function set.spatialPeriod(obj, ppc)
             obj.setParameter(4, ppc)
-            obj.spatialFrequency = ppc;
+            obj.spatialPeriod = ppc;
         end
         
         function set.direction(obj, direction)

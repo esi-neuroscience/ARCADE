@@ -14,6 +14,7 @@ classdef AUXUIControlFunctions < handle
     % unknown   - Jarrod, wrote class
     % 14.4.2015 - Jarrod, added multiselection to mFilePrompt()
     % 21.4.2016 - Jarrod, added some documentation/notes
+    % 27.2.2018 - Jarrod, change output of mFilePrompt() based on 'MultiSelect'
     
     methods (Static)
         %# constructor 
@@ -25,6 +26,8 @@ classdef AUXUIControlFunctions < handle
             Static = true,...
             Sealed = true)
         %# file prompt 
+        % returns char if 'MultiSelect' is off
+        % returns cell if 'MultiSelect' is on (regardless of number of files)
         function fullfilepath = mFilePrompt(fileType,msg,prompt,varargin)
             multiselect = 'off';
             defaultFile = '';
@@ -44,18 +47,19 @@ classdef AUXUIControlFunctions < handle
 
             % did the user cancel or not
             if ~isequal(fname,0)
-                
-                %[fname,fpath] = uigetfile('*.*','','MultiSelect','on');
-                %[fname,fpath] = uiputfile('*_cfg.mat','','');
-                
-                if iscell(fname)
-                    fullfilepath = cellfun(@(ffile) [fpath,ffile], fname,'unif',0)';
-                else
-                    fullfilepath = [fpath,fname];
+                switch multiselect
+                    case 'on'
+                        % one or many files can be returned
+                        if ischar(fname), fname = {fname}; end;
+                        fullfilepath = cellfun(@(ffile) [fpath,ffile], fname,'unif',0)';
+                    case 'off'
+                        % only one file can be returned 
+                        fullfilepath = [fpath,fname];
                 end
             else
                 fullfilepath = [];
             end
+                
             
         end
     end

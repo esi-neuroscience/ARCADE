@@ -25,7 +25,7 @@ classdef MSEditableVariables < AUXEditableVariables
     % 2.3.2015, - Jarrod, 
     %    - editted the button callback to fixed a bug in the gui
     % 21.4.2016 - Jarrod, added some documentation/notes
-
+    % 27.2.2018 - Jarrod, added method to update cfg on button clicks
     
     properties (Access = private)
         % number of variable rows 
@@ -33,8 +33,20 @@ classdef MSEditableVariables < AUXEditableVariables
     end
     
     methods (Static)
-        function this = MSEditableVariables
+        %# CONSTRUCTOR 
+        function this = MSEditableVariables 
         end
+        
+        %# Update CFG on button clicks 
+        % when data is changed by a button click (Add, Remove, or Clear)
+        % the cfg structure needs to be updated 
+        function mUpdateCFGAfterButtonClick(~, evt, hTbl)
+            % relies on the fact that a CellEditCallback function will be set
+            % this function knows how to set the cfg contained in object.data
+            updateCFG_func = get(hTbl,'CellEditCallback'); 
+            updateCFG_func(hTbl,evt);  % -> mGeneralCallback(this,hObj,~,field) in MSConfig
+        end
+        
     end
     
     methods 
@@ -44,19 +56,11 @@ classdef MSEditableVariables < AUXEditableVariables
             % handle to Editable Variable Table
             hTbl = findobj(this.hfig,'Tag','cfg_EditableVariables');
 
-            % Set Cell Selection Callback
-            %set(hTbl,'CellSelectionCallback',@(hObj,evt) set(hObj,'UserData',evt.Indices));
-            % set Cell Edit Callback
-            %set(hTbl,'CellEditCallback',@(hObj,evt) this.cellEditEdVarCallback(hObj,evt));
-            
+            % add listener to "Data" property in in hTbl to update CFG on button clicks
+            % appears to be called only when the Add/Remove/Clear buttons pressed
+            addlistener(hTbl,'Data','PostSet',@(hObj,evt) this.mUpdateCFGAfterButtonClick(hObj,evt,hTbl));
             
             % set button callbacks
-%             hEdVarButtons = findobj(this.hfig,{'Tag'},...
-%                 {...
-%                 'btn_AddNewEditVar';...
-%                 'btn_RemoveEditVar';...
-%                 'btn_ClearEditVars'});
-            
             findButton = @(tag) findobj(this.hfig,'Tag',tag);
 
             % add an editable variable 
@@ -68,14 +72,17 @@ classdef MSEditableVariables < AUXEditableVariables
             % clear all 
             set(findButton('btn_ClearEditVars'),...
                 'Callback',@(hObj,evt) this.mClearEdVarCallback(hObj,evt,hTbl));
-  
-            % load
+            
+            
         end
     end
     
+    
     methods (Sealed = true)
+        
+        
         %---------------------------------------------%
-        %# [UIBUTTON] Add New Editable Variable
+        %# [UIBUTTON] Add New Row for Editable Variable
         function mAddNewEdVarCallback(this,~,~,hTbl)
             %hObj = AUXEditableVariables.getObjectHandle;
 

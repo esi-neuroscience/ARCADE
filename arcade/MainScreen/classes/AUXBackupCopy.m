@@ -26,6 +26,7 @@ classdef AUXBackupCopy < handle
     %  3.5.2015 - Jarrod, fixed copy file bug: changed the logic in mCombineFileLists() 
     % 21.4.2016 - Jarrod, added some documentation/notes
     %  3.5.2016 - Jarrod, added some documentation 
+    % 27.2.2018 - Jarrod, simplified code in mCombineFileLists()
     
     methods (Static)
         %# constructor
@@ -40,24 +41,13 @@ classdef AUXBackupCopy < handle
         
         %# create a combined list of filepaths 
         function combinedList = mCombineFileLists(varargin)
-           
+            % input expected to be cells 
+            
             % remove empty cells 
-            indxNotEmptyInputs = ~cellfun(@isempty,varargin);
-            fileLists          = varargin(indxNotEmptyInputs);
-            nLists             = sum(indxNotEmptyInputs);
+            %indxNotEmptyInputs = ~cellfun(@isempty,varargin);   % necessary? 
             
-            combinedList = {};
-            
-            if nLists==1
-                combinedList = fileLists{1};
-            elseif nLists>1
-                combinedList = union(fileLists{1},fileLists{2},'stable');
-                if nLists>2
-                    for k = 3:nargin
-                        combinedList = union(combinedList,varargin{k},'stable');
-                    end
-                end
-            end
+            %combinedList = unique(cat(1, varargin{:}),'stable'); % in order of adding
+            combinedList = unique(cat(1, varargin{:}));          % sorted
             
         end
         
@@ -167,10 +157,7 @@ classdef AUXBackupCopy < handle
             else
                 disp('Input not a valid type.');
             end
-        end
-        %tskFile = 'C:\Users\dowdallj\Documents\MATLAB\blah.m';
-        %[tskpath,f,e] = fileparts(tskFile);
-        
+        end        
         
         %# check if file is in task directory 
         function result = mFileIsInTaskDirectory(TaskFile,filepaths)

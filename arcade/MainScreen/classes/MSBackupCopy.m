@@ -1,4 +1,4 @@
-classdef MSBackupCopy < AUXBackupCopy & AUXDirectoryManager
+classdef MSBackupCopy < AUXBackupCopy & AUXUIControlFunctions & AUXDirectoryManager
     % [MAIN SCREEN]
 
     % *uses methods in MSConfig 
@@ -51,6 +51,7 @@ classdef MSBackupCopy < AUXBackupCopy & AUXDirectoryManager
     %  3.5.2016 - Jarrod, 
     % - replaced the old AUXFilepaths with the new version
     % FPATH = SGLFilepathManager.launch;
+    % 27.2.2018 - commented a redundant line of code 
     
     properties (...
             AbortSet  = true,...
@@ -117,7 +118,7 @@ classdef MSBackupCopy < AUXBackupCopy & AUXDirectoryManager
             sess = this.cfg.Session;
             
             % create this session directory 
-            sessFilepath = fullfile(sessPath,subj,expt,sess);
+            %sessFilepath = fullfile(sessPath,subj,expt,sess);
             sessFilepath = fullfile(sessPath,[subj '_' today '_' expt '_' sess]);
             
             warn = true;
@@ -247,8 +248,8 @@ classdef MSBackupCopy < AUXBackupCopy & AUXDirectoryManager
             fileType   = '*.*'; % all files 
             multisel   = 'on';
             fullfilepath = this.mFilePrompt(fileType,msg,'open',multisel);
-            
-            if ~isempty(fullfilepath)
+
+           if ~isempty(fullfilepath)
                 
                 % get current filepaths 
                 userFiles = this.mGetFieldCfg(cfgFieldPath);
@@ -262,7 +263,11 @@ classdef MSBackupCopy < AUXBackupCopy & AUXDirectoryManager
                 else
                     % combine files 
                     combinedList = this.mCombineFileLists(userFiles,fullfilepath);
-                    if ~isequal(userFiles,combinedList);
+                    %keyboard
+                    
+                    %varargin = {userFiles,fullfilepath};
+                    
+                    if ~isequal(userFiles,combinedList)
                         this.mSetFieldCfg(cfgFieldPath,combinedList);
                         %eval([cfgFieldPath,'= combinedList;']);
                         boolUpdateListBox = true;

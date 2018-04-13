@@ -20,7 +20,7 @@ classdef (Abstract) Stimulus < hgsetget % will be matlab.mixin.SetGet after 2014
         animation = []; % empty for static stimuli, LinearMotion or GeneralMotion for animated stimuli
     end
     
-    properties ( SetAccess = immutable, GetAccess = public, Hidden = true, Transient = true )
+    properties ( SetAccess = private, GetAccess = public, Hidden = true, Transient = true )
         key
     end
     
@@ -93,6 +93,21 @@ classdef (Abstract) Stimulus < hgsetget % will be matlab.mixin.SetGet after 2014
             obj.assignedAnimations = [];
         end
         
+        function obj = bring_to_front(obj)
+            StimServer.Command(obj.key, 14);
+            Key = StimServer.ReadAck();
+            assert(Key>0, 'Could not bring stimulus to front. See log window of StimServer.exe')
+            obj.key = Key;
+        end
+
+        function toggle_visibility(obj)
+            if obj.visible
+                obj.visible = false;
+            else
+                obj.visible = true;
+            end
+        end
+        
         function delete(obj)
             if ~isequal(obj.key, 0)
                 if ~isempty(obj.assignedAnimations)
@@ -105,6 +120,6 @@ classdef (Abstract) Stimulus < hgsetget % will be matlab.mixin.SetGet after 2014
                 end
                 StimServer.Command(obj.key, 0);
             end
-        end
+        end       
     end
 end
