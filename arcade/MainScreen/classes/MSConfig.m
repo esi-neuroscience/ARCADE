@@ -38,7 +38,13 @@ classdef MSConfig < AUXUIControlFunctions
     % - struct2array() appears not to be toolbox dependent. Removed dependency on this function. 
     % 21.4.2016 - Jarrod, added some documentation/notes
     % 29.4.2016 - Jarrod, added some documentation
-    
+    % 20.2.2018 - Jarrod, HG1/HG2 compatibility 
+    %   - main edit to modified mSetGeneralCfgSetGetFunctions(this)
+    %   - main differences between HG1 vs HG2 
+    %   -- schema.prop (HG1), dynamic property class (HG2)
+    % 23.2.2018 - Jarrod, fixed some code that needlessly assigned a value
+    %   to a newly created property 
+    % 12.4.2018 - Jarrod, fixed bug that caused cfg load to fail 
     
     properties (...
             Abstract      = true,...
@@ -53,7 +59,7 @@ classdef MSConfig < AUXUIControlFunctions
     properties (Access = protected)
         cfgExt      = '_cfg'; % cfg file extension
         %cfgParam    = 'cfg_';     % Tag prefix indicating it is a cfg field
-        cfgElements = [];
+        cfgControlHandles = [];
     end
     
     methods (Static)
@@ -68,108 +74,74 @@ classdef MSConfig < AUXUIControlFunctions
             %--------------------------------------%
             % - get figure handles
             % - find the relevant uiobjects
-            % - get the feildnames, and handles for the cfg struct
+            % - get the fieldnames, and handles for the cfg struct
             % - add properties to uiobjects
             % - add general set/get functions
             % - add general callback
             %--------------------------------------%
 
-            handles = guihandles(this.hfig);
+            handles = struct2cell(guihandles(this.hfig)); 
             
-            % cfgHandles_cntls = findobj(struct2array(handles),...
-            %   'flat', 'Type', 'uitable',...
-            %   '-or', 'Type', 'uicontrol',...
-            %   '-regexp','Tag','^?cfg_');
+            % works for HG1/HG2
+            index_cfg_obj = cellfun(@(c) any(strncmp(get(c,'Tag'), 'cfg_',4)), handles);
+            handles_cfg   = handles(index_cfg_obj);
             
+            % store the cfg handles in this object 
+            this.cfgControlHandles = handles_cfg;
             
-            % Convert structure to cell
-            %c = struct2cell(s);
-            
-            % Construct an array
-            %a = [c{:}];
-            
-            % UICONTROLS
-            cfgHandles_cntls = findobj(cell2mat(struct2cell(handles)),...
-                'flat', 'Type', 'uicontrol','-regexp','Tag','^cfg_');
-            % UITABLES
-            cfgHandles_tbles = findobj(cell2mat(struct2cell(handles)),...
-                'flat', 'Type', 'uitable', '-regexp','Tag','^cfg_');
-            
-            % fieldnames (cfg Tag Paths)
-            cfgFields_cntls = arrayfun(@(h) this.mReplaceChar(get(h,'Tag'),'_','.'),cfgHandles_cntls,'unif',0);
-            cfgFields_tbles = arrayfun(@(h) this.mReplaceChar(get(h,'Tag'),'_','.'),cfgHandles_tbles,'unif',0);
-            
-            % --- combined -----
-            cfgHandles = cat(1,cfgHandles_cntls,cfgHandles_tbles);
-            cfgFields  = cat(1,cfgFields_cntls, cfgFields_tbles);
-            
-            % cfg fieldnames (cell), ui handles (cell)
-            this.cfgElements = {cfgFields,cfgHandles}; % store for reference later
-            % create struct by getting current value which initializes the structure
-            
-            % ---- add properties -----
-            % UICONTROL/UITABLE
-            msp_get = arrayfun(@(obj) schema.prop(obj, 'getPropertyFcn', 'mxArray'), cfgHandles, 'unif',0); %#ok<*NASGU>
-            msp_set = arrayfun(@(obj) schema.prop(obj, 'setPropertyFcn', 'mxArray'), cfgHandles, 'unif',0);
-            msp_def = arrayfun(@(obj) schema.prop(obj, 'uiDefaultValue', 'mxArray'), cfgHandles, 'unif',0);
-            
-            % cfgTagPath
-            %msp_cfg = arrayfun(@(obj) schema.prop(obj, 'cfgTagPathFcn', 'mxArray'), cfgHandles, 'unif',0);
-            
-            % UITABLE
-            msp_ind = arrayfun(@(obj) schema.prop(obj, 'selectedIndices','mxArray'), cfgHandles_tbles, 'unif',0);
-            
-            % specific set/get depending on the UICONTROL Style
-            %hStyle = get(cfgHandles_cntls,'Style');
-            hStyle = arrayfun(@(cntls) get(cntls,'Style'),cfgHandles_cntls,'unif',0);
-            
-            
-            % ---- general Set/Get functions -----
-            % UICONTROL General Set/Get/Callback
-            for k = 1:length(hStyle)
+            % loop over relevant handles 
+            for thisHandle = handles_cfg'
                 
-                [fcnGetFcn,fcnSetFcn] = this.mGetUIControlSetGetFunc(hStyle{k},cfgHandles_cntls(k));
-                
-                set(cfgHandles_cntls(k), 'getPropertyFcn', fcnGetFcn); % general get fcn
-                set(cfgHandles_cntls(k), 'setPropertyFcn', fcnSetFcn); % general set fcn
-                % set general callback (hObj, evt, cfg fieldname)
-                %set(cfgHandles_cntls(k), 'Callback', @(hObj,evt) disp(cfgFields_cntls{k}));
-                
-                % Frames have no Callbacks associated with them
-                if strcmpi(hStyle{k},'frame')
-                    
-                    %mGeneralCallback(this,hObj,evt,field)
-                    %fcnCallback = @(hObj,evt) this.mGeneralCallback(cfgHandles_cntls(k),[],cfgFields_cntls{k});
-                    fcnCallback = @(hObj,evt) this.mGeneralCallback(cfgHandles_cntls(k),evt,cfgFields_cntls{k});
-                    % callback depends on the specific java object
-                    jsxObj = get(cfgHandles_cntls(k),'UserData');
-                    % set callback of Java object, with specific callback (depends on java object)
-                    set(jsxObj{3},jsxObj{4},fcnCallback);
-                    
-                else
-                    set(cfgHandles_cntls(k), 'Callback',@(hObj,evt) this.mGeneralCallback(hObj,evt,cfgFields_cntls{k}));
+                controlObject = thisHandle{1};
+                controlType   = get(controlObject,'Type'); % UITABLE does not have .Style property
+                controlTag    = get(controlObject,'Tag');
+                % the .Tag mirrors the cfg structure
+                % -> cfg_Subject => cfg.Subject
+                struct_fieldname = this.mReplaceChar(controlTag,'_','.');
+
+                switch controlType
+                    case 'uicontrol'
+                        controlStyle = get(controlObject,'Style');
+                        [fcnGetFcn,fcnSetFcn] = this.mGetUIControlSetGetFunc(controlStyle,controlObject);
+
+                        % Special case: Frames have no Callbacks associated with them
+                        if strcmpi(controlStyle,'frame')
+                            fcnCallback = @(hObj,evt) this.mGeneralCallback(controlObject, evt,struct_fieldname);
+                            % callback depends on the specific java object
+                            jsxObj = get(controlObject,'UserData');
+                            % set callback of Java object, with specific callback (depends on java object)
+                            set(jsxObj{3},jsxObj{4},fcnCallback);
+                        else
+                            set(controlObject, 'Callback', @(hObj,evt) this.mGeneralCallback(hObj,evt,struct_fieldname));
+                        end
+                    case 'uitable'
+                        fcnGetFcn = @(hObj) get(hObj,'data');
+                        fcnSetFcn = @(hObj,data) set(hObj,'data',data);
+                        % UITABLE ONLY
+                        addProp(controlObject, 'selectedIndices', []); % create/ selected indicies are set by 'CellSelectionCallback'
+                        % cell edit and selection callbacks 
+                        set(controlObject, 'CellSelectionCallback', @(hObj,evt) set(hObj,'selectedIndices',evt.Indices));
+                        set(controlObject, 'CellEditCallback',      @(hObj,evt) this.mGeneralCallback(hObj, evt, struct_fieldname));  
+                        
+                        % https://de.mathworks.com/help/matlab/ref/matlab.ui.control.table-properties.html
+                        % When the user edits a table cell, MATLAB performs these steps:
+                        % 1. Tries to store the new value into the Data property of the table
+                        % 2. Calls the CellEditCallback function (if it exists)
+                        % If the value results in an error and there is no CellEditCallback function, 
+                        % then the cell data reverts to its previous value and no error displays.
+                        
                 end
+                
+                % ---- add properties -----
+                % UICONTROL/UITABLE
+                isReadOnly = true;
+                addProp(controlObject, 'getPropertyFcn', fcnGetFcn, isReadOnly); % create/set get property function
+                addProp(controlObject, 'setPropertyFcn', fcnSetFcn, isReadOnly); % create/set set property function
+                addProp(controlObject, 'uiDefaultValue', []);                    % create default value property
+  
             end
             
-            % UITABLE General Set/Get
-            arrayfun(@(h) set(h, 'getPropertyFcn',...
-                @(hObj) get(hObj,'data')), cfgHandles_tbles);
-            arrayfun(@(h) set(h, 'setPropertyFcn',...
-                @(hObj,data) set(hObj,'data',data)), cfgHandles_tbles);
-            % UITABLE selected indicies
-            arrayfun(@(h) set(h, 'CellSelectionCallback',...
-                @(hObj,evt) set(hObj,'selectedIndices',evt.Indices)), cfgHandles_tbles);
-            % Cell Edit Callback
-            % here is a source of an error for uitables not having a style property
-            arrayfun(@(h,fn) set(h, 'CellEditCallback',...
-                @(hObj,evt) this.mGeneralCallback(hObj,evt,fn{1})), cfgHandles_tbles, cfgFields_tbles);
-            
-            %arrayfun(@(h,fn) set(h, 'CellEditCallback',...
-            %    @(hObj,evt) disp(fn{1})), cfgHandles_tbles, cfgFields_tbles);
-            
-            %------------------------------------------------%
-            %this.mCreateCfgStruct;
-            
+            %keyboard
         end
 
         
@@ -192,7 +164,7 @@ classdef MSConfig < AUXUIControlFunctions
                     % return value based on string
                    % fcnSetFcn = @(hObj,inText) set(hObj,'Value', find(strcmp(inText,get(hObj,'String'))));
                 case {'edit','pushbutton','text','listbox'}
-                    % **listbox callback is only executed on double clicks**
+                    % **listbox callback is only executed on double click**
                     % get the String and set the String
                     
                     if strncmp(get(hCntrl,'Tag'),'cfg_Files_',9) % if files list
@@ -230,8 +202,6 @@ classdef MSConfig < AUXUIControlFunctions
                     else
                         disp('Java Object Set/Get functions not set.');
                     end
-                    
-                    
                 otherwise
                     fcnGetFcn = [];
                     fcnSetFcn = [];
@@ -247,50 +217,46 @@ classdef MSConfig < AUXUIControlFunctions
             % set short filename without file ext
             fcnSetFcn = @(hObj,filepath) set(hObj,'String',this.mGetShortFile(filepath,false));
         end
- 
+        
         %# Create CFG structure
         function mCreateCfgStruct(this)
-
-            cfgTagPaths = this.cfgElements{1};
-            cfgUIHandle = this.cfgElements{2};
+            cfgUIHandles = this.cfgControlHandles; % cell
             
-            nElements = length(cfgTagPaths);
-
-            % get the generalized functions
-            getFuncs = get(cfgUIHandle,{'getPropertyFcn'});
+            % accumulate all get functions
+            getFuncs = cellfun(@(h) get(h,'getPropertyFcn'),cfgUIHandles,'unif',0);
+            
             % get default values
-            cfgValues = cellfun(@(h,func) func(h), mat2cell(cfgUIHandle,ones(length(cfgUIHandle),1)), getFuncs, 'unif',0);
+            cfgValues = cellfun(@(h,func) func(h), cfgUIHandles, getFuncs, 'unif',0);
 
-            for k = 1:nElements
-                this.mSetFieldCfg(cfgTagPaths{k}, cfgValues{k})
-            end
+            % create Tag paths 
+            cfgStructAccess = cellfun(@(h) this.mReplaceChar(get(h,'Tag'),'_','.'),cfgUIHandles, 'unif',0);
+
+            % create cfg structure in 'this object'
+            cellfun(@(cfg_access, cfg_value) this.mSetFieldCfg(cfg_access, cfg_value), cfgStructAccess, cfgValues);
             drawnow;
         end
         
         %# set default value 
         % should be called after all uicontrol objects have been created 
         function mSetDefaultValue(this)
-            cfgUIHandle = this.cfgElements{2};
+            cfgUIHandles = this.cfgControlHandles;
             
-            % get the generalized functions
-            getFuncs = get(cfgUIHandle,{'getPropertyFcn'});
-            %setFuncs = get(cfgUIHandle,{'setPropertyFcn'});
+            % accumulate all get functions
+            getFuncs = cellfun(@(h) get(h,'getPropertyFcn'),cfgUIHandles,'unif',0);
             
-            % get the current property and set that as the default value 
-            nElements = length(cfgUIHandle);
+            % get default values
+            cfgValues = cellfun(@(h,func) func(h), cfgUIHandles, getFuncs, 'unif',0);
+            % set default value in object 
+            cellfun(@(cfg_obj, cfg_value) set(cfg_obj, 'uiDefaultValue', cfg_value),cfgUIHandles, cfgValues);
             
-            for k = 1:nElements
-                defaultValue = getFuncs{k}(cfgUIHandle(k));
-                set(cfgUIHandle(k), 'uiDefaultValue', defaultValue);
-            end
             drawnow;
         end
-        
-        
+
         %-------------------------------------%
         %            CALLBACKS 
         
         %# UIObject - general callback function
+        % this is called any time a value is entered in an individual  cell
         function mGeneralCallback(this,hObj,~,field)
             % ------ gets the data, and sets it as it is -------
             % get user input & convert to appropriate value
@@ -298,7 +264,7 @@ classdef MSConfig < AUXUIControlFunctions
             uiinput       = fcnGetUIInput(hObj);        % has all params, only needs object handle
             
             this.mSetFieldCfg(field, uiinput);
-            
+
             % frames are used for marking the position/location 
             % of a java object in the gui, set the value of the frame
             % on the callback to signal that the java object callback has
@@ -563,35 +529,35 @@ classdef MSConfig < AUXUIControlFunctions
             
             cfg     = load(cfgFile); % load cfg file
             currcfg = this.cfg;
-            % fieldnames {1}, handles {2}
-            cfgTagPaths = this.cfgElements{1};
-            cfgUIHandle = this.cfgElements{2};
-            
+
+            cfgUIHandle = this.cfgControlHandles; % cell vector (no longer array!)
+
             % get the generalized set functions
             % fcnSetFuncs = get(cfgUIHandle,'setPropertyFcn');
             getSetFcn   = @(hUI) get(hUI,'setPropertyFcn');
-            fcnSetFuncs = arrayfun(getSetFcn,cfgUIHandle,'unif',0);
+            fcnSetFuncs = cellfun(getSetFcn,cfgUIHandle,'unif',0);
             
             % try assign to cfg, and to GUI
-            for k = 1:length(cfgTagPaths)
+            for k = 1:length(cfgUIHandle)
 
                 % select this set function
                 thisSetFcn = fcnSetFuncs{k};
                 
+                struct_fieldname = this.mReplaceChar(get(cfgUIHandle{k},'Tag'),'_','.');
                 % 1. check if default, assign default if empty?
                 % 2. else, check if valid input
                 % - class should match default
                 % - if file, file must exist/be accessible
                 try
                     % get value from loaded cfg
-                    value = eval(cfgTagPaths{k}); % this new config file
+                    value = eval(struct_fieldname); % this new config file
                 catch ME
-                    fprintf('Field %s missing in config file.\n', cfgTagPaths{k});
+                    fprintf('Field %s missing in config file.\n', struct_fieldname);
                     continue;
                 end
                 
                 % error check and default check
-                [result,newValue,errMsg] = this.mGeneralErrorCheck(cfgUIHandle(k),cfgTagPaths{k},value);
+                [result,newValue,errMsg] = this.mGeneralErrorCheck(cfgUIHandle{k},struct_fieldname,value);
                 
                 if ~result
                     % value needs to be re-assigned
@@ -601,19 +567,19 @@ classdef MSConfig < AUXUIControlFunctions
                 try
                     % try to set value in cfg
                     err = 1;
-                    this.mSetFieldCfg(cfgTagPaths{k},value);
+                    this.mSetFieldCfg(struct_fieldname,value);
                     
                     % try to update gui
                     err = 2;
-                    eval('thisSetFcn(cfgUIHandle(k),value)');
+                    eval('thisSetFcn(cfgUIHandle{k},value)');
                     
                 catch
                     % if either one does not go through, retore to previous
-                    prevValue = eval(['curr',cfgTagPaths{k}]);
-                    this.mSetFieldCfg(cfgTagPaths{k},prevValue); % set cfg
-                    eval('thisSetFcn(cfgUIHandle(k),prevValue)'); % set uicontrol
+                    prevValue = eval(['curr',struct_fieldname]);
+                    this.mSetFieldCfg(struct_fieldname,prevValue); % set cfg
+                    eval('thisSetFcn(cfgUIHandle{k},prevValue)'); % set uicontrol
                     
-                    disp(['Failed to load: ', cfgTagPaths{k},' ...']);
+                    disp(['Failed to load: ', struct_fieldname,' ...']);
                     switch err
                         case 1
                             disp('Unable to set value to configuration structure');
