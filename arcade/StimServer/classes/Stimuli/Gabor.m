@@ -61,18 +61,18 @@ classdef Gabor < PixelShader
         function set.maskWidth(obj, width)
             obj.setParameter(1, width)
             obj.maskWidth = width;
-            if ~(min([obj.shaderHeight,obj.shaderWidth]) >= 3*width)
-                obj.shaderHeight = 3*width;
-                obj.shaderWidth = 3*width;
+            if ~(min([obj.shaderHeight,obj.shaderWidth]) >= 6*width)
+                obj.shaderHeight = 6*width;
+                obj.shaderWidth = 6*width;
             end
 
         end
         function set.maskHeight(obj, height)
             obj.setParameter(2, height)
             obj.maskHeight = height;
-            if ~(min([obj.shaderHeight,obj.shaderWidth]) >= 3*height)
-                obj.shaderHeight = 3*height;
-                obj.shaderWidth = 3*height;
+            if ~(min([obj.shaderHeight,obj.shaderWidth]) >= 6*height)
+                obj.shaderHeight = 6*height;
+                obj.shaderWidth = 6*height;
             end
         end
         
