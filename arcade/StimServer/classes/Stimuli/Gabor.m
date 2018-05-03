@@ -4,15 +4,15 @@ classdef Gabor < PixelShader
     % ARCADE/arcade/StimServer/classes/stimfiles/pixelShader/Gabor.fx
     
     properties ( Transient = true )
-        color1 = [255 255 255]; % [r g b alpha]
-        color2 = [0 0 0]; % [r g b alpha]
+        color1 = [255 255 255 255]; % [r g b alpha]
+        color2 = [0 0 0 255]; % [r g b alpha]
         maskRotation = 0; % angle of gaussian mask in degree
         spatialPeriod = 25; % px / cycle
         direction = 0;  % drift direction in degree: 0=rightward, 90=upward, ...
         smoothing = 2; % 2 = sinusoidal grating, 10 = square wave grating
         phaseOffset = 0; % phase offset in deg
-        maskWidth = 50; % x-std of gaussian mask in px
-        maskHeight = 50; % y-std of gaussian mask in px
+        maskWidth = 5; % x-std of gaussian mask in px
+        maskHeight = 5; % y-std of gaussian mask in px
         temporalFrequency = 1; % cycles / s
     end
     
@@ -43,26 +43,41 @@ classdef Gabor < PixelShader
 
         end
         
-        function set.color1(obj, rgb)
-            obj.setColor(1, [rgb 255])
+        function set.color1(obj, rgb)            
+            if numel(rgb) == 3
+                rgb = [rgb 255];
+            end
+            obj.setColor(1, rgb)
             obj.color1 = rgb;
         end
         
         function set.color2(obj, rgb)
+            if numel(rgb) == 3
+                rgb = [rgb 255];
+            end
             obj.setColor(2, [rgb 255])
             obj.color2 = rgb;
         end
         function set.maskWidth(obj, width)
             obj.setParameter(1, width)
             obj.maskWidth = width;
+            if ~(min([obj.shaderHeight,obj.shaderWidth]) >= 3*width)
+                obj.shaderHeight = 3*width;
+                obj.shaderWidth = 3*width;
+            end
+
         end
         function set.maskHeight(obj, height)
             obj.setParameter(2, height)
             obj.maskHeight = height;
+            if ~(min([obj.shaderHeight,obj.shaderWidth]) >= 3*height)
+                obj.shaderHeight = 3*height;
+                obj.shaderWidth = 3*height;
+            end
         end
         
         function set.maskRotation(obj, rotation)
-            obj.setParameter(3, rotation)
+            obj.setParameter(3, -rotation)
             obj.maskRotation = rotation;
         end
         

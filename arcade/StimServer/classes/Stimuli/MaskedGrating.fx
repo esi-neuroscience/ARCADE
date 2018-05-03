@@ -78,7 +78,7 @@ float4 PSmain( float4 Pos : SV_POSITION ) : SV_Target
     
     // calculate sinewave 
     float sineWave = sin( radians(phaseOffset) + numCycles*2.0f*pi + dot(center-Pos.xy, p)*(2.0f*pi)/pixelsPerCycle );
-    float bright   = (width*height*0.0f)+(pow(abs(sineWave), 2.0f/R) * sign(sineWave) + 1.0f) / 2.0f;
+    float bright   = (pow(abs(sineWave), 2.0f/R) * sign(sineWave) + 1.0f) / 2.0f;
 
     // if colored, implement color via alpha blending  
     return color0*(float4)(1.0f-bright) + color1*(float4)bright;

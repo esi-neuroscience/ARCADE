@@ -12,9 +12,9 @@ classdef Grating < PixelShader
         smoothing = 2; % 2 = sinusoidal grating, 10 = square wave grating
         phaseShift = 0;
         % horizontal radius of circular mask in px for direction = 0
-        maskWidth = 200; 
+        maskWidth = 100; 
         % vertical radius of circular mask in px for direction = 0
-        maskHeight = 200; 
+        maskHeight = 100; 
         temporalFrequency = 1; % cycles / s
     end
     
@@ -51,21 +51,35 @@ classdef Grating < PixelShader
         end
         
         function set.color1(obj, rgbw)
+            if numel(rgbw) == 3
+                rgbw = [rgbw 255];
+            end
             obj.setColor(1, rgbw)
             obj.color1 = rgbw;
         end
         
         function set.color2(obj, rgbw)
+            if numel(rgbw) == 3
+                rgbw = [rgbw 255];
+            end
             obj.setColor(2, rgbw)
             obj.color2 = rgbw;
         end
         function set.maskWidth(obj, width)
             obj.setParameter(1, width)
             obj.maskWidth = width;
+             if ~(min([obj.shaderHeight,obj.shaderWidth]) >= 2*width)
+                obj.shaderHeight = 2*width;
+                obj.shaderWidth = 2*width;
+            end
         end
         function set.maskHeight(obj, height)
             obj.setParameter(2, height)
             obj.maskHeight = height;
+            if ~(min([obj.shaderHeight,obj.shaderWidth]) >= 2*height)
+                obj.shaderHeight = 2*height;
+                obj.shaderWidth = 2*height;
+            end
         end
         
         function set.maskRotation(obj, rotation)
