@@ -1,5 +1,20 @@
 # Change Log of ARCADE
 
+## [2.3.0b2] - 2018-05-04
+### CHANGED
+*   Default size of PixelShader-based stimuli is now 50x50 px. Shader size is
+    automatically increased on demand in Grating and Gabor if radius exceeds
+    current shader size
+*   Direction of maskRotation parameter of Gabor has been inverted. It used to
+    be defined opposite of the Gabor.direction parameter
+
+### FIXED
+*   StimServer: changes to stimuli occuring after the end of a deferred mode
+    (groupstimli('end')) but before the next frame were ignored. These are now
+    also applied with the next frame.
+*   Obsolete shader code in Gabor and Grating has been removed
+
+
 ## [2.3.0b1] - 2018-04-13
 ### NEW
 *   Handmapper: an ARCADE add-on for manual receptive field mapping, which can
