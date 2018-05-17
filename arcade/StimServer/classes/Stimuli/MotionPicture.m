@@ -32,6 +32,7 @@ classdef MotionPicture < Stimulus
         % >1: integer number of screen frames a video frame is repeated for
         %  0: no frame advancement
         screenFramesPerVideoFrame = 1;
+        endEventName = 'MovieDone';
     end
     
     methods
@@ -49,6 +50,7 @@ classdef MotionPicture < Stimulus
             fileInfo = imfinfo(filename);
             obj.size = [fileInfo(1).Width fileInfo(1).Height];
             obj.nFrames = length(fileInfo);
+            obj.endEventName = obj.endEventName;
         end
                 
         function set.alpha(obj, alpha)
@@ -77,6 +79,13 @@ classdef MotionPicture < Stimulus
         function set.screenFramesPerVideoFrame(obj, fraction)            
             StimServer.Command(obj.key, ...
                 uint8([9 typecast(uint16(fraction), 'uint8')]));
+            obj.screenFramesPerVideoFrame = fraction;
+        end
+        
+        function set.endEventName(obj, name)
+             StimServer.Command(obj.key, ...
+                 uint8([10 name 0]));
+            obj.endEventName = name;
         end
         
     end
