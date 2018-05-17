@@ -1,5 +1,18 @@
 # Change Log of ARCADE
 
+## [2.3.0] - 2018-05-17
+### NEW
+*   MotionPicture stimuli trigger an event when playback has finished, with
+    the name stored in the MotionPicture.endEventName property
+
+### FIXED
+*   Animations: De-assigning already finished/de-assigned animations was
+    crashing StimServer
+*   MotionPicture stimuli were played at half the specified frame rate
+    (MotionPicture.screenFramesPerVideoFrame)
+*   The specified MotionPicture frame rate was not stored in the MATLAB
+    object.
+
 ## [2.3.0b2] - 2018-05-04
 ### CHANGED
 *   Default size of PixelShader-based stimuli is now 50x50 px. Shader size is
