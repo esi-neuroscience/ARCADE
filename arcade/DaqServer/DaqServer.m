@@ -121,12 +121,24 @@ classdef DaqServer < handle
             DaqServer.Write(uint8([6 typecast(uint16(markerCode), 'uint8')]));
         end
         
-        
         function SetRewardCode(code)
             % Set the event marker code for manual reward
             DaqServer.Write(uint8([7 typecast(uint16(code), 'uint8')]));
         end
         
+        function totalTime = GetTotalTime()
+            DaqServer.Write(uint8(8));
+            totalTime = uint32(0);
+            nRead = uint32(0);
+            [result, ~, totalTime, nRead] = ...
+                calllib('kernel32', 'ReadFile', ...
+                DaqServer.this.hPipe, ...
+                totalTime, ...
+                4, ...
+                nRead, ...
+                []);
+            assert(nRead == 4, 'Could not read total reward time from DaqServer pipe');
+        end
     end
     
     methods (Static, Hidden=true)
