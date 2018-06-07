@@ -8,6 +8,29 @@ classdef State < handle
     % A state can have entry and exit functions, which are run irrespective
     % of the wait outcome. 
     %
+    % EXAMPLE
+    % -------
+    %  % create state with name
+    %  sWaitResponse = State('waitForResponse');
+    %     
+    %  % set duration until timeout in ms and next state name after timeout
+    %  sWaitResponse.duration = 750;
+    %  sWaitResponse.nextStateAfterTimeout = 'noResponse';
+    %     
+    %  % define event names to wait for and associated next state names
+    %  sWaitResponse.waitEvents = {'targetIn', 'distracterIn'}
+    %  sWaitResponse.nextStateAfterTimeout = {'targetAcquired', 'distracterAcquired'};     
+    %  
+    %  % turn stimuli on when entering and off when exiting the state
+    %  sWaitResponse.onEntry = {...
+    %       @() set(target, 'visible', true), ...
+    %       @() set(distracter, 'visible', true), ...
+    %    };
+    %  sWaitResponse.onExit = {...
+    %       @() set(target, 'visible', false), ...
+    %       @() set(distracter, 'visible', false), ...
+    %    };
+    %
     % See also trackeye, SGLStateArc, IPCEvent, function_handle, anondemo
     %     
      
@@ -25,12 +48,23 @@ classdef State < handle
     end
     properties ( GetAccess = public, SetAccess = private)
         runNumber = 0; % number of iterations within current state arc
+        startTic % tic before onEntry functions
+        completed = false; % boolean flag whether State was run from entry to exit
     end
     
+    properties ( Dependent = true, SetAccess = private )
+        elapsedTime % elapsed runtime from entry to exit in ms
+    end
+
+    properties ( Access = private )
+        elapsedTime_ = 0;
+    end
+
     properties ( Access = private, Constant = true )
         WAIT_TIMEOUT = uint32(hex2dec('00000102'));
         WAIT_FAILED  = uint32(hex2dec('FFFFFFFF'));
     end
+
     
     methods ( Access = public )
         function obj = State(name)
@@ -40,14 +74,13 @@ classdef State < handle
         function nextState = run(obj)
             % Execute entry functions, wait for events/timeout and call
             % exit functions
-                        
+            obj.completed = false;
+            obj.startTic = tic;
             obj.runNumber = obj.runNumber+1;
             obj.evalFunctions(obj.onEntry)            
-            
-            tStart = tic;
+                    
             result = State.WAIT_TIMEOUT;
-            while (toc(tStart) < obj.duration/1000) && result == State.WAIT_TIMEOUT
-                java.lang.Thread.sleep(1)
+            while (toc(obj.startTic) < obj.duration/1000) && result == State.WAIT_TIMEOUT                
                 if ~isempty(obj.waitEvents)
                     result = WaitForEvents(1, ...
                         obj.waitEvents, ...
@@ -66,6 +99,8 @@ classdef State < handle
             end
             
             obj.evalFunctions(obj.onExit)
+            obj.elapsedTime_ = toc(obj.startTic)*1000;
+            obj.completed = true;
             
         end
     end
@@ -97,7 +132,20 @@ classdef State < handle
             end
             assert(State.isCellArrayOfChars(stateNames));
             obj.nextStateAfterEvent = stateNames;
-        end    
+        end   
+
+        function t = get.elapsedTime(obj) 
+            if ~obj.completed && ~isempty(obj.startTic)
+                t = toc(obj.startTic)*1000;
+            else
+                t = obj.elapsedTime_;
+            end
+        end
+        
+        function set_duration(obj, value)
+            obj.duration = value;
+        end
+        
     end
     
     methods ( Static, Hidden=true, Access=private )

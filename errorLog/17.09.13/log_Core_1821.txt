@@ -1,0 +1,44 @@
+************************************
+Launching... Core process
+13-Sep-2017 18:21:48
+MATLAB version: 8.3.0.532 (R2014a)
+User name: stephanm
+Computer name: ESI-WSIT001
+ARCADE version: 2.0.0a3-13-g5fd8272
+************************************
+Matlab Random Number Generator shuffled...
+RNG: twister, SEED: 2121721228
+Detected 2 screen devices.
+Found cfg file: D:\ARCADE\Tasks\Examples\exampleDetectTask_cfg.mat
+Config file loaded...
+Saved cfg file here: D:\ARCADE\Tasks\Examples\exampleDetectTask_cfg.mat
+[Warning: Directory already exists.] 
+[> In AUXDirectoryManager>AUXDirectoryManager.mCreateDirectory at 74
+  In MSBackupCopy>MSBackupCopy.mCreateBackupFilepaths at 124
+  In MainScreen>MainScreen.mRunTask at 297
+  In MainScreen>@(hObj,evt)this.mRunTask(hObj,evt) at 275
+  In uiwait at 81
+  In SPCGUIDefinition>SPCGUIDefinition.mWaitForUserAction at 81
+  In MainScreen>MainScreen.MainScreen at 145
+  In MainScreen>MainScreen.launch at 91
+  In SGLCoreProc>SGLCoreProc.mRunServer at 54
+  In runCore at 24
+  In run at 63] 
+[Warning: Directory already exists.] 
+[> In AUXDirectoryManager>AUXDirectoryManager.mCreateDirectory at 74
+  In MSBackupCopy>MSBackupCopy.mCreateBackupFilepaths at 124
+  In MainScreen>MainScreen.mRunTask at 297
+  In MainScreen>@(hObj,evt)this.mRunTask(hObj,evt) at 275
+  In uiwait at 81
+  In SPCGUIDefinition>SPCGUIDefinition.mWaitForUserAction at 81
+  In MainScreen>MainScreen.MainScreen at 145
+  In MainScreen>MainScreen.launch at 91
+  In SGLCoreProc>SGLCoreProc.mRunServer at 54
+  In runCore at 24
+  In run at 63] 
+
+ans =
+
+     0
+
+18:24:56 Closing MATLAB in 5 s. Press CTRL+C to cancel or see log files

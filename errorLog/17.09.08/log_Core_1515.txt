@@ -1,0 +1,62 @@
+************************************
+Launching... Core process
+08-Sep-2017 15:15:24
+MATLAB version: 8.3.0.532 (R2014a)
+User name: stephanm
+Computer name: ESI-WSIT001
+ARCADE version: 2.0.0a3-13-g5fd8272
+************************************
+Matlab Random Number Generator shuffled...
+RNG: twister, SEED: 2077402821
+Detected 2 screen devices.
+Saved cfg file here: D:\ARCADE\Tasks\Examples\exampleDetectTask_cfg.mat
+Checking for backup files...
+Copying backup files....
+Starting Session...
+15:20:25 Starting Reward Server
+15:20:28 Starting Event Server
+15:20:28 Starting ControlScreen
+15:20:29 Starting StimServer
+15:20:29 Waiting for processes
+15:20:38 Starting Session
+{Attempt to reference field of non-structure array.
+
+Error in SGLEyeServerPipe.WriteEyeTrackerMsg (line 52)
+            result = SGLEyeServerPipe.this.pipe.writeMessage(msg);
+
+Error in trackeye (line 41)
+    SGLEyeServerPipe.WriteEyeTrackerMsg([Inf Inf], Inf, Inf)
+
+Error in exampleDetectTask (line 14)
+trackeye('reset')
+
+Error in run (line 63)
+evalin('caller', [script ';']);
+
+Error in SGLSessionArc.mEvalTrialScript (line 193)
+            run(TaskFile);
+
+Error in SGLSessionArc/mRunSession (line 100)
+                this.mEvalTrialScript(EditableVars,TrialData,TaskFile)
+
+Error in SGLSessionArc/mStart (line 212)
+                this.mRunSession;
+
+Error in SGLCoreProc/mRunSession (line 231)
+            SESSArc.mStart;
+
+Error in SGLCoreProc/mRunServer (line 143)
+            this.mRunSession(cfg);
+
+Error in runCore (line 24)
+PROC.mRunServer;
+
+Error in run (line 63)
+evalin('caller', [script ';']);
+} 
+
+
+
+whos
+who
+exit

@@ -1,0 +1,67 @@
+************************************
+Launching... Core process
+13-Sep-2017 18:05:01
+MATLAB version: 8.3.0.532 (R2014a)
+User name: stephanm
+Computer name: ESI-WSIT001
+ARCADE version: 2.0.0a3-13-g5fd8272
+************************************
+Matlab Random Number Generator shuffled...
+RNG: twister, SEED: 2121620570
+Detected 2 screen devices.
+Found cfg file: D:\ARCADE\Tasks\Examples\exampleDetectTask_cfg.mat
+Config file loaded...
+Checking for backup files...
+Copying backup files....
+Starting Session...
+18:06:13 Starting Reward Server
+18:06:16 Starting Event Server
+18:06:17 Starting ControlScreen
+18:06:17 Starting StimServer
+18:06:17 Waiting for processes
+18:06:25 Starting Session
+[Warning: The following error was caught while executing 'processManager' class destructor:
+Invalid timer object. This object has been deleted and should be removed from your workspace using CLEAR.] 
+[> In runCore at 24
+  In run at 63] 
+{Attempt to reference field of non-structure array.
+
+Error in SGLEyeServerPipe.WriteEyeTrackerMsg (line 52)
+            result = SGLEyeServerPipe.this.pipe.writeMessage(msg);
+
+Error in trackeye (line 41)
+    SGLEyeServerPipe.WriteEyeTrackerMsg([Inf Inf], Inf, Inf)
+
+Error in exampleDetectTask (line 14)
+trackeye('reset')
+
+Error in run (line 63)
+evalin('caller', [script ';']);
+
+Error in SGLSessionArc.mEvalTrialScript (line 193)
+            run(TaskFile);
+
+Error in SGLSessionArc/mRunSession (line 100)
+                this.mEvalTrialScript(EditableVars,TrialData,TaskFile)
+
+Error in SGLSessionArc/mStart (line 212)
+                this.mRunSession;
+
+Error in SGLCoreProc/mRunSession (line 231)
+            SESSArc.mStart;
+
+Error in SGLCoreProc/mRunServer (line 143)
+            this.mRunSession(cfg);
+
+Error in runCore (line 24)
+PROC.mRunServer;
+
+Error in run (line 63)
+evalin('caller', [script ';']);
+} 
+msg
+{Undefined function or variable 'msg'.
+} 
+who msg
+whos msg
+exit

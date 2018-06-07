@@ -14,8 +14,8 @@ classdef PixelShader < Stimulus
     end
     
     properties ( SetAccess = public, GetAccess = public, Transient = true )
-        shaderWidth = 1000; % width of shader window in px
-        shaderHeight = 1000; % height of shader window in px
+        shaderWidth = 50; % width of shader window in px
+        shaderHeight = 50; % height of shader window in px
         animationIncrement = 1; % value to be added to phase variable in shader with each frame
         animationPhase = 0; % manuall set phase variable in shader
     end

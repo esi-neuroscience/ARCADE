@@ -1,0 +1,11 @@
+************************************
+Launching... Control Screen process
+13-Sep-2017 18:47:16
+MATLAB version: 8.3.0.532 (R2014a)
+User name: stephanm
+Computer name: ESI-WSIT001
+ARCADE version: 2.0.0a3-13-g5fd8272
+************************************
+18:47:16 Opened Core Pipe
+18:47:16 Waiting for start commmand
+18:47:21 Entering loop

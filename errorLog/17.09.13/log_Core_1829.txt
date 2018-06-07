@@ -1,0 +1,77 @@
+************************************
+Launching... Core process
+13-Sep-2017 18:29:06
+MATLAB version: 8.3.0.532 (R2014a)
+User name: stephanm
+Computer name: ESI-WSIT001
+ARCADE version: 2.0.0a3-13-g5fd8272
+************************************
+Matlab Random Number Generator shuffled...
+RNG: twister, SEED: 2121765001
+Detected 2 screen devices.
+Found cfg file: D:\ARCADE\Tasks\Examples\exampleImage_cfg.mat
+Config file loaded...
+Checking for backup files...
+Copying backup files....
+Starting Session...
+18:29:34 Starting Reward Server
+18:29:35 Starting Event Server
+18:29:35 Starting ControlScreen
+18:29:35 Starting StimServer
+18:29:35 Waiting for processes
+18:29:42 Starting Session
+[Warning: MultipleEvents not initialized or already deleted.] 
+[Warning: MultipleEvents not initialized or already deleted.] 
+[Warning: MultipleEvents not initialized or already deleted.] 
+[Warning: MultipleEvents not initialized or already deleted.] 
+[Warning: MultipleEvents not initialized or already deleted.] 
+[Warning: MultipleEvents not initialized or already deleted.] 
+[Warning: MultipleEvents not initialized or already deleted.] 
+[Warning: MultipleEvents not initialized or already deleted.] 
+[Warning: MultipleEvents not initialized or already deleted.] 
+[Warning: MultipleEvents not initialized or already deleted.] 
+[Warning: MultipleEvents not initialized or already deleted.] 
+[Warning: MultipleEvents not initialized or already deleted.] 
+[Warning: MultipleEvents not initialized or already deleted.] 
+[Warning: MultipleEvents not initialized or already deleted.] 
+[Warning: MultipleEvents not initialized or already deleted.] 
+[Warning: MultipleEvents not initialized or already deleted.] 
+[Warning: MultipleEvents not initialized or already deleted.] 
+[Warning: MultipleEvents not initialized or already deleted.] 
+[Warning: MultipleEvents not initialized or already deleted.] 
+[Warning: MultipleEvents not initialized or already deleted.] 
+[Warning: MultipleEvents not initialized or already deleted.] 
+[Warning: MultipleEvents not initialized or already deleted.] 
+[Warning: MultipleEvents not initialized or already deleted.] 
+[Warning: MultipleEvents not initialized or already deleted.] 
+[Warning: MultipleEvents not initialized or already deleted.] 
+[Warning: MultipleEvents not initialized or already deleted.] 
+[Warning: MultipleEvents not initialized or already deleted.] 
+{Error using NidaqServer.Write (line 114)
+No connection to NidaqServer.
+
+Error in NidaqServer.EventMarker (line 106)
+            NidaqServer.Write(uint8([6 typecast(uint16(markerCode), 'uint8')]));
+
+Error in eventmarker (line 14)
+    NidaqServer.EventMarker(round(value));
+
+Error in SGLSessionArc/mRunSession (line 124)
+                    eventmarker(eventPause);      % send enter Pause marker event
+
+Error in SGLSessionArc/mStart (line 212)
+                this.mRunSession;
+
+Error in SGLCoreProc/mRunSession (line 231)
+            SESSArc.mStart;
+
+Error in SGLCoreProc/mRunServer (line 143)
+            this.mRunSession(cfg);
+
+Error in runCore (line 24)
+PROC.mRunServer;
+
+Error in run (line 63)
+evalin('caller', [script ';']);
+} 
+exit

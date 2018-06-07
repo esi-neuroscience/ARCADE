@@ -1,0 +1,10 @@
+************************************
+Launching... Eye Server process
+08-Dec-2017 12:43:28
+MATLAB version: 8.3.0.532 (R2014a)
+User name: stephanm
+Computer name: ESI-WSIT001
+ARCADE version: 2.1.2-3-g159ff4a
+************************************
+12:43:30 Starting eye data acquisition
+17:25:24 Stopping data acquisition

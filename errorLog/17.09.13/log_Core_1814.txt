@@ -1,0 +1,33 @@
+************************************
+Launching... Core process
+13-Sep-2017 18:14:15
+MATLAB version: 8.3.0.532 (R2014a)
+User name: stephanm
+Computer name: ESI-WSIT001
+ARCADE version: 2.0.0a3-13-g5fd8272
+************************************
+Matlab Random Number Generator shuffled...
+RNG: twister, SEED: 2121675962
+Detected 2 screen devices.
+Found cfg file: D:\ARCADE\Tasks\Examples\exampleDetectTask_cfg.mat
+Config file loaded...
+Saved cfg file here: D:\ARCADE\Tasks\Examples\exampleDetectTask_cfg.mat
+Checking for backup files...
+Copying backup files....
+Starting Session...
+18:15:06 Starting Reward Server
+18:15:06 Starting Event Server
+18:15:07 Starting ControlScreen
+18:15:07 Starting EyeServer
+18:15:07 Starting StimServer
+18:15:07 Waiting for processes
+{Error using SGLCoreProc/mRunServer (line 117)
+Wait for EyeServer failed
+
+Error in runCore (line 24)
+PROC.mRunServer;
+
+Error in run (line 63)
+evalin('caller', [script ';']);
+} 
+exit
