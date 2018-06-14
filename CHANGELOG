@@ -1,5 +1,67 @@
 # Change Log of ARCADE
 
+## [2.3.0] - 2018-05-17
+### NEW
+*   MotionPicture stimuli trigger an event when playback has finished, with
+    the name stored in the MotionPicture.endEventName property
+
+### FIXED
+*   Animations: De-assigning already finished/de-assigned animations was
+    crashing StimServer
+*   MotionPicture stimuli were played at half the specified frame rate
+    (MotionPicture.screenFramesPerVideoFrame)
+*   The specified MotionPicture frame rate was not stored in the MATLAB
+    object.
+
+## [2.3.0b2] - 2018-05-04
+### CHANGED
+*   Default size of PixelShader-based stimuli is now 50x50 px. Shader size is
+    automatically increased on demand in Grating and Gabor if radius exceeds
+    current shader size
+*   Direction of maskRotation parameter of Gabor has been inverted. It used to
+    be defined opposite of the Gabor.direction parameter
+
+### FIXED
+*   StimServer: changes to stimuli occuring after the end of a deferred mode
+    (groupstimli('end')) but before the next frame were ignored. These are now
+    also applied with the next frame.
+*   Obsolete shader code in Gabor and Grating has been removed
+
+
+## [2.3.0b1] - 2018-04-13
+### NEW
+*   Handmapper: an ARCADE add-on for manual receptive field mapping, which can
+    be started via arcade/AddOns/Handmapper/RFhandmapper.bat
+*   bring_to_front: The drawing order of overlapping stimuli can now be
+    adjusted by bringing individual stimuli to the frontmost layer using the
+    bring_to_front method.
+*   Flicker animation: stimuli can be turned on and off periodically for
+    speficied number of frames
+*   MotionPicture stimulus (alpha version): image sequences stored in a multi-
+    frame TIFF file can be presented as movies. Use
+    convert_video_for_StimServer to convert compressed movie files to an
+    uncompressed TIFF.
+*   NidaqServer: logging option for debugging event-triggered reward
+*   Function for plotting a state flow diagram based on trialscript code
+*   State: set and get methods for duration and elapsedTime to determine State
+    duration at runtime
+*   StateRuntimeVariable: a class for holding and retreiving data created at
+    runtime of the session, e.g. reaction times. See help StateRuntimeVariable
+*   Improvements for CalibrateEyelink: reward is now coupled to advancing to
+    the next calibration target, reward and stimulus visibility can be
+    triggered via hotkeys
+
+### CHANGED
+*   Grating: the spatialFrequency property was renamed to spatialPeriod as it
+    was actually specifying the period in px/cycle. spatialFrequency will
+    still work but produce a warning
+
+### FIXED
+*   Editable variables where not removed from the configuration file when they
+    were removed from the GUI    
+*   Manually adding files to backup in main GUI deleted existing files
+
+
 ## [2.2.0] - 2018-01-10
 ### NEW
 *   EyelinkEyeServer: positions tracked via trackeye are not drawn on the
