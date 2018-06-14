@@ -114,7 +114,11 @@ classdef (Sealed) SGLSessionArc
                 clear stateArc
 
                 EventServer.writeEvents();
-                
+
+                if DaqServer.GetConnectionStatus()
+                    totalRewardTime(DaqServer.GetTotalRewardTime());
+                end
+
                 quitSession = false;
                 
                 % -- Pause Requested? --

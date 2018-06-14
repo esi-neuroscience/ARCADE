@@ -8,6 +8,14 @@ targetPositions = [
     0 -500
     ];
 
+% end session after 50 trials or when 50 ms of reward duration was reached
+totalRewardTime()
+if TrialData.currentTrial > 50 || totalRewardTime() >= 500
+    requestQuitSession()
+end
+
+
+
 %% EYE TRACKING
 fixRadius = 50; % px
 targetRadius = 300;
@@ -15,6 +23,7 @@ trackeye('reset')
 fixEvents = trackeye([0 0], fixRadius, 'fix');
 targetEvents = trackeye(targetPositions(TrialData.currentCondition,:), ...
     targetRadius, 'target');
+
 
 %% STIMULI
 [TaskFolder,~] = fileparts(mfilename('fullpath'));

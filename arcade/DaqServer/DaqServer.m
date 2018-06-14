@@ -126,7 +126,8 @@ classdef DaqServer < handle
             DaqServer.Write(uint8([7 typecast(uint16(code), 'uint8')]));
         end
         
-        function totalTime = GetTotalTime()
+        function totalTime = GetTotalRewardTime()
+            % Retreive reward time since last retreival
             DaqServer.Write(uint8(8));
             totalTime = uint32(0);
             nRead = uint32(0);

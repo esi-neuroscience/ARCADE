@@ -19,6 +19,7 @@ function reward(rewardTimes)
 if DaqServer.GetConnectionStatus()
     DaqServer.Reward(rewardTimes);
 else
+	totalRewardTime(sum(rewardTimes(1:2:end)))
     warning('Reward triggered but not connected to DAQ/Reward server')
 end
     
