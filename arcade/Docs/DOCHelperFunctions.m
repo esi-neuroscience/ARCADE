@@ -22,3 +22,6 @@ help reactiontime
 
 %% |storeUserVariables|
 help storeUserVariables
+
+%% |requestQuitSession|
+help requestQuitSession

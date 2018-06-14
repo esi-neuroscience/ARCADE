@@ -1,11 +1,10 @@
-
-
-% designed to set a flag -> UserRequestsToQuitSession
-% this allows users to determine in their TrialScript logic
-% if they would like to quit the session
-% for example if they have enough trials.
-% the flag is checked at the end of each trial
 function result = requestQuitSession(varargin)
+% REQUESTQUITSESSION - end session after current trial
+%
+%   requestQuitSession()
+%
+%
+
 persistent quitSession
 result = [];
 

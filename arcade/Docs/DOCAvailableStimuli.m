@@ -349,6 +349,26 @@ set([g1, g2, g3], 'visible', true);
 %
 % <<exampleGaussian.png>>
 
+%% Petal
+% A petal-like shape based on two circles connected by Bezier curves 
+% can be created using the |Petal| stimulus. 
+properties('Petal');
+%% 
+% *Example*
+p = Petal;
+p.angle = 35;
+p.faceColor = [255 255 255 128];
+p.lineColor = [255 0 0 255];
+p.drawMode = 3; % 1=face only, 2=line only, 3=both
+p.visible = true;
+
+%%
+%
+% <<examplePetal.png>>
+
+
+
+
 %% Pixel shader
 % Pixel shader are small programs that run on the graphics card and are 
 % written in a specific shader language, HLSL  (see 
