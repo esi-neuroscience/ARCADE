@@ -105,6 +105,11 @@ classdef (Sealed = true) StimServer < handle
             StimServer.Command(0, uint8([16 lit]));
         end
         
+        function PDposition(pos)
+            % Change position of photo diode. 0=upper left, 1=lower left
+            StimServer.Command(0, uint8([16 3 pos]));
+        end
+        
         function Defer(deferred)
             % Enable (1) or disable (0) grouping of following commands
             StimServer.Command(0, uint8([1 deferred]));
