@@ -55,7 +55,7 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
             
             if ~ishghandle(MSgui.hfig)
                 delete(MSgui)
-                fclose('all')
+                fclose('all');
                 return    
             end
             
@@ -83,7 +83,7 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
             % launch EyeServer process            
             if ~strcmp(cfg.EyeServer, 'None')
                 this.mWriteToDiary('Starting EyeServer', true)
-                eyeServerReadyEvt = IPCEvent('EyeServerReady', false);
+%                 eyeServerReadyEvt = IPCEvent('EyeServerReady', false);
                 eyeProcess = processManager('id', 'EyeServer', ...
                     'command', fullfile(arcaderoot, 'arcade', 'EyeServer', ['EyeServer.bat ' cfg.EyeServer]), ...
                     'printStdout', false, ...
@@ -110,10 +110,10 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
             
             % Wait for EyeServer and ControlScreen
             this.mWriteToDiary('Waiting for processes', true)
-            if ~strcmp(cfg.EyeServer, 'None')
-                result = eyeServerReadyEvt.waitForTrigger(20000);
-                assert(result==1, 'Wait for EyeServer failed')
-            end
+%             if ~strcmp(cfg.EyeServer, 'None')
+%                 result = eyeServerReadyEvt.waitForTrigger(20000);
+%                 assert(result==1, 'Wait for EyeServer failed')
+%             end
             result = controlScreenReadyEvt.waitForTrigger(20000);
             assert(result==1, 'Wait for ControlScreen failed')
             
@@ -130,7 +130,11 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
 
             % connect to EyeServer
             if ~strcmp(cfg.EyeServer, 'None')
-                SGLEyeServerPipe.Open();
+                EyeServer.Connect();
+                EyeServer.Start([datestr(now,'mmddHHMM') '.edf'])
+%                 eyeFile =  fullfile(cfg.filepaths.Behaviour, ...
+%                     [cfg.Subject '_' today() '_' cfg.Experiment '_' cfg.Session '.edf']);
+%                 EyeServer.Start(eyeFile)
             end
 
             % Run session
@@ -153,8 +157,9 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
 
             % quit eye server
             if ~strcmp(cfg.EyeServer, 'None')
-                stopEyeServerEvt = IPCEvent('StopEyeServer');
-                stopEyeServerEvt.trigger();
+%                 stopEyeServerEvt = IPCEvent('StopEyeServer');
+%                 stopEyeServerEvt.trigger();
+                EyeServer.Stop()
                 eyeProcess.stop()
             end
             

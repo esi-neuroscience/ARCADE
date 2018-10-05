@@ -34,21 +34,18 @@ function eventNames = trackeye(position, tolerance, name)
 %     (done automatically by ARCADE).
 % 
 % See also State, ABSEyeServer, SGLEyeServerPipe
+persistent eyeTargets
 
 
-readyEvent = IPCEvent('EyeTrackerReady', false);
 if nargin == 1 && strcmp(position, 'reset')
-    SGLEyeServerPipe.WriteEyeTrackerMsg([Inf Inf], Inf, Inf)       
-    % wait for ready event of eye server
-	wasTriggered = readyEvent.waitForTrigger(5000);
-	assert(wasTriggered, 'Setting eye tracker failed')
+    for iTarget = 1:length(eyeTargets)
+        delete(eyeTargets{iTarget})
+        pause(0.001)
+    end
     return
 end
 
 
-SGLEyeServerPipe.WriteEyeTrackerMsg(position, tolerance, name)
-% wait for ready event of eye server
-wasTriggered = readyEvent.waitForTrigger(5000);
-assert(wasTriggered, 'Setting eye tracker failed')
+eyeTargets{end+1} = CircularEyeTarget(position(1), position(2), tolerance, name);
 
 eventNames = {[name 'In'], [name 'Out']};

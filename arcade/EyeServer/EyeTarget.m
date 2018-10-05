@@ -6,7 +6,7 @@ classdef (Abstract) EyeTarget < hgsetget
         key
     end
     
-    properties ( Dependent = true )
+    properties 
         position % Position in pixel relative to screen center
     end
     
@@ -15,7 +15,7 @@ classdef (Abstract) EyeTarget < hgsetget
     
     methods
         function obj = EyeTarget
-            Key = EyeLinkServer.ReadAck();
+            Key = EyeServer.ReadAck();
             assert(Key>0, 'Could not create target.')
             obj.key = Key;
         end
@@ -24,13 +24,14 @@ classdef (Abstract) EyeTarget < hgsetget
             assert(numel(value)==2, 'Position must be 2-element vector')
             x = value(1);
             y = value(2);
-            EyeLinkServer.Command(obj.key, ...
+            EyeServer.Command(obj.key, ...
                 [3 typecast(single([x y]), 'uint8')]);
+            obj.position = value;
         end
         
         function delete(obj)
             if ~isequal(obj.key, 0)
-                EyeLinkServer.Command(obj.key, 0);
+                EyeServer.Command(obj.key, 0);
             end
         end       
     end
