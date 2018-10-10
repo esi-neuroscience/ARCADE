@@ -20,14 +20,15 @@ classdef (Abstract) EyeTarget < hgsetget
             obj.key = Key;
         end
         
-        function set.position(obj, value)
-            assert(numel(value)==2, 'Position must be 2-element vector')
-            x = value(1);
-            y = value(2);
-            EyeServer.Command(obj.key, ...
-                [3 typecast(single([x y]), 'uint8')]);
-            obj.position = value;
-        end
+% not implemented yet
+%        function set.position(obj, value)
+%            assert(numel(value)==2, 'Position must be 2-element vector')
+%            x = value(1);
+%            y = value(2);
+%            EyeServer.Command(obj.key, ...
+%                [3 typecast(single([x y]), 'uint8')]);
+%            obj.position = value;
+%        end
         
         function delete(obj)
             if ~isequal(obj.key, 0)

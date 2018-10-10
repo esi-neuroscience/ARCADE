@@ -109,8 +109,12 @@ classdef EyeLinkServer < handle
             end
         end
         
-        function Stop()
-            EyeLinkServer.Command(0, uint8([0 0]));
+        function Stop(varargin)
+            if isequal(nargin(), 0)
+                EyeLinkServer.Command(0, uint8([0 0]));
+            else
+                EyeLinkServer.Command(0, uint8([0 0 varargin{1} 0]));
+            end
         end
                 
     end
