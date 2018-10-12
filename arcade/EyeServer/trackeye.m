@@ -36,12 +36,13 @@ function eventNames = trackeye(position, tolerance, name)
 % See also State, ABSEyeServer, SGLEyeServerPipe
 persistent eyeTargets
 
-
 if nargin == 1 && strcmp(position, 'reset')
-    for iTarget = 1:length(eyeTargets)
-        delete(eyeTargets{iTarget})
-        pause(0.001)
-    end
+    eyeTargets = {};
+%     for iTarget = 1:length(eyeTargets)
+%         delete(eyeTargets{iTarget})
+%         eyeTargets{iTarget} = '';
+%         pause(0.001)
+%     end
     return
 end
 
