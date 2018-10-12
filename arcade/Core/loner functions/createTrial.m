@@ -19,7 +19,7 @@ function createTrial(initialState, varargin)
 
 % add states to state arc
 stateArc = SGLStateArc.launch;
-MultipleEvents.delete();
+% MultipleEvents.delete();
 stateArc.states = [varargin{:}];
 if ~ismember(initialState, stateArc.stateNames)
     error('Initial state %s is not among defined states', initialState)
@@ -27,6 +27,7 @@ end
 stateArc.initialState = initialState;
 if ~isempty(unique([stateArc.states.waitEvents]))
     MultipleEvents.Init(stateArc.eventNames);
+    MultipleEvents.Reset(stateArc.eventNames);
 end    
 end
 
