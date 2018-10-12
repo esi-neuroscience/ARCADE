@@ -1,8 +1,8 @@
-classdef EyeLinkServer < handle
-    % EYELINKSERVER - Class for communicating with EyeLinkServer
+classdef EyeServer < handle
+    % EyeServer - Class for communicating with EyeServer
     
     properties (Constant, Access = private, Hidden = true)
-        this = EyeLinkServer
+        this = EyeServer
     end
     
     properties (Access = private, Transient = true, Hidden = true)
@@ -11,18 +11,18 @@ classdef EyeLinkServer < handle
     end
     
     methods (Access = protected, Hidden=true)
-        function obj = EyeLinkServer()
+        function obj = EyeServer()
             %            mlock;
         end
     end
     
     methods (Static)        
         function Connect(varargin)
-            % Connect to EyeLinkServer
-            obj = EyeLinkServer.this;
+            % Connect to EyeServer
+            obj = EyeServer.this;
             if ~obj.hPipe.isNull()
-                warning('EyeLinkServer:Connect:failed', ...
-                    'EyeLinkServer connection was already established.');
+                warning('EyeServer:Connect:failed', ...
+                    'EyeServer connection was already established.');
                 return;
             end;
             if ~libisloaded('kernel32')
@@ -58,15 +58,15 @@ classdef EyeLinkServer < handle
                 if ~isequal(ConstructorResult, 0)
                     ConstructorResult
                 end
-                error('EyeLinkServer:Constructor:failed', ...
-                    'Can''t connect to EyeLinkServer''s pipe. Is the server running ?');
+                error('EyeServer:Constructor:failed', ...
+                    'Can''t connect to EyeServer''s pipe. Is the server running ?');
             end
             obj.isConnected = true;
         end
         
         function Disconnect()
-            % Disconnect from EyeLinkServer
-            temp = EyeLinkServer.this;
+            % Disconnect from EyeServer
+            temp = EyeServer.this;
             if temp.isConnected
                 assert(~isequal(0, calllib('kernel32', 'CloseHandle', temp.hPipe)));
                 temp.hPipe = libpointer;
@@ -75,26 +75,26 @@ classdef EyeLinkServer < handle
         end
         
         function isConnected = GetConnectionStatus()
-            % Retreive connection status with EyeLinkServer
-            temp = EyeLinkServer.this;
+            % Retreive connection status with EyeServer
+            temp = EyeServer.this;
             isConnected = temp.isConnected;
         end
         
         function delete()
-            EyeLinkServer.Disconnect();
+            EyeServer.Disconnect();
             munlock;
-            clear EyeLinkServer;
+            clear EyeServer;
         end
         
         function SetScreenSize(width, height)
-            EyeLinkServer.Command(0, uint8([0 1 typecast(uint16([width height]), 'uint8')]));
+            EyeServer.Command(0, uint8([0 1 typecast(uint16([width height]), 'uint8')]));
         end
         
         function Start(varargin)
             if isequal(nargin(), 0)
-                EyeLinkServer.Command(0, uint8([0 2]));
+                EyeServer.Command(0, uint8([0 2]));
             else
-                EyeLinkServer.Command(0, uint8([0 2 varargin{1} 0]));
+                EyeServer.Command(0, uint8([0 2 varargin{1} 0]));
             end
         end
         
@@ -103,17 +103,17 @@ classdef EyeLinkServer < handle
 		% Transform([x0 y0 x1 y1])		coefficients for linear transformation
 		% Transform([x0 y0 x1 y1 x2 y2])coefficients for quadratic transformation
             if isequal(nargin(), 0)
-                EyeLinkServer.Command(0, uint8([0 3]));
+                EyeServer.Command(0, uint8([0 3]));
             else
-                EyeLinkServer.Command(0, uint8([0 3 typecast(single(varargin{1}),'uint8')]));
+                EyeServer.Command(0, uint8([0 3 typecast(single(varargin{1}),'uint8')]));
             end
         end
         
         function Stop(varargin)
             if isequal(nargin(), 0)
-                EyeLinkServer.Command(0, uint8([0 0]));
+                EyeServer.Command(0, uint8([0 0]));
             else
-                EyeLinkServer.Command(0, uint8([0 0 varargin{1} 0]));
+                EyeServer.Command(0, uint8([0 0 varargin{1} 0]));
             end
         end
                 
@@ -122,14 +122,14 @@ classdef EyeLinkServer < handle
     methods (Static, Hidden=true)
         
         function Write(cmdMessage)
-            if isNull(EyeLinkServer.this.hPipe)
-                error('EyeLinkServer:Unconnected', ...
-                    'No connection to EyeLinkServer.');
+            if isNull(EyeServer.this.hPipe)
+                error('EyeServer:Unconnected', ...
+                    'No connection to EyeServer.');
             end
             nWritten = uint32(0);
             [result, ~, cmdMessage, nWritten] = ...
                 calllib('kernel32', 'WriteFile', ...
-                EyeLinkServer.this.hPipe, ...
+                EyeServer.this.hPipe, ...
                 cmdMessage, ...
                 length(cmdMessage), ...
                 nWritten, ...
@@ -142,7 +142,7 @@ classdef EyeLinkServer < handle
         end
         
         function Command(key, bytearr)
-            EyeLinkServer.Write([typecast(uint16(key), 'uint8') uint8(bytearr)]);
+            EyeServer.Write([typecast(uint16(key), 'uint8') uint8(bytearr)]);
         end
         
         function key = ReadAck()
@@ -150,12 +150,12 @@ classdef EyeLinkServer < handle
             nRead = uint32(0);
             [result, ~, key, nRead] = ...
                 calllib('kernel32', 'ReadFile', ...
-                EyeLinkServer.this.hPipe, ...
+                EyeServer.this.hPipe, ...
                 key, ...
                 2, ...
                 nRead, ...
                 []);
-            assert(nRead == 2, 'Could not read target key from EyeLinkServer pipe');
+            assert(nRead == 2, 'Could not read target key from EyeServer pipe');
         end
     end
 end
