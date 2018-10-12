@@ -11,7 +11,8 @@ classdef PNLButtons < handle
                 };
             % get handles
             % other functions using the handles expect a double vector
-            btns = cell2mat(AUXAuxMethods.mGetHandles(hfig,Tags));
+            btns = AUXAuxMethods.mGetHandles(hfig,Tags);
+            btns = [btns{:}];
             set(btns(1), 'Callback', @PNLButtons.pauseButtonCallback);
             set(btns(2), 'Callback', @PNLButtons.rewardButtonCallback);
             set(btns(3), 'Callback', @PNLButtons.skipButtonCallback);
