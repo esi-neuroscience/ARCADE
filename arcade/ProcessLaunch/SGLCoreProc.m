@@ -83,7 +83,6 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
             % launch EyeServer process            
             if ~strcmp(cfg.EyeServer, 'None')
                 this.mWriteToDiary('Starting EyeServer', true)
-%                 eyeServerReadyEvt = IPCEvent('EyeServerReady', false);
                 eyeProcess = processManager('id', 'EyeServer', ...
                     'command', fullfile(arcaderoot, 'arcade', 'EyeServer', ['EyeServer.bat ' cfg.EyeServer]), ...
                     'printStdout', false, ...
@@ -131,10 +130,7 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
             % connect to EyeServer
             if ~strcmp(cfg.EyeServer, 'None')
                 EyeServer.Connect();
-                EyeServer.Start([datestr(now,'mmddHHMM') '.edf'])
-%                 eyeFile =  fullfile(cfg.filepaths.Behaviour, ...
-%                     [cfg.Subject '_' today() '_' cfg.Experiment '_' cfg.Session '.edf']);
-%                 EyeServer.Start(eyeFile)
+                EyeServer.Start([datestr(now,'mmddHHMM') '.edf'])               
             end
 
             % Run session
@@ -157,10 +153,10 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
 
             % quit eye server
             if ~strcmp(cfg.EyeServer, 'None')
-%                 stopEyeServerEvt = IPCEvent('StopEyeServer');
-%                 stopEyeServerEvt.trigger();
-                EyeServer.Stop()
-                eyeProcess.stop()
+                eyeFile =  fullfile(cfg.filepaths.Behaviour, ...
+                    [cfg.Subject '_' today() '_' cfg.Experiment '_' cfg.Session '.edf']);
+                EyeServer.Stop(eyeFile)
+                % eyeProcess.stop()
             end
             
             % quit control screen
@@ -200,11 +196,11 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
                 sprintf('run%s.m',xServ));
             
             if ~isInDebugMode
-                launchCmd = sprintf('matlab -automation -wait -r "run(''%s'')"', ...
-                    launchFunc);
+                launchCmd = ['C:\Program Files\MATLAB\R2014a\bin\' sprintf('matlab -automation -wait -r "run(''%s'')"', ...
+                    launchFunc)];
             else
-                launchCmd = sprintf('matlab -wait -r "dbstop if error; run(''%s'')"', ...
-                    launchFunc);
+                launchCmd = ['C:\Program Files\MATLAB\R2014a\bin\' sprintf('matlab -wait -r "dbstop if error; run(''%s'')"', ...
+                    launchFunc)];
             end
                         
             % launch process
