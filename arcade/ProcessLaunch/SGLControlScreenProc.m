@@ -74,7 +74,7 @@ classdef (Sealed) SGLControlScreenProc < SPCServerProc
             this.mWriteToDiary('Cleaning up', true);
             
             
-            delete(CorePipe);
+            SGLTrialDataPipe.delete();
             
         end
     end

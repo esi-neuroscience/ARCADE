@@ -30,7 +30,8 @@ classdef PNLSessionSummary < handle
                 'txt_TotalOverall'};
             % get handles 
             % other functions using the handles expect a double vector
-            htxt = cell2mat(AUXAuxMethods.mGetHandles(hfig,Tags));
+            htxt = AUXAuxMethods.mGetHandles(hfig,Tags);
+            htxt = [htxt{:}];
             
             this.mUpdate([0,0,0],[0,0],zeros(1,6),htxt);
             %this.mUpdate([0,0,0],[0,0],[],htxt,gdata.correctValue);

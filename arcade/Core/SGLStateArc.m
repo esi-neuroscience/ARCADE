@@ -50,6 +50,10 @@ classdef (Sealed) SGLStateArc < handle
                 error('No end point for state system defined.')
             end
             obj.states = states;   
+            if ~isempty(unique([obj.states.waitEvents]))
+                MultipleEvents.Init(obj.eventNames);
+                MultipleEvents.Reset(obj.eventNames);
+            end  
         end
         
         function stateNames = get.stateNames(obj)
@@ -82,7 +86,7 @@ classdef (Sealed) SGLStateArc < handle
         end
         
         function delete(obj)   
-            
+            MultipleEvents.delete();
         end
     end
    
