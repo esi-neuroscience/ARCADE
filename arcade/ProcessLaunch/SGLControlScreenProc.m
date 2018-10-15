@@ -120,7 +120,7 @@ classdef (Sealed) SGLControlScreenProc < SPCServerProc
             end
             stopControlScreenEvt = IPCEvent('StopControlScreen');            
             pauseCoreEvt = IPCEvent('PauseCoreRequested');            
-            while ~stopControlScreenEvt.wasTriggered()
+            while ~stopControlScreenEvt.wasTriggered
                 
                 if CntlScreen.keyPressed
                     switch CntlScreen.userRequest

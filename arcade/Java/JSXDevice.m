@@ -20,7 +20,7 @@ classdef JSXDevice < handle
         %# constructor
         function this = JSXDevice
             % get screen devices
-            jScreenDevices = java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices(); %#ok<*PROP>
+            jScreenDevices = java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices; %#ok<*PROP>
 
             % get device id 
             this.jDeviceID = arrayfun(@(dev) dev.getScreen(), jScreenDevices);
