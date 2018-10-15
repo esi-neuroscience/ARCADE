@@ -9,7 +9,7 @@ targetPositions = [
     ];
 
 % end session after 50 trials or when 50 ms of reward duration was reached
-totalRewardTime()
+fprintf('Total reward so faar was %.1f\n', totalRewardTime)
 if TrialData.currentTrial > 50 || totalRewardTime() >= 500
     requestQuitSession()
 end
@@ -18,7 +18,7 @@ end
 
 %% EYE TRACKING
 fixRadius = 50; % px
-targetRadius = 300;
+targetRadius = 50;
 trackeye('reset')
 fixEvents = trackeye([0 0], fixRadius, 'fix');
 targetEvents = trackeye(targetPositions(TrialData.currentCondition,:), ...
