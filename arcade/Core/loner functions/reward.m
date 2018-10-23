@@ -16,10 +16,19 @@ function reward(rewardTimes)
 %   reward([50 40 50]) 
 % 
 % 
+persistent warnedAlready
+if any(rewardTimes == 0)
+	warning('Reward of zero requested and ignored')
+	return
+end
+
 if DaqServer.GetConnectionStatus()
     DaqServer.Reward(rewardTimes);
 else
 	totalRewardTime(sum(rewardTimes(1:2:end)))
-    warning('Reward triggered but not connected to DAQ/Reward server')
+	if isempty(warnedAlready)
+	    warning('Reward triggered but not connected to DAQ/Reward server')
+	    warnedAlready = true;
+	end		
 end
     
