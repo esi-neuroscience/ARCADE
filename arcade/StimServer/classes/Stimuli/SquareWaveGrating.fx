@@ -17,18 +17,18 @@ cbuffer PS_CONSTANT_BUFFER : register (b0)
 
     // mask parameters 
     float  radius     : packoffset(c1.x); // param 1  radius (circle), width (ellipse) [pixels]
-    float  param2     : packoffset(c1.y); // param 2, height (ellipse)                 [pixels]         
-    float  mskAngle     : packoffset(c1.z); // param 3, angle  (ellipse)                 [degrees]
+    float  param2     : packoffset(c1.y); 
+    float  param3     : packoffset(c1.z); 
 
     // grating parameters
     float  spatialPeriod: packoffset(c1.w); // param 4  pixels per cycle
-    float  direction    : packoffset(c2.x); // param 5  direction                        [degrees] 
-    float  smoothR      : packoffset(c2.y); // param 6  smoothing parameter (squarewave) [r > 2] 
+    float  direction    : packoffset(c2.x); // param 5  direction  [degrees] 
+    float  aaWidth      : packoffset(c2.y); // param 6  smoothing parameter (squarewave) [r > 2] 
     float  phaseOffset  : packoffset(c2.z); // param 7  phase offset                     [degrees]
     
     // empty
     float dummy        : packoffset(c2.w); 
- 
+
 };
 
 cbuffer PS_COLOR_BUFFER : register (b2)
@@ -45,33 +45,46 @@ float4 PSmain( float4 Pos : SV_POSITION ) : SV_Target
     // float radius     = radix;
 
     // discard pixel
-    if (distance(center, Pos.xy) > radius) discard;
-    
+    float alpha = 1;
+    float r = distance(center, Pos.xy);
+    if (r > radius) {
+        discard;
+    }
+
     // grating direction 
+    static const float pi = 3.141592654;
     float2 p;
-    sincos(radians(-1.0f*direction), p.y, p.x);
+    sincos(radians(-1.0f*direction)+pi, p.y, p.x);
 
     float pixelsPerCycle = (spatialPeriod ? spatialPeriod: 100.0f);
 
 
     // calculate sw grating 
-    int squareWave = (int) floor(( 
-        phaseOffset + 
-        phase + 
-        dot(Pos.xy-center, p)+width/2.0f) 
-        / (pixelsPerCycle/2.0f)) & 1;
-
-    // anti aliasing via linear interpolation
-    float pixelPhase = (phaseOffset + phase + dot(Pos.xy-center, p) + width/2.0f) % pixelsPerCycle;
+    int squareWave = (int) floor((phaseOffset + phase +
+                                  dot(Pos.xy-center, p)+width/2.0f) / 
+                                 (pixelsPerCycle/2.0f)) & 1;
     float bright = (float) squareWave;
-    float aaWidth = (smoothR ? smoothR : 1.0f);
-    if (( pixelPhase >= (pixelsPerCycle/2.0f) ) & 
-        (pixelPhase < pixelsPerCycle/2.0f + aaWidth)) {
-        bright = (pixelPhase - pixelsPerCycle/2.0f)/aaWidth;        
+
+    
+    // anti aliasing via linear interpolation    
+    if ( aaWidth > 0 ) {
+        // anti-aliasing of grating bands
+        float pixelPhase = (phaseOffset + phase + dot(Pos.xy-center, p) + 
+                            width/2.0f) % pixelsPerCycle;        
+        if (( pixelPhase >= (pixelsPerCycle/2.0f) ) & 
+            (pixelPhase < pixelsPerCycle/2.0f + aaWidth)) {
+            bright = (pixelPhase - pixelsPerCycle/2.0f)/aaWidth;        
+        };
+        if ( pixelPhase <= aaWidth ) {
+            bright = 1.0f -(pixelPhase/aaWidth);        
+        }
+
+        // anti-aliasing of circular mask
+        if (r >= (radius-aaWidth)) {
+            alpha = 1.0f - (r-(radius-aaWidth))/aaWidth;
+        }
     };
-    if ( pixelPhase <= aaWidth ) {
-        bright = 1-(pixelPhase/aaWidth);        
-    }
-   ;
-     return color0*(float4)(bright) + color1*(float4)(1.0f-bright);
+    float4 color = color0*(float4)(bright) + color1*(float4)(1.0f-bright);
+    color[3] = alpha;
+    return color;
 }
