@@ -7,16 +7,11 @@ classdef SquareWaveGrating < PixelShader
         color1 = [255 255 255 255]; % [r g b alpha]
         color2 = [0 0 0 255]; % [r g b alpha]        
         spatialPeriod = 25; % px / cycle        
-        direction = 0;  % drift direction in degree
-        smoothing = 1; % width of anti-aliasing window
-        phaseShift = 0; % pixels
-        % horizontal radius of circular mask in px for direction = 0
-        radius = 100; 
+        direction = 0;  % drift direction in degree (counter-clockwise): 0=->
+        smoothing = 1; % width of anti-aliasing window in px
+        phaseShift = 0; % pixels        
+        radius = 100; % radius of circular mask in px 
         temporalFrequency = 1; % cycles / s
-    end
-    
-    properties ( Transient = true, Dependent = true, Hidden = true )
-        spatialFrequency % wrongly named legacy property
     end
     
     properties ( Access = private, Transient = true )
@@ -66,16 +61,6 @@ classdef SquareWaveGrating < PixelShader
                 obj.shaderHeight = 2*width;
                 obj.shaderWidth = 2*width;
             end
-        end
-
-        
-        function set.spatialFrequency(obj, ppc)
-            warning('The Grating property spatialFrequency has been renamed to spatialPeriod. Please use spatialPeriod instead.')
-            obj.spatialPeriod = ppc;
-        end
-        
-        function value = get.spatialFrequency(obj)
-            value = obj.spatialPeriod;
         end
         
         function set.spatialPeriod(obj, ppc)
