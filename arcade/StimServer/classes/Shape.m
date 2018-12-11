@@ -2,23 +2,17 @@ classdef (Abstract) Shape < Stimulus
     % SHAPE - Abstract helper class for shape stimuli with colors and
     % outlines and angles.
     %
-    % Shape Properties:
-    %   drawMode - 1=face only, 2=line only, 3=face and line
-    %   lineWidth - width of outline in px
-    %   angle - counter-clockise rotation of shape in degrees, 0=horizontal
-    %   faceColor - 24-bit [r g b {alpha}] color with optional alpha value
-    %   lineColor -  24-bit [r g b {alpha}] value with optional alpha value
     %
     % See also Stimulus, Rectangle, Ellipse, Petal
     
     
     properties ( Access = public, Transient = true )
         
-        drawMode = 3; % 1=face only, 2=edge only, 3=face and edge
+        drawMode = 1; % 1=face only, 2=edge only, 3=face and edge
         lineWidth = 2; % width of outline in px
         angle = 0; % counter-clockise rotation of rectangle in degrees, 0=horizontal
         faceColor = [255 255 255]; % 24-bit [r g b] value
-        lineColor = [0 128 0]; %  24-bit [r g b] value
+        lineColor = [255 255 255]; %  24-bit [r g b] value
         
     end
     
