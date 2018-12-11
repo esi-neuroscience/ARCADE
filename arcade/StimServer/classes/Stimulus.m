@@ -13,7 +13,7 @@ classdef (Abstract) Stimulus < hgsetget % will be matlab.mixin.SetGet after 2014
     % ParticleStimulus, Animation, LinearMotion, GeneralMotion, StimServer
     
     properties ( SetAccess = public, GetAccess = public, Transient = true )
-        visible = false; % Visibilty of stimulus, true for on, false for off        
+        visible = false; % Visibilty of stimulus, true for on, false for off
     end
     
     properties ( Hidden = true, Access = public, Transient = true )
@@ -99,7 +99,7 @@ classdef (Abstract) Stimulus < hgsetget % will be matlab.mixin.SetGet after 2014
             assert(Key>0, 'Could not bring stimulus to front. See log window of StimServer.exe')
             obj.key = Key;
         end
-
+        
         function toggle_visibility(obj)
             if obj.visible
                 obj.visible = false;
@@ -120,6 +120,37 @@ classdef (Abstract) Stimulus < hgsetget % will be matlab.mixin.SetGet after 2014
                 end
                 StimServer.Command(obj.key, 0);
             end
-        end       
+        end
+    end
+    
+    methods ( Access = protected, Static = false )
+        function set_all_properties(obj)
+            % set all properties to current value / trigger set functions
+            props = properties(obj);
+            for iProp = 1:length(props)
+                obj.(props{iProp}) = obj.(props{iProp});
+            end
+            
+        end
+        
+        
+    end
+        
+    methods ( Access = protected, Static = true )
+        function color4 = handle_color_input(color, alpha)
+            if nargin == 1
+                alpha = 255;
+            end
+            switch numel(color)
+                case 3
+                    color4 = [color, alpha];
+                case 4
+                    color4 = color;
+                otherwise
+                    error('Invalid color input. Must be either [r g b] or [r g b alpha]')
+            end
+            
+        end
+        
     end
 end

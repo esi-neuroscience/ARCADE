@@ -1,5 +1,21 @@
 # Change Log of ARCADE
 
+## Unreleased
+### NEW
+*   Square wave grating with anti-aliased bands and mask
+*   StimServer v1.3.1.1: anti-aliased Ellipse and Rectangle stimuli with
+    support for outlines
+*   BinaryEyelinkServer:
+*   Support for MATLAB > 2014a
+*   NidaqServer v.1.0.10.1: support for PCIe-6251
+
+## [2.4.0] - 2018-06-15
+### NEW
+*   A petal-like shape stimulus can now be created using the Petal class
+    The total reward issued during a session can now be retreived using the MATLAB function totalRewardtime
+*   Improved documentation for helper functions and stimuli
+
+
 ## [2.3.0] - 2018-05-17
 ### NEW
 *   MotionPicture stimuli trigger an event when playback has finished, with
