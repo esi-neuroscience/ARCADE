@@ -90,13 +90,6 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
                     error('Unsupported EyeServer type')
             end                                    
             
-            % launch StimServer process
-            logmessage('Starting StimServer')
-            stimServerProcess = processManager('id', 'StimServer', ...
-                'command', fullfile(arcaderoot, 'arcade', 'StimServer', 'StimServer.exe'), ...
-                'printStdout', false, ...
-                'printStderr', false);
-            
             % launch DaqServer process
             if ~strcmp(cfg.DaqServer, 'None')
                 logmessage('Starting DaqServer')
@@ -105,6 +98,14 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
                     'printStdout', false, ...
                     'printStderr', false);
             end
+
+            % launch StimServer process
+            logmessage('Starting StimServer')
+            stimServerProcess = processManager('id', 'StimServer', ...
+                'command', fullfile(arcaderoot, 'arcade', 'StimServer', 'StimServer.exe'), ...
+                'printStdout', false, ...
+                'printStderr', false);
+            
             
             
             % Wait for EyeServer and ControlScreen
