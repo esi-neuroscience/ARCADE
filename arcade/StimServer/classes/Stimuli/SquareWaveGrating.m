@@ -1,11 +1,27 @@
 classdef SquareWaveGrating < PixelShader
-    % GRATING - Class for drifting square-wave gratings with a circular mask
-    % Pixel shader file:
-    % ARCADE/arcade/StimServer/classes/stimfiles/pixelShader/SquareWaveGrating.fx
-    
+    % GRATING < PixelShader < Stimulus - Square wave gratings for ARCADE
+    %
+    % Shader file: <a href="matlab:edit('SquareWaveGrating.fx')">SquareWaveGrating.fx</a>
+    %
+    % PROPERTIES
+    % -----------
+    %    
+    %  color1            : 24-bit color [r g b alpha]/[r g b]
+    %  color2            : 24-bit color [r g b alpha]/[r g b]
+    %  spatialPeriod     : (pixel per cycle)
+    %  direction         : drift direction in degree (counter-clockwise): 0=->
+    %  smoothing         : width of anti-aliasing window (pixel)
+    %  phaseShift        : phase offset (degree)     
+    %  radius            : radius of circular mask (pixel)
+    %  temporalFrequency : (cycles per second)
+    %  
+    % For more information, see <a href="matlab:doc('arcade')">the ARCADE guide</a>.
+    % 
+    % See also PixelShader, Stimulus
+
     properties ( Transient = true )
-        color1 = [255 255 255 255]; % [r g b alpha]
-        color2 = [0 0 0 255]; % [r g b alpha]        
+        color1 = [255 255 255 255]; % [r g b alpha]/[r g b]
+        color2 = [0 0 0 255]; % [r g b alpha]/[r g b]
         spatialPeriod = 25; % px / cycle        
         direction = 0;  % drift direction in degree (counter-clockwise): 0=->
         smoothing = 1; % width of anti-aliasing window in px
@@ -78,8 +94,8 @@ classdef SquareWaveGrating < PixelShader
             obj.smoothing = smoothing;
         end
         
-        function set.phaseShift(obj, px)
-            obj.setParameter(7, px)
+        function set.phaseShift(obj, px)            
+            obj.setParameter(7, px/360*obj.spatialPeriod)
             obj.phaseShift = px;
         end
 
