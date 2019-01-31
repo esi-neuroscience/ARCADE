@@ -1,16 +1,34 @@
 classdef (Abstract) Stimulus < hgsetget % will be matlab.mixin.SetGet after 2014b
-    % STIMULUS - Abstract base class for StimServer stimuli providing the
-    % general stimulus properties visible, position and animation. Stimulus
-    % properties can be changed either struct-like or using set:
+    % STIMULUS - Abstract base class for all ARCADE stimuli 
+    % 
+    % All ARCADE stimuli are child classes of this base class, i.e., all
+    % stimuli have at least the following properties and methods:
     %
+    % PROPERTIES
+    % -----------
+    %   position : [x y] center of stimulus on screen (pixel)
+    %   visible  : visibility of stimulus (true/false)
+    % 
+    % Stimulus properties can be changed either struct-like or using set:
     %   stim.position = [0 0];
     %   set(stim, 'position', [0 0])
+    % 
+    % METHODS
+    % -------
+    %  Stimulus.play_animation(Animation) : assign an animation to the stimulus
+    %  Stimulus.stop_animation()          : stop all playing animations
+    %  Stimulus.bring_to_front()          : bring the stimulus to the foremost
+    %                                       drawing layer
+    %  Stimulus.toggle_visibility()       : turn stimulus on if off and vice 
+    %                                       versa
+    % 
+    % For more information, see <a href="matlab:doc('arcade')">the ARCADE guide</a>.
     %
-    % The position property is retrieved from the StimServer and not stored
-    % locally.
+    % Stimuli are displayed by the StimServer process. The Stimulus objects in
+    % MATLAB are only handle classes, which send commands to the StimServer
+    % for managing stimulus properties.
     %
-    % See also Picture, Rectangle, Grating, PixelShader, Animation, MovingBar,
-    % ParticleStimulus, Animation, LinearMotion, GeneralMotion, StimServer
+    % See also Animation, StimServer
     
     properties ( SetAccess = public, GetAccess = public, Transient = true )
         visible = false; % Visibilty of stimulus, true for on, false for off
