@@ -1,5 +1,5 @@
 classdef SquareWaveGrating < PixelShader
-    % GRATING < PixelShader < Stimulus - Square wave gratings for ARCADE
+    % SQUAREWAVEGRATING < PixelShader < Stimulus - Square wave gratings for ARCADE
     %
     % Shader file: <a href="matlab:edit('SquareWaveGrating.fx')">SquareWaveGrating.fx</a>
     %
@@ -13,7 +13,7 @@ classdef SquareWaveGrating < PixelShader
     %  smoothing         : width of anti-aliasing window (pixel)
     %  phaseShift        : phase offset (degree)     
     %  radius            : radius of circular mask (pixel)
-    %  temporalFrequency : (cycles per second)
+    %  temporalFrequency : drift speed (cycles per second)
     %  
     % For more information, see <a href="matlab:doc('arcade')">the ARCADE guide</a>.
     % 
