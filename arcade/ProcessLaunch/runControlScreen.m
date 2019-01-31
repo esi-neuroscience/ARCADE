@@ -13,6 +13,13 @@ warning('off','MATLAB:RMDIR:RemovedFromPath');
 % some notation I used that should be fixed 
 warning('off','MATLAB:mir_warning_unrecognized_pragma');
 %--------------------------%
+
+if verLessThan('matlab', '9.5')
+   warning('off', 'MATLAB:hg:WillBeRemovedReplaceWith')
+   warning('off', 'MATLAB:hg:EraseModeIgnored')   
+   warning('off', 'MATLAB:hg:DrawModeIgnored')
+end
+
 initialWorkingDirectory = pwd;
 cd(fileparts(mfilename('fullpath'))); 
 
