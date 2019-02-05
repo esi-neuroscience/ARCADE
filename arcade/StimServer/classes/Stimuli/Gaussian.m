@@ -12,7 +12,7 @@ classdef Gaussian < PixelShader
     %
     % Note: The width and height of the PixelShader always at least 5*max(sdx, sdy).
     %
-    % For more information, see <a href="matlab:doc('arcade')">the ARCADE guide</a>.
+    % For more information, see <a href="matlab:doc('arcade')">the ARCADE guide</a> and the superclasses.
     %
     % See also PixelShader, Stimulus
 

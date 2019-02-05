@@ -9,17 +9,16 @@ classdef Grating < PixelShader
     %  color1            : 24-bit color [r g b alpha]/[r g b]
     %  color2            : 24-bit color [r g b alpha]/[r g b]
     %  spatialPeriod     : (pixel per cycle)
-    %  direction         : drift direction in degree (counter-clockwise): 0=->
-    %  smoothing         : 2=sinusoidal grating, 10 > ~square wave grating
+    %  direction         : counter-clockwise drift direction (degree): 0=->
+    %  smoothing         : 2=sinusoidal grating, >10 ~square wave grating
     %  phaseShift        : phase offset (degree)     
     %  radius            : radius of circular mask (pixel)
     %  temporalFrequency : drift speed (cycles per second)
-    %  maskWidth         : horizontal radius of circular mask (pixel) for 
-    %                      direction = 0
-    %  maskHeight        : vertical radius of circular mask in (pixel) for 
-    %                      direction = 0
+    %  maskWidth         : horizontal radius of circular mask (pixel)
+    %  maskHeight        : vertical radius of circular mask (pixel) 
+    %  maskRotation      : counter-clockwise rotation angle of circular mask (degree)
     % 
-    % For more information, see <a href="matlab:doc('arcade')">the ARCADE guide</a>.
+    % For more information, see <a href="matlab:doc('arcade')">the ARCADE guide</a> and the superclasses.
     % 
     % See also PixelShader, Stimulus
     
