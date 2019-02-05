@@ -15,7 +15,7 @@ classdef SquareWaveGrating < PixelShader
     %  radius            : radius of circular mask (pixel)
     %  temporalFrequency : drift speed (cycles per second)
     %  
-    % For more information, see <a href="matlab:doc('arcade')">the ARCADE guide</a>.
+    % For more information, see <a href="matlab:doc('arcade')">the ARCADE guide</a> and the superclasses.
     % 
     % See also PixelShader, Stimulus
 

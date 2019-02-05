@@ -1,7 +1,26 @@
 classdef Gabor < PixelShader
-    % GABOR - Class for a (drifting) grating with a Gaussian mask. 
-    % Pixel shader file:
-    % ARCADE/arcade/StimServer/classes/stimfiles/pixelShader/Gabor.fx
+    % Gabor < PixelShader < Stimulus - Grating with a Gaussian mask for ARCADE
+    %
+    % Shader file: <a href="matlab:edit('Gabor.fx')">Gabor.fx</a>
+    %
+    % PROPERTIES
+    % -----------
+    %    
+    %  color1            : 24-bit color [r g b alpha]/[r g b]
+    %  color2            : 24-bit color [r g b alpha]/[r g b]
+    %  spatialPeriod     : (pixel per cycle)
+    %  direction         : drift direction in degree (counter-clockwise): 0=->
+    %  smoothing         : 2=sinusoidal grating, >10 ~square wave grating
+    %  phaseShift        : phase offset (degree)     
+    %  radius            : radius of circular mask (pixel)
+    %  temporalFrequency : drift speed (cycles per second)
+    %  maskWidth         : horizontal SD of Gaussian mask (pixel)
+    %  maskHeight        : vertical SD of Gaussian mask (pixel) 
+    %  maskRotation      : counter-clockwise rotation angle of circular mask (degree)
+    % 
+    % For more information, see <a href="matlab:doc('arcade')">the ARCADE guide</a> and the superclasses.
+    % 
+    % See also PixelShader, Stimulus
     
     properties ( Transient = true )
         color1 = [255 255 255 255]; % [r g b alpha]
