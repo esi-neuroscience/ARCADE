@@ -52,7 +52,6 @@ classdef (Sealed) SGLStateArc < handle
             obj.states = states;   
             if ~isempty(unique([obj.states.waitEvents]))
                 MultipleEvents.Init(obj.eventNames);
-                MultipleEvents.Reset(obj.eventNames);
             end  
         end
         
