@@ -17,7 +17,11 @@ classdef Grating < PixelShader
     %  maskWidth         : horizontal radius of circular mask (pixel)
     %  maskHeight        : vertical radius of circular mask (pixel) 
     %  maskRotation      : counter-clockwise rotation angle of circular mask (degree)
-    % 
+    %
+    % USAGE
+    % -----
+    %   g = Grating();
+    %
     % For more information, see <a href="matlab:doc('arcade')">the ARCADE guide</a> and the superclasses.
     % 
     % See also PixelShader, Stimulus

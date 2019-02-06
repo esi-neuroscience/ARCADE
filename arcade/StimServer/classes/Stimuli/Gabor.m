@@ -18,6 +18,10 @@ classdef Gabor < PixelShader
     %  maskHeight        : vertical SD of Gaussian mask (pixel) 
     %  maskRotation      : counter-clockwise rotation angle of circular mask (degree)
     % 
+    % USAGE
+    % -----
+    %   g = Gabor();
+    %
     % For more information, see <a href="matlab:doc('arcade')">the ARCADE guide</a> and the superclasses.
     % 
     % See also PixelShader, Stimulus
