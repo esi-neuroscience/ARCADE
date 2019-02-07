@@ -1,11 +1,41 @@
 classdef (Sealed = true) StimServer < handle
-    % STIMSERVER - Matlab interface for communication with StimServer.exe via
-    % a named pipe.
+    % STIMSERVER - MATLAB interface for communication with StimServer.exe 
     %
-    % StimServer.exe must be started before using this class.
-    % Commands and stimuli can be passed after StimServer.Connect() was called.
-    %
-    % See also Stimulus, MSMessagePipe
+    %  
+    % METHODS (static)
+    % ----------------
+    %  Connect() : Open pipe to StimServer.exe for sending commands
+    %  Defer(deferred) : Enable (1) or disable (0) grouping of following commands
+    %  Disconnect() : Disconnect from StimServer.exe
+    %  GetConnectionStatus() : Returns status of StimServer pipe connection.
+    %  GetFrameRate() : Returns current frame rate of StimServer screen
+    %  PDmode(mode) : Change mode of photo diode. 0=off, 1=on, 2=toggle, 3=flicker
+    %  PDposition(pos) : Change position of photo diode. 0=upper left, 1=lower left
+    %  PDshow(shown) : Enable (shown=1) or disable (shown=0) photo diode
+    %  RemoveAll() : Remove all stimuli from StimServer, doesn't clear MATLAB objects
+    %  SetBackgroundColor(color) : Set the full screen background color (24-bit RGB)
+    %  SetDefaultDrawColor(color) : Set the default draw color of Symbols and Shapes
+    %  SetDefaultFinalAction(mask) : Set default terminal action for Animations
+    %  ShowAll(visible) : Make all stimuli visible (1) or invisible (0).
+    %                     This doesn't update the Stimulus MATLAB objects.
+    %    
+    % For more information, see the accompanying StimServer documentation 
+    % (StimServer.pdf) and <a href="matlab:doc('arcade')">the ARCADE guide</a>.
+    % 
+    % USAGE
+    % -----
+    % StimServer.exe must be started before using this class. The Connect method
+    % must be called before any other commands can be sent. The above functions 
+    % for controlling the StimServer are <a href="https://www.mathworks.com/help/releases/R2018a/matlab/matlab_oop/static-methods.html">static methods</a>, i.e. they can be called 
+    % directly without creating a StimServer object.
+    % 
+    % For example, changing the background color to black is achieved by calling
+    %      StimServer.SetBackgroundColor([0, 0, 0])
+    % 
+    % Communication between MATLAB and the StimServer is implemented via a <a href="https://docs.microsoft.com/en-us/windows/desktop/ipc/named-pipes">Named Pipe</a>,
+    % using calls to the kernel32 sytem library.
+    %  
+    % See also Stimulus, win_kernel32, MSMessagePipe
     
     properties (Constant, Access = private, Hidden = true)
         this = StimServer
@@ -27,22 +57,18 @@ classdef (Sealed = true) StimServer < handle
             % Connect to StimServer.exe pipe for issueing commands
             obj = StimServer.this;
             if ~obj.hPipe.isNull()
-                %                 warning('StimServer:Connect:failed', ...
-                %                     'StimServer connection was already established.');
                 return;
             end;
             if ~libisloaded('kernel32')
                 loadlibrary('kernel32', @win_kernel32);
             end;
-            %             [result] = ...
-            %                 calllib('kernel32', 'GetNamedPipeInfo', ...
-            %                 obj.hPipe, ...
-            %                 [], ...
-            %                 [], ...
-            %                 [], ...
-            %                 []);
-            %             if isequal(result, 0)
-            if isequal(nargin, 0); server='.'; else server = varargin{1}; end;
+  
+            if isequal(nargin, 0); 
+                server='.'; 
+            else 
+                server = varargin{1}; 
+            end;
+
             GENERIC_READ_WRITE = uint32(hex2dec('C0000000'));
             obj.hPipe = calllib('kernel32', 'CreateFileA', ...
                 uint8(['\\' server '\pipe\StimServerPipe']), ...
@@ -132,6 +158,12 @@ classdef (Sealed = true) StimServer < handle
         function frameRate = GetFrameRate
             StimServer.Command(0, uint8([1 8]));
             frameRate = StimServer.read1single();
+        end
+
+        function isConnected = GetConnectionStatus()
+            % Retreive connection status with StimServer
+            obj = StimServer.this;
+            isConnected = ~obj.hPipe.isNull();
         end
         
     end

@@ -1,9 +1,23 @@
 classdef (Abstract) Shape < Stimulus
-    % SHAPE - Abstract helper class for shape stimuli with colors and
-    % outlines and angles.
+    % SHAPE < Stimulus - Abstract intermediate class for shape stimuli for ARCADE
     %
+    % All ARCADE stimuli that are drawn as shapes with an outline and/or face
+    % have the following properties :
     %
-    % See also Stimulus, Rectangle, Ellipse, Petal
+    % PROPERTIES
+    % -----------
+    %    drawMode  : integer mode for outline/face drawing: 
+    %                1=face only, 2=edge only, 3=face and edge
+    %    lineWidth : width of outline (pixel)
+    %    angle     : counter-clockise rotation angle (degree), 0=horizontal
+    %    faceColor : 24-bit [r g b] value
+    %    faceAlpha : 8-bit alpha value, 0=transparent, 255=opaque
+    %    lineColor : 24-bit [r g b] value
+    %    lineAlpha : 8-bit alpha value, 0=transparent, 255=opaque
+    %
+    % For more information, see <a href="matlab:doc('arcade')">the ARCADE guide</a> and the  superclasses.
+    %
+    % See also Shape, Stimulus
     
     
     properties ( Access = public, Transient = true )

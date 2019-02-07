@@ -1,7 +1,20 @@
 classdef Ellipse < Shape
-    % ELLIPSE - Class for elliptic stimuli
+    % ELLIPSE < Shape < Stimulus - Ellipse stimulus for ARCADE
+    %
     % 
-    % See also Stimulus, Shape
+    % PROPERTIES
+    % -----------
+    %   width  : width of ellipse (pixel) for rotation angle=0
+    %   height : heigth of ellipse (pixel) for rotation angle=0
+    %
+    %      
+    % USAGE
+    % -----
+    %   e = Ellipse();
+    %
+    % For more information, see <a href="matlab:doc('arcade')">the ARCADE guide</a> and the superclasses.
+    %
+    % See also Shape, Stimulus
 
     properties ( Access = public, Transient = true )
         width = 100; % width of ellipse in px for angle=0
@@ -15,7 +28,6 @@ classdef Ellipse < Shape
 
             % set defaults (trigger set methods)
             obj.set_all_properties()
-
 
         end
         

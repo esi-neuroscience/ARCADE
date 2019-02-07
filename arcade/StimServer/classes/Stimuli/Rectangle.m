@@ -1,7 +1,15 @@
 classdef Rectangle < Shape
-    % RECTANGLE - Class for rectangular stimuli
+    % RECTANGLE < Shape < Stimulus - Rectangle stimulus for ARCADE
+    %
     % 
-    % See also Stimulus
+    % PROPERTIES
+    % -----------
+    %   width  : width of rectangle (pixel) for rotation angle=0
+    %   height : heigth of rectangle (pixel) for rotation angle=0
+    %
+    % For more information, see <a href="matlab:doc('arcade')">the ARCADE guide</a> and the superclasses.
+    %
+    % See also Shape, Stimulus
 
     properties ( SetAccess = public, GetAccess = public, Transient = true )
         width = 11; % width of rectangle in px for angle=0
