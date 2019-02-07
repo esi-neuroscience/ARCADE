@@ -41,6 +41,10 @@ classdef (Sealed = true) StimServer < handle
         this = StimServer
     end
     
+    properties ( Constant, GetAccess = public, Hidden = true )
+        doneEventName = 'StimServerDone'
+    end
+
     properties (Access = private, Transient = true, Hidden = true)
         hPipe = libpointer;
     end
@@ -165,7 +169,10 @@ classdef (Sealed = true) StimServer < handle
             obj = StimServer.this;
             isConnected = ~obj.hPipe.isNull();
         end
-        
+
+        function waitResult = waitUntilDone(timeout)
+            IPCEvent.wait_for_event(StimServer.doneEventName, timeout)
+        end
     end
     
     methods (Static, Hidden=true)

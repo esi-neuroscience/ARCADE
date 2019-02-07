@@ -4,7 +4,7 @@
 %------------------------------------------%
 % 2.5.2016 - Jarrod, wrote function 
 
-function runControlScreen
+function runControlScreen(varargin)
 %--------------------------%
 % turn on all warnings
 warning('on','all');

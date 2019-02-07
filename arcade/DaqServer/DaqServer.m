@@ -10,6 +10,10 @@ classdef DaqServer < handle
         isConnected = false;
     end
     
+    properties ( Constant, GetAccess = public, Hidden = true )
+        doneEventName = 'DaqServerDone'
+    end
+    
     methods (Access = protected, Hidden=true)
         function obj = DaqServer()
             %            mlock;

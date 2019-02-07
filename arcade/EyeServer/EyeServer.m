@@ -6,8 +6,11 @@ classdef EyeServer < handle
     end
     
     properties (Access = private, Transient = true, Hidden = true)
-        hPipe = libpointer;
-        isConnected = false;
+        hPipe = libpointer;        
+    end
+    
+    properties ( Constant, GetAccess = public, Hidden = true )
+        doneEventName = 'EyeServerDone'
     end
     
     methods (Access = protected, Hidden=true)
@@ -61,7 +64,7 @@ classdef EyeServer < handle
                 error('EyeServer:Constructor:failed', ...
                     'Can''t connect to EyeServer''s pipe. Is the server running ?');
             end
-            obj.isConnected = true;
+            
         end
         
         function Disconnect()
@@ -76,8 +79,8 @@ classdef EyeServer < handle
         
         function isConnected = GetConnectionStatus()
             % Retreive connection status with EyeServer
-            temp = EyeServer.this;
-            isConnected = temp.isConnected;
+            obj = EyeServer.this;
+            isConnected = ~obj.hPipe.isNull();
         end
         
         function delete()

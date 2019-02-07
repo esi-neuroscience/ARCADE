@@ -73,77 +73,10 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
             % Create TrialData pipe
             SGLTrialDataPipe.Create();
             
-            % launch ControlScreen process
-            logmessage('Starting ControlScreen')
-            controlScreenReadyEvt = IPCEvent('controlScreenReady');
-            controlScreenProcess = this.mLaunchServer('ControlScreen');
-            
-            % launch EyeServer process
-            switch cfg.EyeServer
-                case 'BinaryEyelink'
-                    logmessage('Starting EyeServer')
-                    eyeProcess = processManager('id', 'EyeServer', ...
-                        'command', fullfile(arcaderoot, 'arcade', ...
-                            'EyeServer', 'EyeServer.bat'), ...
-                        'printStdout', false, ...
-                        'printStderr', false);
-                otherwise
-                    error('Unsupported EyeServer type')
-            end                                    
-            
-            % launch DaqServer process
-            if ~strcmp(cfg.DaqServer, 'None')
-                logmessage('Starting DaqServer')
-                daqProcess = processManager('id', 'DaqServer', ...
-                    'command', fullfile(arcaderoot, 'arcade', 'DaqServer', 'NidaqServer.exe'), ...
-                    'printStdout', false, ...
-                    'printStderr', false);
-            end
-
-            % launch StimServer process
-            logmessage('Starting StimServer')
-            stimServerProcess = processManager('id', 'StimServer', ...
-                'command', fullfile(arcaderoot, 'arcade', 'StimServer', 'StimServer.exe'), ...
-                'printStdout', false, ...
-                'printStderr', false);
-            
-            
-            
-            % Wait for EyeServer and ControlScreen
-            logmessage('Waiting for processes')
-            %             if ~strcmp(cfg.EyeServer, 'None')
-            %                 result = eyeServerReadyEvt.waitForTrigger(20000);
-            %                 assert(result==1, 'Wait for EyeServer failed')
-            %             end
-            result = controlScreenReadyEvt.waitForTrigger(20000);
-            assert(result==1, 'Wait for ControlScreen failed')
-            
-            
-            
-            % connect to StimServer
-            StimServer.Connect();
-            
-            % connect to DaqServer
-            if ~strcmp(cfg.DaqServer, 'None')
-                DaqServer.Connect();
-            end
-            
-            
-            % connect to EyeServer
-            if ~strcmp(cfg.EyeServer, 'None')
-                EyeServer.Connect();
-                EyeServer.Start([datestr(now,'mmddHHMM') '.edf'])
-            end
-            
-            % Run session
-            startEvent = IPCEvent('startControlScreenLoop');
-            startEvent.trigger();
+            processes = launch_processes(cfg)
             
             logmessage('Starting Session');
             this.mRunSession(cfg);
-            
-            
-            
             
             
             %----------------------------------------%
@@ -163,25 +96,23 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
                 result = waitForFileEvt.waitForTrigger(300000);
                 if ~result
                     warning('Could not transfer eye data')
-                end
-                eyeProcess.stop()
+                end                
             end
             
             % quit control screen
             stopControlScreenEvt = IPCEvent('StopControlScreen');
             stopControlScreenEvt.trigger()
-            controlScreenProcess.stop()
             
             % quit stim server
-            StimServer.delete()
-            stimServerProcess.stop()
+            StimServer.delete()            
             
             % quit DaqServer
             if ~strcmp(cfg.DaqServer, 'None')
-                DaqServer.delete();
-                daqProcess.stop();
+                DaqServer.delete();                
             end
             
+            % kill subprocesses
+            cellfun(@(x) x.stop(), processes)
             
             % close TrialData pipe
             SGLTrialDataPipe.delete()
