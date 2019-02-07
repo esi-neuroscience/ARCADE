@@ -1,7 +1,30 @@
 classdef Grating < PixelShader
-    % GRATING - Class for a (drifting) grating with a circular mask. 
-    % Pixel shader file:
-    % ARCADE/arcade/StimServer/classes/stimfiles/pixelShader/MaskedGrating.fx
+    % GRATING < PixelShader < Stimulus - Sine gratings for ARCADE
+    %
+    % Shader file: <a href="matlab:edit('Grating.fx')">MaskedGrating.fx</a>
+    %
+    % PROPERTIES
+    % -----------
+    %    
+    %  color1            : 24-bit color [r g b alpha]/[r g b]
+    %  color2            : 24-bit color [r g b alpha]/[r g b]
+    %  spatialPeriod     : (pixel per cycle)
+    %  direction         : counter-clockwise drift direction (degree): 0=->
+    %  smoothing         : 2=sinusoidal grating, >10 ~square wave grating
+    %  phaseShift        : phase offset (degree)     
+    %  radius            : radius of circular mask (pixel)
+    %  temporalFrequency : drift speed (cycles per second)
+    %  maskWidth         : horizontal radius of circular mask (pixel)
+    %  maskHeight        : vertical radius of circular mask (pixel) 
+    %  maskRotation      : counter-clockwise rotation angle of circular mask (degree)
+    %
+    % USAGE
+    % -----
+    %   g = Grating();
+    %
+    % For more information, see <a href="matlab:doc('arcade')">the ARCADE guide</a> and the superclasses.
+    % 
+    % See also PixelShader, Stimulus
     
     properties ( Transient = true )
         color1 = [255 255 255 255]; % [r g b alpha]

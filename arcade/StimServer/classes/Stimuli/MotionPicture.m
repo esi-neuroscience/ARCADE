@@ -2,7 +2,20 @@ classdef MotionPicture < Stimulus
     % MOTIONPICTURE - Class for image sequence stimuli to be passed to the
     %   StimServer.
     %
-    % Usage
+    % PROPERTIES
+    % -----------
+    %   filename : filename of image sequence (read-only)
+    %   size     : [x y] video frame size (pixel) (read-only)
+    %   nFrames  : number of video frames in file (read-only)
+    %   alpha    : 8-bit alpha transparency value between 0 (transparent) and 255 (opaque)
+    %   angle    : rotation angle of image (degree), 0=horizontal, 90=vertical        
+    %   screenFramesPerVideoFrame : 
+    %              >1 = integer number of screen frames a video frame is repeated for
+    %               0 = no frame advancement
+    %   endEventName : name of event triggered after movie ends
+    %
+    %
+    % USAGE
     % -----
     %   images = MotionPicture(filename);
     %

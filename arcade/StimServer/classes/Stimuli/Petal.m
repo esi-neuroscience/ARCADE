@@ -1,9 +1,8 @@
 classdef Petal < Shape
-    % PETAL - Class for petal stimuli
+    % PETAL < Shape < Stimulus - Petal-like shape for ARCADE
     %
-    % Petal-like shape based on two circles and a quadratic Bezier curve
+    % This stimulus is based on two circles and a quadratic Bezier curve
     % connecting the circles.
-    %
     %
     %                         _______
     %                        /       \
@@ -13,8 +12,18 @@ classdef Petal < Shape
     %        \______/       \          /
     %                        \________/
     %            ------ d ------
+    % 
+    % PROPERTIES
+    % -----------
+    %   r : radius of central/inner circle (pixel)
+    %   R : radius of outer circle (pixel)
+    %   d : distance between circle centers (pixel)
+    %   q : position of middle point of Bezier curve (normalized to distance
+    %       of circles). Default = golden ratio ~ 0.382
     %
-    % See also Stimulus, Shape
+    % For more information, see <a href="matlab:doc('arcade')">the ARCADE guide</a> and the superclasses.
+    %
+    % See also Shape, Stimulus
     
     properties ( SetAccess = public, GetAccess = public, Transient = true )
         r = 25; % radius of medial circle in px

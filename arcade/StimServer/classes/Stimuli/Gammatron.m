@@ -15,7 +15,11 @@ classdef Gammatron < PixelShader
     %  smoothing         : width of antialising window at edge (pixels)
     %  phaseShift        : phase offset (degree)
     %  
-    % For more information, see <a href="matlab:doc('arcade')">the ARCADE guide</a>.
+    % USAGE
+    % -----
+    %   g = Gammatron();
+    %
+    % For more information, see <a href="matlab:doc('arcade')">the ARCADE guide</a> and the superclasses.
     % 
     % See also PixelShader, Stimulus
      

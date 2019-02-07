@@ -1,26 +1,36 @@
 classdef ( Sealed ) MovingBar < Rectangle
-    % MOVINGBAR - Helper class for a moving bar
+    % MOVINGBAR < Rectangle < Shape < Stimulus - Helper class for a moving bar
+    % 
+    % A rectangle stimulus with linear sweeping motion animation 
     %
+    % PROPERTIES
+    % -----------
     %
-    % Usage
+    %   direction      : traveling direction of bar (degree)
+    %   travelDistance : distance of travel from startPosition (pixel) 
+    %   startPosition  : [x y] starting position of bar sweep (pixel)
+    %   linkedOrientationDirection : boolean flag whether bar should be 
+    %                                orthogonal to motion direction            
+    %
+    % USAGE
     % -----
     %
     %   bar = MovingBar(speed, distance);
     %   bar.play_animation()
     %
-    % Example
+    % EXAMPLE
     % -------
     %   bar = MovingBar(500, 500)
     %   bar.startPosition = [300 -300];
     %   bar.direction = 45;
-    %   bar.color = [0 255 128];
+    %   bar.faceColor = [0 255 128];
     %   bar.width = 10;
     %   bar.play_animation();
     %
-    % Note: Only the changing the startPosition property will affect the
+    % Note: Only changing the startPosition property will affect the
     % moving bar. The position property has no effect.
     % 
-    % See also Stimulus, Rectangle, Animation
+    % See also Rectangle, Shape, Stimulus, Animation, LinearMotion
     
     properties ( Transient = true )
         direction = 0 % traveling direction of bar in degrees
@@ -29,9 +39,12 @@ classdef ( Sealed ) MovingBar < Rectangle
         % linkedOrientationDirection - boolean flag
         % If true, bar will be orthogonal to motion direction
         linkedOrientationDirection = true;
-        barAnimation
+        
     end
     
+    properties ( Access = private )
+        barAnimation
+    end
     
     
     methods
@@ -43,6 +56,7 @@ classdef ( Sealed ) MovingBar < Rectangle
             vertices = obj.calc_vertices(obj.startPosition, ...
                 obj.direction, distance);
             obj.barAnimation = LinearMotion(speed, vertices);
+            % tirgger event and disappear after sweep
             obj.barAnimation.terminalAction = '00001001';
             obj.travelDistance = distance;
             
