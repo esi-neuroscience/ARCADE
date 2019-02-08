@@ -118,6 +118,13 @@ classdef (Abstract) Stimulus < hgsetget % will be matlab.mixin.SetGet after 2014
             obj.key = Key;
         end
         
+        function obj = swap_order_with(obj, stim2)
+            key2 = stim2.key;
+            StimServer.Command(obj.key, [14 typecast(uint16(key2), 'uint8')]);
+            stim2.key = obj.key;
+            obj.key = key2;
+        end
+        
         function toggle_visibility(obj)
             if obj.visible
                 obj.visible = false;
