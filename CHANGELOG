@@ -9,6 +9,12 @@
 *   Support for MATLAB > 2014a
 *   NidaqServer v.1.0.10.2: support for PCIe-6251 and PCIe-6321
 
+### CHANGED
+*   Circle stimulus is now a child of Ellipse with different properties than 
+    before (radius instead of diameter, faceColor and edgeColor instead of color)
+*   Extended documentation: all user-facing functions and classes have extensive
+    documentation of all releveant methods and properties.
+
 ## [2.4.0] - 2018-06-15
 ### NEW
 *   A petal-like shape stimulus can now be created using the Petal class
