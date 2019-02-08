@@ -23,12 +23,14 @@ classdef SGLTrialDataPipe < handle
     methods (Static)
         function Create()
             obj = SGLTrialDataPipe.this;
-            obj.pipe = MSMessagePipeServer('\\.\pipe\TrialData', [44 0], true);
+            waitForMessage = false;
+            obj.pipe = MSMessagePipeServer('\\.\pipe\TrialData', [44 44], waitForMessage);
         end
         
         function Open()
             obj = SGLTrialDataPipe.this;
-            obj.pipe = MSMessagePipeClient('\\.\pipe\TrialData', false);
+            waitForMessage = false;
+            obj.pipe = MSMessagePipeClient('\\.\pipe\TrialData', waitForMessage);
         end
         
         function Close()

@@ -1,10 +1,6 @@
-
-
-
-%------------------------------------------%
-% 2.5.2016 - Jarrod, wrote function 
-
 function runCore
+run('../add_arcade_to_path.m')
+
 %--------------------------%
 % turn on all warnings
 warning('on','all');

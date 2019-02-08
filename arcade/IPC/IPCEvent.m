@@ -98,7 +98,7 @@ classdef IPCEvent < handle
     methods ( Static = true )
         function set_event(eventName)
             event = IPCEvent(eventName);
-            event.set()
+            event.trigger()
         end
 
         function result = wait_for_event(eventName, timeout)
