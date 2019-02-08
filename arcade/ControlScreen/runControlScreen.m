@@ -1,43 +1,110 @@
-
-
-
-%------------------------------------------%
-% 2.5.2016 - Jarrod, wrote function 
-
 function runControlScreen(varargin)
-%--------------------------%
+run('../add_arcade_to_path.m')
+
 % turn on all warnings
 warning('on','all');
-% turn off some known warnings 
+% turn off some known warnings
 warning('off','MATLAB:RMDIR:RemovedFromPath');
-% some notation I used that should be fixed 
 warning('off','MATLAB:mir_warning_unrecognized_pragma');
-%--------------------------%
-
-if verLessThan('matlab', '9.5')
-   warning('off', 'MATLAB:hg:WillBeRemovedReplaceWith')
-   warning('off', 'MATLAB:hg:EraseModeIgnored')   
-   warning('off', 'MATLAB:hg:DrawModeIgnored')
+if verLessThan('matlab', '9.6')
+    warning('off', 'MATLAB:hg:WillBeRemovedReplaceWith')
+    warning('off', 'MATLAB:hg:EraseModeIgnored')
+    warning('off', 'MATLAB:hg:DrawModeIgnored')
 end
 
-initialWorkingDirectory = pwd;
-cd(fileparts(mfilename('fullpath'))); 
+SGLTrialDataPipe.Create();
+logmessage('Created TrialData Pipe')
 
-% create instance of server/process
-PROC = SGLControlScreenProc.launch; 
-% move back to original working directory
-cd(initialWorkingDirectory);
-% run server
-PROC.mRunServer; 
+% Launch/Initialize ControlScreen
+CntlScreen = ControlScreen.launch;
 
-% cleaup
-delete(PROC);
+% launch Eye Plot
+PltEyePos = SGLEyePosition.launch(CntlScreen.hfig);
 
-java.lang.Thread.sleep(500);
-% quit matlab
+% Launch SharedDataPool
+ShrdDataPool = SGLSharedDataPool.launch(CntlScreen.hfig);
+
+finishup = onCleanup(@cleanup);
+guiperf = zeros(1,2); % [WriteTime, UpdateTime]
+
+logmessage('Entering loop');
+
+% Signal Core process that we're ready for connect
+controlScreenEvent = IPCEvent('ControlScreenDone');
+controlScreenEvent.trigger()
+
+% Wait for Core process to connect
+controlScreenEvent.waitForTrigger(5000)
+
+try
+    eyeClient = EyeClient;
+catch me
+    warning('Could not open current eye position')
+    eyeClient = [];
+end
+
+pauseCoreEvt = IPCEvent('PauseCoreRequested');
+
+while ~controlScreenEvent.wasTriggered && ishghandle(CntlScreen.hfig) 
+    
+    if CntlScreen.keyPressed
+        switch CntlScreen.userRequest
+            case 'pause_request'
+                pauseCoreEvt.trigger()
+        end
+        CntlScreen.keyPressed = false;
+    end
+    
+    % update eye position
+    if ~isempty(eyeClient)
+        eye_pos = eyeClient.eyePosition;
+    else
+        eye_pos = [NaN NaN];
+    end
+    PltEyePos.mUpdate(eye_pos);
+    drawnow
+    
+    
+    % check for trial data from Core    
+    trialData = SGLTrialDataPipe.ReadTrialData();
+    while ~isempty(trialData)        
+        ShrdDataPool.mUpdateTrialData(trialData);
+        
+        % compute trial metrics
+        trlMetrics = ShrdDataPool.mComputeTrialMetrics;
+        trlMetrics.guiperf = guiperf; % add gui performance
+        
+        % update control screen
+        t = tic;
+        CntlScreen.mUpdateControlDisplay('update', trlMetrics);
+        drawnow('expose'); % just update graphics
+        
+        % get the gui update time
+        guiperf(1) = trialData(7);% write BHV time
+        guiperf(2) = round(toc(t)*1000);     
+        drawnow; % flush events
+        trialData = SGLTrialDataPipe.ReadTrialData();
+    end
+    
+    java.lang.Thread.sleep(5); % pause a bit
+end
+logmessage('Exiting loop');
 quit
 
+function cleanup()    
+    SGLTrialDataPipe.Close
+    SGLTrialDataPipe.delete()
 end
+
+
+end
+
+
+
+
+
+
+
 
 
 

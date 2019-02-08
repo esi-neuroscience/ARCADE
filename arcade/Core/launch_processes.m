@@ -1,4 +1,4 @@
-function [procs, readyEvents] = launch_processes(cfg)
+function procs = launch_processes(cfg)
 
 
 % defaults
@@ -11,7 +11,7 @@ if ~isfield(cfg, 'DaqServer')
 end
 if ~isfield(cfg, 'ControlScreen')
     cfg.ControlScreen = 'MatlabControlScreen.bat';
-    cfg.ControlScreen = 'None';
+    %     cfg.ControlScreen = 'None';
 end
 if ~isfield(cfg, 'StimServer')
     cfg.StimServer = 'StimServer.exe';
@@ -27,18 +27,20 @@ for iExe = 1:length(cfg.OtherExecutables)
     cmd = cfg.OtherExecutables{iExe};
     logmessage(sprintf('Starting %s', cmd))
     procs{end+1} =  processManager('id', cmd, 'command',  cmd);
- 
 end
 
 % launch control screen process
 if ~strcmp(cfg.ControlScreen, 'None')
-    logmessage('Starting ControlScreen')
+    logmessage(sprintf('Starting %s', cfg.ControlScreen))
+    
     controlScreenExePath = fullfile(arcaderoot, 'arcade', ...
         'ControlScreen', cfg.ControlScreen);
     procs{end+1} = processManager('id', 'ControlScreen', ...
-        'command',  controlScreenExePath);
+        'command',  controlScreenExePath, ...
+        'workingDir', fullfile(arcaderoot, 'arcade', 'ControlScreen'), ...
+        'printStdout', false, 'printStderr', false);
     controlScreenDoneEvent = IPCEvent('ControlScreenDone');
-%     readyEvents{end+1} = Control
+    readyEvents{end+1} = controlScreenDoneEvent.name;
 end
 
 % launch EyeServer process
@@ -58,7 +60,7 @@ if ~strcmp(cfg.DaqServer, 'None')
         'DaqServer', cfg.DaqServer);
     procs{end+1} = processManager('id', 'DaqServer', ...
         'command', daqServerExePath);
-%     readyEvents{end+1} = DaqServer.doneEventName;
+    readyEvents{end+1} = DaqServer.doneEventName;
 end
 
 
@@ -72,28 +74,35 @@ if ~strcmp(cfg.StimServer, 'None')
     readyEvents{end+1} = StimServer.doneEventName;
 end
 
+logmessage('Waiting for processes to start')
 pause(0.5)
 MultipleEvents.Init(readyEvents)
-result = MultipleEvents.WaitFor(readyEvents, 1, 5000);
+result = MultipleEvents.WaitFor(readyEvents, 1, 20000);
 assert(result == 1, 'Not all processes could be started within 5 s')
 
 % connect to StimServer
 if ~strcmp(cfg.StimServer, 'None')
+    logmessage('Connect to StimServer')
     StimServer.Connect();
 end
 
 % connect to DaqServer
 if ~strcmp(cfg.DaqServer, 'None')
-     DaqServer.Connect();
+    logmessage('Connect to DaqServer')
+    DaqServer.Connect();
 end
-
 
 % connect to EyeServer
 if ~strcmp(cfg.EyeServer, 'None')
-     EyeServer.Connect();
-     EyeServer.Start([datestr(now,'mmddHHMM') '.edf'])
+    logmessage('Connect to EyeServer')
+    EyeServer.Connect();
+    EyeServer.Start()
 end
 
-
-
+% connect to ControlScreen
+if ~strcmp(cfg.ControlScreen, 'None')
+    logmessage('Connect to ControlScreen')
+    SGLTrialDataPipe.Open()
+    IPCEvent.set_event('ControlScreenDone')
+end
 
