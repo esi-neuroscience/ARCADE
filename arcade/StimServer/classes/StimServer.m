@@ -51,7 +51,7 @@ classdef (Sealed = true) StimServer < handle
     
     methods (Access = private, Hidden=true)
         function obj = StimServer()
-            mlock;
+            % mlock;
         end
     end
     

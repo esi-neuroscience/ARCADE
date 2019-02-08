@@ -69,11 +69,8 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
                                     
             evtFile = fullfile(cfg.filepaths.Behaviour, [cfg.Subject '_' today() '_' cfg.Experiment '_' cfg.Session '.evt']);
             eventServer = SGLEventMarkerServer.launch(evtFile);
-            
-            % Create TrialData pipe
-            SGLTrialDataPipe.Create();
-            
-            processes = launch_processes(cfg)
+                        
+            processes = launch_processes(cfg);
             
             logmessage('Starting Session');
             this.mRunSession(cfg);
@@ -100,8 +97,7 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
             end
             
             % quit control screen
-            stopControlScreenEvt = IPCEvent('StopControlScreen');
-            stopControlScreenEvt.trigger()
+            IPCEvent.set_event('ControlScreenDone')
             
             % quit stim server
             StimServer.delete()            
@@ -122,36 +118,7 @@ classdef (Sealed) SGLCoreProc < SPCServerProc
     end
     
     methods (Access = protected)
-        %# launch server process
-        function process = mLaunchServer(this,xServ)
-            
-            % are we in debug mode?
-            debugPoints = dbstatus();
-            isInDebugMode = any(arrayfun(@(x) strcmp(debugPoints.cond, 'error'), ...
-                debugPoints));
-            
-            % create filepath to call
-            launchFunc = fullfile(this.FPATH.pathProcessLaunch, ...
-                sprintf('run%s.m',xServ));
-            
-            if ~isInDebugMode
-                launchCmd = sprintf('matlab -automation -wait -r "run(''%s'')"', ...
-                    launchFunc);
-            else
-                launchCmd = sprintf('matlab -wait -r "dbstop if error; run(''%s'')"', ...
-                    launchFunc);
-            end
-            
-            % launch process
-            process = processManager('id', xServ, ...
-                'command', launchCmd, ...
-                'printStdout', false, ...
-                'printStderr', false);
-            
-        end
-        
-        
-        
+              
         %# RUN user's Session
         function mRunSession(this,cfg)
             % move to user's working directory

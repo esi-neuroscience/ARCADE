@@ -70,10 +70,9 @@ classdef EyeServer < handle
         function Disconnect()
             % Disconnect from EyeServer
             temp = EyeServer.this;
-            if temp.isConnected
+            if EyeServer.GetConnectionStatus()
                 assert(~isequal(0, calllib('kernel32', 'CloseHandle', temp.hPipe)));
-                temp.hPipe = libpointer;
-                temp.isConnected = false;
+                temp.hPipe = libpointer;                
             end
         end
         
