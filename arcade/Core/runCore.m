@@ -25,7 +25,7 @@ if nargin == 0
     if ~ishghandle(MSgui.hfig)
         delete(MSgui)
         fclose('all');
-        return
+        exit
     end
     
     cfg = MSgui.cfg; % get cfg file
