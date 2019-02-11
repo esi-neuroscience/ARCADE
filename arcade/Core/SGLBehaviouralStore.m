@@ -89,10 +89,6 @@ classdef (Sealed) SGLBehaviouralStore < AUXEditableVariables & AUXOutputDataFile
             % set cfg  structure
             this.cfg = cfg;
             behavDir = this.cfg.filepaths.Behaviour;
-            %
-            if ~exist(behavDir,'dir')
-                result = mkdir(behavDir);
-            end
                 
             this.writeDirectory = behavDir;
         end
