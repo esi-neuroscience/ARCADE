@@ -1,10 +1,55 @@
 classdef ArcadeConfig
-    
+    % ARCADECONFIG - Class for all ARCADE configuration parameters
+    %
+    %
+    %
+    % PROPERTIES
+    % ----------
+    %  BackgroundRGB : 24-bit [r g b] background color during task
+    %  BackupSettings :   
+    %  ControlScreen : path to ControlScreen executable in ARCADE/ControlScreen
+    %  DaqServer : path to DaqServer executable in ARCADE/DaqServer
+    %  DistanceToScreen : subject distance from screen (cm) 
+    %  EditableVariables
+    %  EventMarker
+    %  Experiment
+    %  Experimenter
+    %  EyeServer : path to EyeServer executable in ARCADE/EyeServer
+    %  Files : struct with paths to additional files
+    %        .UserAdded : cell array of files to be copied to backup folder
+    %        .EventMarkers : ?
+    %        .BlockSelection : function for selecting the next block
+    %        .ConditionSelection : function for selecting the next condition
+    %  InitFunction : function to be run before first trial
+    %  MaximumNumberOfTrials
+    %  MonitorDiagonalSize
+    %  MonitorRefreshRate
+    %  MonitorResolution
+    %  OtherExecutables : cell array of executables to be launched along ARCADE
+    %  PauseRGB : 24-bit [r g b] background color during pause
+    %  PixelsPerDegree
+    %  ProjectOwner
+    %  rngSeed : seed of random number generator
+    %  rngGenerator : type of random number generator
+    %  Session
+    %  StimServer : path to StimServer executable in ARCADE/StimServer
+    %  Subject : name of subject
+    %  TrialErrorLegend
+    %  taskFile
+    %  filepaths
+    %
+    % METHODS
+    % -------
+    %  save(filename, varargin) : store configuration parameters in .mat file
+    %  struct : convert class instance to struct
+    %
+    %
+
     
     properties
-        BackgroundRGB
-        BackupSettings
-        ControlScreen = 'MatlabControlScreen.bat';
+        BackgroundRGB % 24-bit [r g b] background color during task
+        BackupSettings        
+        ControlScreen = 'MatlabControlScreen.bat'; 
         DaqServer
         DistanceToScreen
         EditableVariables
@@ -12,7 +57,10 @@ classdef ArcadeConfig
         Experiment
         Experimenter
         EyeServer
-        Files
+        Files = struct('UserAdded', {''}, ...
+            'EventMarkers', {''}, ...
+            'BlockSelection', {''}, ...
+            'ConditionSelection', {''})
         InitFunction
         MaximumNumberOfTrials
         MonitorDiagonalSize
@@ -22,12 +70,17 @@ classdef ArcadeConfig
         PauseRGB
         PixelsPerDegree
         ProjectOwner
+        rng     
         Session
         StimServer = 'StimServer.exe';
         Subject
         TrialErrorLegend
         taskFile
-        filepaths
+        filepaths = struct('Backup', {''}, 'Behaviour', {''}, 'Session', {''})
+    end
+
+    properties ( Dependent = true )
+    	sessionName
     end
     
     methods
@@ -35,6 +88,10 @@ classdef ArcadeConfig
             if nargin == 1 && isstruct(cfg)
                 fields = fieldnames(cfg);
                 for iField = 1:length(fields)
+                	% leave fields set to 'None' empty
+                	if strcmp(cfg.(fields{iField}), 'None')
+                		cfg.(fields{iField}) = [];
+                	end
                     obj.(fields{iField}) = cfg.(fields{iField});                    
                 end
             end
@@ -107,6 +164,27 @@ classdef ArcadeConfig
                     'Init function must be a function handle')
             end
             obj.InitFunction = func;
+        end
+
+        function name = get.sessionName(obj)
+        	 name = [obj.Subject '_' today '_' obj.Experiment, '_' obj.Session];
+        end
+
+        function obj = set.sessionName(obj, sessionName)
+             
+        end
+
+        function obj = set.Files(obj, files)
+            assert(isstruct(files))
+            fields = fieldnames(files);
+            % replace old char options 'none', 'n/a' with empty values
+            for iField = 1:length(fields)
+                value = files.(fields{iField});
+                if strcmp(value, 'n/a') || strcmp(value, 'none')
+                    value = '';
+                end
+                obj.Files.(fields{iField}) = value;
+            end
         end
         
     end

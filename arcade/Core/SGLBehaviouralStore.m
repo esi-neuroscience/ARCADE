@@ -99,13 +99,13 @@ classdef (Sealed) SGLBehaviouralStore < AUXEditableVariables & AUXOutputDataFile
             
             if this.currentTrial==0                                
                 % get selection functions 
-                if ~strcmp(this.cfg.Files.ConditionSelection, 'n/a')
+                if ~isempty(this.cfg.Files.ConditionSelection)
                     [~,condSelFile,~] = fileparts(this.cfg.Files.ConditionSelection);
                     condSelFcn = str2func(condSelFile);
                 else
                     condSelFcn = @(x) ones(1);
                 end
-                if ~strcmp(this.cfg.Files.BlockSelection, 'n/a')
+                if ~isempty(this.cfg.Files.BlockSelection)
                     [~,blockSelFile,~] = fileparts(this.cfg.Files.BlockSelection);
                     blockSelFcn = str2func(blockSelFile);
                 else

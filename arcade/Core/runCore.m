@@ -1,6 +1,8 @@
 function runCore(varargin)
 run(fullfile(fileparts(mfilename('fullpath')), '..', 'add_arcade_to_path.m'))
 
+print_header(mfilename, varargin{:})
+
 %--------------------------%
 % turn on all warnings
 warning('on','all');
@@ -21,43 +23,54 @@ end
 if nargin == 0
     % launch Main Screen
     MSgui = MainScreen.launch;
-    
+
     if ~ishghandle(MSgui.hfig)
         delete(MSgui)
         fclose('all');
         exit
     end
-    
+
     cfg = ArcadeConfig(MSgui.cfg); % get cfg file
     cfg.taskFile = MSgui.taskFile;
-    
+
     % close main screen
     delete(MSgui);
     drawnow()
-    
+
 else
-    cfg = ArcadeConfig(load(varargin{1}));
-    if ~isempty(cfg.taskFile)
+    logmessage(sprintf('Using predefined configuration file\n         %s', varargin{:}))
+    cfg = ArcadeConfig(load(cfgFile));
+    if isempty(cfg.taskFile)
         cd(fullfile(arcaderoot, 'Tasks'))
         [filename, pathname] = uigetfile('*.m', 'Pick a MATLAB Taskscript');
         if filename == 0; return; end
         cfg.taskFile = fullfile(pathname, filename);
         cd(initialWorkingDirectory)
     end
-    if ~isfield(cfg, 'filepaths')
-        cfg.filepaths = [];
-    end         
+end
+if isempty(cfg.rng)
+    cfg.rng = rng(now, 'twister');
+else
+    logmessage(...
+        sprintf('Using predefined random number generator (method=%s, seed=%u)', ...
+        cfg.rng.Type, cfg.rng.Seed))
+    rng(cfg.rng.Seed, cfg.rng.Type);
 end
 
 %% Initialize folders
 [foldersCreated, cfg] = handle_folders(cfg);
 if ~foldersCreated
-    return
+    logmessage('Cancelling session')
+    exit
 end
 
+% save cfg and associated files in backup folder
+logmessage(sprintf('Storing session configuration and associated files in\n         %s', cfg.filepaths.Session))
+save_config(cfg)
+
+
 %% Initialize Servers
-evtFile = fullfile(cfg.filepaths.Behaviour, ...
-    [cfg.Subject '_' today() '_' cfg.Experiment '_' cfg.Session '.evt']);
+evtFile = fullfile(cfg.filepaths.Behaviour, [cfg.sessionName '.evt']);
 eventServer = SGLEventMarkerServer.launch(evtFile);
 
 % asynchronously launch subprocesses
@@ -76,30 +89,18 @@ SESSArc  = SGLSessionArc.launch;
 logmessage('Starting Session')
 SESSArc.mStart;
 
-%----------------------------------------%
-% close behavioural file
-BHVstore.mCloseFile;
-% convert file
-BHVstore.mESIRead;
-
-%----------------------------------------%
-% leaving session
-logmessage('Quitting session');
-
-delete(BHVstore);
-delete(SESSArc);
+%% End session
 
 clear VARIABLES
 
-
-
-%% Stop session and cleanup
+%% Exit MATLAB
 
 logmessage('Closing MATLAB in 5 s. Press CTRL+C to cancel or see log files');
 
 for seconds = 5:-1:0
-    fprintf('%g\n', seconds)
+    fprintf('%g', seconds)
     pause(1)
+    fprintf('\b')
 end
 exit
 
@@ -109,9 +110,9 @@ end
 function cleanup_function(cfg, procs)
 
 % quit eye server
-if ~strcmp(cfg.EyeServer, 'None')
-    eyeFile =  fullfile(cfg.filepaths.Behaviour, ...
-        [cfg.Subject '_' today() '_' cfg.Experiment '_' cfg.Session '.edf']);
+if ~isempty(cfg.EyeServer)
+    trackeye('reset')
+    eyeFile =  fullfile(cfg.filepaths.Behaviour, [cfg.sessionName '.edf']);
     EyeServer.Stop(eyeFile)
     waitForFileEvt = IPCEvent('EyeServerDone');
     logmessage('Waiting for eye data transfer')
@@ -125,24 +126,38 @@ end
 IPCEvent.set_event('ControlScreenDone')
 
 % Close StimServer pipe
-% if ~strcmp(cfg.StimServer, 'None')
+if ~isempty(cfg.StimServer)
     StimServer.delete()
-% end
+end
 
 % Close StimServer pipe
-if ~strcmp(cfg.DaqServer, 'None')
+if ~isempty(cfg.DaqServer)
     DaqServer.delete();
 end
 
 % close TrialData pipe
-% if ~strcmp(cfg.ControlScreen, 'None')
+if ~isempty(cfg.ControlScreen)
     SGLTrialDataPipe.delete()
-% end
+end
 
 % kill subprocesses
 cellfun(@(x) x.stop(), procs)
 
-fclose('all'); % close all open files
+
+BHVstore = SGLBehaviouralStore.launch();
+BHVstore.mCloseFile;
+BHVstore.mESIRead;
+delete(BHVstore);
+
+eventServer = SGLEventMarkerServer.launch();
+delete(eventServer)
+
+logmessage('Quitting session');
+
+
+
+
+% fclose('all'); % close all open files
 
 end
 

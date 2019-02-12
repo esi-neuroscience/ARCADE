@@ -1,7 +1,7 @@
 classdef (Sealed) SGLEventMarkerServer < handle
     
     
-    properties (SetAccess = immutable)
+    properties (SetAccess = private)
         filename = [];
         fileHandle = [];
     end
@@ -69,6 +69,7 @@ classdef (Sealed) SGLEventMarkerServer < handle
         function delete(this) 
             if ~isempty(this.filename)
                 fclose(this.fileHandle);
+                this.fileHandle = [];
             end
         end
     end   

@@ -14,7 +14,7 @@ for iExe = 1:length(cfg.OtherExecutables)
 end
 
 % launch control screen process
-if ~strcmp(cfg.ControlScreen, 'None') && ~isempty(cfg.ControlScreen)
+if ~isempty(cfg.ControlScreen)
     logmessage(sprintf('Starting %s', cfg.ControlScreen))
     
     controlScreenExePath = fullfile(arcaderoot, 'arcade', ...
@@ -28,7 +28,7 @@ if ~strcmp(cfg.ControlScreen, 'None') && ~isempty(cfg.ControlScreen)
 end
 
 % launch EyeServer process
-if ~strcmp(cfg.EyeServer, 'None') && ~isempty(cfg.EyeServer)
+if ~isempty(cfg.EyeServer)
     logmessage('Starting EyeServer')
     eyeServerExePath = fullfile(arcaderoot, 'arcade', ...
         'EyeServer', cfg.EyeServer);
@@ -38,7 +38,7 @@ if ~strcmp(cfg.EyeServer, 'None') && ~isempty(cfg.EyeServer)
 end
 
 % launch DaqServer process
-if ~strcmp(cfg.DaqServer, 'None') && ~isempty(cfg.DaqServer)
+if ~isempty(cfg.DaqServer)
     logmessage('Starting DaqServer')
     daqServerExePath = fullfile(arcaderoot, 'arcade', ...
         'DaqServer', cfg.DaqServer);
@@ -48,8 +48,18 @@ if ~strcmp(cfg.DaqServer, 'None') && ~isempty(cfg.DaqServer)
 end
 
 
-% launch StimServer process
-if ~strcmp(cfg.StimServer, 'None') && ~isempty(cfg.StimServer)
+
+logmessage('Waiting for processes to start')
+pause(0.5)
+MultipleEvents.Init(readyEvents)
+result = MultipleEvents.WaitFor(readyEvents, 1, 20000);
+assert(result == 1, 'Not all processes could be started within 20 s')
+MultipleEvents.delete()
+
+% launch StimServer process last when all other windows are open to prevent 
+% change of StimServer full screen mode
+
+if ~isempty(cfg.StimServer)
     logmessage('Starting StimServer')
     stimServerExePath = fullfile(arcaderoot, 'arcade', ...
         'StimServer', cfg.StimServer);
@@ -58,11 +68,9 @@ if ~strcmp(cfg.StimServer, 'None') && ~isempty(cfg.StimServer)
     readyEvents{end+1} = StimServer.doneEventName;
 end
 
-logmessage('Waiting for processes to start')
-pause(0.5)
-MultipleEvents.Init(readyEvents)
-result = MultipleEvents.WaitFor(readyEvents, 1, 20000);
-assert(result == 1, 'Not all processes could be started within 5 s')
+
+IPCEvent.wait_for_event(StimServer.doneEventName, 1000);
+
 
 % connect to StimServer
 if ~strcmp(cfg.StimServer, 'None') && ~isempty(cfg.StimServer)
@@ -80,7 +88,7 @@ end
 if ~strcmp(cfg.EyeServer, 'None') && ~isempty(cfg.EyeServer)
     logmessage('Connect to EyeServer')
     EyeServer.Connect();
-    EyeServer.Start()
+    EyeServer.Start('tmp.edf')
 end
 
 % connect to ControlScreen
