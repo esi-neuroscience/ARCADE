@@ -28,7 +28,7 @@ if nargin == 0
         exit
     end
     
-    cfg = MSgui.cfg; % get cfg file
+    cfg = ArcadeConfig(MSgui.cfg); % get cfg file
     cfg.taskFile = MSgui.taskFile;
     
     % close main screen
@@ -36,8 +36,8 @@ if nargin == 0
     drawnow()
     
 else
-    cfg = load(varargin{1});
-    if ~isfield(cfg, 'taskFile')
+    cfg = ArcadeConfig(load(varargin{1}));
+    if ~isempty(cfg.taskFile)
         cd(fullfile(arcaderoot, 'Tasks'))
         [filename, pathname] = uigetfile('*.m', 'Pick a MATLAB Taskscript');
         if filename == 0; return; end
