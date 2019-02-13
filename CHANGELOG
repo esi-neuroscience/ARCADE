@@ -2,14 +2,16 @@
 
 ## Unreleased
 ### NEW
+*   ARCADE can now be started with the path to a _cfg.mat file as an input 
+    argument 
 *   Square wave grating with anti-aliased bands and mask
 *   StimServer v1.3.1.3: 
         - anti-aliased Ellipse and Rectangle stimuli with support for outlines
         - support for swapping stimuli (drawing order)
-*   BinaryEyelinkServer:
+*   BinaryEyelinkServer: 
 *   Support for MATLAB > 2014a. ARCADE will now use the matlab.exe from the 
     Windows PATH environmental variable. This usually is the one that was 
-    installed last.
+    installed last. Tested versions are 2014a and 2018b Update 2
 *   NidaqServer v.1.0.10.2: support for PCIe-6251 and PCIe-6321
 
 ### CHANGED
