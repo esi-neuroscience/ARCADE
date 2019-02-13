@@ -23,12 +23,13 @@ while exist(cfg.filepaths.Session, 'dir') == 7
     
     switch answer
         case 'Overwrite existing data'
-            disp('overwrite!')
+            
             warnString = sprintf('The contents of %s will be deleted', cfg.sessionName);
             warnTitle  = 'Warning!';
             f = warndlg(warnString, warnTitle, 'modal');
             waitfor(f);
-  
+            logmessage(warnString)
+            
             % delete directory
             [result, message, ~] = rmdir(cfg.filepaths.Session,'s');
             assert(result == 1, message)
