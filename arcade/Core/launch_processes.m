@@ -51,10 +51,12 @@ end
 
 logmessage('Waiting for processes to start')
 pause(0.5)
-MultipleEvents.Init(readyEvents)
-result = MultipleEvents.WaitFor(readyEvents, 1, 20000);
-assert(result == 1, 'Not all processes could be started within 20 s')
-MultipleEvents.delete()
+if ~isempty(readyEvents)
+    MultipleEvents.Init(readyEvents)
+    result = MultipleEvents.WaitFor(readyEvents, 1, 20000);
+    assert(result == 1, 'Not all processes could be started within 20 s')
+    MultipleEvents.delete()
+end
 
 % launch StimServer process last when all other windows are open to prevent 
 % change of StimServer full screen mode
@@ -70,29 +72,29 @@ end
 
 
 IPCEvent.wait_for_event(StimServer.doneEventName, 1000);
-
+pause(0.1)
 
 % connect to StimServer
-if ~strcmp(cfg.StimServer, 'None') && ~isempty(cfg.StimServer)
+if ~isempty(cfg.StimServer)
     logmessage('Connect to StimServer')
     StimServer.Connect();
 end
 
 % connect to DaqServer
-if ~strcmp(cfg.DaqServer, 'None') && ~isempty(cfg.DaqServer)
+if ~isempty(cfg.DaqServer)
     logmessage('Connect to DaqServer')
     DaqServer.Connect();
 end
 
 % connect to EyeServer
-if ~strcmp(cfg.EyeServer, 'None') && ~isempty(cfg.EyeServer)
+if ~isempty(cfg.EyeServer)
     logmessage('Connect to EyeServer')
     EyeServer.Connect();
     EyeServer.Start('tmp.edf')
 end
 
 % connect to ControlScreen
-if ~strcmp(cfg.ControlScreen, 'None')
+if ~isempty(cfg.ControlScreen)
     logmessage('Connect to ControlScreen')
     SGLTrialDataPipe.Open()
     IPCEvent.set_event('ControlScreenDone')
