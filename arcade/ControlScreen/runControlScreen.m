@@ -31,10 +31,10 @@ logmessage('Entering loop');
 
 % Signal Core process that we're ready for connect
 controlScreenEvent = IPCEvent('ControlScreenDone');
-controlScreenEvent.trigger()
+controlScreenEvent.trigger();
 
 % Wait for Core process to connect
-controlScreenEvent.waitForTrigger(5000)
+controlScreenEvent.waitForTrigger(5000);
 
 try
     eyeClient = EyeClient;
