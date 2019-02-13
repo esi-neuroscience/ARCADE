@@ -1,11 +1,11 @@
 
 
 %% Start ControlScreen and dummy EyeServer
-cfg = [];
+cfg = ArcadeConfig;
 cfg.ControlScreen = 'MatlabControlScreen.bat';
 cfg.EyeServer = 'EyeLinkServer.exe';
-cfg.DaqServer = 'None';
-cfg.StimServer = 'None';
+cfg.DaqServer = [];
+cfg.StimServer = [];
 
 p = launch_processes(cfg);
 
