@@ -52,7 +52,7 @@ classdef MSEvents < handle
 %            fcns.RHS{fcnNum}={'ulong', 'voidPtrPtr', 'int32', 'ulong'};
 
             result = calllib('kernel32', 'WaitForMultipleObjects', ...
-                length(hEvents), hEvents, waitAll, timeout)
+                length(hEvents), hEvents, waitAll, timeout);
                 
                 
         end

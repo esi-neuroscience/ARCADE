@@ -301,7 +301,7 @@ classdef (Sealed) MainScreen < MSJavaObjects & MSConfig & MSEditableVariables & 
             % if directories sucessfully created, copy files if any 
 
             disp('Checking for backup files...');
-            copyIfAny = true;                       % copy backup files if any
+            copyIfAny = false;                       % copy backup files if any
             
             %------------------------------%
             %            bugs 

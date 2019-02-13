@@ -121,23 +121,24 @@ classdef MSBackupCopy < AUXBackupCopy & AUXUIControlFunctions & AUXDirectoryMana
             %sessFilepath = fullfile(sessPath,subj,expt,sess);
             sessFilepath = fullfile(sessPath,[subj '_' today '_' expt '_' sess]);
             
-            warn = true;
-            success_sess = this.mCreateDirectory(sessFilepath,warn);
-            if ~success_sess
-                success = success_sess;
-                return;
-            end
+            % warn = true;
+            % success_sess = this.mCreateDirectory(sessFilepath,warn);
+            % if ~success_sess
+            %     success = success_sess;
+            %     return;
+            % end
 
             % create subdirectories 
             bckpFilepath = fullfile(sessFilepath,'Backup');
             behvFilepath = fullfile(sessFilepath,'Behaviour');
             
             % create directories 
-            warn = false;
-            success_bck = this.mCreateDirectory(bckpFilepath,warn);
-            success_bhv = this.mCreateDirectory(behvFilepath,warn);
+            % warn = false;
+            % success_bck = this.mCreateDirectory(bckpFilepath,warn);
+            % success_bhv = this.mCreateDirectory(behvFilepath,warn);
             
-            success = success_bck & success_bhv & success_sess;
+            % success = success_bck & success_bhv & success_sess;
+            success = true;
             
             filepaths = [];
             if success
