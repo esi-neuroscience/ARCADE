@@ -30,12 +30,12 @@ targetEvents = trackeye(targetPositions(TrialData.currentCondition,:), ...
 
 % fixation point
 fp = Circle;
-fp.radius = 5;
+fp.diameter = 5;
 fp.position = [0 0];
 
 % target
 target = Circle;
-target.radius = 20;
+target.diameter = 20;
 target.faceColor = [0 255 0];
 target.faceAlpha = 100;
 target.position = targetPositions(TrialData.currentCondition,:);

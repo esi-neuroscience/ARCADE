@@ -2,7 +2,7 @@
 
 
 %% Test 1
-cfg = [];
+cfg = ArcadeConfig;
 cfg.EyeServer = 'EyelinkServer.exe';
 cfg.DaqServer = 'NidaqServer.exe';
 cfg.ControlScreen = 'MatlabControlScreen.bat';

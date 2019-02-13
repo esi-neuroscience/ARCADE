@@ -27,17 +27,17 @@ classdef EyeServer < handle
                 warning('EyeServer:Connect:failed', ...
                     'EyeServer connection was already established.');
                 return;
-            end;
+            end
             if ~libisloaded('kernel32')
                 loadlibrary('kernel32', @win_kernel32);
-            end;
-            if isequal(nargin, 0); 
+            end
+            if isequal(nargin, 0)
                 server='.'; 
                 pipeName='\pipe\EyeServerPipe';
             else                 
                 server = varargin{1}; 
                 pipeName = varargin{2}; 
-            end;
+            end
 
             GENERIC_READ_WRITE = uint32(hex2dec('C0000000'));
             obj.hPipe = calllib('kernel32', 'CreateFileA', ...
@@ -59,7 +59,7 @@ classdef EyeServer < handle
                 obj.hPipe = libpointer;
                 ConstructorResult = calllib('kernel32', 'GetLastError');
                 if ~isequal(ConstructorResult, 0)
-                    ConstructorResult
+                    disp(ConstructorResult)
                 end
                 error('EyeServer:Constructor:failed', ...
                     'Can''t connect to EyeServer''s pipe. Is the server running ?');
