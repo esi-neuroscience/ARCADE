@@ -66,8 +66,7 @@ if ~isempty(cfg.StimServer)
     stimServerExePath = fullfile(arcaderoot, 'arcade', ...
         'StimServer', cfg.StimServer);
     procs{end+1} = processManager('id', 'StimServer', ...
-        'command',  stimServerExePath);
-    readyEvents{end+1} = StimServer.doneEventName;
+        'command',  stimServerExePath);    
 end
 
 

@@ -1,9 +1,5 @@
 function print_header(varargin)
 
-if nargin == 0
-    procName = 'ARCADE CORE';
-end
-
 headerAsterisk = '****************  ARCADE  ********************\n';
 dateTimeString      = datestr(now,'dd-mmm-yyyy HH:MM:SS');
 matlabVersionString = version();

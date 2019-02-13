@@ -170,7 +170,7 @@ classdef ArcadeConfig
         	 name = [obj.Subject '_' today '_' obj.Experiment, '_' obj.Session];
         end
 
-        function obj = set.sessionName(obj, sessionName)
+        function obj = set.sessionName(obj, ~)
              
         end
 

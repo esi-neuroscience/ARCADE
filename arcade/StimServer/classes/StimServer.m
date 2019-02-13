@@ -62,16 +62,16 @@ classdef (Sealed = true) StimServer < handle
             obj = StimServer.this;
             if ~obj.hPipe.isNull()
                 return;
-            end;
+            end
             if ~libisloaded('kernel32')
                 loadlibrary('kernel32', @win_kernel32);
-            end;
+            end
   
-            if isequal(nargin, 0); 
+            if isequal(nargin, 0)
                 server='.'; 
             else 
                 server = varargin{1}; 
-            end;
+            end
 
             GENERIC_READ_WRITE = uint32(hex2dec('C0000000'));
             obj.hPipe = calllib('kernel32', 'CreateFileA', ...
@@ -93,7 +93,7 @@ classdef (Sealed = true) StimServer < handle
                 obj.hPipe = libpointer;
                 ConstructorResult = calllib('kernel32', 'GetLastError');
                 if ~isequal(ConstructorResult, 0)
-                    ConstructorResult
+                    disp(ConstructorResult)
                 end
                 error('StimServer:Constructor:failed', ...
                     'Can''t connect to StimServer''s pipe. Is the server running ?');
@@ -171,7 +171,7 @@ classdef (Sealed = true) StimServer < handle
         end
 
         function waitResult = waitUntilDone(timeout)
-            IPCEvent.wait_for_event(StimServer.doneEventName, timeout)
+            waitResult = IPCEvent.wait_for_event(StimServer.doneEventName, timeout);
         end
     end
     
