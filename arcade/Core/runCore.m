@@ -39,7 +39,7 @@ if nargin == 0
 
 else
     logmessage(sprintf('Using predefined configuration file\n         %s', varargin{:}))
-    cfg = ArcadeConfig(load(cfgFile));
+    cfg = ArcadeConfig(load(varargin{1}));
     if isempty(cfg.taskFile)
         cd(fullfile(arcaderoot, 'Tasks'))
         [filename, pathname] = uigetfile('*.m', 'Pick a MATLAB Taskscript');
@@ -74,7 +74,8 @@ evtFile = fullfile(cfg.filepaths.Behaviour, [cfg.sessionName '.evt']);
 eventServer = SGLEventMarkerServer.launch(evtFile);
 
 % asynchronously launch subprocesses
-processes = launch_processes(cfg);
+processes = launch_processes(cfg, ...
+    fullfile(cfg.filepaths.Backup, [cfg.sessionName '_cfg.mat']));
 
 cleanup = onCleanup(@() cleanup_function(cfg, processes));
 
