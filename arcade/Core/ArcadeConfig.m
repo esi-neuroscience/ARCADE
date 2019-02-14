@@ -6,10 +6,10 @@ classdef ArcadeConfig
     % PROPERTIES
     % ----------
     %  BackgroundRGB : 24-bit [r g b] background color during task
-    %  BackupSettings :   
+    %  BackupSettings :
     %  ControlScreen : path to ControlScreen executable in ARCADE/ControlScreen
     %  DaqServer : path to DaqServer executable in ARCADE/DaqServer
-    %  DistanceToScreen : subject distance from screen (cm) 
+    %  DistanceToScreen : subject distance from screen (cm)
     %  EditableVariables
     %  EventMarker
     %  Experiment
@@ -34,7 +34,7 @@ classdef ArcadeConfig
     %  Session
     %  StimServer : path to StimServer executable in ARCADE/StimServer
     %  Subject : name of subject
-    %  TrialErrorLegend
+    %  TrialErrorLegend : 10 element cell array with trialerror labels (0-9)
     %  taskFile
     %  filepaths
     %
@@ -44,12 +44,12 @@ classdef ArcadeConfig
     %  struct : convert class instance to struct
     %
     %
-
+    
     
     properties
         BackgroundRGB % 24-bit [r g b] background color during task
-        BackupSettings        
-        ControlScreen = 'MatlabControlScreen.bat'; 
+        BackupSettings
+        ControlScreen = 'MatlabControlScreen.bat';
         DaqServer
         DistanceToScreen
         EditableVariables
@@ -70,17 +70,17 @@ classdef ArcadeConfig
         PauseRGB
         PixelsPerDegree
         ProjectOwner
-        rng     
+        rng
         Session
         StimServer = 'StimServer.exe';
         Subject
-        TrialErrorLegend
+        TrialErrorLegend = cell(1,10);
         taskFile
         filepaths = struct('Backup', {''}, 'Behaviour', {''}, 'Session', {''})
     end
-
+    
     properties ( Dependent = true )
-    	sessionName
+        sessionName
     end
     
     methods
@@ -88,11 +88,11 @@ classdef ArcadeConfig
             if nargin == 1 && isstruct(cfg)
                 fields = fieldnames(cfg);
                 for iField = 1:length(fields)
-                	% leave fields set to 'None' empty
-                	if strcmp(cfg.(fields{iField}), 'None')
-                		cfg.(fields{iField}) = [];
-                	end
-                    obj.(fields{iField}) = cfg.(fields{iField});                    
+                    % leave fields set to 'None' empty
+                    if strcmp(cfg.(fields{iField}), 'None')
+                        cfg.(fields{iField}) = [];
+                    end
+                    obj.(fields{iField}) = cfg.(fields{iField});
                 end
             end
         end
@@ -138,11 +138,11 @@ classdef ArcadeConfig
             end
         end
         
-        function obj = set.BackgroundRGB(obj, rgb)            
+        function obj = set.BackgroundRGB(obj, rgb)
             obj.BackgroundRGB = obj.handle_color(rgb);
         end
         
-        function obj = set.PauseRGB(obj, rgb)            
+        function obj = set.PauseRGB(obj, rgb)
             obj.PauseRGB = obj.handle_color(rgb);
         end
         
@@ -165,15 +165,32 @@ classdef ArcadeConfig
             end
             obj.InitFunction = func;
         end
-
+        
         function name = get.sessionName(obj)
-        	 name = [obj.Subject '_' today '_' obj.Experiment, '_' obj.Session];
+            name = [obj.Subject '_' today '_' obj.Experiment, '_' obj.Session];
         end
-
+        
         function obj = set.sessionName(obj, ~)
-             
+            
         end
-
+        
+        function obj = set.TrialErrorLegend(obj, errorLegend)
+            if isstruct(errorLegend)
+                if isfield(errorLegend, 'numInf')
+                    errorLegend = rmfield(errorLegend, 'numInf');
+                end
+                fields = fieldnames(errorLegend);
+                errorLegend = struct2cell(errorLegend);
+                [fields, idx] = sort(fields);
+                errorLegend = errorLegend(idx);                
+            end
+            assert(numel(errorLegend) == 10,...
+                'Number of trial error legends must be 10 element cell array')
+            obj.TrialErrorLegend = errorLegend;
+        end
+        
+        
+        
         function obj = set.Files(obj, files)
             assert(isstruct(files))
             fields = fieldnames(files);
@@ -197,9 +214,9 @@ classdef ArcadeConfig
             end
         end
         function color = handle_color(color)
-              assert(numel(color) == 3)
-              assert(all(color>=0) && all(color<=255))
-              color = color(:)';
+            assert(numel(color) == 3)
+            assert(all(color>=0) && all(color<=255))
+            color = color(:)';
         end
-    end   
+    end
 end

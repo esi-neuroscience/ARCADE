@@ -1,8 +1,13 @@
-function procs = launch_processes(cfg)
-
+function procs = launch_processes(cfg, varargin)
 
 % defaults
 if ~exist('cfg', 'var'); cfg = ArcadeConfig; end
+if nargin == 1
+    cfgPath = '';
+elseif nargin == 2
+    cfgPath = varargin{1};
+end
+    
 
 procs = {};
 readyEvents = {};
@@ -18,7 +23,7 @@ if ~isempty(cfg.ControlScreen)
     logmessage(sprintf('Starting %s', cfg.ControlScreen))
     
     controlScreenExePath = fullfile(arcaderoot, 'arcade', ...
-        'ControlScreen', cfg.ControlScreen);
+        'ControlScreen', [cfg.ControlScreen ' "' cfgPath '"']);
     procs{end+1} = processManager('id', 'ControlScreen', ...
         'command',  controlScreenExePath, ...
         'workingDir', fullfile(arcaderoot, 'arcade', 'ControlScreen'), ...

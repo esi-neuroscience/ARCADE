@@ -12,5 +12,5 @@ set "HH=%dt:~8,2%" & set "Min=%dt:~10,2%" & set "Sec=%dt:~12,2%" & set "MS=%dt:~
 set "datestamp=%YYYY%%MM%%DD%" & set "timestamp=%HH%%Min%%Sec%" 
 set logfile=%~dp0..\..\errorLog\log_controlscreen_%datestamp%_%timestamp%.txt
 
-SET matlabCmd="cd %ControlScreenDir%; dbstop if error; runControlScreen(%CfgPath%)"
+SET matlabCmd="cd %ControlScreenDir%; dbstop if error; runControlScreen('%CfgPath%')"
 START "" /MIN /B matlab -automation -logfile %logfile% -wait -r %matlabCmd%
