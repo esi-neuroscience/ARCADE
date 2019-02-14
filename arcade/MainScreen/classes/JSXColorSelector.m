@@ -67,9 +67,9 @@ classdef JSXColorSelector < SPCJavaObjectDefinition
         % java set/get function
         function mSetGetFunctions(this)
             % set function 
-            setFcn = @(~,value) this.jCombo.setSelectedColor(java.awt.Color(value(1),value(2),value(3)));
+            setFcn = @(~,value) this.jCombo.setSelectedColor(java.awt.Color(value(1)/255,value(2)/255,value(3)/255));
             % get function 
-            getFcn = @(~) this.jCombo.getSelectedColor().getColorComponents([]);
+            getFcn = @(~) round(255*this.jCombo.getSelectedColor().getColorComponents([]))';
             % add set/get function to user data 
             %set(this.hObj,'UserData',{setFcn,getFcn});
             this.mSetUserData(setFcn,getFcn,this.jhCombo);
