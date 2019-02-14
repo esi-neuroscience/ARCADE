@@ -52,8 +52,8 @@ classdef ArcadeConfig
         ControlScreen = 'MatlabControlScreen.bat';
         DaqServer
         DistanceToScreen
-        EditableVariables
-        EventMarker
+        EditableVariables = {'Reward', '50', 'Numeric'}
+        EventMarker = struct('Pause', 29600, 'Resume', 29601)
         Experiment
         Experimenter
         EyeServer
@@ -62,7 +62,7 @@ classdef ArcadeConfig
             'BlockSelection', {''}, ...
             'ConditionSelection', {''})
         InitFunction
-        MaximumNumberOfTrials
+        MaximumNumberOfTrials = 10000
         MonitorDiagonalSize
         MonitorRefreshRate
         MonitorResolution
