@@ -18,9 +18,6 @@ classdef Circle < Ellipse
         diameter = 100;
     end
     
-    properties ( Access = public, Dependent = true, Transient = true, Hidden = true )
-        color % obsolete property for backwards compatibility with ARCADE < 2.5
-    end
         
     methods
         function obj = Circle(varargin)
@@ -41,16 +38,6 @@ classdef Circle < Ellipse
             end
             r = obj.width;
         end
-        
-        function color = get.color(obj)
-            color = obj.faceColor;
-        end
-        
-        function set.color(obj, color)
-            warning('The Circle.color property is obsolete. Use Circle.faceColor instead.')
-            obj.faceColor = color;
-        end
-
         
     end
 end
