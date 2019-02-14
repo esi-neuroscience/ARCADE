@@ -47,7 +47,7 @@ classdef ArcadeConfig
     
     
     properties
-        BackgroundRGB % 24-bit [r g b] background color during task
+        BackgroundRGB = [128 128 128]; % 24-bit [r g b] background color during task
         BackupSettings
         ControlScreen = 'MatlabControlScreen.bat';
         DaqServer
@@ -67,7 +67,7 @@ classdef ArcadeConfig
         MonitorRefreshRate
         MonitorResolution
         OtherExecutables
-        PauseRGB
+        PauseRGB = [128 128 128]
         PixelsPerDegree
         ProjectOwner
         rng
