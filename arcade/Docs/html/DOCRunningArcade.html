@@ -1,0 +1,194 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Running ARCADE</title><meta name="generator" content="MATLAB 9.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2019-02-14"><meta name="DC.source" content="DOCRunningArcade.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Running ARCADE</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Starting ARCADE</a></li><li><a href="#3">Configuring ARCADE via the Configuration GUI (MainScreen)</a></li><li><a href="#5">Configuring ARCADE on the command line</a></li><li><a href="#7">Running a session</a></li></ul></div><h2 id="1">Starting ARCADE</h2><p>ARCADE can be launched via the executable bat file <tt>arcade/start_arcade.bat</tt> or by directly calling the <tt><a href="matlab:doc('runCore')">arcade/Core/runCore</a></tt> function from a running MATLAB.</p><pre class="codeinput">help <span class="string">runCore</span>
+</pre><pre class="codeoutput">  RUNCORE - Start ARCADE 
+ 
+    runCore([pathToCfg])
+ 
+  INPUT
+  -----
+    pathToCfg : optional path to a file with a valid ARCADE configuration,
+                e.g. resulting from a previous session, ArcadeConfig.save 
+                or the configuration GUI (MainScreen).
+                If runCore is called without an input argument, the
+                MainScreen GUI will be opened to configure the session.
+ 
+  For more information, see &lt;a href="matlab:doc('arcade')"&gt;the ARCADE guide&lt;/a&gt;.
+ 
+  See also ArcadeConfig
+
+</pre><p>All possible configuration options can be found in the <tt><a href="matlab:doc('ArcadeConfig')">ArcadeConfig</a></tt> class (see <tt>help ArcadeConfig</tt>).  A configuration can be created by</p><div><ol><li>starting ARCADE via <tt>start_arcade.bat</tt> and using the configuration GUI (MainScreen)</li><li>using the ArcadeConfig class and saving the result to a file</li></ol></div><h2 id="3">Configuring ARCADE via the Configuration GUI (MainScreen)</h2><p>The configuration GUI provides an easy way to configure an experimental session by graphically selecting files, colors, and parameters. Clicking the run button will launch a session with the selected parameters. This configuration will be saved as a .mat file both in the folder with the task script as well as with the behavioral data in the <tt>ARCADE/sessionLog/&lt;session&gt;/Backup</tt> folder. It can then later be used for running a session with the same parameters without launching the configuration GUI.</p><p><img vspace="5" hspace="5" src="MainScreen.png" alt=""> </p><h2 id="5">Configuring ARCADE on the command line</h2><p>Alternatively, the configuration can be created in the Command Window of MATLAB. See the example below.</p><pre class="codeinput">cfg = ArcadeConfig;
+cfg.Subject = <span class="string">'cat11'</span>;
+cfg.Experiment = <span class="string">'detect-task'</span>;
+cfg.taskFile = <span class="string">'C:\Toolboxes\ARCADE\Tasks\Examples\exampleDetectTask.m'</span>;
+cfg.Experimenter = <span class="string">'Erwin Schrodinger'</span>;
+cfg.Session = <span class="string">'1'</span>;
+cfg.TrialErrorLegend = {<span class="string">'0'</span>, <span class="keyword">...</span><span class="comment"> % 0</span>
+    <span class="string">'Correct'</span>, <span class="keyword">...</span><span class="comment"> % 1</span>
+    <span class="string">'NoResponse'</span>, <span class="keyword">...</span><span class="comment"> % 2</span>
+    <span class="string">'NoFixation'</span>, <span class="keyword">...</span><span class="comment"> % 3</span>
+    <span class="string">'BreakFixation'</span>, <span class="keyword">...</span><span class="comment"> % 4</span>
+    [], <span class="keyword">...</span><span class="comment"> % 5</span>
+    [], <span class="keyword">...</span><span class="comment"> % 6</span>
+    [], <span class="keyword">...</span><span class="comment"> ^ 7</span>
+    [], <span class="keyword">...</span><span class="comment"> % 8</span>
+    [], <span class="keyword">...</span><span class="comment"> % 9</span>
+    };
+cfg.EyeServer = <span class="string">'EyeLinkServer.exe'</span>;
+cfg.DaqServer = <span class="string">'NiDaqServer.exe'</span>;
+
+cfg.save(<span class="string">'C:\Toolboxes\ARCADE\Tasks\Examples\cat_detect_cfg.mat'</span>)
+</pre><p>The path to the resulting .mat file can then be used as an argument for <tt>start_arcade.bat</tt> or <tt>runCore</tt></p><pre>  start_arcade.bat "C:\Toolboxes\ARCADE\Tasks\Examples\cat_detect_cfg.mat"</pre><pre>  runCore('C:\Toolboxes\ARCADE\Tasks\Examples\cat_detect_cfg.mat')</pre><h2 id="7">Running a session</h2><p>An experimental session starts with ARCADE launching all the configured subprocesses (EyeServer, StimServer, ControlScreen, DaqServer) and initializing their connections.</p><p>This usually entails launching the <tt>ControlScreen</tt>, which provides a GUI displaying behavioral data and the current eye position. If the EyeLinkServer is used for eye monitoring, an additional GUI will be visible that shows the current eye position and the currently monitored screen locations.</p><p><img vspace="5" hspace="5" src="ControlScreen.png" alt=""> </p><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2018b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Running ARCADE
+
+
+%% Starting ARCADE
+% ARCADE can be launched via the executable bat file 
+% |arcade/start_arcade.bat| or by directly calling the
+% |<matlab:doc('runCore') arcade/Core/runCore>| function from a running MATLAB.
+%
+help runCore
+
+%%
+% All possible configuration options can be found in the 
+% |<matlab:doc('ArcadeConfig') ArcadeConfig>| class (see |help
+% ArcadeConfig|).  A configuration can be created by  
+% 
+% # starting ARCADE via |start_arcade.bat| and using the configuration GUI
+% (MainScreen)
+% # using the ArcadeConfig class and saving the result to a file
+% 
+
+%% Configuring ARCADE via the Configuration GUI (MainScreen)
+% The configuration GUI provides an easy way to configure an experimental
+% session by graphically selecting files, colors, and parameters.
+% Clicking the run button will launch a session with the selected
+% parameters. This configuration will be saved as a .mat file both in the
+% folder with the task script as well as with the behavioral data in the
+% |ARCADE/sessionLog/<session>/Backup| folder. It can then later be used
+% for running a session with the same parameters without launching the 
+% configuration GUI. 
+%
+
+%%
+% <<MainScreen.png>>
+
+%% Configuring ARCADE on the command line 
+% Alternatively, the configuration can be created in the Command Window of
+% MATLAB. See the example below.
+
+cfg = ArcadeConfig;
+cfg.Subject = 'cat11';
+cfg.Experiment = 'detect-task';
+cfg.taskFile = 'C:\Toolboxes\ARCADE\Tasks\Examples\exampleDetectTask.m';
+cfg.Experimenter = 'Erwin Schrodinger';
+cfg.Session = '1';
+cfg.TrialErrorLegend = {'0', ... % 0
+    'Correct', ... % 1 
+    'NoResponse', ... % 2 
+    'NoFixation', ... % 3
+    'BreakFixation', ... % 4
+    [], ... % 5
+    [], ... % 6
+    [], ... ^ 7
+    [], ... % 8
+    [], ... % 9     
+    };
+cfg.EyeServer = 'EyeLinkServer.exe';
+cfg.DaqServer = 'NiDaqServer.exe';
+
+cfg.save('C:\Toolboxes\ARCADE\Tasks\Examples\cat_detect_cfg.mat')
+
+%%
+% The path to the resulting .mat file can then be used as an argument for
+% |start_arcade.bat| or |runCore| 
+%
+%    start_arcade.bat "C:\Toolboxes\ARCADE\Tasks\Examples\cat_detect_cfg.mat"
+%
+%    runCore('C:\Toolboxes\ARCADE\Tasks\Examples\cat_detect_cfg.mat')
+%
+
+%% Running a session
+% An experimental session starts with ARCADE launching all the configured
+% subprocesses (EyeServer, StimServer, ControlScreen, DaqServer) and 
+% initializing their connections. 
+%
+% This usually entails launching the |ControlScreen|, which provides a GUI
+% displaying behavioral data and the current eye position. If the
+% EyeLinkServer is used for eye monitoring, an additional GUI will be
+% visible that shows the current eye position and the currently monitored
+% screen locations.
+
+%%
+% <<ControlScreen.png>>
+
+
+##### SOURCE END #####
+--></body></html>

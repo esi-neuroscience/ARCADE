@@ -4,27 +4,17 @@ function prepare_docs(format)
 if ~exist('format', 'var'); format = 'html'; end
 outputdir = fullfile(arcaderoot, 'arcade', 'Docs', format);
 
-cmd = fullfile(arcaderoot, 'arcade', 'StimServer', 'StimServer.exe');
-stimServerProcess = processManager('command', cmd, 'autoStart', true);
-pause(1)
-tStart = tic;
-while toc(tStart)<15
-    try
-        StimServer.Connect();       
-        break
-    catch me
-        pause(0.5);
-        continue
-    end
-    
-end
+% cfg = ArcadeConfig;
+% cfg.ControlScreen = '';
+% procs = launch_processes(cfg);
 
 docDirectory = fileparts(mfilename('fullpath'));
 
 docFiles = dir(fullfile(docDirectory, 'DOC*.m'));
 
 for iFile = 1:length(docFiles)
-    publish(fullfile(docDirectory, docFiles(iFile).name), 'format', format, 'outputDir', outputdir)
+    publish(fullfile(docDirectory, docFiles(iFile).name), ...
+        'format', format, 'outputDir', outputdir, 'evalCode', false);
 end
-StimServer.Disconnect();
-stimServerProcess.stop()
+% StimServer.delete
+% clear procs
