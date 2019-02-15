@@ -1,5 +1,5 @@
 function eventNames = trackeye(position, tolerance, name)
-% TRACKEYE - Tell EyeServer to signal events when gaze enters/exits a screen position
+%TRACKEYE Tell EyeServer to signal events when gaze enters/exits a screen position
 % 
 % INPUT
 % -----
@@ -33,7 +33,9 @@ function eventNames = trackeye(position, tolerance, name)
 %   * Before calling trackeye, the pipe to the EyeServer has to be opened
 %     (done automatically by ARCADE).
 % 
-% See also State, ABSEyeServer, SGLEyeServerPipe
+% For more information, see <a href="matlab:doc('arcade')">the ARCADE guide</a>.
+%
+% See also State, EyeServer
 persistent eyeTargets
 
 if nargin == 1 && strcmp(position, 'reset')

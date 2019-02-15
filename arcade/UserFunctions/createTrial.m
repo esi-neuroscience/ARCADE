@@ -1,5 +1,5 @@
 function createTrial(initialState, varargin)
-% CREATETRIAL - Create and start a trial from several trial states
+%CREATETRIAL Create and start a trial from several trial states
 % 
 % INPUT 
 % -----
@@ -14,6 +14,8 @@ function createTrial(initialState, varargin)
 %   ... 
 %   createTrial(initialState, sAcquireFix, ...)
 %   
+% For more information, see <a href="matlab:doc('arcade')">the ARCADE guide</a>.
+%
 % See also State, SGLStateArc
 
 
@@ -26,4 +28,5 @@ end
 stateArc.initialState = initialState;
   
 end
+
 

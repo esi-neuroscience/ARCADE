@@ -1,5 +1,5 @@
 function storeUserVariables(var) 
-% STOREUSERVARIABLES - Store a variable in the behavioral data file of ARCADE.
+% STOREUSERVARIABLES Store a variable in the behavioral data file of ARCADE.
 % 
 % INPUT
 % -----
@@ -10,6 +10,8 @@ function storeUserVariables(var)
 % 
 % Note: large variables (> ~5 MB) will cause a noticable delay.
 % 
+% For more information, see <a href="matlab:doc('arcade')">the ARCADE guide</a>.
+
 BHVStore = SGLBehaviouralStore.launch;
 BHVStore.userVariables{BHVStore.currentTrial} = var;
 

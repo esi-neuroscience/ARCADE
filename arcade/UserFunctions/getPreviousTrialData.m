@@ -1,6 +1,6 @@
 function trialdata = getPreviousTrialData()
-% GETPREVIOUSTRIALDATA - Retreive behavioral outcomes and conditions of
-% previous trials
+%GETPREVIOUSTRIALDATA Retreive behavioral outcomes and conditions of
+%                        previous trials
 % 
 % USAGE
 % ------
@@ -18,6 +18,9 @@ function trialdata = getPreviousTrialData()
 %           blocks: [1 1 1 1 1 1]
 %     reactionTime: [NaN NaN NaN 0.2527 NaN 0.3257]
 %	 userVariables: [0 0 1 40 NaN 0]
+%
+% For more information, see <a href="matlab:doc('arcade')">the ARCADE guide</a>.
+%
 
 
 bhv = SGLBehaviouralStore.launch; 

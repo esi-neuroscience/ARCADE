@@ -1,9 +1,23 @@
 function t = totalRewardTime(newReward)
-% GETTOTALREWARDTIME - Retreive total reward of session
-%
+%TOTALREWARDTIME Retreive total reward duration of session
 %
 %  time = totalRewardTime()
 %
+% The returned total reward duration includes manual reward triggered via 
+% the reward button/hotkey.
+%
+% EXAMPLE
+% -------
+%	
+%	if totalRewardTime() > 2000
+%		requestQuitSession()
+%	end
+%
+% For more information, see <a href="matlab:doc('arcade')">the ARCADE guide</a>.
+%
+% See also DaqServer, reward
+
+
 persistent time
 if isempty(time)
     time = 0;

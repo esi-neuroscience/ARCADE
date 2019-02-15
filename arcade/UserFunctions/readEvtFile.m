@@ -1,5 +1,5 @@
 function evt = readEvtFile(filename)
-% READEVTFILE - Read .evt file written by ARCADE.
+%READEVTFILE Read .evt file written by ARCADE.
 %   
 % .evt files contain the timestamps in microseconds and marker values as 
 % alternating uint64 values.
