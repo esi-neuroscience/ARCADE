@@ -11,9 +11,13 @@ function runCore(varargin)
 %               If runCore is called without an input argument, the
 %               MainScreen GUI will be opened to configure the session.
 %
+% runCore starts all enabled ARCADE submodules (EyeServer, ...),
+% initializes storing the behavioral data and runs the user's task script
+% for each trial, until a quit condition is fullfilled.
+%
 % For more information, see <a href="matlab:doc('arcade')">the ARCADE guide</a>.
 %
-% See also ArcadeConfig
+% See also ArcadeConfig, launch_processes, createTrial, SGLStateArc
 
 run(fullfile(fileparts(mfilename('fullpath')), '..', 'add_arcade_to_path.m'))
 

@@ -1,5 +1,37 @@
 classdef EyeServer < handle
-    % EyeServer - Class for communicating with EyeServer
+    % EYESERVER - MATLAB interface for communication with the EyeServer
+    %             process
+    % 
+    % The EyeServer process handles acquisition of the eye position and
+    % signals <a href="https://docs.microsoft.com/en-us/windows/desktop/Sync/event-objects">Named Events</a> when the eye enters/leaves user-defined regions on
+    % the screen. Communication between the Core process and the EyeServer 
+    % happens via a <a href="https://docs.microsoft.com/en-us/windows/desktop/ipc/named-pipes">Named Pipe</a>, for which this MATLAB class provides an interface.
+    %
+    % Currently only one EyeServer is implemented (EyeLinkServer.exe), which 
+    % supports Eyelink 1000/2000 devices. A different EyeServer should
+    % set up the same Named Pipe and respond to the commands implemented in
+    % this class. 
+    %
+    % The methods listed below are not meant for the user during session
+    % runtime. Instead, the corresponding functions in the UserFunctions
+    % folder should be used (see help UserFunctions).
+    %
+    %
+    % METHODS (static)
+    % ----------------
+    %  Connect() : Open pipe to the EyeServer for sending commands
+    %  Disconnect() : Disconnect from pipe to EyeServer
+    %  GetConnectionStatus() : Returns true for connect
+    %  Start(filename) : Start recording and store data in filename.  
+    %                    For the EyeLinkServer this filename refers to the 
+    %                    Eyelink PC's filesystem.
+    %  Stop(filename) : Stop recording and copy data to local filename
+    %  Transform(varargin) : apply a transform to the eye position signal
+    %       Transform()					remove transformation
+	%       Transform([x0 y0 x1 y1])	linear transformation
+    %	    Transform([x0 y0 x1 y1 x2 y2]) quadratic transformation
+    %
+    % See also trackeye, EyeTarget, IPCEvent
     
     properties (Constant, Access = private, Hidden = true)
         this = EyeServer
