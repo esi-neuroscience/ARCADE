@@ -36,7 +36,10 @@ classdef RFhandmapper < handle
         eye
         
         % processes
-        EyeServer = 'Eyelink' %'Eyelink' 'NationalInstruments' 'Test'
+        EyeServer = 'EyelinkServer.exe';
+        DaqServer = 'NidaqServer.exe';
+        StimServer = 'StimServer.exe';
+        ControlScreen = []; % place holder for launch_processes
         stimServerProcess
         daqServerProcess
         eyeServerProcess
@@ -53,6 +56,7 @@ classdef RFhandmapper < handle
     
     methods
         function obj = RFhandmapper(screenDist, reward, fixPoint, customStim)
+            run(fullfile(fileparts(mfilename('fullpath')), '..', '..', 'add_arcade_to_path.m'))
             
             % setup
             if exist('screenDist', 'var') && ~isempty(screenDist)
@@ -76,10 +80,11 @@ classdef RFhandmapper < handle
             
             % connect processes
             obj.stopEvent = IPCEvent('StopRFhandmapper');
-            
-            obj.connectStimServer();
-            obj.connectNidaqServer();
-            obj.connectEyeServer();
+
+            obj.connectProcesses();
+            %obj.connectStimServer();
+            %obj.connectNidaqServer();
+            %obj.connectEyeServer();
 
             % setup eye tracking
             obj.calc_ppd();
@@ -95,6 +100,14 @@ classdef RFhandmapper < handle
             % close
             obj.delete();
             
+        end
+
+        function connectProcesses(obj)
+            
+            cfg = struct(obj);
+
+            procs = launch_processes(cfg);
+
         end
         
         function connectStimServer(obj)
