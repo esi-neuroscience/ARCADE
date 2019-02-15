@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Visual stimuli for ARCADE</title><meta name="generator" content="MATLAB 8.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-06-14"><meta name="DC.source" content="DOCAvailableStimuli.m"><style type="text/css">
+      --><title>Visual stimuli for ARCADE</title><meta name="generator" content="MATLAB 9.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2019-02-15"><meta name="DC.source" content="DOCAvailableStimuli.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -66,56 +66,103 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>Visual stimuli for ARCADE</h1><!--introduction--><p>Stimuli are created invisibly in the task script before the creation of the trial states. They can then be manipulated (made visible, moved, ...) in the <tt>onEntry</tt> and <tt>onExit</tt> functions of the trial states. Possible stimuli are described here. A stimulus is created by calling the stimulus type class and storing it in a variable, e.g.</p><pre class="language-matlab">stim = MyStimulus;
-</pre><p><tt>MyStimulus</tt> is the type of stimulus, e.g. <tt>Grating</tt>, <tt>Picture</tt>, <tt>Rectangle</tt>, ... Stimulus properties can be then be changed in two ways. Either by directly setting the property, similar to changing fields of a struct array, e.g.</p><pre class="language-matlab">stim.property = 3.14;
+  </style></head><body><div class="content"><h1>Visual stimuli for ARCADE</h1><!--introduction--><p><tt><a href="matlab:doc('Stimulus')">Stimuli</a></tt> are created invisibly in the task script before the creation of the trial states. They can then be manipulated (made visible, moved, ...) in the <tt>onEntry</tt> and <tt>onExit</tt> functions of the trial states. Possible stimuli are described here. A stimulus is created by calling the stimulus type class and storing it in a variable, e.g.</p><pre class="language-matlab">stim = MyStimulus;
+</pre><p><tt>MyStimulus</tt> is the type of stimulus, e.g. <tt><a href="matlab:doc('Grating')">Grating</a></tt>, <tt><a href="matlab:doc('Picture')">Picture</a></tt>, ... Stimulus properties can be then be changed in two ways. Either by directly setting the property, similar to changing fields of a struct array, e.g.</p><pre class="language-matlab">stim.property = 3.14;
 </pre><p>or by using the <tt>set</tt> command, similar to how figures and axes can be manipulated in MATLAB, e.g.,</p><pre class="language-matlab">set(stim, <span class="string">'property'</span>, 3.14)
 </pre><p>Only the latter variant can be used in the <tt>onEntry</tt> and <tt>onExit</tt> functions of trial states. The former variant is useful for testing your stimuli. To see all properties of a stimulus, use   <tt>properties('MyStimulus')</tt>, e.g. <tt>properties('Rectangle')</tt></p><p>To ensure stable operation of ARCADE, all stimuli should be explicitly deleted at the end of a trial, e.g. in a <tt>cleanUp</tt> state by issuing</p><pre class="language-matlab">stim.delete()
-</pre><p><b>Testing stimuli</b></p><p>All stimuli can be tested from any open MATLAB if ARCADE is in the MATLAB search path and <tt>ARCADE/arcade/StimServer/StimServer.exe</tt> is running. The first command in such a test environment has to be</p><pre class="language-matlab">StimServer.Connect()
-</pre><p>This command is not necessary in the actual trial script.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">General stimulus properties</a></li><li><a href="#3">Circles</a></li><li><a href="#6">Pictures</a></li><li><a href="#9">Masked grating</a></li><li><a href="#13">Gabor</a></li><li><a href="#17">Rectangles</a></li><li><a href="#20">Animations</a></li><li><a href="#24">Moving Bars</a></li><li><a href="#27">Gammatron (annular grating)</a></li><li><a href="#30">Gaussian</a></li><li><a href="#33">Petal</a></li><li><a href="#36">Pixel shader</a></li></ul></div><h2>General stimulus properties<a name="1"></a></h2><p>All stimuli share a few properties. All stimuli can be made visible, repositioned, or animated (smoothly translated).</p><pre class="codeinput">properties(<span class="string">'Stimulus'</span>)
-</pre><pre class="codeoutput">
-Properties for class Stimulus:
+</pre><p>Documentation about a particular stimulus can be found via the MATLAB <tt>help</tt> (only stimulus-specific help) and <tt>doc</tt> (stimulus-specific and inhertied properties) commands, e.g.   help Circle   doc Circle</p><p><b>Testing stimuli</b></p><p>All stimuli can be tested from any open MATLAB if ARCADE is in the MATLAB search path and <tt>ARCADE/arcade/StimServer/StimServer.exe</tt> is running. The first command in such a test environment has to be</p><pre class="language-matlab">StimServer.Connect()
+</pre><p>This command is not necessary in the actual trial script.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">General stimulus properties</a></li><li><a href="#3">Circles</a></li><li><a href="#6">Pictures</a></li><li><a href="#9">Masked sinusoidal grating</a></li><li><a href="#13">Square-wave grating</a></li><li><a href="#16">Gabor</a></li><li><a href="#20">Rectangles</a></li><li><a href="#23">Animations</a></li><li><a href="#27">Moving Bars</a></li><li><a href="#30">Gammatron (annular grating)</a></li><li><a href="#33">Gaussian</a></li><li><a href="#36">Petal</a></li><li><a href="#39">Pixel shader</a></li></ul></div><h2 id="1">General stimulus properties</h2><p>All stimuli share a few properties. All stimuli can be made visible, repositioned, or animated (smoothly translated).</p><pre class="codeinput">help <span class="string">Stimulus</span>
+</pre><pre class="codeoutput">  STIMULUS - Abstract base class for all ARCADE stimuli 
+  
+  All ARCADE stimuli are child classes of this base class, i.e., all
+  stimuli have at least the following properties and methods:
+ 
+  PROPERTIES
+  -----------
+    position : [x y] center of stimulus on screen (pixel)
+    visible  : visibility of stimulus (true/false)
+  
+  Stimulus properties can be changed either struct-like or using set:
+    stim.position = [0 0];
+    set(stim, 'position', [0 0])
+  
+  METHODS
+  -------
+   Stimulus.play_animation(Animation) : assign an animation to the stimulus
+   Stimulus.stop_animation()          : stop all playing animations
+   Stimulus.bring_to_front()          : bring the stimulus to the foremost
+                                        drawing layer
+   Stimulus.toggle_visibility()       : turn stimulus on if off and vice 
+                                        versa
+  
+  For more information, see &lt;a href="matlab:doc('arcade')"&gt;the ARCADE guide&lt;/a&gt;.
+ 
+  Stimuli are displayed by the StimServer process. The Stimulus objects in
+  MATLAB are only handle classes, which send commands to the StimServer
+  for managing stimulus properties.
+ 
+  See also Animation, StimServer
 
-    visible
-    position
+    Reference page in Doc Center
+       doc Stimulus
 
-</pre><p>Visibility can be <tt>true</tt> for on or <tt>false</tt> for off. Coordinates are usually in pixels. The stimulus <tt>position</tt> is always relative to the screen center. Angles are defined in degree with 0 being rightward (--) and 90 upward (|).</p><p>Colors are always specified as 24-bit RGB values, e.g. [255 255 255] for white and [0 0 0] for black. Alpha values range from fully transparent (0) to fully opaque (255).</p><p><i>Note</i>: For displays with an even number of pixels the center <tt>[0 0]</tt> is actually between the two center pixels. To achieve pixel-perfect display of stimuli you should add 0.5 to the coordinate.</p><h2>Circles<a name="3"></a></h2><p>Filled circles can be created as a <tt>Circle</tt>. Type 1 circles are filled, type 2 circles are outlined circles (5 px width, currently not flexible).</p><pre class="codeinput">properties(<span class="string">'Circle'</span>)
-</pre><pre class="codeoutput">
-Properties for class Circle:
 
-    type
-    diameter
-    color
-    alpha
-    visible
-    position
+</pre><p>Visibility can be <tt>true</tt> for on or <tt>false</tt> for off. Coordinates are usually in pixels. The stimulus <tt>position</tt> is always relative to the screen center. Angles are defined in degree with 0 being rightward (--) and 90 upward (|).</p><p>Colors are always specified as 24-bit RGB values, e.g. [255 255 255] for white and [0 0 0] for black. Alpha values range from fully transparent (0) to fully opaque (255).</p><p><i>Note</i>: For displays with an even number of pixels the center <tt>[0 0]</tt> is actually between the two center pixels. To achieve pixel-perfect display of stimuli you should add 0.5 to the coordinate.</p><h2 id="3">Circles</h2><p>Filled circles can be created as a <tt><a href="matlab:doc('Circle')">Circle</a></tt>.</p><pre class="codeinput">help <span class="string">Circle</span>
+</pre><pre class="codeoutput">  CIRCLE &lt; ELLIPSE &lt; Shape &lt; Stimulus - Circle stimulus for ARCADE
+ 
+  
+  PROPERTIES
+  -----------
+    diameter : diameter of circle (pixel)     
+       
+  USAGE
+  -----
+    c = Circle();
+ 
+  For more information, see &lt;a href="matlab:doc('arcade')"&gt;the ARCADE guide&lt;/a&gt; and the superclasses.
+ 
+  See also Ellipse, Shape, Stimulus
+
+    Reference page in Doc Center
+       doc Circle
+
 
 </pre><p><b>Example</b></p><pre class="codeinput">circ1 = Circle(1);
-circ1.alpha = 200;
+circ1.faceAlpha = 200;
 circ1.diameter = 400;
 circ1.position = [0 0];
 circ2 = Circle(2);
 circ2.diameter = 50;
 circ2.position = [20 100];
-circ2.color = [128 0 255];
+circ2.faceColor = [128 0 255];
 circ3 = Circle(1);
 circ3.diameter = 300;
-circ3.color = [0 180 255];
+circ3.faceColor = [0 180 255];
 circ3.position = [275 49];
-circ3.alpha = 100;
+circ3.faceAlpha = 100;
 set([circ1, circ2, circ3], <span class="string">'visible'</span>, true)
 pause(1)
-circ1.delete()
-circ2.delete()
-circ3.delete()
-</pre><p><img vspace="5" hspace="5" src="exampleCircle.png" alt=""> </p><p>Detailed documentation can be found with <a href="matlab:doc('Circle')">doc Circle</a></p><h2>Pictures<a name="6"></a></h2><p>Possible Picture formats are BMP, PNG, TIFF and JPEG. The position can be defined as an <tt>[x y]</tt> vector in pixels relative to the screen center. An alpha transparency level can be defined between 0 and 255 with 0 being fully transparent and 255 fully opaque. Transparency in PNGs is also supported.</p><pre class="codeinput">properties(<span class="string">'Picture'</span>)
-</pre><pre class="codeoutput">
-Properties for class Picture:
+clear <span class="string">circ*</span>
+</pre><p><img vspace="5" hspace="5" src="exampleCircle.png" alt=""> </p><p>Detailed documentation can be found with <a href="matlab:doc('Circle')">doc Circle</a></p><h2 id="6">Pictures</h2><p>Possible <tt><a href="matlab:doc('Picture')">Picture</a></tt> formats are BMP, PNG, TIFF and JPEG. The position can be defined as an <tt>[x y]</tt> vector in pixels relative to the screen center. An alpha transparency level can be defined between 0 and 255 with 0 being fully transparent and 255 fully opaque. Transparency in PNGs is also supported.</p><pre class="codeinput">help <span class="string">Picture</span>
+</pre><pre class="codeoutput">  PICTURE &lt; Stimulus - Static image stimuli for ARCADE
+ 
+  PROPERTIES
+  -----------
+     
+    alpha : 8-bit alpha transparency value between 0 (transparent) and 255 (opaque)
+    angle : rotation angle (degree) of image, 0=horizontal, 90=vertical
+  
+  USAGE
+  -----
+    img = Picture(filename);
+ 
+  For more information, see &lt;a href="matlab:doc('arcade')"&gt;the ARCADE guide&lt;/a&gt; and the superclasses.
+ 
+  See also Stimulus, Animation
 
-    filename
-    alpha
-    angle
-    visible
-    position
+    Reference page in Doc Center
+       doc Picture
+
 
 </pre><p><b>Example</b></p><pre class="codeinput">imgPath = <span class="string">'C:\Toolboxes\ARCADE\arcade\Docs'</span>;
 img = Picture(fullfile(imgPath, <span class="string">'image.png'</span>));
@@ -129,36 +176,45 @@ img2.alpha = 200;
 img2.angle = 200;
 set([img, img2], <span class="string">'visible'</span>, true)
 pause(1)
-img.delete()
-img2.delete()
-</pre><p><img vspace="5" hspace="5" src="exampleImage.png" alt=""> </p><p>Detailed documentation can be found with <a href="matlab:doc('Picture')">doc Picture</a></p><h2>Masked grating<a name="9"></a></h2><p>Gratings with a hard circular mask are implemented as <tt>PixelShader</tt> (see below) stimuli with various parameters:</p><pre class="codeinput">properties(<span class="string">'Grating'</span>)
-</pre><pre class="codeoutput">
-Properties for class Grating:
+clear <span class="string">img</span> <span class="string">img2</span>
+</pre><p><img vspace="5" hspace="5" src="exampleImage.png" alt=""> </p><p>Detailed documentation can be found with <a href="matlab:doc('Picture')">doc Picture</a></p><h2 id="9">Masked sinusoidal grating</h2><p>Sinusoidal <tt><a href="matlab:doc('Grating')">Gratings</a></tt> with a hard circular mask are implemented as <tt>PixelShader</tt> (see below) stimuli with various parameters:</p><pre class="codeinput">help <span class="string">Grating</span>
+</pre><pre class="codeoutput">  GRATING &lt; PixelShader &lt; Stimulus - Sine gratings for ARCADE
+ 
+  Shader file: &lt;a href="matlab:edit('Grating.fx')"&gt;MaskedGrating.fx&lt;/a&gt;
+ 
+  PROPERTIES
+  -----------
+     
+   color1            : 24-bit color [r g b alpha]/[r g b]
+   color2            : 24-bit color [r g b alpha]/[r g b]
+   spatialPeriod     : (pixel per cycle)
+   direction         : counter-clockwise drift direction (degree): 0=-&gt;
+   smoothing         : 2=sinusoidal grating, &gt;10 ~square wave grating
+   phaseShift        : phase offset (degree)     
+   radius            : radius of circular mask (pixel)
+   temporalFrequency : drift speed (cycles per second)
+   maskWidth         : horizontal radius of circular mask (pixel)
+   maskHeight        : vertical radius of circular mask (pixel) 
+   maskRotation      : counter-clockwise rotation angle of circular mask (degree)
+ 
+  USAGE
+  -----
+    g = Grating();
+ 
+  For more information, see &lt;a href="matlab:doc('arcade')"&gt;the ARCADE guide&lt;/a&gt; and the superclasses.
+  
+  See also PixelShader, Stimulus
 
-    color1
-    color2
-    maskRotation
-    spatialPeriod
-    direction
-    smoothing
-    phaseShift
-    maskWidth
-    maskHeight
-    temporalFrequency
-    filename
-    shaderWidth
-    shaderHeight
-    animationIncrement
-    animationPhase
-    visible
-    position
+    Reference page in Doc Center
+       doc Grating
+
 
 </pre><p>Spatial frequency is defined as <tt>spatialFrequency</tt> in pixel per cycle. Temporal frequency is specified via the <tt>temporalFrequency</tt> property in units of cycles per s. The mask can be circular or elliptical (<tt>maskWidth</tt>, <tt>maskHeight</tt>), and can be rotated (<tt>maskRotation</tt>). The two colors of the grating are specfied as a vector of 8-bit values for <tt>[red green blue alpha]</tt>. The <tt>smoothing</tt> parameter is 2 for purely sinusoidal gratings. Values &gt; 2 will approach a square wave grating.</p><p><b>Example</b></p><pre class="codeinput">grat1 = Grating();
 grat1.color1 = [255 0 0 200];
 grat1.color2 = [0 255 0 200];
 grat1.maskRotation = 45;
 grat1.maskWidth = 400;
-grat1.spatialFrequency = 60;
+grat1.spatialPeriod = 60;
 grat1.smoothing = 2;
 grat1.temporalFrequency = 1;
 grat1.visible = true;
@@ -168,7 +224,7 @@ grat2.color1 = [255 0 0 200];
 grat2.color2 = [0 0 0 200];
 grat2.maskRotation = 270;
 grat2.maskWidth = 400;
-grat2.spatialFrequency = 20;
+grat2.spatialPeriod = 20;
 grat2.smoothing = 10;
 grat2.temporalFrequency = 1;
 grat2.position = [400 0];
@@ -177,33 +233,72 @@ grat2.visible = true;
 
 
 pause(1);
-grat1.delete();
-grat2.delete();
-</pre><pre class="codeoutput">Warning: The Grating property spatialFrequency has been renamed to
-spatialPeriod. Please use spatialPeriod instead. 
-Warning: The Grating property spatialFrequency has been renamed to
-spatialPeriod. Please use spatialPeriod instead. 
-</pre><p><img vspace="5" hspace="5" src="exampleGrating.png" alt=""> </p><p>Detailed documentation can be found with <a href="matlab:doc('Grating')">doc Grating</a></p><h2>Gabor<a name="13"></a></h2><p>Gabors are gratings with a Gaussian mask and also are implemented as <tt>PixelShader</tt> (see below) stimuli with various parameters:</p><pre class="codeinput">properties(<span class="string">'Gabor'</span>)
-</pre><pre class="codeoutput">
-Properties for class Gabor:
+clear <span class="string">grat1</span> <span class="string">grat2</span>
+</pre><p><img vspace="5" hspace="5" src="exampleGrating.png" alt=""> </p><h2 id="13">Square-wave grating</h2><p>True <tt><a href="matlab:doc('SquareWaveGrating')">square-wave gratings</a></tt> with antialiased bands and circular mask are implemented as a <tt>PixelShader</tt> stimulus with very similar parameters as the sinusoidal grating.</p><pre class="codeinput">help <span class="string">SquareWaveGrating</span>
+</pre><pre class="codeoutput">  SQUAREWAVEGRATING &lt; PixelShader &lt; Stimulus - Square wave gratings for ARCADE
+ 
+  Shader file: &lt;a href="matlab:edit('SquareWaveGrating.fx')"&gt;SquareWaveGrating.fx&lt;/a&gt;
+ 
+  PROPERTIES
+  -----------
+     
+   color1            : 24-bit color [r g b alpha]/[r g b]
+   color2            : 24-bit color [r g b alpha]/[r g b]
+   spatialPeriod     : (pixel per cycle)
+   direction         : drift direction in degree (counter-clockwise): 0=-&gt;
+   smoothing         : width of anti-aliasing window (pixel)
+   phaseShift        : phase offset (degree)     
+   radius            : radius of circular mask (pixel)
+   temporalFrequency : drift speed (cycles per second)
+   
+  For more information, see &lt;a href="matlab:doc('arcade')"&gt;the ARCADE guide&lt;/a&gt; and the superclasses.
+  
+  See also PixelShader, Stimulus
 
-    color1
-    color2
-    maskRotation
-    spatialPeriod
-    direction
-    smoothing
-    phaseOffset
-    maskWidth
-    maskHeight
-    temporalFrequency
-    filename
-    shaderWidth
-    shaderHeight
-    animationIncrement
-    animationPhase
-    visible
-    position
+    Reference page in Doc Center
+       doc SquareWaveGrating
+
+
+</pre><p><b>Example</b></p><pre class="codeinput">swg = SquareWaveGrating();
+swg.color1 = [128 0 0];
+swg.color2 = [0 0 128];
+swg.radius = 100;
+swg.direction = 37;
+swg.spatialPeriod = 80;
+swg.visible = true;
+pause(1);
+clear <span class="string">swg</span>
+</pre><p><img vspace="5" hspace="5" src="exampleSquareWaveGrating.png" alt=""> </p><h2 id="16">Gabor</h2><p><tt><a href="matlab:doc('Gabor')">Gabors</a></tt> are sinusoidal gratings with a Gaussian mask and also are implemented as <tt>PixelShader</tt> (see below) stimuli with various parameters:</p><pre class="codeinput">help <span class="string">Gabor</span>
+</pre><pre class="codeoutput">  Gabor &lt; PixelShader &lt; Stimulus - Grating with a Gaussian mask for ARCADE
+ 
+  Shader file: &lt;a href="matlab:edit('Gabor.fx')"&gt;Gabor.fx&lt;/a&gt;
+ 
+  PROPERTIES
+  -----------
+     
+   color1            : 24-bit color [r g b alpha]/[r g b]
+   color2            : 24-bit color [r g b alpha]/[r g b]
+   spatialPeriod     : (pixel per cycle)
+   direction         : drift direction in degree (counter-clockwise): 0=-&gt;
+   smoothing         : 2=sinusoidal grating, &gt;10 ~square wave grating
+   phaseShift        : phase offset (degree)     
+   radius            : radius of circular mask (pixel)
+   temporalFrequency : drift speed (cycles per second)
+   maskWidth         : horizontal SD of Gaussian mask (pixel)
+   maskHeight        : vertical SD of Gaussian mask (pixel) 
+   maskRotation      : counter-clockwise rotation angle of circular mask (degree)
+  
+  USAGE
+  -----
+    g = Gabor();
+ 
+  For more information, see &lt;a href="matlab:doc('arcade')"&gt;the ARCADE guide&lt;/a&gt; and the superclasses.
+  
+  See also PixelShader, Stimulus
+
+    Reference page in Doc Center
+       doc Gabor
+
 
 </pre><p>Spatial frequency is defined via <tt>spatialPeriod</tt> in pixel per cycle (actually the inverse of the spatial frequency). Temporal frequency is specified via the <tt>temporalFrequency</tt> property in units of cycles per s. The gaussian mask can be circular or elliptical (<tt>maskWidth</tt>, <tt>maskHeight</tt>), and can be rotated (<tt>maskRotation</tt>).  The two colors of the grating are specfied as a vector of 8-bit values for <tt>[red green blue ]</tt>. The <tt>smoothing</tt> parameter is 2 for purely can be used to achieve square-wave instead of of sinusoidal gratings: values &gt; 2 will approach a square wave grating.</p><p><b>Example</b></p><pre class="codeinput">gabor1 = Gabor();
 gabor1.color1 = [255 0 0];
@@ -229,37 +324,40 @@ gabor2.visible = true;
 
 
 pause(1);
-gabor1.delete();
-gabor2.delete();
-</pre><p><img vspace="5" hspace="5" src="exampleGabor.png" alt=""> </p><p>Detailed documentation can be found with <a href="matlab:doc('Gabor')">doc Gabor</a></p><h2>Rectangles<a name="17"></a></h2><p>Rectangles are always filled and have the following properties:</p><pre class="codeinput">properties(<span class="string">'Rectangle'</span>)
-</pre><pre class="codeoutput">
-Properties for class Rectangle:
+clear <span class="string">gabor*</span>
+</pre><p><img vspace="5" hspace="5" src="exampleGabor.png" alt=""> </p><h2 id="20">Rectangles</h2><p><tt><a href="matlab:doc('Rectangle')">Rectangles</a></tt> are always filled and have the following properties:</p><pre class="codeinput">help <span class="string">Rectangle</span>
+</pre><pre class="codeoutput">  RECTANGLE &lt; Shape &lt; Stimulus - Rectangle stimulus for ARCADE
+ 
+  
+  PROPERTIES
+  -----------
+    width  : width of rectangle (pixel) for rotation angle=0
+    height : heigth of rectangle (pixel) for rotation angle=0
+ 
+  For more information, see &lt;a href="matlab:doc('arcade')"&gt;the ARCADE guide&lt;/a&gt; and the superclasses.
+ 
+  See also Shape, Stimulus
 
-    width
-    height
-    angle
-    color
-    alpha
-    visible
-    position
+    Reference page in Doc Center
+       doc Rectangle
+
 
 </pre><p><b>Example</b></p><pre class="codeinput">r1 = Rectangle;
-r1.color = [128 0 255];
+r1.faceColor = [128 0 255];
 r1.height = 200;
 r1.angle = 45;
-r1.alpha = 100;
+r1.faceAlpha = 100;
 r1.visible = true;
 
 r2 = Rectangle;
-r2.color = [128 255 255];
+r2.faceColor = [128 255 255];
 r2.height = 200;
 r2.angle = 180;
-r2.alpha = 100;
+r2.faceAlpha = 100;
 r2.visible = true;
 pause(1)
-r1.delete();
-r2.delete();
-</pre><p><img vspace="5" hspace="5" src="exampleRectangle.png" alt=""> </p><p>Detailed documentation can be found with <a href="matlab:doc('Rectangle')">doc Rectangle</a></p><h2>Animations<a name="20"></a></h2><p>ARCADE allows several kinds of animations. All stimulus types can be smoothly translated around on the screen. To animate a stimulus, an animation has to be created first and then assigned to a stimulus by using the <tt>play_animation</tt> method of a stimulus.</p><p>Currently there are five types of animation</p><div><ol><li><tt>LinearMotion</tt>: Move a stimulus along a polygon.</li><li><tt>GeneralMotion</tt>: This moves the stimulus along an arbitrary path defined in a file. <b>NOT FULLY TESTED YET</b></li><li><tt>LinearRange</tt>: Change certain scalar stimulus properties linearily from a starting value to an end value within a specified duration</li><li><tt>Flash</tt>: Flash (turn on) a stimulus for a defined number of frames</li><li><tt>ExternalPositionControl</tt>: Couple the position of a stimulus to a position in a shared memory, e.g. the eye position.</li></ol></div><p>To start an animation is has to be passed to the <tt>play_animation</tt> method of a stimulus. Animations start immediatly when the stimulus is visible or when it becomes visible. An animation can be stopped by using the <tt>stop_animation</tt> method of the animated stimulus.</p><p>When an animation ends several actions can be triggered, which is controlled via the <tt>terminalAction</tt> property of the animation.</p><pre class="codeinput">help <span class="string">Animation.terminalAction</span>
+clear <span class="string">r1</span> <span class="string">r2</span>
+</pre><p><img vspace="5" hspace="5" src="exampleRectangle.png" alt=""> </p><h2 id="23">Animations</h2><p>ARCADE allows several kinds of <tt><a href="matlab:doc('Animation')">animations</a></tt>. All stimulus types can be smoothly translated around on the screen. To animate a stimulus, an animation has to be created first and then assigned to a stimulus by using the <tt>play_animation</tt> method of a stimulus.</p><p>Currently there are five types of animation</p><div><ol><li><tt><a href="matlab:doc('LinearMotion')">LinearMotion</a></tt>: Move a stimulus along a polygon.</li><li><tt><a href="matlab:doc('GeneralMotion')">GeneralMotion</a></tt>: This moves the stimulus along an arbitrary path defined in a file. <b>NOT FULLY TESTED YET</b></li><li><tt><a href="matlab:doc('LinearRange')">LinearRange</a></tt>: Change certain scalar stimulus properties linearily from a starting value to an end value within a specified duration</li><li><tt><a href="matlab:doc('Flash')">Flash</a></tt>: Flash (turn on) a stimulus for a defined number of frames</li><li><tt><a href="matlab:doc('ExternalPositionControl')">ExternalPositionControl</a></tt>: Couple the position of a stimulus to a position in a shared memory, e.g. the eye position.</li></ol></div><p>To start an animation is has to be passed to the <tt>play_animation</tt> method of a stimulus. Animations start immediatly when the stimulus is visible or when it becomes visible. An animation can be stopped by using the <tt>stop_animation</tt> method of the animated stimulus.</p><p>When an animation ends several actions can be triggered, which is controlled via the <tt>terminalAction</tt> property of the animation.</p><pre class="codeinput">help <span class="string">Animation.terminalAction</span>
 </pre><pre class="codeoutput">  8-bit mask as string to define actions after the end of the animation.
   The bits have the following meaning:
     1 disable the assigned stimulus
@@ -274,8 +372,8 @@ r2.delete();
   Default = '00000000', i.e. the stimulus remains visible after the
   animation ends.
 
-</pre><p>To keep the stimulus presentation and the experimental <tt>State</tt> in sync, it is <b>strongly recommended</b> to set the 4th bit of the <tt>terminalAction</tt> property such that the <tt>StimServerAnimationDone</tt> event is triggered. Otherwise the next state might already start before the animation is finished.</p><p><b>Example</b></p><pre class="codeinput">r = Rectangle;
-r.color = [255 255 255];
+</pre><p>To keep the stimulus presentation and the experimental <tt><a href="matlab:doc('State')">State</a></tt> in sync, it is <b>strongly recommended</b> to set the 4th bit of the <tt>terminalAction</tt> property such that the <tt>StimServerAnimationDone</tt> event is triggered. Otherwise the next state might already start before the animation is finished.</p><p><b>Example</b></p><pre class="codeinput">r = Rectangle;
+r.faceColor = [255 255 255];
 r.height = 200;
 r.angle = 45;
 
@@ -283,68 +381,117 @@ pause(1)
 vertices = [0 0 100 0 500 500]; <span class="comment">% [x1 y2 x2 y2 x3 y3]</span>
 speed = 150; <span class="comment">% px/s</span>
 a = LinearMotion(speed, vertices);
+a.terminalAction = <span class="string">'00001001'</span>;
 r.play_animation(a);
 r.visible = true;
-</pre><p><img vspace="5" hspace="5" src="exampleAnimation.png" alt=""> </p><p>Detailed documentation can be found with <a href="matlab:doc('LinearMotion')">doc LinearMotion</a></p><h2>Moving Bars<a name="24"></a></h2><p>The <tt>MovingBar</tt> class simplifies the creation of animated bars by automatically creating the animation.</p><pre class="codeinput">properties(<span class="string">'MovingBar'</span>)
-</pre><pre class="codeoutput">
-Properties for class MovingBar:
+animationDone = IPCEvent.wait_for_event(<span class="string">'StimServerAnimationDone'</span>, 5000);
+pause(1)
+clear <span class="string">r</span> <span class="string">a</span>
+</pre><p><img vspace="5" hspace="5" src="exampleAnimation.png" alt=""> </p><p>Detailed documentation can be found with <a href="matlab:doc('LinearMotion')">doc LinearMotion</a></p><h2 id="27">Moving Bars</h2><p>The <tt><a href="matlab:doc('MovingBar')">MovingBar</a></tt> class simplifies the creation of animated bars by automatically creating the animation.</p><pre class="codeinput">help <span class="string">MovingBar</span>
+</pre><pre class="codeoutput">  MOVINGBAR &lt; Rectangle &lt; Shape &lt; Stimulus - Helper class for a moving bar
+  
+  A rectangle stimulus with linear sweeping motion animation 
+ 
+  PROPERTIES
+  -----------
+ 
+    direction      : traveling direction of bar (degree)
+    travelDistance : distance of travel from startPosition (pixel) 
+    startPosition  : [x y] starting position of bar sweep (pixel)
+    linkedOrientationDirection : boolean flag whether bar should be 
+                                 orthogonal to motion direction            
+ 
+  USAGE
+  -----
+ 
+    bar = MovingBar(speed, distance);
+    bar.play_animation()
+ 
+  EXAMPLE
+  -------
+    bar = MovingBar(500, 500)
+    bar.startPosition = [300 -300];
+    bar.direction = 45;
+    bar.faceColor = [0 255 128];
+    bar.width = 10;
+    bar.play_animation();
+ 
+  Note: Only changing the startPosition property will affect the
+  moving bar. The position property has no effect.
+  
+  See also Rectangle, Shape, Stimulus, Animation, LinearMotion
 
-    direction
-    travelDistance
-    startPosition
-    linkedOrientationDirection
-    barAnimation
-    width
-    height
-    angle
-    color
-    alpha
-    visible
-    position
+    Reference page in Doc Center
+       doc MovingBar
+
 
 </pre><p>Only the <tt>startPosition</tt>, <tt>direction</tt> and <tt>travelDistance</tt> have to bet set. If <tt>linkedOrientationDirection</tt> is set, the bar will always be orthogonal to the travel direction. To start the sweep animation of the <tt>MovingBar</tt> use the <tt>play_animation</tt> method without arguments.</p><p><b>Example</b></p><pre class="codeinput">speed = 200;
 travelDistance = 500;
 mb = MovingBar(speed, travelDistance);
 mb.direction = 35;
 mb.play_animation()
-pause(5)
-mb.delete()
-</pre><h2>Gammatron (annular grating)<a name="27"></a></h2><p>The <tt>Gammatron</tt> class creates an annular grating pattern with based on two colors that can be drifting inward or outward.</p><pre class="codeinput">properties(<span class="string">'Gammatron'</span>)
-</pre><pre class="codeoutput">
-Properties for class Gammatron:
+animationDone = IPCEvent.wait_for_event(<span class="string">'StimServerAnimationDone'</span>, 5000);
 
-    temporalFrequency
-    spatialPeriod
-    direction
-    color1
-    color2
-    radius
-    filename
-    shaderWidth
-    shaderHeight
-    animationIncrement
-    animationPhase
-    visible
-    position
+clear <span class="string">mb</span>
+</pre><h2 id="30">Gammatron (annular grating)</h2><p>The  <tt><a href="matlab:doc('Gammatron')">Gammatron</a></tt> class creates an annular grating pattern with based on two colors that can be drifting inward or outward.</p><pre class="codeinput">help <span class="string">Gammatron</span>
+</pre><pre class="codeoutput">  GAMMATRON &lt; PixelShader &lt; Stimulus - Annular gratings for ARCADE
+ 
+  Shader file: ARCADE\arcade\StimServer\classes\Stimuli\Gammatron.fx
+ 
+  PROPERTIES
+  -----------
+       
+   temporalFrequency : (cycles per second)
+                       &lt; 0: inward, &gt; 0: outward, 0:static
+   spatialPeriod     : (pixel per cycle)
+   color1            : 24-bit color [r g b alpha]/[r g b]
+   color2            : 24-bit color [r g b alpha]/[r g b]
+   radius            : radius of circular mask (pixels)
+   smoothing         : width of antialising window at edge (pixels)
+   phaseShift        : phase offset (degree)
+   
+  USAGE
+  -----
+    g = Gammatron();
+ 
+  For more information, see &lt;a href="matlab:doc('arcade')"&gt;the ARCADE guide&lt;/a&gt; and the superclasses.
+  
+  See also PixelShader, Stimulus
+
+    Reference page in Doc Center
+       doc Gammatron
+
 
 </pre><p><b>Example</b></p><pre class="codeinput">g = Gammatron;
 g.radius = 200;
 g.visible = true;
-</pre><p><img vspace="5" hspace="5" src="exampleGammatron.png" alt=""> </p><h2>Gaussian<a name="30"></a></h2><p>A 2D patch with Gaussian profile can be created using the <tt>Gaussian</tt> stimulus. Its size, rotation and color can be set:</p><pre class="codeinput">properties(<span class="string">'Gaussian'</span>);
-</pre><pre class="codeoutput">
-Properties for class Gaussian:
+pause(1)
+clear <span class="string">g</span>
+</pre><p><img vspace="5" hspace="5" src="exampleGammatron.png" alt=""> </p><h2 id="33">Gaussian</h2><p>A 2D patch with Gaussian profile can be created using the <tt>Gaussian</tt> stimulus. Its size, rotation and color can be set:</p><pre class="codeinput">help <span class="string">Gaussian</span>
+</pre><pre class="codeoutput">  GAUSSIAN &lt; PixelShader &lt; Stimulus - Gaussian patch for ARCADE
+ 
+  Shader file: &lt;a href="matlab:edit('Gaussian.fx')"&gt;SquareWaveGrating.fx&lt;/a&gt;
+ 
+  PROPERTIES
+  -----------
+    color : 24-bit color [r g b]
+    angle : counter-clockwise rotation of patch (degree);  0=horizontal, 90=vertical
+    sdx   : standard deviation in x-direction (pixel) for angle=0
+    sdy   : standard deviation in y-direction (pixel) for angle=0
+ 
+  Note: The width and height of the PixelShader always at least 5*max(sdx, sdy).
+ 
+  USAGE
+  -----
+    g = Gaussian();
+ 
+  For more information, see &lt;a href="matlab:doc('arcade')"&gt;the ARCADE guide&lt;/a&gt; and the superclasses.
+ 
+  See also PixelShader, Stimulus
 
-    color
-    angle
-    sdx
-    sdy
-    filename
-    shaderWidth
-    shaderHeight
-    animationIncrement
-    animationPhase
-    visible
-    position
+    Reference page in Doc Center
+       doc Gaussian
+
 
 </pre><p><b>Example</b></p><pre class="codeinput">g1 = Gaussian;
 g1.sdx = 100;
@@ -357,21 +504,38 @@ g2.sdy = 100;
 g3 = Gaussian;
 g3.color = [0 0 0];
 set([g1, g2, g3], <span class="string">'visible'</span>, true);
-</pre><p><img vspace="5" hspace="5" src="exampleGaussian.png" alt=""> </p><h2>Petal<a name="33"></a></h2><p>A petal-like shape based on two circles connected by Bezier curves can be created using the <tt>Petal</tt> stimulus.</p><pre class="codeinput">properties(<span class="string">'Petal'</span>);
-</pre><pre class="codeoutput">
-Properties for class Petal:
+pause(1)
+clear <span class="string">g1</span> <span class="string">g2</span> <span class="string">g3</span>
+</pre><p><img vspace="5" hspace="5" src="exampleGaussian.png" alt=""> </p><h2 id="36">Petal</h2><p>A petal-like shape based on two circles connected by Bezier curves can be created using the <tt><a href="matlab:doc('Petal')">Petal</a></tt> stimulus.</p><pre class="codeinput">help <span class="string">Petal</span>
+</pre><pre class="codeoutput">  PETAL &lt; Shape &lt; Stimulus - Petal-like shape for ARCADE
+ 
+  This stimulus is based on two circles and a quadratic Bezier curve
+  connecting the circles.
+ 
+                          _______
+                         /       \
+          _____         /         \
+         /     \_______/           |
+         |  r    __q____     R     |
+         \______/       \          /
+                         \________/
+             ------ d ------
+  
+  PROPERTIES
+  -----------
+    r : radius of central/inner circle (pixel)
+    R : radius of outer circle (pixel)
+    d : distance between circle centers (pixel)
+    q : position of middle point of Bezier curve (normalized to distance
+        of circles). Default = golden ratio ~ 0.382
+ 
+  For more information, see &lt;a href="matlab:doc('arcade')"&gt;the ARCADE guide&lt;/a&gt; and the superclasses.
+ 
+  See also Shape, Stimulus
 
-    r
-    R
-    d
-    q
-    drawMode
-    lineWidth
-    angle
-    faceColor
-    lineColor
-    visible
-    position
+    Reference page in Doc Center
+       doc Petal
+
 
 </pre><p><b>Example</b></p><pre class="codeinput">p = Petal;
 p.angle = 35;
@@ -379,22 +543,27 @@ p.faceColor = [255 255 255 128];
 p.lineColor = [255 0 0 255];
 p.drawMode = 3; <span class="comment">% 1=face only, 2=line only, 3=both</span>
 p.visible = true;
-</pre><p><img vspace="5" hspace="5" src="examplePetal.png" alt=""> </p><h2>Pixel shader<a name="36"></a></h2><p>Pixel shader are small programs that run on the graphics card and are written in a specific shader language, HLSL  (see <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb509561(v=vs.85).aspx">here</a> for more information). Using HLSL any stimulus that can be parameterized based on pixel location and time may be generated and rendered with high performance.</p><p>Programming in HLSL is not trivial, but offers great flexibility. As a starting point you may have a look at the gratings presented above. They are implemented in the file <tt>ARCADE\arcade\StimServer\classes\stimfiles\pixelShader\MaskedGrating.fx</tt>, which is loaded and controlled by the <tt>PixelShader</tt> class with the following properties and methods</p><pre class="codeinput">properties(<span class="string">'PixelShader'</span>)
-</pre><pre class="codeoutput">
-Properties for class PixelShader:
+pause(1)
+clear <span class="string">p</span>
+</pre><p><img vspace="5" hspace="5" src="examplePetal.png" alt=""> </p><h2 id="39">Pixel shader</h2><p><tt><a href="matlab:doc('PixelShader')">PixelShader</a></tt> are small programs that run on the graphics card and are written in a specific shader language, HLSL  (see <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb509561(v=vs.85).aspx">here</a> for more information). Using HLSL any stimulus that can be parameterized based on pixel location and time may be generated and rendered with high performance.</p><p>Programming in HLSL is not trivial, but offers great flexibility. As a starting point you may have a look at the gratings presented above. They are implemented in the file <tt>ARCADE\arcade\StimServer\classes\stimfiles\pixelShader\MaskedGrating.fx</tt>, which is loaded and controlled by the <tt>PixelShader</tt> class with the following properties and methods</p><pre class="codeinput">help <span class="string">PixelShader</span>
+</pre><pre class="codeoutput">  Class for passing and controlling pixel shader programs in HLSL to the
+  StimServer. Actual pixel shader shader implementations should be
+  children of this class to implement parameter handling.
+ 
+  Usage
+  -----
+    ps = PixelShader(filename);
+ 
+  See also Stimulus
 
-    filename
-    shaderWidth
-    shaderHeight
-    animationIncrement
-    animationPhase
-    visible
-    position
+    Reference page in Doc Center
+       doc PixelShader
 
-</pre><p>Pixel shaders can currently use up to 4 RGB-Alpha colors and 12 parameters that are passed to the shader using the <tt>setColor</tt> and <tt>setParameter</tt> methods. Detailed documentation can be found with <a href="matlab:doc('PixelShader')">doc PixelShader</a></p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014a</a><br></p></div><!--
+
+</pre><p>Pixel shaders can currently use up to 4 RGB-Alpha colors and 12 parameters that are passed to the shader using the <tt>setColor</tt> and <tt>setParameter</tt> methods.</p><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2018b</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 %% Visual stimuli for ARCADE
-% Stimuli are created invisibly in the task script before the creation of the trial
+% |<matlab:doc('Stimulus') Stimuli>| are created invisibly in the task script before the creation of the trial
 % states. They can then be manipulated (made visible, moved, ...) in the
 % |onEntry| and |onExit| functions of the trial states.
 % Possible stimuli are described here. A stimulus is created by calling the
@@ -402,7 +571,8 @@ Properties for class PixelShader:
 % 
 %   stim = MyStimulus;
 % 
-% |MyStimulus| is the type of stimulus, e.g. |Grating|, |Picture|, |Rectangle|, ...
+% |MyStimulus| is the type of stimulus, e.g. |<matlab:doc('Grating') Grating>|, 
+% |<matlab:doc('Picture') Picture>|, ...
 % Stimulus properties can be then be changed in two ways. Either by directly
 % setting the property, similar to changing fields of a struct array, e.g.
 %
@@ -423,6 +593,11 @@ Properties for class PixelShader:
 %
 %   stim.delete()
 % 
+% Documentation about a particular stimulus can be found via the MATLAB
+% |help| (only stimulus-specific help) and |doc| (stimulus-specific and
+% inhertied properties) commands, e.g.
+%   help Circle
+%   doc Circle
 %
 % *Testing stimuli*
 % 
@@ -437,7 +612,7 @@ Properties for class PixelShader:
 %% General stimulus properties
 % All stimuli share a few properties. All stimuli can be made visible, 
 % repositioned, or animated (smoothly translated).
-properties('Stimulus')
+help Stimulus
 %%
 % Visibility can be |true| for on or |false| for off. 
 % Coordinates are usually in pixels. The stimulus |position| is always relative
@@ -453,30 +628,27 @@ properties('Stimulus')
 % stimuli you should add 0.5 to the coordinate. 
 
 %% Circles
-% Filled circles can be created as a |Circle|. Type 1 circles are filled, 
-% type 2 circles are outlined circles (5 px width, currently not flexible).
-properties('Circle')
+% Filled circles can be created as a |<matlab:doc('Circle') Circle>|.
+help Circle
 %%
 % *Example*
 %
 circ1 = Circle(1);
-circ1.alpha = 200;
+circ1.faceAlpha = 200;
 circ1.diameter = 400;
 circ1.position = [0 0];
 circ2 = Circle(2);
 circ2.diameter = 50;
 circ2.position = [20 100];
-circ2.color = [128 0 255];
+circ2.faceColor = [128 0 255];
 circ3 = Circle(1);
 circ3.diameter = 300;
-circ3.color = [0 180 255];
+circ3.faceColor = [0 180 255];
 circ3.position = [275 49];
-circ3.alpha = 100;
+circ3.faceAlpha = 100;
 set([circ1, circ2, circ3], 'visible', true)
 pause(1)
-circ1.delete()
-circ2.delete()
-circ3.delete()
+clear circ*
 
 %%
 %
@@ -485,11 +657,12 @@ circ3.delete()
 % Detailed documentation can be found with <matlab:doc('Circle') doc Circle>
 
 %% Pictures
-% Possible Picture formats are BMP, PNG, TIFF and JPEG. The position can be defined
+% Possible |<matlab:doc('Picture') Picture>| formats are BMP, PNG, TIFF 
+% and JPEG. The position can be defined
 % as an |[x y]| vector in pixels relative to the screen center. An alpha
 % transparency level can be defined between 0 and 255 with 0 being fully
 % transparent and 255 fully opaque. Transparency in PNGs is also supported.
-properties('Picture')
+help Picture
 %%
 % *Example*
 %
@@ -505,18 +678,17 @@ img2.alpha = 200;
 img2.angle = 200;
 set([img, img2], 'visible', true)
 pause(1)
-img.delete()
-img2.delete()
+clear img img2
 
 %%
 %
 % <<exampleImage.png>>
 %
 % Detailed documentation can be found with <matlab:doc('Picture') doc Picture>
-%% Masked grating
-% Gratings with a hard circular mask are implemented as |PixelShader| 
+%% Masked sinusoidal grating
+% Sinusoidal |<matlab:doc('Grating') Gratings>| with a hard circular mask are implemented as |PixelShader| 
 % (see below) stimuli with various parameters:
-properties('Grating')
+help Grating
 %%
 % Spatial frequency is defined as |spatialFrequency| in pixel per cycle. 
 % Temporal frequency is
@@ -534,7 +706,7 @@ grat1.color1 = [255 0 0 200];
 grat1.color2 = [0 255 0 200];
 grat1.maskRotation = 45;
 grat1.maskWidth = 400;
-grat1.spatialFrequency = 60;
+grat1.spatialPeriod = 60;
 grat1.smoothing = 2;
 grat1.temporalFrequency = 1;
 grat1.visible = true;
@@ -544,7 +716,7 @@ grat2.color1 = [255 0 0 200];
 grat2.color2 = [0 0 0 200];
 grat2.maskRotation = 270;
 grat2.maskWidth = 400;
-grat2.spatialFrequency = 20;
+grat2.spatialPeriod = 20;
 grat2.smoothing = 10;
 grat2.temporalFrequency = 1;
 grat2.position = [400 0];
@@ -553,19 +725,44 @@ grat2.visible = true;
 
 
 pause(1);
-grat1.delete();
-grat2.delete();
+clear grat1 grat2
 %%
 %
 % <<exampleGrating.png>>
 %
-% Detailed documentation can be found with <matlab:doc('Grating') doc Grating>
+
+%% Square-wave grating
+% True |<matlab:doc('SquareWaveGrating') square-wave gratings>| with 
+% antialiased bands and circular mask are implemented as a |PixelShader| 
+% stimulus with very similar parameters as the sinusoidal grating.
+help SquareWaveGrating
+
+%%
+% *Example*
+%
+swg = SquareWaveGrating();
+swg.color1 = [128 0 0];
+swg.color2 = [0 0 128];
+swg.radius = 100;
+swg.direction = 37;
+swg.spatialPeriod = 80;
+swg.visible = true;
+pause(1);
+clear swg
+
+
+%%
+%
+% <<exampleSquareWaveGrating.png>>
+%
+
+
 
 %% Gabor
-% Gabors are gratings with a Gaussian mask and also are implemented 
-% as |PixelShader| (see below) stimuli with various
+% |<matlab:doc('Gabor') Gabors>| are sinusoidal gratings with a Gaussian 
+% mask and also are implemented as |PixelShader| (see below) stimuli with various
 % parameters:
-properties('Gabor')
+help Gabor
 %%
 % Spatial frequency is defined via |spatialPeriod| in pixel per cycle
 % (actually the inverse of the spatial frequency).
@@ -603,58 +800,53 @@ gabor2.visible = true;
 
 
 pause(1);
-gabor1.delete();
-gabor2.delete();
+clear gabor*
 %%
 %
 % <<exampleGabor.png>>
 %
-% Detailed documentation can be found with <matlab:doc('Gabor') doc Gabor>
-
 
 %% Rectangles
-% Rectangles are always filled and have the following properties:
-properties('Rectangle')
+% |<matlab:doc('Rectangle') Rectangles>| are always filled and have the following properties:
+help Rectangle
 %%
 % *Example*
 %
 r1 = Rectangle;
-r1.color = [128 0 255];
+r1.faceColor = [128 0 255];
 r1.height = 200;
 r1.angle = 45;
-r1.alpha = 100;
+r1.faceAlpha = 100;
 r1.visible = true;
 
 r2 = Rectangle;
-r2.color = [128 255 255];
+r2.faceColor = [128 255 255];
 r2.height = 200;
 r2.angle = 180;
-r2.alpha = 100;
+r2.faceAlpha = 100;
 r2.visible = true;
 pause(1)
-r1.delete();
-r2.delete();
+clear r1 r2
 %%
 %
 % <<exampleRectangle.png>>
 %
-% Detailed documentation can be found with <matlab:doc('Rectangle') doc Rectangle>
-
 %% Animations
-% ARCADE allows several kinds of animations. All stimulus types can be 
+% ARCADE allows several kinds of |<matlab:doc('Animation') animations>|.
+% All stimulus types can be 
 % smoothly translated around on the screen. To animate a
 % stimulus, an animation has to be created first and then assigned to a
 % stimulus by using the |play_animation| method of a stimulus.
 % 
 % Currently there are five types of animation
 % 
-% # |LinearMotion|: Move a stimulus along a polygon.
-% # |GeneralMotion|: This moves the stimulus along an arbitrary path
+% # |<matlab:doc('LinearMotion') LinearMotion>|: Move a stimulus along a polygon.
+% # |<matlab:doc('GeneralMotion') GeneralMotion>|: This moves the stimulus along an arbitrary path
 % defined in a file. *NOT FULLY TESTED YET*
-% # |LinearRange|: Change certain scalar stimulus properties linearily from a
+% # |<matlab:doc('LinearRange') LinearRange>|: Change certain scalar stimulus properties linearily from a
 % starting value to an end value within a specified duration 
-% # |Flash|: Flash (turn on) a stimulus for a defined number of frames
-% # |ExternalPositionControl|: Couple the position of a stimulus to a
+% # |<matlab:doc('Flash') Flash>|: Flash (turn on) a stimulus for a defined number of frames
+% # |<matlab:doc('ExternalPositionControl') ExternalPositionControl>|: Couple the position of a stimulus to a
 % position in a shared memory, e.g. the eye position.
 % 
 % To start an animation is has to be passed to the |play_animation| method
@@ -668,7 +860,7 @@ r2.delete();
 help Animation.terminalAction
 
 %%
-% To keep the stimulus presentation and the experimental |State| in sync,
+% To keep the stimulus presentation and the experimental |<matlab:doc('State') State>| in sync,
 % it is *strongly recommended* to set the 4th bit of the |terminalAction| property
 % such that the |StimServerAnimationDone| event is triggered. Otherwise the
 % next state might already start before the animation is finished.
@@ -676,7 +868,7 @@ help Animation.terminalAction
 %%
 % *Example*
 r = Rectangle;
-r.color = [255 255 255];
+r.faceColor = [255 255 255];
 r.height = 200;
 r.angle = 45;
 
@@ -684,8 +876,12 @@ pause(1)
 vertices = [0 0 100 0 500 500]; % [x1 y2 x2 y2 x3 y3]
 speed = 150; % px/s
 a = LinearMotion(speed, vertices);
+a.terminalAction = '00001001';
 r.play_animation(a);
 r.visible = true;
+animationDone = IPCEvent.wait_for_event('StimServerAnimationDone', 5000);
+pause(1)
+clear r a
 %%
 %
 % <<exampleAnimation.png>>
@@ -693,9 +889,9 @@ r.visible = true;
 % Detailed documentation can be found with <matlab:doc('LinearMotion') doc LinearMotion>
 
 %% Moving Bars
-% The |MovingBar| class simplifies the creation of animated bars by
-% automatically creating the animation. 
-properties('MovingBar')
+% The |<matlab:doc('MovingBar') MovingBar>| class simplifies the creation
+% of animated bars by automatically creating the animation. 
+help MovingBar
 %%
 % Only the |startPosition|, |direction| and |travelDistance| have to bet set.
 % If |linkedOrientationDirection| is set, the bar will always be
@@ -708,25 +904,28 @@ travelDistance = 500;
 mb = MovingBar(speed, travelDistance);
 mb.direction = 35;
 mb.play_animation()
-pause(5)
-mb.delete()
+animationDone = IPCEvent.wait_for_event('StimServerAnimationDone', 5000);
+
+clear mb
 
 %% Gammatron (annular grating)
-% The |Gammatron| class creates an annular grating pattern with based on
-% two colors that can be drifting inward or outward.
-properties('Gammatron')
+% The  |<matlab:doc('Gammatron') Gammatron>| class creates an annular 
+% grating pattern with based on two colors that can be drifting inward or outward.
+help Gammatron
 %%
 % *Example*
 g = Gammatron;
 g.radius = 200;
 g.visible = true;
+pause(1)
+clear g
 %%
 %
 % <<exampleGammatron.png>>
 %% Gaussian
 % A 2D patch with Gaussian profile can be created using the |Gaussian|
 % stimulus. Its size, rotation and color can be set:
-properties('Gaussian');
+help Gaussian
 %% 
 % *Example*
 g1 = Gaussian;
@@ -740,14 +939,16 @@ g2.sdy = 100;
 g3 = Gaussian;
 g3.color = [0 0 0];
 set([g1, g2, g3], 'visible', true);
+pause(1)
+clear g1 g2 g3
 %%
 %
 % <<exampleGaussian.png>>
 
 %% Petal
 % A petal-like shape based on two circles connected by Bezier curves 
-% can be created using the |Petal| stimulus. 
-properties('Petal');
+% can be created using the |<matlab:doc('Petal') Petal>| stimulus. 
+help Petal
 %% 
 % *Example*
 p = Petal;
@@ -756,6 +957,8 @@ p.faceColor = [255 255 255 128];
 p.lineColor = [255 0 0 255];
 p.drawMode = 3; % 1=face only, 2=line only, 3=both
 p.visible = true;
+pause(1)
+clear p
 
 %%
 %
@@ -765,7 +968,8 @@ p.visible = true;
 
 
 %% Pixel shader
-% Pixel shader are small programs that run on the graphics card and are 
+% |<matlab:doc('PixelShader') PixelShader>| are small programs that run
+% on the graphics card and are 
 % written in a specific shader language, HLSL  (see 
 % <https://msdn.microsoft.com/en-us/library/windows/desktop/bb509561(v=vs.85).aspx here>
 % for more information). Using HLSL any stimulus that 
@@ -778,12 +982,11 @@ p.visible = true;
 % |ARCADE\arcade\StimServer\classes\stimfiles\pixelShader\MaskedGrating.fx|,
 % which is loaded and controlled by the |PixelShader| class with the
 % following properties and methods
-properties('PixelShader')
+help PixelShader
 %%
 % Pixel shaders can currently use up to 4 RGB-Alpha colors and 12
 % parameters that are passed to the shader using the |setColor| and
 % |setParameter| methods.
-% Detailed documentation can be found with <matlab:doc('PixelShader') doc PixelShader>
 
 
 

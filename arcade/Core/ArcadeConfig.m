@@ -47,13 +47,13 @@ classdef ArcadeConfig
     
     
     properties
-        BackgroundRGB % 24-bit [r g b] background color during task
+        BackgroundRGB = [128 128 128]; % 24-bit [r g b] background color during task
         BackupSettings
         ControlScreen = 'MatlabControlScreen.bat';
         DaqServer
         DistanceToScreen
-        EditableVariables
-        EventMarker
+        EditableVariables = {'Reward', '50', 'Numeric'}
+        EventMarker = struct('Pause', 29600, 'Resume', 29601)
         Experiment
         Experimenter
         EyeServer
@@ -62,12 +62,12 @@ classdef ArcadeConfig
             'BlockSelection', {''}, ...
             'ConditionSelection', {''})
         InitFunction
-        MaximumNumberOfTrials
+        MaximumNumberOfTrials = 10000
         MonitorDiagonalSize
         MonitorRefreshRate
         MonitorResolution
         OtherExecutables
-        PauseRGB
+        PauseRGB = [128 128 128]
         PixelsPerDegree
         ProjectOwner
         rng

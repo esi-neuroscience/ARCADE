@@ -5,7 +5,8 @@ function [foldersWereCreated, cfg] = handle_folders(cfg)
 
 % check if sessionLog folder exists (ARCADE/sessionLog)
 sessionLogFolder = fullfile(arcaderoot, 'sessionLog');
-if ~isfield(cfg.filepaths, 'Session')
+
+if isempty(cfg.filepaths.Session)
     cfg.filepaths.Session =  fullfile(sessionLogFolder, cfg.sessionName);
 end
 

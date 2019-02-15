@@ -1,11 +1,16 @@
 function eventmarker(value,varargin)
-% EVENTMARKER - Send a digital marker for an event to the DAQ card (if
-% available) and store the corresponding timestamp in the .evt file.
+%EVENTMARKER Send a digital marker for an event to the DAQ card (if
+%               available) and store the corresponding timestamp in the 
+%               .evt file.
 % 
 % INPUT
 % -----
 %   value : event code number >=0 and <2^16
 % 
+% For more information, see <a href="matlab:doc('arcade')">the ARCADE guide</a>.
+%
+% See also DaqServer
+%
 persistent hasDaqServer
 if isempty(hasDaqServer)
 	hasDaqServer = DaqServer.GetConnectionStatus();
@@ -23,4 +28,5 @@ else
 end
 
 end
+
 

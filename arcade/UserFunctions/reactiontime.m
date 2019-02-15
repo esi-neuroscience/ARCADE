@@ -1,5 +1,5 @@
 function reactiontime( setmode, varargin )
-% REACTIONTIME - Measure and store reaction times.
+%REACTIONTIME Measure and store reaction times.
 %  
 % INPUT
 % -----
@@ -7,14 +7,37 @@ function reactiontime( setmode, varargin )
 % 
 %   'start'    : start timer for reaction time
 %   'end'      : record elapsed time in ms since reactiontime('start')
-%                    in behavioral data file
+%                in behavioral data file
 %   'writeRT', rt   : write rt as reaction time value to
 %                     behavioral data file, e.g.
 %                     reactiontime('writeRT', 264)
 %   'settic', timer : set start timer to timer handle returned by tic
-% 
+%
+%
+% EXAMPLE
+% -------
+%   ...
+%   sWaitForResponse = State('WaitForResponse');
+%   sWaitForResponse.duration = 2000;
+%   sWaitForResponse.waitEvents = {'targeIn'};
+%   sWaitForResponse.onEntry = {
+%       @() reationtime('start')
+%       };
+%   sWaitForResponse.nextStateAfterEvent = {'Correct'};
+%   sWaitForResponse.nextStateAfterTimeout = 'NoResponse';
+%
+%   sCorrect = State('Correct');
+%   sCorrect.duration = 0;
+%   sCorrect.onEntry = {
+%       @() reactiontime('end')
+%       };
+%   ...
+%
+% For more information, see <a href="matlab:doc('arcade')">the ARCADE guide</a>.
+%
+%
 % See also tic
-% 
+ 
 persistent startTic
 
 switch setmode
@@ -47,4 +70,5 @@ switch setmode
 end
 
 end
+
 

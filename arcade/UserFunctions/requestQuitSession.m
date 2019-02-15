@@ -1,8 +1,13 @@
 function result = requestQuitSession(varargin)
-% REQUESTQUITSESSION - end session after current trial
+%REQUESTQUITSESSION end session after current trial
 %
 %   requestQuitSession()
 %
+% EXAMPLE
+% -------
+%   if totalRewardTime() > 2000
+%       requestQuitSession()
+%   end
 %
 
 persistent quitSession
@@ -28,4 +33,5 @@ else
 end
 
 end
+
 

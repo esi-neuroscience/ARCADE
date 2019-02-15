@@ -1,7 +1,13 @@
 function convertEsiFile(filename)
-% CONVERTESIFILE - Convert behavioral data stored in .esi file written by
-% ARCADE to .mat
-%
+%CONVERTESIFILE Convert behavioral data stored in .esi file written by
+%                  ARCADE to .mat
+% 
+% INPUT
+% -----
+%    {filename} : optional path to a .esi file. If filename is not given, a
+%                 graphical file selector will pop up.
+%                   
+% For more information, see <a href="matlab:doc('arcade')">the ARCADE guide</a>.
 
 if nargin == 0
     [filename, pathname] = uigetfile('*.esi', 'Pick an ARCADE esi file (*.esi)');

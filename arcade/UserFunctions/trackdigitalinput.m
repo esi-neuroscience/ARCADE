@@ -1,12 +1,12 @@
 function trackdigitalinput(lineNumber, eventName)
-% TRACKDIGITALINPUT - Tell DaqServer to signal events when digitial input line
-% state changes
+%TRACKDIGITALINPUT Tell DaqServer to signal events when digitial input line
+%                     state changes
 % 
 % INPUT
 % -----
 %   lineNumber  : input line of DAQ card to be tracked. For PCI-6221 cards
 % 				  this can be 0-7 of port 2, for PCI-6503 only lines 4-7 of
-% 				  port 2a re available as input
+% 				  port 2 are available as input
 %	eventName   : event name to be triggered when pulse arrives on input line
 % 				  or 2-element cell array with event names for line on and off
 % 
@@ -32,7 +32,7 @@ function trackdigitalinput(lineNumber, eventName)
 %   * Before calling trackdigitalinput, the pipe to the DaqServer has to be opened
 %     (done automatically by ARCADE).
 % 
-% See also State
+% See also State, DaqServer
 
 persistent wasStarted
 if isempty(wasStarted)

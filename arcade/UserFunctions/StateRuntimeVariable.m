@@ -1,5 +1,5 @@
 classdef StateRuntimeVariable < handle
-    % StateRuntimeVariable - Class for storing data generated at runtime of
+    % STATERUNTIMEVARIABLE - Class for storing data generated at runtime of
     % the ARCADE State machine
     %
     %   runtimeVar = StateRuntimeVariable(intialValue)
@@ -9,6 +9,15 @@ classdef StateRuntimeVariable < handle
     % To provide a means for storing or retreiving data at runtime of a State
     % this class holds data and provides set_value and get_value functions. 
     % These can then be called during the onEntry and onExit functions.
+    %
+    % METHODS
+    % -------
+    %     get_value()  : returns current variable value
+    %     set_value(v) : set variable value to v
+    %
+    % PROPERTIES
+    % ----------
+    %     value : value of the variable
     %
     %
     % EXAMPLE 1
@@ -40,7 +49,7 @@ classdef StateRuntimeVariable < handle
     %  y = State('y');
     %  y.onEntry = {@() y.set_duration(stateDuration.value)};
     %
-    % See also State
+    % See also State, SGLStateArc
 
 
     

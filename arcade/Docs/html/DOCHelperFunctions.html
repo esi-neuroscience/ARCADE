@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Helper functions</title><meta name="generator" content="MATLAB 8.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-06-14"><meta name="DC.source" content="DOCHelperFunctions.m"><style type="text/css">
+      --><title>User functions</title><meta name="generator" content="MATLAB 9.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2019-02-15"><meta name="DC.source" content="DOCHelperFunctions.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -66,17 +66,66 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>Helper functions</h1><!--introduction--><p>ARCADE provides several helper functions that are useful for controlling the experiment and storing additional behavioral data. See below for a list.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1"><tt>eventmarker</tt></a></li><li><a href="#2"><tt>groupStimuli</tt></a></li><li><a href="#3"><tt>photodiode</tt></a></li><li><a href="#4"><tt>trialerror</tt></a></li><li><a href="#5"><tt>reward</tt></a></li><li><a href="#6"><tt>reactiontime</tt></a></li><li><a href="#7"><tt>storeUserVariables</tt></a></li><li><a href="#8"><tt>requestQuitSession</tt></a></li></ul></div><h2><tt>eventmarker</tt><a name="1"></a></h2><pre class="codeinput">help <span class="string">eventmarker</span>
-</pre><pre class="codeoutput">  EVENTMARKER - Send a digital marker for an event to the DAQ card (if
-  available) and store the corresponding timestamp in the .evt file.
+  </style></head><body><div class="content"><h1>User functions</h1><!--introduction--><p>ARCADE provides several <a href="matlab:doc('UserFunctions')">UserFunctions</a> that are useful for controlling  the experiment and storing additional behavioral data. See below for a list. They are stored in the <tt>ARCADE/arcade/UserFunctions</tt> folder.</p><!--/introduction--><pre class="codeinput">help <span class="string">createTrial</span>
+</pre><pre class="codeoutput"> CREATETRIAL Create and start a trial from several trial states
+  
+  INPUT 
+  -----
+    initialState : name of first state as string
+    states : experimental states of class State
+  
+ 
+  EXAMPLE
+  -------
+    initialState = 'acqFix';
+    sAcquireFix = State('acqFix')
+    ... 
+    createTrial(initialState, sAcquireFix, ...)
+    
+  For more information, see &lt;a href="matlab:doc('arcade')"&gt;the ARCADE guide&lt;/a&gt;.
+ 
+  See also State, SGLStateArc
+
+</pre><pre class="codeinput">help <span class="string">eventmarker</span>
+</pre><pre class="codeoutput"> EVENTMARKER Send a digital marker for an event to the DAQ card (if
+                available) and store the corresponding timestamp in the 
+                .evt file.
   
   INPUT
   -----
     value : event code number &gt;=0 and &lt;2^16
   
+  For more information, see &lt;a href="matlab:doc('arcade')"&gt;the ARCADE guide&lt;/a&gt;.
+ 
+  See also DaqServer
+ 
 
-</pre><h2><tt>groupStimuli</tt><a name="2"></a></h2><pre class="codeinput">help <span class="string">groupStimuli</span>
-</pre><pre class="codeoutput">  GROUPSTIMULI - Group changes to stimuli together.
+</pre><pre class="codeinput">help <span class="string">getPreviousTrialData</span>
+</pre><pre class="codeoutput"> GETPREVIOUSTRIALDATA Retreive behavioral outcomes and conditions of
+                         previous trials
+  
+  USAGE
+  ------
+    trialdata = getPreviousTrialData();
+  
+  If this function is called during the task script, the last entry of the
+  data is already the current trial.
+ 
+  EXAMPLE
+  -------
+  trialdata = 
+  
+        trialError: [3 3 3 1 3 1]
+        conditions: [1 1 2 2 1 1]
+            blocks: [1 1 1 1 1 1]
+      reactionTime: [NaN NaN NaN 0.2527 NaN 0.3257]
+ 	 userVariables: [0 0 1 40 NaN 0]
+ 
+  For more information, see &lt;a href="matlab:doc('arcade')"&gt;the ARCADE guide&lt;/a&gt;.
+ 
+
+</pre><pre class="codeinput">help <span class="string">groupStimuli</span>
+</pre><pre class="codeoutput"> GROUPSTIMULI Group changes to stimuli together.
   
   INPUT
   -----
@@ -85,8 +134,8 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
   All changes made to stimuli following a groupStimuli('start') call
   will be applied simulataneously once groupStimuli('end') is called.
   
-  Example
-  ------
+  EXAMPLE
+  -------
   
   	r = Rectangle;
   	set(r, 'visible', true)
@@ -94,9 +143,16 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
   	set(r, 'angle', 45)
     set(r, 'position', [-500 -300])
   	groupStimuli('end')
+ 
+  For more information, see &lt;a href="matlab:doc('arcade')"&gt;the ARCADE guide&lt;/a&gt;.
+ 
+  See also StimServer
 
-</pre><h2><tt>photodiode</tt><a name="3"></a></h2><pre class="codeinput">help <span class="string">photodiode</span>
-</pre><pre class="codeoutput">  PHOTODIODE - Set the mode of the photodiode stimulus
+</pre><pre class="codeinput">help <span class="string">logmessage</span>
+</pre><pre class="codeoutput">  LOGMESSAGE Write message with timestamp to command line and logfile
+
+</pre><pre class="codeinput">help <span class="string">photodiode</span>
+</pre><pre class="codeoutput"> PHOTODIODE Set the mode of the photodiode stimulus
   
   INPUT
   -----
@@ -104,22 +160,110 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
     'off'	 : turn photodiode stimulus black
   	'toggle' : switch status of photodioe (i.e., on-&gt;off, or off-&gt;on)
   	'flicker': flip between black and white with every frame
+ 
+  For more information, see &lt;a href="matlab:doc('arcade')"&gt;the ARCADE guide&lt;/a&gt;.
+ 
+  See also StimServer
 
-</pre><h2><tt>trialerror</tt><a name="4"></a></h2><pre class="codeinput">help <span class="string">trialerror</span>
-</pre><pre class="codeoutput">  TRIALERROR - Store outcome of trial in behavioral record file
+</pre><pre class="codeinput">help <span class="string">reactiontime</span>
+</pre><pre class="codeoutput"> REACTIONTIME Measure and store reaction times.
+   
+  INPUT
+  -----
+  Input is always a string plus optional further arguments:   
+  
+    'start'    : start timer for reaction time
+    'end'      : record elapsed time in ms since reactiontime('start')
+                 in behavioral data file
+    'writeRT', rt   : write rt as reaction time value to
+                      behavioral data file, e.g.
+                      reactiontime('writeRT', 264)
+    'settic', timer : set start timer to timer handle returned by tic
+ 
+ 
+  EXAMPLE
+  -------
+    ...
+    sWaitForResponse = State('WaitForResponse');
+    sWaitForResponse.duration = 2000;
+    sWaitForResponse.waitEvents = {'targeIn'};
+    sWaitForResponse.onEntry = {
+        @() reationtime('start')
+        };
+    sWaitForResponse.nextStateAfterEvent = {'Correct'};
+    sWaitForResponse.nextStateAfterTimeout = 'NoResponse';
+ 
+    sCorrect = State('Correct');
+    sCorrect.duration = 0;
+    sCorrect.onEntry = {
+        @() reactiontime('end')
+        };
+    ...
+ 
+  For more information, see &lt;a href="matlab:doc('arcade')"&gt;the ARCADE guide&lt;/a&gt;.
+ 
+ 
+  See also tic
+
+</pre><pre class="codeinput">help <span class="string">readEvtFile</span>
+</pre><pre class="codeoutput"> READEVTFILE Read .evt file written by ARCADE.
+    
+  .evt files contain the timestamps in microseconds and marker values as 
+  alternating uint64 values.
   
   INPUT
   -----
-    trlerr : code for outcome of trial in range 1-9 
+        filename : string, optional
+  
+  OUTPUT
+  ------
+        evt : struct with fields timestamps (us) and values
+  
 
-</pre><h2><tt>reward</tt><a name="5"></a></h2><pre class="codeinput">help <span class="string">reward</span>
-</pre><pre class="codeoutput">  REWARD - Give a reward pulse or pulse sequence.
+</pre><pre class="codeinput">help <span class="string">requestQuitSession</span>
+</pre><pre class="codeoutput"> REQUESTQUITSESSION end session after current trial
+ 
+    requestQuitSession()
+ 
+  EXAMPLE
+  -------
+    if totalRewardTime() &gt; 2000
+        requestQuitSession()
+    end
+ 
+
+</pre><pre class="codeinput">help <span class="string">retrieveConfig</span>
+</pre><pre class="codeoutput"> RETRIEVECONFIG Retreive ArcadeConfig of current session
+ 
+  This function can be used to extract information about the current session
+  at session runtime, e.g. the name of the subject.
+ 
+  USAGE
+  -----
+ 
+ 	 cfg = retreiveConfig()
+ 
+ 
+  EXAMPLE
+  -------
+ 	cfg = retreiveConfig()	
+ 	if strcmp(cfg.Subject, 'monkeyK')
+ 		rewardDuration = 90;
+ 	end
+ 
+  See also ArcadeConfig
+
+</pre><pre class="codeinput">help <span class="string">reward</span>
+</pre><pre class="codeoutput"> REWARD Give a reward pulse or pulse sequence.
   
   INPUT
   -----
   
    rewardTime : durations of reward pulses and inter-reward intervals in ms
   
+  The the reward is given by setting the digital reward line of the
+  DaqServer to 'on' for the specified duration.
+ 
   
   EXAMPLE
   -------
@@ -129,28 +273,23 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
   Give 2x50 ms pulse with a pause of 40 ms 
     reward([50 40 50]) 
   
+  For more information, see &lt;a href="matlab:doc('arcade')"&gt;the ARCADE guide&lt;/a&gt;.
   
+  See also DaqServer
 
-</pre><h2><tt>reactiontime</tt><a name="6"></a></h2><pre class="codeinput">help <span class="string">reactiontime</span>
-</pre><pre class="codeoutput">  REACTIONTIME - Measure and store reaction times.
-   
+</pre><pre class="codeinput">help <span class="string">setManualRewardDuration</span>
+</pre><pre class="codeoutput"> SETMANUALREWARDDURATION Set reward duration for manual reward
+ 
   INPUT
   -----
-  Input is always a string plus optional further arguments:   
-  
-    'start'    : start timer for reaction time
-    'end'      : record elapsed time in ms since reactiontime('start')
-                     in behavioral data file
-    'writeRT', rt   : write rt as reaction time value to
-                      behavioral data file, e.g.
-                      reactiontime('writeRT', 264)
-    'settic', timer : set start timer to timer handle returned by tic
-  
-  See also tic
-  
+    duration : reward duration in ms
+ 
+  For more information, see &lt;a href="matlab:doc('arcade')"&gt;the ARCADE guide&lt;/a&gt;.
+ 
+  See also DaqServer
 
-</pre><h2><tt>storeUserVariables</tt><a name="7"></a></h2><pre class="codeinput">help <span class="string">storeUserVariables</span>
-</pre><pre class="codeoutput">  STOREUSERVARIABLES - Store a variable in the behavioral data file of ARCADE.
+</pre><pre class="codeinput">help <span class="string">storeUserVariables</span>
+</pre><pre class="codeoutput">  STOREUSERVARIABLES Store a variable in the behavioral data file of ARCADE.
   
   INPUT
   -----
@@ -161,42 +300,223 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
   
   Note: large variables (&gt; ~5 MB) will cause a noticable delay.
   
+  For more information, see &lt;a href="matlab:doc('arcade')"&gt;the ARCADE guide&lt;/a&gt;.
 
-</pre><h2><tt>requestQuitSession</tt><a name="8"></a></h2><pre class="codeinput">help <span class="string">requestQuitSession</span>
-</pre><pre class="codeoutput">  REQUESTQUITSESSION - end session after current trial
+</pre><pre class="codeinput">help <span class="string">totalRewardTime</span>
+</pre><pre class="codeoutput"> TOTALREWARDTIME Retreive total reward duration of session
  
-    requestQuitSession()
+   time = totalRewardTime()
  
+  The returned total reward duration includes manual reward triggered via 
+  the reward button/hotkey.
  
+  EXAMPLE
+  -------
+ 	
+ 	if totalRewardTime() &gt; 2000
+ 		requestQuitSession()
+ 	end
+ 
+  For more information, see &lt;a href="matlab:doc('arcade')"&gt;the ARCADE guide&lt;/a&gt;.
+ 
+  See also DaqServer, reward
 
-</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014a</a><br></p></div><!--
+</pre><pre class="codeinput">help <span class="string">trackdigitalinput</span>
+</pre><pre class="codeoutput"> TRACKDIGITALINPUT Tell DaqServer to signal events when digitial input line
+                      state changes
+  
+  INPUT
+  -----
+    lineNumber  : input line of DAQ card to be tracked. For PCI-6221 cards
+  				  this can be 0-7 of port 2, for PCI-6503 only lines 4-7 of
+  				  port 2 are available as input
+ 	eventName   : event name to be triggered when pulse arrives on input line
+  				  or 2-element cell array with event names for line on and off
+  
+  	or
+  
+  	'start'     : start tracking of digitial input. Call trackdigitalinput
+  	              with this option after all lines were added.
+  
+  
+  EXAMPLE
+  -------
+ 
+  Track state of button connected to line 2 of port 2.
+ 
+  	if TrialData.currentTrial == 1
+    	trackdigitalinput(2, {'leverOn', 'leverOff'})
+ 		trackdigitalinput('start')
+ 	end
+  
+  
+  Notes: 
+    * To add more than one input position, trackdigitalinput has to be called repeatedly.  
+    * Before calling trackdigitalinput, the pipe to the DaqServer has to be opened
+      (done automatically by ARCADE).
+  
+  See also State, DaqServer
+
+</pre><pre class="codeinput">help <span class="string">trackeye</span>
+</pre><pre class="codeoutput"> TRACKEYE Tell EyeServer to signal events when gaze enters/exits a screen position
+  
+  INPUT
+  -----
+    position    : [x y] screen position to be tracked in px rel. to center
+    tolerance   : fixation radius in px around position 
+    name        : name of tracked position
+    
+    or
+  
+    'reset'     : delete all tracked positions
+  
+  OUTPUT
+  ------
+    eventNames  : cell array of event names that will be triggered by the
+                  EyeServer. 1st element is event for entering a
+                  position, 2nd for leaving a position. These names can be
+                  used for the waitEvents property of the experimental
+                  States.
+  
+  EXAMPLE
+  -------
+    trackeye('reset')
+    eventNames = trackeye([0 0], 50, 'fixationPoint')
+    eventNames = 
+  
+          'fixationPointIn'    'fixationPointOut'
+  
+  Notes: 
+    * To add more than one position, trackeye has to be called repeatedly.
+      Positions will be tracked until trackeye('reset') is called.
+    * Before calling trackeye, the pipe to the EyeServer has to be opened
+      (done automatically by ARCADE).
+  
+  For more information, see &lt;a href="matlab:doc('arcade')"&gt;the ARCADE guide&lt;/a&gt;.
+ 
+  See also State, EyeServer
+
+</pre><pre class="codeinput">help <span class="string">trialerror</span>
+</pre><pre class="codeoutput"> TRIALERROR Store outcome of trial in behavioral record file
+  
+  INPUT
+  -----
+    trlerr : code for outcome of trial in range 1-9
+ 
+ 
+  EXAMPLE
+  -------
+   ...
+   sCorrect = State('correct');
+   sCorrect.duration = 0;
+   sCorrect.onEntry = {
+      @(x) trialerror(1)
+     };
+   ...
+ 
+  For more information, see &lt;a href="matlab:doc('arcade')"&gt;the ARCADE guide&lt;/a&gt;.
+
+</pre><pre class="codeinput">help <span class="string">StateRuntimeVariable</span>
+</pre><pre class="codeoutput">  STATERUNTIMEVARIABLE - Class for storing data generated at runtime of
+  the ARCADE State machine
+ 
+    runtimeVar = StateRuntimeVariable(intialValue)
+ 
+  In MATLAB, assignments (e.g., a = 2) are not possible in anonymous
+  functions such as the onEntry and onExit functions of the State class.
+  To provide a means for storing or retreiving data at runtime of a State
+  this class holds data and provides set_value and get_value functions. 
+  These can then be called during the onEntry and onExit functions.
+ 
+  METHODS
+  -------
+      get_value()  : returns current variable value
+      set_value(v) : set variable value to v
+ 
+  PROPERTIES
+  ----------
+      value : value of the variable
+ 
+ 
+  EXAMPLE 1
+  ---------
+  In order to make reward dependent on reaction tim,e a
+  StateRuntimeVariable can be used to store the reaction time and to
+  retreive later when the reward should be delivered.
+      
+  reactionTime = StateRuntimeVariable(nan);
+  x = State('x'); 
+  x.duration = randi(1000)
+  x.onExit = {@() reactionTime.set_value(x.elapsedTime)};    
+  y = State('y');
+  y.onEntry = {@() reward(200*exp(-reactionTime.get_value()))};
+  
+ 
+  
+  EXAMPLE 2
+  ---------
+  The following example will use the actual duration of the state x as
+  duration of the state y by modifying the duration of state y when it is
+  entered:
+  
+   stateDuration = StateRuntimeVariable(nan);
+   x = State('x');
+   x.duration = 1000;
+   x.onExit = {@() stateDuration.set_value(x.elapsedTime)};
+  
+   y = State('y');
+   y.onEntry = {@() y.set_duration(stateDuration.value)};
+ 
+  See also State, SGLStateArc
+
+    Reference page in Doc Center
+       doc StateRuntimeVariable
+
+
+</pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2018b</a><br></p></div><!--
 ##### SOURCE BEGIN #####
-%% Helper functions
-% ARCADE provides several helper functions that are useful for controlling
-% the experiment and storing additional behavioral data. See below for a
-% list.
-% 
-%% |eventmarker|
+%% User functions
+% ARCADE provides several <matlab:doc('UserFunctions') UserFunctions> 
+% that are useful for controlling  the experiment and storing additional 
+% behavioral data. See below for a
+% list. They are stored in the |ARCADE/arcade/UserFunctions| folder.
+
+%%
+help createTrial
+%%
 help eventmarker
-%% |groupStimuli|
+%%
+help getPreviousTrialData
+%%
 help groupStimuli
-
-%% |photodiode|
+%%
+help logmessage
+%%
 help photodiode
-
-%% |trialerror|
-help trialerror
-
-%% |reward|
-help reward
-
-%% |reactiontime|
+%%
 help reactiontime
-
-%% |storeUserVariables|
-help storeUserVariables
-
-%% |requestQuitSession|
+%%
+help readEvtFile
+%%
 help requestQuitSession
+%%
+help retrieveConfig
+%%
+help reward
+%%
+help setManualRewardDuration
+%%
+help storeUserVariables
+%%
+help totalRewardTime
+%%
+help trackdigitalinput
+%%
+help trackeye
+%%
+help trialerror
+%%
+help StateRuntimeVariable
+
 ##### SOURCE END #####
 --></body></html>

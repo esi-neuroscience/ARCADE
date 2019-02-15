@@ -1,4 +1,24 @@
 function runCore(varargin)
+% RUNCORE - Start ARCADE 
+%
+%   runCore([pathToCfg])
+%
+% INPUT
+% -----
+%   pathToCfg : optional path to a file with a valid ARCADE configuration,
+%               e.g. resulting from a previous session, ArcadeConfig.save 
+%               or the configuration GUI (MainScreen).
+%               If runCore is called without an input argument, the
+%               MainScreen GUI will be opened to configure the session.
+%
+% runCore starts all enabled ARCADE submodules (EyeServer, ...),
+% initializes storing the behavioral data and runs the user's task script
+% for each trial, until a quit condition is fullfilled.
+%
+% For more information, see <a href="matlab:doc('arcade')">the ARCADE guide</a>.
+%
+% See also ArcadeConfig, launch_processes, createTrial, SGLStateArc
+
 run(fullfile(fileparts(mfilename('fullpath')), '..', 'add_arcade_to_path.m'))
 
 print_header(mfilename, varargin{:})
@@ -52,7 +72,7 @@ if isempty(cfg.rng)
     cfg.rng = rng(now, 'twister');
 else
     logmessage(...
-        sprintf('Using predefined random number generator (method=%s, seed=%u)', ...
+        sprintf('Using predefined random number generator (method=%s, seed=%d)', ...
         cfg.rng.Type, cfg.rng.Seed))
     rng(cfg.rng.Seed, cfg.rng.Type);
 end

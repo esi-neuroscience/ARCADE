@@ -1,5 +1,5 @@
 function photodiode(setmode)
-% PHOTODIODE - Set the mode of the photodiode stimulus
+%PHOTODIODE Set the mode of the photodiode stimulus
 % 
 % INPUT
 % -----
@@ -7,6 +7,10 @@ function photodiode(setmode)
 %   'off'	 : turn photodiode stimulus black
 % 	'toggle' : switch status of photodioe (i.e., on->off, or off->on)
 % 	'flicker': flip between black and white with every frame
+%
+% For more information, see <a href="matlab:doc('arcade')">the ARCADE guide</a>.
+%
+% See also StimServer
 
 switch setmode
     case 'toggle'
@@ -22,4 +26,5 @@ end
 
 
 end
+
 

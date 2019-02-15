@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Designing a task script</title><meta name="generator" content="MATLAB 8.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-06-27"><meta name="DC.source" content="DOCDesigningTaskFiles.m"><style type="text/css">
+      --><title>Designing a task script</title><meta name="generator" content="MATLAB 9.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2019-02-15"><meta name="DC.source" content="DOCDesigningTaskFiles.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -66,13 +66,13 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>Designing a task script</h1><!--introduction--><p>The task m-file is the where everything about the flow of your experiment is defined. In it, all stimuli, and trial states are defined. Each task script contains basically three sections</p><div><ol><li>Code to be run at beginning of each trial, e.g. definition of eventmarkers, the logic of experimental conditions, etc.</li><li>Definition of stimuli</li><li>Definition of trial states</li></ol></div><p>Task scripts should be stored in subfolder(s) of ARCADE/Tasks.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Handling conditions</a></li><li><a href="#3">Creating visual stimuli</a></li><li><a href="#4">Creating trial states</a></li></ul></div><h2>Handling conditions<a name="1"></a></h2><p>Choosing the condition for each trial is done in user-generated condition and block selection functions. These functions are selected during the configuration of the session and must take the current trial as first input and return associated condition/block as first output. For example, the following function will return a random condition between 1 and 10:</p><pre class="language-matlab"><span class="keyword">function</span> condition = random_condition(currentTrial)
+  </style></head><body><div class="content"><h1>Designing a task script</h1><!--introduction--><p>The task m-file is the where everything about the flow of your experiment is defined. In it, all stimuli, and trial states are defined. Each task script contains basically three sections</p><div><ol><li>Code to be run at beginning of each trial, e.g. definition of eventmarkers, the logic of experimental conditions, etc.</li><li>Definition of stimuli</li><li>Definition of trial states</li></ol></div><p>Task scripts should be stored in subfolder(s) of ARCADE/Tasks.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Handling conditions</a></li><li><a href="#3">Creating visual stimuli</a></li><li><a href="#4">Creating trial states</a></li></ul></div><h2 id="1">Handling conditions</h2><p>Choosing the condition for each trial is done in user-generated condition and block selection functions. These functions are selected during the configuration of the session and must take the current trial as first input and return associated condition/block as first output. For example, the following function will return a random condition between 1 and 10:</p><pre class="language-matlab"><span class="keyword">function</span> condition = random_condition(currentTrial)
 condition = randi(10)
 </pre><p>The block selection script is evaluated first and its outcome can be used in the condition selection script as second input argument, e.g.</p><pre class="language-matlab"><span class="keyword">function</span> condition = random_condition(currentTrial, currentBlock)
 <span class="keyword">...</span>
 </pre><p>To retrieve the outcomes of past trials for determining the next condition use the <tt>getPreviousTrialData</tt> function</p><pre class="codeinput">help <span class="string">getPreviousTrialData</span>
-</pre><pre class="codeoutput">  GETPREVIOUSTRIALDATA - Retreive behavioral outcomes and conditions of
-  previous trials
+</pre><pre class="codeoutput"> GETPREVIOUSTRIALDATA Retreive behavioral outcomes and conditions of
+                         previous trials
   
   USAGE
   ------
@@ -89,16 +89,19 @@ condition = randi(10)
         conditions: [1 1 2 2 1 1]
             blocks: [1 1 1 1 1 1]
       reactionTime: [NaN NaN NaN 0.2527 NaN 0.3257]
+ 	 userVariables: [0 0 1 40 NaN 0]
+ 
+  For more information, see &lt;a href="matlab:doc('arcade')"&gt;the ARCADE guide&lt;/a&gt;.
+ 
 
 </pre><p>After the selection was completed, the current trial number, condition and block are then available in the task script as the <tt>TrialData</tt> struct, e.g.</p><pre>TrialData =</pre><pre>   currentCondition: 8
        currentBlock: 1
-       currentTrial: 1</pre><p>This information can then be used to determine the flow of the trial.</p><p>If no condition and/or block selection functions are provided, the current condition/block is always 1.</p><h2>Creating visual stimuli<a name="3"></a></h2><p>Each stimulus is first defined with several stimulus type-specific parameters. The stimulus will then be turned on in the entry or exit functions of the trial states.</p><pre class="language-matlab"><span class="comment">% Code that creates stimuli</span>
+       currentTrial: 1</pre><p>This information can then be used to determine the flow of the trial. The logic of what should happen within a trial of a certain condition and block has to be handle in the task script by the user.</p><p>If no condition and/or block selection functions are provided, the current condition/block is always 1.</p><h2 id="3">Creating visual stimuli</h2><p>Each stimulus is first defined with several stimulus type-specific parameters. The stimulus will then be turned on in the entry or exit functions of the trial states.</p><pre class="language-matlab"><span class="comment">% Code that creates stimuli</span>
 target = Circle;
 target.position = [4 -1];
-target.color = [0 255 0 128];
+target.faceColor = [0 255 0 128];
 <span class="keyword">...</span>
-</pre><p>Documentation of all possible stimuli can be found <a href="DOCAvailableStimuli.html">here</a>.</p><h2>Creating trial states<a name="4"></a></h2><p>The flow of a trial is defined by a sequence of states. Each state starts with the execution of its <i>entry functions</i>, in which actions such as changing the stimulus parameters or triggering event markers can be taken.</p><p>After the completion of these, the state waits for the expiration of a timeout or an event, e.g. from an input device such as an eye tracker. The next state is determined during this waiting process, either by expiration of a timeout or by a triggered event, e.g. a fixation break.</p><p>After the waiting process is completed the <i>exit functions</i> are executed and the next state started.</p><p><img vspace="5" hspace="5" src="state.png" alt=""> </p><p>A trial consists of a sequence of these trial states starting at an <i>initial state</i> and ending in a <i>final state</i>. States are defined via the <tt>State</tt> class</p><pre class="codeinput">help <span class="string">State</span>
-properties(<span class="string">'State'</span>)
+</pre><p>Documentation of all possible stimuli can be found <a href="DOCAvailableStimuli.html">here</a>.</p><h2 id="4">Creating trial states</h2><p>The flow of a trial is defined by a sequence of states. Each state starts with the execution of its <i>entry functions</i>, in which actions such as changing the stimulus parameters or triggering event markers can be taken.</p><p>After the completion of these, the state waits for the expiration of a timeout or an event, e.g. from an input device such as an eye tracker. The next state is determined during this waiting process, either by expiration of a timeout or by a triggered event, e.g. a fixation break.</p><p>After the waiting process is completed the <i>exit functions</i> are executed and the next state started.</p><p><img vspace="5" hspace="5" src="state.png" alt=""> </p><p>A trial consists of a sequence of these trial states starting at an <i>initial state</i> and ending in a <i>final state</i>. States are defined via the <tt><a href="matlab:doc('State')">State</a></tt> class</p><pre class="codeinput">help <span class="string">State</span>
 </pre><pre class="codeoutput">  STATE - Class for experimental states
       
   When run, a State instance waits for specified system events and
@@ -108,25 +111,38 @@ properties(<span class="string">'State'</span>)
   A state can have entry and exit functions, which are run irrespective
   of the wait outcome. 
  
+  EXAMPLE
+  -------
+   % create state with name
+   sWaitResponse = State('waitForResponse');
+      
+   % set duration until timeout in ms and next state name after timeout
+   sWaitResponse.duration = 750;
+   sWaitResponse.nextStateAfterTimeout = 'noResponse';
+      
+   % define event names to wait for and associated next state names
+   sWaitResponse.waitEvents = {'targetIn', 'distracterIn'}
+   sWaitResponse.nextStateAfterTimeout = {'targetAcquired', 'distracterAcquired'};     
+   
+   % turn stimuli on when entering and off when exiting the state
+   sWaitResponse.onEntry = {...
+        @() set(target, 'visible', true), ...
+        @() set(distracter, 'visible', true), ...
+     };
+   sWaitResponse.onExit = {...
+        @() set(target, 'visible', false), ...
+        @() set(distracter, 'visible', false), ...
+     };
+ 
   See also trackeye, SGLStateArc, IPCEvent, function_handle, anondemo
       
 
+    Reference page in Doc Center
+       doc State
 
-Properties for class State:
 
-    name
-    waitEvents
-    waitForAllEvents
-    nextStateAfterEvent
-    nextStateAfterTimeout
-    onEntry
-    onExit
-    duration
-    maxRepetitions
-    runNumber
-
-</pre><p>The states are then passed to the <tt>createTrial</tt> function to create the state sequence.</p><pre class="codeinput">help <span class="string">createTrial</span>
-</pre><pre class="codeoutput">  CREATETRIAL - Create and start a trial from several trial states
+</pre><p>The states are then passed to the <tt><a href="matlab:doc('createTrial')">createTrial</a></tt> function to create the state sequence.</p><pre class="codeinput">help <span class="string">createTrial</span>
+</pre><pre class="codeoutput"> CREATETRIAL Create and start a trial from several trial states
   
   INPUT 
   -----
@@ -141,6 +157,8 @@ Properties for class State:
     ... 
     createTrial(initialState, sAcquireFix, ...)
     
+  For more information, see &lt;a href="matlab:doc('arcade')"&gt;the ARCADE guide&lt;/a&gt;.
+ 
   See also State, SGLStateArc
 
 </pre><p>Events can be triggered by any process and provide a flexible tool for managing the flow of the experiment. For example, the EyeServer can set events when the eye enters a specific area of the screen. See <a href="DOCEyetracking.html">here</a> for the documentation of eye tracking.</p><p><b>Example</b></p><p>The example below shows a complete state flow diagram for a simple detection task.</p><p><img vspace="5" hspace="5" src="exampleStateSequence.png" alt=""> </p><p>The definition of the states would start like this</p><pre class="codeinput">acqFix = State(<span class="string">'acqFix'</span>);
@@ -152,7 +170,7 @@ acqFix.onEntry = {<span class="keyword">...</span>
     @(x) eventmarker(1), <span class="keyword">...</span>
     @(x) set(fp, <span class="string">'visible'</span>, true), <span class="keyword">...</span>
     };
-</pre><p>The complete task script for the above task can be found in <a href="matlab:edit(fullfile(arcaderoot,'Tasks','Examples','exampleDetectTask.m'))">ARCADE\Tasks\Examples\exampleDetectTask.m</a></p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014a</a><br></p></div><!--
+</pre><p>The complete task script for the above task can be found in <a href="DOCExampleDetectTask.html">here</a></p><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2018b</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 %% Designing a task script
 % The task m-file is the where everything about the flow of your experiment
@@ -199,7 +217,9 @@ help getPreviousTrialData
 %         currentBlock: 1
 %         currentTrial: 1
 % 
-% This information can then be used to determine the flow of the trial. 
+% This information can then be used to determine the flow of the trial. The
+% logic of what should happen within a trial of a certain condition and
+% block has to be handle in the task script by the user.
 % 
 % If no condition and/or block selection functions are provided, the
 % current condition/block is always 1.
@@ -214,7 +234,7 @@ help getPreviousTrialData
 %   % Code that creates stimuli
 %   target = Circle;
 %   target.position = [4 -1];
-%   target.color = [0 255 0 128];
+%   target.faceColor = [0 255 0 128];
 %   ...
 % 
 %
@@ -238,11 +258,11 @@ help getPreviousTrialData
 % 
 % A trial consists of a sequence of these trial states starting at an 
 % _initial state_ and ending in a _final state_. States are defined via
-% the |State| class
+% the |<matlab:doc('State') State>| class
 help State
-properties('State')
+
 %%
-% The states are then passed to the |createTrial| function to create the
+% The states are then passed to the |<matlab:doc('createTrial') createTrial>| function to create the
 % state sequence.
 help createTrial
 %%
@@ -272,7 +292,7 @@ acqFix.onEntry = {...
 
 %%
 % The complete task script for the above task can be found in
-% <matlab:edit(fullfile(arcaderoot,'Tasks','Examples','exampleDetectTask.m')) ARCADE\Tasks\Examples\exampleDetectTask.m> 
+% <DOCExampleDetectTask.html here>
 
 ##### SOURCE END #####
 --></body></html>

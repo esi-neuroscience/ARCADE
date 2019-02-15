@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Digital input and output</title><meta name="generator" content="MATLAB 8.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-11-21"><meta name="DC.source" content="DOCDigitalInputOutput.m"><style type="text/css">
+      --><title>Digital input and output</title><meta name="generator" content="MATLAB 9.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2019-02-15"><meta name="DC.source" content="DOCDigitalInputOutput.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -66,14 +66,17 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>Digital input and output</h1><!--introduction--><p>Handling digital input and output in ARCADE is done via the DaqServer module, to which the Core sends commands for input and output.</p><p>Currently  only a DaqServer for National Instruments Cards is implemented, NidaqServer.exe. Detailed documentation for it can be found in arcade/DaqServer/NidaqServer.pdf.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Reward</a></li><li><a href="#5">Event markers</a></li><li><a href="#6">Tracking digital inputs</a></li></ul></div><h2>Reward<a name="1"></a></h2><p>Reward signals can be triggered as as on and off times of a digital output line via the <tt>reward</tt> command:</p><pre class="codeinput">help <span class="string">reward</span>
-</pre><pre class="codeoutput">  REWARD - Give a reward pulse or pulse sequence.
+  </style></head><body><div class="content"><h1>Digital input and output</h1><!--introduction--><p>Handling digital input and output in ARCADE is done via the DaqServer module, to which the Core sends commands for input and output.</p><p>Currently  only a DaqServer for National Instruments Cards is implemented, NidaqServer.exe. Detailed documentation for it can be found in arcade/DaqServer/NidaqServer.pdf.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Reward</a></li><li><a href="#5">Event markers</a></li><li><a href="#6">Tracking digital inputs</a></li></ul></div><h2 id="1">Reward</h2><p>Reward signals can be triggered as as on and off times of a digital output line via the <tt>reward</tt> command:</p><pre class="codeinput">help <span class="string">reward</span>
+</pre><pre class="codeoutput"> REWARD Give a reward pulse or pulse sequence.
   
   INPUT
   -----
   
    rewardTime : durations of reward pulses and inter-reward intervals in ms
   
+  The the reward is given by setting the digital reward line of the
+  DaqServer to 'on' for the specified duration.
+ 
   
   EXAMPLE
   -------
@@ -83,28 +86,35 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
   Give 2x50 ms pulse with a pause of 40 ms 
     reward([50 40 50]) 
   
+  For more information, see &lt;a href="matlab:doc('arcade')"&gt;the ARCADE guide&lt;/a&gt;.
   
+  See also DaqServer
 
 </pre><p>Alternatively, reward can be triggered by using an event</p><pre class="language-matlab">reward = IPCEvent(<span class="string">'Reward'</span>);
 reward.trigger();
-</pre><p>The reward button in the Control Screen uses this mechanism. The duration of the manual reward can be configured using the <tt>DaqServer.SetRewardTime</tt> command. Optionally, the DaqServer can be configured to send out an event marker with the manual reward by using <tt>DaqServer.SetRewardCode</tt>.</p><h2>Event markers<a name="5"></a></h2><p>Events occuring during the experiment, e.g. stimulus onset times, can be signalled to a recording system via digital event markers, usually 8-bit values. An eventmarker can be triggered using the <tt>eventmarker</tt> function.</p><pre class="codeinput">help <span class="string">eventmarker</span>
-</pre><pre class="codeoutput">  EVENTMARKER - Send a digital marker for an event to the DAQ card (if
-  available) and store the corresponding timestamp in the .evt file.
+</pre><p>The reward button in the Control Screen uses this mechanism. The duration of the manual reward can be configured using the <tt>DaqServer.SetRewardTime</tt> command. Optionally, the DaqServer can be configured to send out an event marker with the manual reward by using <tt>DaqServer.SetRewardCode</tt>.</p><h2 id="5">Event markers</h2><p>Events occuring during the experiment, e.g. stimulus onset times, can be signalled to a recording system via digital event markers, usually 8-bit values. An eventmarker can be triggered using the <tt>eventmarker</tt> function.</p><pre class="codeinput">help <span class="string">eventmarker</span>
+</pre><pre class="codeoutput"> EVENTMARKER Send a digital marker for an event to the DAQ card (if
+                available) and store the corresponding timestamp in the 
+                .evt file.
   
   INPUT
   -----
     value : event code number &gt;=0 and &lt;2^16
   
+  For more information, see &lt;a href="matlab:doc('arcade')"&gt;the ARCADE guide&lt;/a&gt;.
+ 
+  See also DaqServer
+ 
 
-</pre><h2>Tracking digital inputs<a name="6"></a></h2><p>ARCADE can track and respond to digitial inputs delivered via National Instruments PCI(e) cards such as the PCI-6221 and PCI-6503 models.</p><p>Tracking a digital input line is configured via the <tt>trackdigitalinput</tt> function, which sends a message to the <tt>DaqServer</tt>, which is currently always the <tt>NidaqServer.exe</tt>.</p><pre class="codeinput">help <span class="string">trackdigitalinput</span>
-</pre><pre class="codeoutput">  TRACKDIGITALINPUT - Tell DaqServer to signal events when digitial input line
-  state changes
+</pre><h2 id="6">Tracking digital inputs</h2><p>ARCADE can track and respond to digitial inputs delivered via National Instruments PCI(e) cards such as the PCI-6221 and PCI-6503 models.</p><p>Tracking a digital input line is configured via the <tt>trackdigitalinput</tt> function, which sends a message to the <tt>DaqServer</tt>, which is currently always the <tt>NidaqServer.exe</tt>.</p><pre class="codeinput">help <span class="string">trackdigitalinput</span>
+</pre><pre class="codeoutput"> TRACKDIGITALINPUT Tell DaqServer to signal events when digitial input line
+                      state changes
   
   INPUT
   -----
     lineNumber  : input line of DAQ card to be tracked. For PCI-6221 cards
   				  this can be 0-7 of port 2, for PCI-6503 only lines 4-7 of
-  				  port 2a re available as input
+  				  port 2 are available as input
  	eventName   : event name to be triggered when pulse arrives on input line
   				  or 2-element cell array with event names for line on and off
   
@@ -130,9 +140,9 @@ reward.trigger();
     * Before calling trackdigitalinput, the pipe to the DaqServer has to be opened
       (done automatically by ARCADE).
   
-  See also State
+  See also State, DaqServer
 
-</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014a</a><br></p></div><!--
+</pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2018b</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 %% Digital input and output
 % Handling digital input and output in ARCADE is done via the DaqServer
