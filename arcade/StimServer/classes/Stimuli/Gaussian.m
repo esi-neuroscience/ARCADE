@@ -49,15 +49,15 @@ classdef Gaussian < PixelShader
         end
 
         function set.sdx(obj, sdx)
-            if 5*max([sdx obj.sdy]) > min([obj.shaderWidth, obj.shaderHeight])
-                obj.shaderWidth = 5*max([sdx obj.sdy]);
-                obj.shaderHeight = 5*max([sdx obj.sdy]);
+            if 8*max([sdx obj.sdy]) > min([obj.shaderWidth, obj.shaderHeight])
+                obj.shaderWidth = 8*max([sdx obj.sdy]);
+                obj.shaderHeight = 8*max([sdx obj.sdy]);
             end
             obj.setParameter(1, sdx)
             obj.sdx = sdx;
         end
 
-        function set.sdy(obj, sdy);
+        function set.sdy(obj, sdy)
             if 5*max([sdy obj.sdx]) > min([obj.shaderWidth, obj.shaderHeight])
                 obj.shaderWidth = 5*max([sdy obj.sdx]);
                 obj.shaderHeight = 5*max([sdy obj.sdx]);
