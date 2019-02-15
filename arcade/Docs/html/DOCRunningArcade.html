@@ -79,9 +79,13 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
                 If runCore is called without an input argument, the
                 MainScreen GUI will be opened to configure the session.
  
+  runCore starts all enabled ARCADE submodules (EyeServer, ...),
+  initializes storing the behavioral data and runs the user's task script
+  for each trial, until a quit condition is fullfilled.
+ 
   For more information, see &lt;a href="matlab:doc('arcade')"&gt;the ARCADE guide&lt;/a&gt;.
  
-  See also ArcadeConfig
+  See also ArcadeConfig, launch_processes, createTrial, SGLStateArc
 
 </pre><p>All possible configuration options can be found in the <tt><a href="matlab:doc('ArcadeConfig')">ArcadeConfig</a></tt> class (see <tt>help ArcadeConfig</tt>).  A configuration can be created by</p><div><ol><li>starting ARCADE via <tt>start_arcade.bat</tt> and using the configuration GUI (MainScreen)</li><li>using the ArcadeConfig class and saving the result to a file</li></ol></div><h2 id="3">Configuring ARCADE via the Configuration GUI (MainScreen)</h2><p>The configuration GUI provides an easy way to configure an experimental session by graphically selecting files, colors, and parameters. Clicking the run button will launch a session with the selected parameters. This configuration will be saved as a .mat file both in the folder with the task script as well as with the behavioral data in the <tt>ARCADE/sessionLog/&lt;session&gt;/Backup</tt> folder. It can then later be used for running a session with the same parameters without launching the configuration GUI.</p><p><img vspace="5" hspace="5" src="MainScreen.png" alt=""> </p><h2 id="5">Configuring ARCADE on the command line</h2><p>Alternatively, the configuration can be created in the Command Window of MATLAB. See the example below.</p><pre class="codeinput">cfg = ArcadeConfig;
 cfg.Subject = <span class="string">'cat11'</span>;

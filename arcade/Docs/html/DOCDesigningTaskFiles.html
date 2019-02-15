@@ -111,6 +111,24 @@ target.faceColor = [0 255 0 128];
   A state can have entry and exit functions, which are run irrespective
   of the wait outcome. 
  
+  PROPERTIES
+  ----------
+    name : name of  state
+    waitEvents : cell array of event names to wait for durin run
+    waitForAllEvents : boolean flag whether to wait for all events
+    nextStateAfterEvent : cell aray of next state names corresponding 
+                          to events in waitEvents
+    nextStateAfterTimeout : name of next state after timeout
+    nextStateAfterMaxRepetitions : name of next state after maximal iterations
+    onEntry : cell array of anonymous functions to be executed during 
+              state entry
+    onExit : cell array of anonymous functions to be executed during 
+             state exit
+    duration : timeout for wait in ms counted from before the first
+               entry function
+    maxRepetitions : number of maximal iterations of state in a trial
+ 
+ 
   EXAMPLE
   -------
    % create state with name
