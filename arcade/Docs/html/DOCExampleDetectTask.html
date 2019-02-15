@@ -1,0 +1,304 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>DOCExampleDetectTask</title><meta name="generator" content="MATLAB 9.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2019-02-15"><meta name="DC.source" content="DOCExampleDetectTask.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1></h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">CONDITIONS</a></li><li><a href="#2">EYE TRACKING</a></li><li><a href="#3">STIMULI</a></li><li><a href="#4">STATES</a></li><li><a href="#5">create trial from states</a></li></ul></div><h2 id="1">CONDITIONS</h2><pre class="language-matlab">targetPositions = [
+    250 300;
+    -200 300;
+    0 500;
+    0 -500
+    ];
+</pre><pre class="language-matlab"><span class="comment">% end session after 50 trials or when 50 ms of reward duration was reached</span>
+fprintf(<span class="string">'Total reward so far was %.1f\n'</span>, totalRewardTime)
+<span class="keyword">if</span> TrialData.currentTrial &gt; 50 || totalRewardTime() &gt;= 500
+    requestQuitSession()
+<span class="keyword">end</span>
+</pre><h2 id="2">EYE TRACKING</h2><pre class="language-matlab">fixRadius = 50; <span class="comment">% px</span>
+targetRadius = 50;
+trackeye(<span class="string">'reset'</span>)
+fixEvents = trackeye([0 0], fixRadius, <span class="string">'fix'</span>);
+targetEvents = trackeye(targetPositions(TrialData.currentCondition,:), <span class="keyword">...</span>
+    targetRadius, <span class="string">'target'</span>);
+</pre><h2 id="3">STIMULI</h2><pre class="language-matlab">[TaskFolder,~] = fileparts(mfilename(<span class="string">'fullpath'</span>));
+</pre><pre class="language-matlab"><span class="comment">% fixation point</span>
+fp = Circle;
+fp.diameter = 5;
+fp.position = [0 0];
+</pre><pre class="language-matlab"><span class="comment">% target</span>
+target = Circle;
+target.diameter = 20;
+target.faceColor = [0 255 0];
+target.faceAlpha = 100;
+target.position = targetPositions(TrialData.currentCondition,:);
+</pre><h2 id="4">STATES</h2><pre class="language-matlab">acqFix = State(<span class="string">'acqFix'</span>);
+acqFix.duration = 5000;
+acqFix.nextStateAfterTimeout = <span class="string">'noFix'</span>;
+acqFix.waitEvents = fixEvents{1};
+acqFix.nextStateAfterEvent = <span class="string">'holdFix'</span>;
+acqFix.onEntry = {<span class="keyword">...</span>
+    @(x) eventmarker(1), <span class="keyword">...</span>
+    @(x) set(fp, <span class="string">'visible'</span>, true), <span class="keyword">...</span>
+    };
+</pre><pre class="language-matlab">holdFix = State(<span class="string">'holdFix'</span>);
+holdFix.duration = 1000;
+holdFix.waitEvents = fixEvents{2};
+holdFix.nextStateAfterEvent = <span class="string">'breakFix'</span>;
+holdFix.nextStateAfterTimeout = <span class="string">'targetOn'</span>;
+holdFix.onEntry = {<span class="keyword">...</span>
+    @(x) eventmarker(2), <span class="keyword">...</span>
+    };
+</pre><pre class="language-matlab">targetOn = State(<span class="string">'targetOn'</span>);
+targetOn.duration = 0;
+targetOn.onEntry = {<span class="keyword">...</span>
+    @() eventmarker(3), <span class="keyword">...</span>
+    @() groupStimuli(<span class="string">'start'</span>), <span class="keyword">...</span>
+    @() set(target, <span class="string">'visible'</span>, true), <span class="keyword">...</span>
+    @() set(fp, <span class="string">'visible'</span>, false), <span class="keyword">...</span>
+    @() photodiode(<span class="string">'on'</span>), <span class="keyword">...</span>
+    @() groupStimuli(<span class="string">'end'</span>), <span class="keyword">...</span>
+    };
+targetOn.nextStateAfterTimeout = <span class="string">'waitForResponse'</span>;
+</pre><pre class="language-matlab">waitForResponse = State(<span class="string">'waitForResponse'</span>);
+waitForResponse.duration = 5000;
+waitForResponse.nextStateAfterTimeout = <span class="string">'noResponse'</span>;
+waitForResponse.waitEvents = targetEvents{1};
+waitForResponse.nextStateAfterEvent = <span class="string">'correct'</span>;
+</pre><pre class="language-matlab">correct = State(<span class="string">'correct'</span>);
+correct.duration = 0;
+correct.nextStateAfterTimeout = <span class="string">'cleanUp'</span>;
+correct.onEntry = {<span class="keyword">...</span>
+    @() set(target, <span class="string">'visible'</span>, false), <span class="keyword">...</span>
+    @() eventmarker(4), <span class="keyword">...</span>
+    @() trialerror(1), <span class="keyword">...</span>
+    @() reward(100), <span class="keyword">...</span>
+    };
+</pre><pre class="language-matlab">noFix = State(<span class="string">'noFix'</span>);
+noFix.duration = 0;
+noFix.onEntry = {<span class="keyword">...</span>
+    @() eventmarker(9), <span class="keyword">...</span>
+    @() trialerror(9), <span class="keyword">...</span>
+    };
+noFix.nextStateAfterTimeout = <span class="string">'cleanUp'</span>;
+</pre><pre class="language-matlab">breakFix = State(<span class="string">'breakFix'</span>);
+breakFix.duration = 0;
+breakFix.onEntry = {<span class="keyword">...</span>
+    @() eventmarker(5), <span class="keyword">...</span>
+    @() trialerror(3), <span class="keyword">...</span>
+    };
+breakFix.nextStateAfterTimeout = <span class="string">'cleanUp'</span>;
+</pre><pre class="language-matlab">noResponse = State(<span class="string">'noResponse'</span>);
+noResponse.duration = 0;
+noResponse.onEntry = {<span class="keyword">...</span>
+    @() eventmarker(6), <span class="keyword">...</span>
+    @() trialerror(4), <span class="keyword">...</span>
+    };
+noResponse.nextStateAfterTimeout = <span class="string">'cleanUp'</span>;
+</pre><pre class="language-matlab">cleanUp = State(<span class="string">'cleanUp'</span>);
+cleanUp.onEntry = {<span class="keyword">...</span>
+    @() delete(fp), <span class="keyword">...</span>
+    @() delete(target), <span class="keyword">...</span>
+    @() photodiode(<span class="string">'off'</span>)
+    };
+cleanUp.nextStateAfterTimeout = <span class="string">'final'</span>;
+</pre><h2 id="5">create trial from states</h2><pre class="language-matlab">createTrial(<span class="string">'acqFix'</span>, <span class="keyword">...</span><span class="comment"> % initial state</span>
+    acqFix, holdFix, targetOn, waitForResponse, correct, <span class="keyword">...</span>
+    noFix, breakFix, noResponse, cleanUp);
+</pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2018b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+
+
+%% CONDITIONS
+%   targetPositions = [
+%       250 300;
+%       -200 300;
+%       0 500;
+%       0 -500
+%       ];
+%   
+%   % end session after 50 trials or when 50 ms of reward duration was reached
+%   fprintf('Total reward so far was %.1f\n', totalRewardTime)
+%   if TrialData.currentTrial > 50 || totalRewardTime() >= 500
+%       requestQuitSession()
+%   end
+
+
+
+%% EYE TRACKING
+%   fixRadius = 50; % px
+%   targetRadius = 50;
+%   trackeye('reset')
+%   fixEvents = trackeye([0 0], fixRadius, 'fix');
+%   targetEvents = trackeye(targetPositions(TrialData.currentCondition,:), ...
+%       targetRadius, 'target');
+
+
+%% STIMULI
+%   [TaskFolder,~] = fileparts(mfilename('fullpath'));
+%   
+%   % fixation point
+%   fp = Circle;
+%   fp.diameter = 5;
+%   fp.position = [0 0];
+%   
+%   % target
+%   target = Circle;
+%   target.diameter = 20;
+%   target.faceColor = [0 255 0];
+%   target.faceAlpha = 100;
+%   target.position = targetPositions(TrialData.currentCondition,:);
+%   
+%% STATES
+%   acqFix = State('acqFix');
+%   acqFix.duration = 5000;
+%   acqFix.nextStateAfterTimeout = 'noFix';
+%   acqFix.waitEvents = fixEvents{1};
+%   acqFix.nextStateAfterEvent = 'holdFix';
+%   acqFix.onEntry = {...
+%       @(x) eventmarker(1), ...
+%       @(x) set(fp, 'visible', true), ...
+%       };
+%   
+%   holdFix = State('holdFix');
+%   holdFix.duration = 1000;
+%   holdFix.waitEvents = fixEvents{2};
+%   holdFix.nextStateAfterEvent = 'breakFix';
+%   holdFix.nextStateAfterTimeout = 'targetOn';
+%   holdFix.onEntry = {...
+%       @(x) eventmarker(2), ...
+%       };
+%   
+%   targetOn = State('targetOn');
+%   targetOn.duration = 0;
+%   targetOn.onEntry = {...
+%       @() eventmarker(3), ...
+%       @() groupStimuli('start'), ...
+%       @() set(target, 'visible', true), ...
+%       @() set(fp, 'visible', false), ...
+%       @() photodiode('on'), ...
+%       @() groupStimuli('end'), ...
+%       };
+%   targetOn.nextStateAfterTimeout = 'waitForResponse';
+%   
+%   waitForResponse = State('waitForResponse');
+%   waitForResponse.duration = 5000;
+%   waitForResponse.nextStateAfterTimeout = 'noResponse';
+%   waitForResponse.waitEvents = targetEvents{1};
+%   waitForResponse.nextStateAfterEvent = 'correct';
+%   
+%   correct = State('correct');
+%   correct.duration = 0;
+%   correct.nextStateAfterTimeout = 'cleanUp';
+%   correct.onEntry = {...
+%       @() set(target, 'visible', false), ...
+%       @() eventmarker(4), ...
+%       @() trialerror(1), ...
+%       @() reward(100), ...
+%       };
+%   
+%   noFix = State('noFix');
+%   noFix.duration = 0;
+%   noFix.onEntry = {...
+%       @() eventmarker(9), ...
+%       @() trialerror(9), ...
+%       };
+%   noFix.nextStateAfterTimeout = 'cleanUp';
+%   
+%   
+%   breakFix = State('breakFix');
+%   breakFix.duration = 0;
+%   breakFix.onEntry = {...
+%       @() eventmarker(5), ...
+%       @() trialerror(3), ...
+%       };
+%   breakFix.nextStateAfterTimeout = 'cleanUp';
+%   
+%   
+%   noResponse = State('noResponse');
+%   noResponse.duration = 0;
+%   noResponse.onEntry = {...
+%       @() eventmarker(6), ...
+%       @() trialerror(4), ...
+%       };
+%   noResponse.nextStateAfterTimeout = 'cleanUp';
+%   
+%   
+%   cleanUp = State('cleanUp');
+%   cleanUp.onEntry = {...
+%       @() delete(fp), ...
+%       @() delete(target), ...
+%       @() photodiode('off')
+%       };
+%   cleanUp.nextStateAfterTimeout = 'final';
+
+%% create trial from states
+%   createTrial('acqFix', ... % initial state
+%       acqFix, holdFix, targetOn, waitForResponse, correct, ...
+%       noFix, breakFix, noResponse, cleanUp);
+
+
+##### SOURCE END #####
+--></body></html>
