@@ -1,5 +1,5 @@
 classdef DaqServer < handle
-    % DAQSERVER - MATLAB interface for communication with DaqServers
+    % DAQSERVER - MATLAB interface for communication with DaqServer process
     % 
     % The DaqServer process handles digital input and output, i.e.
     % eventmarkers, reward, levers, etc. The communication between the Core
