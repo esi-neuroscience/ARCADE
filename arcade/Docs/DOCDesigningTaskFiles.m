@@ -43,7 +43,9 @@ help getPreviousTrialData
 %         currentBlock: 1
 %         currentTrial: 1
 % 
-% This information can then be used to determine the flow of the trial. 
+% This information can then be used to determine the flow of the trial. The
+% logic of what should happen within a trial of a certain condition and
+% block has to be handle in the task script by the user.
 % 
 % If no condition and/or block selection functions are provided, the
 % current condition/block is always 1.
@@ -58,7 +60,7 @@ help getPreviousTrialData
 %   % Code that creates stimuli
 %   target = Circle;
 %   target.position = [4 -1];
-%   target.color = [0 255 0 128];
+%   target.faceColor = [0 255 0 128];
 %   ...
 % 
 %
@@ -82,11 +84,11 @@ help getPreviousTrialData
 % 
 % A trial consists of a sequence of these trial states starting at an 
 % _initial state_ and ending in a _final state_. States are defined via
-% the |State| class
+% the |<matlab:doc('State') State>| class
 help State
-properties('State')
+
 %%
-% The states are then passed to the |createTrial| function to create the
+% The states are then passed to the |<matlab:doc('createTrial') createTrial>| function to create the
 % state sequence.
 help createTrial
 %%
@@ -116,4 +118,4 @@ acqFix.onEntry = {...
 
 %%
 % The complete task script for the above task can be found in
-% <matlab:edit(fullfile(arcaderoot,'Tasks','Examples','exampleDetectTask.m')) ARCADE\Tasks\Examples\exampleDetectTask.m> 
+% <DOCExampleDetectTask.html here>

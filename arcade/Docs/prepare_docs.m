@@ -4,9 +4,11 @@ function prepare_docs(format)
 if ~exist('format', 'var'); format = 'html'; end
 outputdir = fullfile(arcaderoot, 'arcade', 'Docs', format);
 
-% cfg = ArcadeConfig;
-% cfg.ControlScreen = '';
-% procs = launch_processes(cfg);
+cfg = ArcadeConfig;
+cfg.ControlScreen = '';
+cfg.EyeServer = 'EyeLinkServer.exe';
+procs = launch_processes(cfg);
+c = onCleanup(@cleanup);
 
 docDirectory = fileparts(mfilename('fullpath'));
 
@@ -14,7 +16,15 @@ docFiles = dir(fullfile(docDirectory, 'DOC*.m'));
 
 for iFile = 1:length(docFiles)
     publish(fullfile(docDirectory, docFiles(iFile).name), ...
-        'format', format, 'outputDir', outputdir, 'evalCode', false);
+        'format', format, 'outputDir', outputdir, 'evalCode', true);
 end
-% StimServer.delete
-% clear procs
+
+doc arcade
+
+end
+
+
+function cleanup()
+StimServer.delete
+EyeServer.delete
+end

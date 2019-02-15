@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Tracking the eye position</title><meta name="generator" content="MATLAB 9.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2019-02-14"><meta name="DC.source" content="DOCEyetracking.m"><style type="text/css">
+      --><title>Tracking the eye position</title><meta name="generator" content="MATLAB 9.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2019-02-15"><meta name="DC.source" content="DOCEyetracking.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -67,8 +67,51 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
   </style></head><body><div class="content"><h1>Tracking the eye position</h1><p>ARCADE can track and respond to the eye position of the subject. This is handled by the <tt>EyeServer</tt>, which sets system events when the gaze enters an area.</p><p>Tracking the eye is configured via the <tt>trackeye</tt> function, which sends a message to the <tt>EyeServer</tt>.</p><pre class="codeinput">help <span class="string">trackeye</span>
+</pre><pre class="codeoutput"> TRACKEYE Tell EyeServer to signal events when gaze enters/exits a screen position
+  
+  INPUT
+  -----
+    position    : [x y] screen position to be tracked in px rel. to center
+    tolerance   : fixation radius in px around position 
+    name        : name of tracked position
+    
+    or
+  
+    'reset'     : delete all tracked positions
+  
+  OUTPUT
+  ------
+    eventNames  : cell array of event names that will be triggered by the
+                  EyeServer. 1st element is event for entering a
+                  position, 2nd for leaving a position. These names can be
+                  used for the waitEvents property of the experimental
+                  States.
+  
+  EXAMPLE
+  -------
+    trackeye('reset')
+    eventNames = trackeye([0 0], 50, 'fixationPoint')
+    eventNames = 
+  
+          'fixationPointIn'    'fixationPointOut'
+  
+  Notes: 
+    * To add more than one position, trackeye has to be called repeatedly.
+      Positions will be tracked until trackeye('reset') is called.
+    * Before calling trackeye, the pipe to the EyeServer has to be opened
+      (done automatically by ARCADE).
+  
+  For more information, see &lt;a href="matlab:doc('arcade')"&gt;the ARCADE guide&lt;/a&gt;.
+ 
+  See also State, EyeServer
+
 </pre><p>The current eye position can also be retrieved via the <tt>EyeClient</tt> class.</p><pre class="codeinput">eye = EyeClient;
 eye.eyePosition
+</pre><pre class="codeoutput">
+ans =
+
+     0     0
+
 </pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2018b</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 %% Tracking the eye position

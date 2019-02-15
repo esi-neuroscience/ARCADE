@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Behavioral data</title><meta name="generator" content="MATLAB 9.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2019-02-14"><meta name="DC.source" content="DOCBehavioralData.m"><style type="text/css">
+      --><title>Behavioral data</title><meta name="generator" content="MATLAB 9.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2019-02-15"><meta name="DC.source" content="DOCBehavioralData.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -67,7 +67,34 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
   </style></head><body><div class="content"><h1>Behavioral data</h1><!--introduction--><p>ARCADE stores a record of the subject's behavior during a session in subfolders of <tt>ARCADE\sessionLog</tt>. Each session will be stored in the folder named <tt>ARCADE\sessionLog\subject\experiment\session</tt> with <tt>subject</tt>, <tt>experiment</tt> and <tt>session</tt> as defined during configuration of the experiment.</p><p>ARCADE will create multiple files in the subfolder <tt>Behaviour</tt> of the session folder all named with the pattern <tt>subject_experiment_session.ext</tt></p><p>After a successful session there will be 4 files:</p><div><ul><li><tt>.mat</tt> : MATLAB file containing information about all trials. This file            is only created after a completed session.</li><li><tt>.esi</tt> and <tt>.hdr</tt> : binary files containing the same behavioral record as the <tt>.mat</tt> file. These files are continouously updated during the session and are always written.</li><li><tt>.evt</tt> : binary file with event timestamps and codes. The timestamps are in microseconds and relative to the initialization of the experiment. Events are written to disk during the inter-trial interval.</li></ul></div><p><b>Example</b></p><p>Contents of <tt>ARCADE\sessionLog\hugo_20170523_petalStep2-3c_12\Behaviour</tt> after session 12 with monkey hugo running the petalStep2-3c task on the 23 May 2017:</p><div><ul><li>hugo_20170523_petalStep2-3c_12.esi</li><li>hugo_20170523_petalStep2-3c_12.hdr</li><li>hugo_20170523_petalStep2-3c_12.mat</li><li>hugo_20170523_petalStep2-3c_12.evt</li></ul></div><!--/introduction--><p>To read the events from the <tt>.evt</tt> file into MATLAB, use <tt>readEvtFile</tt></p><pre class="codeinput">help <span class="string">readEvtFile</span>
+</pre><pre class="codeoutput"> READEVTFILE Read .evt file written by ARCADE.
+    
+  .evt files contain the timestamps in microseconds and marker values as 
+  alternating uint64 values.
+  
+  INPUT
+  -----
+        filename : string, optional
+  
+  OUTPUT
+  ------
+        evt : struct with fields timestamps (us) and values
+  
+
 </pre><p>If a session could not be completed successfully the <tt>.esi</tt> and <tt>.hdr</tt> files can be converted to a MATLAB file with <tt>convertEsiFile</tt>.</p><p><b>User-defined variables</b></p><p>Arbitrary variables for user data can be stored using storeUserVariables</p><pre class="codeinput">help <span class="string">storeUserVariables</span>
+</pre><pre class="codeoutput">  STOREUSERVARIABLES Store a variable in the behavioral data file of ARCADE.
+  
+  INPUT
+  -----
+    var : MATLAB variable to be stored in behavioral data
+  
+  Only one variable per trial can be stored. Multiple
+  variables can be held together in cell array or struct.
+  
+  Note: large variables (&gt; ~5 MB) will cause a noticable delay.
+  
+  For more information, see &lt;a href="matlab:doc('arcade')"&gt;the ARCADE guide&lt;/a&gt;.
+
 </pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2018b</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 %% Behavioral data
