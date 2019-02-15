@@ -1,6 +1,12 @@
 classdef IPCEvent < handle
     % IPCEVENT - Class for handling kernel32 system events
     % 
+    % kernel32 Named Events provide a fast and flexible way for signaling
+    % timing and synchronization between processes. In ARCADE, the
+    % different servers trigger (set) these events when certain conditions
+    % are fulfilled, e.g. the eye enters a screen region or a leverl is
+    % pulled.
+    %  
     % IPCEvent always calls CreateEvent, which either creates an event or
     % returns the handle of an existing event, see <a href="https://docs.microsoft.com/en-us/windows/desktop/sync/synchronization">MSDN</a> for more information.
     % 
