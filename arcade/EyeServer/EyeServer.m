@@ -31,12 +31,13 @@ classdef EyeServer < handle
             if ~libisloaded('kernel32')
                 loadlibrary('kernel32', @win_kernel32);
             end;
+            pipeName='\pipe\EyeServerPipe';
             if isequal(nargin, 0); 
                 server='.'; 
-                pipeName='\pipe\EyeServerPipe';
+            %    pipeName='\pipe\EyeServerPipe';
             else                 
                 server = varargin{1}; 
-                pipeName = varargin{2}; 
+%                pipeName = varargin{2}; 
             end;
 
             GENERIC_READ_WRITE = uint32(hex2dec('C0000000'));
@@ -61,7 +62,7 @@ classdef EyeServer < handle
                 if ~isequal(ConstructorResult, 0)
                     ConstructorResult
                 end
-                error('EyeServer:Constructor:failed', ...
+                error('EyeServer:Connect:failed', ...
                     'Can''t connect to EyeServer''s pipe. Is the server running ?');
             end
             
