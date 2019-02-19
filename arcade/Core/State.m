@@ -8,6 +8,24 @@ classdef State < handle
     % A state can have entry and exit functions, which are run irrespective
     % of the wait outcome. 
     %
+    % PROPERTIES
+    % ----------
+    %   name : name of  state
+    %   waitEvents : cell array of event names to wait for durin run
+    %   waitForAllEvents : boolean flag whether to wait for all events
+    %   nextStateAfterEvent : cell aray of next state names corresponding 
+    %                         to events in waitEvents
+    %   nextStateAfterTimeout : name of next state after timeout
+    %   nextStateAfterMaxRepetitions : name of next state after maximal iterations
+    %   onEntry : cell array of anonymous functions to be executed during 
+    %             state entry
+    %   onExit : cell array of anonymous functions to be executed during 
+    %            state exit
+    %   duration : timeout for wait in ms counted from before the first
+    %              entry function
+    %   maxRepetitions : number of maximal iterations of state in a trial
+    %
+    %
     % EXAMPLE
     % -------
     %  % create state with name
@@ -80,6 +98,8 @@ classdef State < handle
             obj.evalFunctions(obj.onEntry)            
                     
             result = State.WAIT_TIMEOUT;
+            % FIXME: this workaround was introduced because MATLAB waited
+            % ca. 10% longer than specified in the wait duration.
             while (toc(obj.startTic) < obj.duration/1000) && result == State.WAIT_TIMEOUT                
                 if ~isempty(obj.waitEvents)
                     result = WaitForEvents(1, ...

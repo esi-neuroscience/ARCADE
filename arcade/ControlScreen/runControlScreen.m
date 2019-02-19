@@ -1,5 +1,6 @@
 function runControlScreen(varargin)
-run('../add_arcade_to_path.m')
+
+run(fullfile(fileparts(mfilename('fullpath')), '..', 'add_arcade_to_path.m'))
 
 % turn on all warnings
 warning('on','all');
@@ -13,10 +14,31 @@ if verLessThan('matlab', '9.6')
 end
 
 SGLTrialDataPipe.Create();
+finishup = onCleanup(@cleanup);
 logmessage('Created TrialData Pipe')
+
+logmessage(sprintf('Using predefined configuration file\n         %s', varargin{:}))
+
+if nargin == 1
+    cfg = ArcadeConfig(load(varargin{1}));
+else
+    cfg = ArcadeConfig;
+end
 
 % Launch/Initialize ControlScreen
 CntlScreen = ControlScreen.launch;
+
+for iTrialErrorLegend = 1:length(cfg.TrialErrorLegend)
+    currErrLegend = cfg.TrialErrorLegend{iTrialErrorLegend};
+    if ~isempty(currErrLegend)
+        tag = sprintf('trx_%d', iTrialErrorLegend-1);
+        set(findobj(CntlScreen.hfig, 'Tag', tag), ...
+            'String', currErrLegend)
+    end
+end
+set(findobj(CntlScreen.hfig, 'Tag', 'stx_sessionName'), ...
+    'String', cfg.sessionName)
+
 
 % launch Eye Plot
 PltEyePos = SGLEyePosition.launch(CntlScreen.hfig);
@@ -24,17 +46,17 @@ PltEyePos = SGLEyePosition.launch(CntlScreen.hfig);
 % Launch SharedDataPool
 ShrdDataPool = SGLSharedDataPool.launch(CntlScreen.hfig);
 
-finishup = onCleanup(@cleanup);
+
 guiperf = zeros(1,2); % [WriteTime, UpdateTime]
 
 logmessage('Entering loop');
 
 % Signal Core process that we're ready for connect
 controlScreenEvent = IPCEvent('ControlScreenDone');
-controlScreenEvent.trigger()
+controlScreenEvent.trigger();
 
 % Wait for Core process to connect
-controlScreenEvent.waitForTrigger(5000)
+controlScreenEvent.waitForTrigger(5000);
 
 try
     eyeClient = EyeClient;

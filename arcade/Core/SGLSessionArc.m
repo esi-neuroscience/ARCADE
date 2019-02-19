@@ -64,8 +64,8 @@ classdef (Sealed) SGLSessionArc
 
             %----------------------------------%
             %         Set parameters 
-            StimBckgrnd.backgroundColor = round(BHVstore.cfg.BackgroundRGB*255); % colours
-            StimBckgrnd.pauseColor      = round(BHVstore.cfg.PauseRGB*255);
+            StimBckgrnd.backgroundColor = BHVstore.cfg.BackgroundRGB; % colours
+            StimBckgrnd.pauseColor      = BHVstore.cfg.PauseRGB;
             
             StimServer.PDshow(1);    % enable use of photo-diode
             StimBckgrnd.setBackground;  % make sure background is correct color 

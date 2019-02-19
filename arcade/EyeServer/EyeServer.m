@@ -1,5 +1,37 @@
 classdef EyeServer < handle
-    % EyeServer - Class for communicating with EyeServer
+    % EYESERVER - MATLAB interface for communication with the EyeServer
+    %             process
+    % 
+    % The EyeServer process handles acquisition of the eye position and
+    % signals <a href="https://docs.microsoft.com/en-us/windows/desktop/Sync/event-objects">Named Events</a> when the eye enters/leaves user-defined regions on
+    % the screen. Communication between the Core process and the EyeServer 
+    % happens via a <a href="https://docs.microsoft.com/en-us/windows/desktop/ipc/named-pipes">Named Pipe</a>, for which this MATLAB class provides an interface.
+    %
+    % Currently only one EyeServer is implemented (EyeLinkServer.exe), which 
+    % supports Eyelink 1000/2000 devices. A different EyeServer should
+    % set up the same Named Pipe and respond to the commands implemented in
+    % this class. 
+    %
+    % The methods listed below are not meant for the user during session
+    % runtime. Instead, the corresponding functions in the UserFunctions
+    % folder should be used (see help UserFunctions).
+    %
+    %
+    % METHODS (static)
+    % ----------------
+    %  Connect() : Open pipe to the EyeServer for sending commands
+    %  Disconnect() : Disconnect from pipe to EyeServer
+    %  GetConnectionStatus() : Returns true for connect
+    %  Start(filename) : Start recording and store data in filename.  
+    %                    For the EyeLinkServer this filename refers to the 
+    %                    Eyelink PC's filesystem.
+    %  Stop(filename) : Stop recording and copy data to local filename
+    %  Transform(varargin) : apply a transform to the eye position signal
+    %       Transform()					remove transformation
+	%       Transform([x0 y0 x1 y1])	linear transformation
+    %	    Transform([x0 y0 x1 y1 x2 y2]) quadratic transformation
+    %
+    % See also trackeye, EyeTarget, IPCEvent
     
     properties (Constant, Access = private, Hidden = true)
         this = EyeServer
@@ -27,18 +59,28 @@ classdef EyeServer < handle
                 warning('EyeServer:Connect:failed', ...
                     'EyeServer connection was already established.');
                 return;
-            end;
+            end
             if ~libisloaded('kernel32')
                 loadlibrary('kernel32', @win_kernel32);
+<<<<<<< HEAD
             end;
             pipeName='\pipe\EyeServerPipe';
             if isequal(nargin, 0); 
+=======
+            end
+            if isequal(nargin, 0)
+>>>>>>> d7df27c01a5d5551e42baf78c273dbed59ccd0a4
                 server='.'; 
             %    pipeName='\pipe\EyeServerPipe';
             else                 
                 server = varargin{1}; 
+<<<<<<< HEAD
 %                pipeName = varargin{2}; 
             end;
+=======
+                pipeName = varargin{2}; 
+            end
+>>>>>>> d7df27c01a5d5551e42baf78c273dbed59ccd0a4
 
             GENERIC_READ_WRITE = uint32(hex2dec('C0000000'));
             obj.hPipe = calllib('kernel32', 'CreateFileA', ...
@@ -60,7 +102,7 @@ classdef EyeServer < handle
                 obj.hPipe = libpointer;
                 ConstructorResult = calllib('kernel32', 'GetLastError');
                 if ~isequal(ConstructorResult, 0)
-                    ConstructorResult
+                    disp(ConstructorResult)
                 end
                 error('EyeServer:Connect:failed', ...
                     'Can''t connect to EyeServer''s pipe. Is the server running ?');

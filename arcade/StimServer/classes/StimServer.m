@@ -1,18 +1,29 @@
 classdef (Sealed = true) StimServer < handle
     % STIMSERVER - MATLAB interface for communication with StimServer.exe 
     %
+    % The StimServer process displays visual stimuli on screen. 
+    % Visual stimuli are controlled by sending commands via a  
+    % <a href="https://docs.microsoft.com/en-us/windows/desktop/ipc/named-pipes">Named Pipe</a>, for which this MATLAB class provides an interface.
     %  
+    % USAGE
+    % -----
+    % StimServer.exe must be started before using this class. The Connect method
+    % must be called before any other commands can be sent. The methods 
+    % listed below are not meant for the user during session
+    % runtime. Instead, Stimulus classes (see help Stimuli) and the 
+    % corresponding functions in the UserFunctions folder should be used (see help UserFunctions).
+    %
     % METHODS (static)
     % ----------------
     %  Connect() : Open pipe to StimServer.exe for sending commands
-    %  Defer(deferred) : Enable (1) or disable (0) grouping of following commands
+    %  Defer(deferred) : Enable (deferred=1) or disable (deferred=0) 
+    %                    grouping of following commands
     %  Disconnect() : Disconnect from StimServer.exe
     %  GetConnectionStatus() : Returns status of StimServer pipe connection.
     %  GetFrameRate() : Returns current frame rate of StimServer screen
     %  PDmode(mode) : Change mode of photo diode. 0=off, 1=on, 2=toggle, 3=flicker
     %  PDposition(pos) : Change position of photo diode. 0=upper left, 1=lower left
     %  PDshow(shown) : Enable (shown=1) or disable (shown=0) photo diode
-    %  RemoveAll() : Remove all stimuli from StimServer, doesn't clear MATLAB objects
     %  SetBackgroundColor(color) : Set the full screen background color (24-bit RGB)
     %  SetDefaultDrawColor(color) : Set the default draw color of Symbols and Shapes
     %  SetDefaultFinalAction(mask) : Set default terminal action for Animations
@@ -21,21 +32,9 @@ classdef (Sealed = true) StimServer < handle
     %    
     % For more information, see the accompanying StimServer documentation 
     % (StimServer.pdf) and <a href="matlab:doc('arcade')">the ARCADE guide</a>.
-    % 
-    % USAGE
-    % -----
-    % StimServer.exe must be started before using this class. The Connect method
-    % must be called before any other commands can be sent. The above functions 
-    % for controlling the StimServer are <a href="https://www.mathworks.com/help/releases/R2018a/matlab/matlab_oop/static-methods.html">static methods</a>, i.e. they can be called 
-    % directly without creating a StimServer object.
-    % 
-    % For example, changing the background color to black is achieved by calling
-    %      StimServer.SetBackgroundColor([0, 0, 0])
-    % 
-    % Communication between MATLAB and the StimServer is implemented via a <a href="https://docs.microsoft.com/en-us/windows/desktop/ipc/named-pipes">Named Pipe</a>,
-    % using calls to the kernel32 sytem library.
-    %  
-    % See also Stimulus, win_kernel32, MSMessagePipe
+    %      
+    % See also Stimulus, backgroundColor, win_kernel32, groupStimuli,
+    %          photodiode, 
     
     properties (Constant, Access = private, Hidden = true)
         this = StimServer
@@ -62,16 +61,16 @@ classdef (Sealed = true) StimServer < handle
             obj = StimServer.this;
             if ~obj.hPipe.isNull()
                 return;
-            end;
+            end
             if ~libisloaded('kernel32')
                 loadlibrary('kernel32', @win_kernel32);
-            end;
+            end
   
-            if isequal(nargin, 0); 
+            if isequal(nargin, 0)
                 server='.'; 
             else 
                 server = varargin{1}; 
-            end;
+            end
 
             GENERIC_READ_WRITE = uint32(hex2dec('C0000000'));
             obj.hPipe = calllib('kernel32', 'CreateFileA', ...
@@ -82,23 +81,8 @@ classdef (Sealed = true) StimServer < handle
                 3, ...  % OPEN_EXISTING
                 0, ...
                 []);
-            assert(~obj.hPipe.isNull());
-            result = calllib('kernel32', 'GetNamedPipeInfo', ...
-                obj.hPipe, ...
-                [], ...
-                [], ...
-                [], ...
-                []);
-            if isequal(result, 0)
-                obj.hPipe = libpointer;
-                ConstructorResult = calllib('kernel32', 'GetLastError');
-                if ~isequal(ConstructorResult, 0)
-                    ConstructorResult
-                end
-                error('StimServer:Constructor:failed', ...
-                    'Can''t connect to StimServer''s pipe. Is the server running ?');
-            end
-            %             disp('Connected to StimServer pipe');
+            assert(~obj.hPipe.isNull(), ...
+                'Can''t connect to StimServer''s pipe. Is the server running ?');                           
         end
         
         function Disconnect()
@@ -171,7 +155,7 @@ classdef (Sealed = true) StimServer < handle
         end
 
         function waitResult = waitUntilDone(timeout)
-            IPCEvent.wait_for_event(StimServer.doneEventName, timeout)
+            waitResult = IPCEvent.wait_for_event(StimServer.doneEventName, timeout);
         end
     end
     

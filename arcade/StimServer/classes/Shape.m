@@ -6,7 +6,7 @@ classdef (Abstract) Shape < Stimulus
     %
     % PROPERTIES
     % -----------
-    %    drawMode  : integer mode for outline/face drawing: 
+    %    drawMode  : integer mode for outline/face drawing:
     %                1=face only, 2=edge only, 3=face and edge
     %    lineWidth : width of outline (pixel)
     %    angle     : counter-clockise rotation angle (degree), 0=horizontal
@@ -28,6 +28,11 @@ classdef (Abstract) Shape < Stimulus
         faceColor = [255 255 255]; % 24-bit [r g b] value
         lineColor = [255 255 255]; %  24-bit [r g b] value
         
+    end
+    
+    properties ( Access = public, Dependent = true, Transient = true, Hidden = true )
+        color % obsolete property for backwards compatibility with ARCADE < 2.5
+        alpha % obsolete property for backwards compatibility with ARCADE < 2.5
     end
     
     properties ( Dependent = true )
@@ -94,7 +99,25 @@ classdef (Abstract) Shape < Stimulus
         function alpha = get.lineAlpha(obj)
             alpha = obj.lineAlpha_;
         end
-                
+        
+        function color = get.color(obj)
+            color = obj.faceColor;
+        end
+        
+        function set.color(obj, color)
+            warning('The color property is obsolete. Use faceColor instead.')
+            obj.faceColor = color;
+        end
+        
+        function alpha = get.alpha(obj)
+            alpha = obj.faceAlpha;
+        end
+        
+        function set.alpha(obj, alpha)
+            warning('The alpha property is obsolete. Use faceAlpha instead.')
+            obj.faceAlpha = alpha;
+        end
+        
     end
     
 end
