@@ -62,25 +62,14 @@ classdef EyeServer < handle
             end
             if ~libisloaded('kernel32')
                 loadlibrary('kernel32', @win_kernel32);
-<<<<<<< HEAD
-            end;
-            pipeName='\pipe\EyeServerPipe';
-            if isequal(nargin, 0); 
-=======
             end
+            pipeName='\pipe\EyeServerPipe';
             if isequal(nargin, 0)
->>>>>>> d7df27c01a5d5551e42baf78c273dbed59ccd0a4
                 server='.'; 
-            %    pipeName='\pipe\EyeServerPipe';
             else                 
                 server = varargin{1}; 
-<<<<<<< HEAD
-%                pipeName = varargin{2}; 
-            end;
-=======
                 pipeName = varargin{2}; 
             end
->>>>>>> d7df27c01a5d5551e42baf78c273dbed59ccd0a4
 
             GENERIC_READ_WRITE = uint32(hex2dec('C0000000'));
             obj.hPipe = calllib('kernel32', 'CreateFileA', ...
