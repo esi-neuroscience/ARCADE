@@ -36,10 +36,7 @@ classdef RFhandmapper < handle
         eye
         
         % processes
-        EyeServer = 'EyelinkServer.exe';
-        DaqServer = 'NidaqServer.exe';
-        StimServer = 'StimServer.exe';
-        ControlScreen = []; % place holder for launch_processes
+        
         stimServerProcess
         daqServerProcess
         eyeServerProcess
@@ -95,7 +92,13 @@ classdef RFhandmapper < handle
             
             % start displaying
             obj.currstim = obj.stim{1};
-            obj.start();
+            
+            try
+                obj.start();
+            catch ME
+                obj.delete();
+                rethrow(ME)
+            end
             
             % close
             obj.delete();
@@ -104,9 +107,18 @@ classdef RFhandmapper < handle
 
         function connectProcesses(obj)
             
-            cfg = struct(obj);
+            cfg = ArcadeConfig();
+            cfg.EyeServer = 'EyelinkServer.exe';
+            cfg.DaqServer = 'NidaqServer.exe';
+            cfg.StimServer = 'StimServer.exe';
+            cfg.ControlScreen = ''; % place holder for launch_processes
 
             procs = launch_processes(cfg);
+            
+            
+            obj.eyeServerProcess = procs{1};
+            obj.daqServerProcess = procs{2};
+            obj.stimServerProcess = procs{3};
 
         end
         
@@ -264,19 +276,19 @@ classdef RFhandmapper < handle
         
         function delete(obj)
             
+            delete(obj.currstim)
+            cellfun(@(x) delete(x), obj.stim)
+            
             StimServer.Disconnect();
             delete(obj.stimServerProcess);
             
             DaqServer.Disconnect();
             delete(obj.daqServerProcess);
             
-            SGLEyeServerPipe.Close();
-            stopEvent = IPCEvent('StopEyeServer');
-            stopEvent.trigger();
+			EyeServer.Stop();
+            EyeServer.Disconnect();
+            %EyeServer.delete();
             delete(obj.eyeServerProcess);
-            
-            delete(obj.currstim)
-            cellfun(@(x) delete(x), obj.stim)
             
             delete(timerfind)
             
