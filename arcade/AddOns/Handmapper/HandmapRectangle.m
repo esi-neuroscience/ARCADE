@@ -29,8 +29,9 @@ classdef HandmapRectangle < HandmapStimulus
             obj.stim{1}.width = 30; % width of rectangle in px for angle=0
             obj.stim{1}.height = 2000; % height of rectangle in px for angle=0
             obj.stim{1}.angle = 0; % counter-clockise rotation of rectangle in degrees, 0=horizontal
-            obj.stim{1}.color = [255 255 255]; % 24-bit [r g b] value
-            obj.stim{1}.alpha = 255; % alpha transparency, 0=transparent, 255=opaque
+			obj.stim{1}.faceColor = [255 255 255]; % 24-bit [r g b] value^M
+            obj.stim{1}.faceAlpha = 255; % alpha transparency, 0=transparent, 255=opaque^M
+
             
         end
         

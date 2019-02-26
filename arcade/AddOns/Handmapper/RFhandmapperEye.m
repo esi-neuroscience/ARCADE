@@ -5,7 +5,7 @@ classdef RFhandmapperEye < handle
         fixDuration = 3000
         countRew = 0
         
-        fixPoint = @CalibrationStimulusGaussian;
+        fixPoint = @CalibrationStimulusGaussian;%@CalibrationStimulusCircle;%
         
         % eye tracking
         fixRadius = 70
@@ -252,8 +252,7 @@ classdef RFhandmapperEye < handle
         
         %% eye tracking
         
-        function result = waitfor_eye(obj)
-            
+        function waitfor_eye(obj)
             while obj.eyeTracking
                 
                 if isempty(obj.fpEvents)
@@ -261,35 +260,34 @@ classdef RFhandmapperEye < handle
                     obj.fpEvents = trackeye(obj.fixCenter, obj.fixRadius, 'fp');
                     MultipleEvents.Init(obj.fpEvents);
                 end
-                
-                if obj.eyeIn
-                    event = obj.fpEvents{2};%out
-                else
-                    event = obj.fpEvents{1};%in
-                end
-                
+
                 result = obj.WAIT_TIMEOUT;
                 
                 while obj.eyeTracking && result == obj.WAIT_TIMEOUT && ~obj.main.stopEvent.wasTriggered
-                    result = MultipleEvents.WaitFor(event, false, 0);
+                    result = MultipleEvents.WaitFor(obj.fpEvents, false, 0);
                     pause(0.005)
                 end
                 
                 assert(result ~= obj.WAIT_FAILED, 'Waiting for eye event failed, check trackeye inputs')
                 
-                if result == 1
-                    % start and stop timer
-                    if obj.eyeIn == 0 && strcmp(obj.rewTimer.running, 'off')
+                % start and stop timer
+                if obj.main.stopEvent.wasTriggered
+                    stop(obj.rewTimer)
+                    obj.eyeTracking = 0;
+                    return
+                elseif result == 1
+                    obj.eyeIn = 1;
+                    if  strcmp(obj.rewTimer.running, 'off')
                         start(obj.rewTimer)
-                    else
-                        stop(obj.rewTimer)
                     end
-                    obj.eyeIn = ~obj.eyeIn;
+                    MultipleEvents.Reset(obj.fpEvents(1));
+                else
+                    obj.eyeIn = 0;
+                    stop(obj.rewTimer)
+                    MultipleEvents.Reset(obj.fpEvents(2));
                 end
                 
             end
-            
-            
         end
         
     end
