@@ -35,7 +35,7 @@ Currently ARCADE was only tested on
 
 * Windows 7 with Windows Platform Update and Windows 10 (v1803)
 * MATLAB 2014a (64-bit), MATLAB 2018b
-* Eyelink eye tracker
+* Eyelink 1000/2000 eye tracker
 * National Instruments I/O devices PCI-6221, PCI-6503 and USB-6353
 
 
@@ -48,3 +48,8 @@ of ARCADE:
 * Joscha Schmiedt (joscha.schmiedt@esi-frankfurt.de)
 * Katharine Shapcott (katharine.shapcott@esi-frankfurt.de)
 * Michael Stephan (michael.stephan@esi-frankfurt.de)
+
+The ARCADE software is free but copyrighted software, distributed
+under the terms of the GNU General Public Licence as published by
+the Free Software Foundation (either version 3, or at your option
+any later version). See the file LICENSE for more details.
