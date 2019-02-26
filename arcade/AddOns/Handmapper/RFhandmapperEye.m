@@ -274,7 +274,6 @@ classdef RFhandmapperEye < handle
                 if obj.main.stopEvent.wasTriggered
                     stop(obj.rewTimer)
                     obj.eyeTracking = 0;
-                    obj.main.stopEvent.trigger();
                     return
                 elseif result == 1
                     obj.eyeIn = 1;
