@@ -18,6 +18,7 @@ classdef (Abstract) EyeTarget < hgsetget
             Key = EyeServer.ReadAck();
             assert(Key>0, 'Could not create target.')
             obj.key = Key;
+		  EyeServer.Command(obj.key, 1);	% force "Out" events on blinks
         end
         
 % not implemented yet
