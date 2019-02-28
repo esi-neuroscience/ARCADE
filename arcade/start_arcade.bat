@@ -19,6 +19,8 @@ set "HH=%dt:~8,2%" & set "Min=%dt:~10,2%" & set "Sec=%dt:~12,2%" & set "MS=%dt:~
 set "datestamp=%YYYY%%MM%%DD%" & set "timestamp=%HH%%Min%%Sec%" 
 set logfile=%~dp0..\errorLog\log_core_%datestamp%_%timestamp%.txt
 
+cd %ARCADEDIR%
+
 IF [%1]==[] ( 
 	SET RUNCMD=matlab -nodesktop -logfile %logfile% -r "runCore()" 
 	) ELSE IF [%1]==[/DEBUG] ( 
