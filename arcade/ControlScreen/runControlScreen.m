@@ -19,7 +19,7 @@ logmessage('Created TrialData Pipe')
 
 logmessage(sprintf('Using predefined configuration file\n         %s', varargin{:}))
 
-if nargin == 1
+if nargin == 1 && ~isempty(varargin{1})
     cfg = ArcadeConfig(load(varargin{1}));
 else
     cfg = ArcadeConfig;
