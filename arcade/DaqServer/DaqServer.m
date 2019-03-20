@@ -146,7 +146,10 @@ classdef DaqServer < handle
         
         function Start()
             % Start tracking of digital input lines defined with AddLine
+            event = IPCEvent('DaqServerDone');
+            event.reset();
             DaqServer.Write(uint8(3));
+            event.waitForTrigger(1000);
         end
         
         function SetRewardTime(timems)
