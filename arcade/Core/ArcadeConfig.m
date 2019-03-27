@@ -197,8 +197,10 @@ classdef ArcadeConfig
             % replace old char options 'none', 'n/a' with empty values
             for iField = 1:length(fields)
                 value = files.(fields{iField});
-                if strcmp(value, 'n/a') || strcmp(value, 'none')
-                    value = '';
+                if ischar(value) 
+                    if strcmp(value, 'n/a') || strcmp(value, 'none')
+                        value = '';
+                    end
                 end
                 obj.Files.(fields{iField}) = value;
             end
