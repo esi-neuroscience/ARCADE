@@ -38,6 +38,11 @@ classdef SGLTrialDataPipe < handle
             obj.pipe.delete();
         end
         
+        function wasCreated = GetConnectionStatus()
+           obj = SGLTrialDataPipe.this; 
+           wasCreated = ~isempty(obj.pipe);
+        end
+        
         function WriteTrialData(current, trialdata)
             % current = [currentCondition currentBlock currentTrial]
             % trialdata = [trialError, reactionTime, trialErrorTime, writeTime];
@@ -50,16 +55,17 @@ classdef SGLTrialDataPipe < handle
         end
         
         function trialdata = ReadTrialData()
-            msg = SGLTrialDataPipe.this.pipe.readMessage();
-            if ~isempty(msg)
-                trialdata = [...
-                    double(typecast(msg(1:6),'uint16')),...
-                    double(typecast(msg(7:22),'single')), ...
-                    ];
-            else
-                trialdata = [];
-            end
-            
+            if SGLTrialDataPipe.GetConnectionStatus()
+                msg = SGLTrialDataPipe.this.pipe.readMessage();
+                if ~isempty(msg)
+                    trialdata = [...
+                        double(typecast(msg(1:6),'uint16')),...
+                        double(typecast(msg(7:22),'single')), ...
+                        ];
+                else
+                    trialdata = [];
+                end
+            end            
         end
         
         function delete()
