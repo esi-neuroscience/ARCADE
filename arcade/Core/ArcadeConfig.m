@@ -85,14 +85,19 @@ classdef ArcadeConfig
     
     methods
         function obj = ArcadeConfig(cfg)
-            if nargin == 1 && isstruct(cfg)
-                fields = fieldnames(cfg);
-                for iField = 1:length(fields)
-                    % leave fields set to 'None' empty
-                    if strcmp(cfg.(fields{iField}), 'None')
-                        cfg.(fields{iField}) = [];
+            if nargin == 1                
+                if ischar(cfg)
+                    cfg = load(cfg);
+                end
+                if isstruct(cfg)
+                    fields = fieldnames(cfg);
+                    for iField = 1:length(fields)
+                        % leave fields set to 'None' empty
+                        if strcmp(cfg.(fields{iField}), 'None')
+                            cfg.(fields{iField}) = [];
+                        end
+                        obj.(fields{iField}) = cfg.(fields{iField});
                     end
-                    obj.(fields{iField}) = cfg.(fields{iField});
                 end
             end
         end
@@ -182,7 +187,7 @@ classdef ArcadeConfig
                 fields = fieldnames(errorLegend);
                 errorLegend = struct2cell(errorLegend);
                 [fields, idx] = sort(fields);
-                errorLegend = errorLegend(idx);                
+                errorLegend = errorLegend(idx);
             end
             assert(numel(errorLegend) == 10,...
                 'Number of trial error legends must be 10 element cell array')
@@ -197,7 +202,7 @@ classdef ArcadeConfig
             % replace old char options 'none', 'n/a' with empty values
             for iField = 1:length(fields)
                 value = files.(fields{iField});
-                if ischar(value) 
+                if ischar(value)
                     if strcmp(value, 'n/a') || strcmp(value, 'none')
                         value = '';
                     end
