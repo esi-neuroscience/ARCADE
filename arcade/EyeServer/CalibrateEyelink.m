@@ -65,14 +65,30 @@ classdef CalibrateEyelink < handle
             obj.eyelinkConfig.read_config_from_tracker();
             
             
+            % force coordinates to be relative to screen center
+            if ~Eyelink('IsConnected')
+                assert(Eyelink('Initialize') == 0, 'Eyelink: could not initialize')
+            end
+            w = abs(diff(obj.eyelinkConfig.screen_pixel_coords([1 3])));
+            if bitand(w, 1)
+                w = w+1;
+            end
+            h = abs(diff(obj.eyelinkConfig.screen_pixel_coords([2 4]))) + 1;
+            if bitand(h, 1)
+                h = h+1;
+            end
+            obj.eyelinkConfig.set_param('screen_pixel_coords', ...
+                [-w/2 h/2-1 w/2-1 -h/2])
+            
+            
             obj.fig = figure('Color', 'w', 'WindowStyle', 'normal', ...
                 'MenuBar', 'None', 'Name', 'CalibrateEyelink', 'NumberTitle', 'off');
             set(obj.fig, 'WindowKeyPressFcn', @obj.onKeyPress, ...
                 'CloseRequestFcn', @obj.onClose)
             
             obj.ax = axes('SortMethod','childorder', ...
-                'XLim', obj.eyelinkConfig.screen_pixel_coords([1 3]), ...
-                'YLim', obj.eyelinkConfig.screen_pixel_coords([4 2]) ...
+                'XLim', [-w/2 w/2], ...
+                'YLim', [-h/2 h/2] ...
                 );
             box(obj.ax, 'on')
             
@@ -95,7 +111,7 @@ classdef CalibrateEyelink < handle
             else
                 if isa(stim, 'function_handle')
                     obj.stimHandle = stim;
-                    obj.stim = stim();                    
+                    obj.stim = stim();
                 else
                     error('Stimulus definition must be a function handle')
                 end
@@ -107,15 +123,12 @@ classdef CalibrateEyelink < handle
                 rewardDuration = 80;
             end
             obj.rewardDuration = rewardDuration;
-                        
+            
             obj.start();
-                        
             
             if nargout == 0
                 clear obj
             end
-            
-            
         end
         
         function start(obj)
@@ -125,13 +138,13 @@ classdef CalibrateEyelink < handle
             end
             Eyelink('StartSetup');
             Eyelink('WaitForModeReady', 500);
-            Eyelink('SendKeyButton', double('c'), 0, obj.KB_PRESS)
-            Eyelink('WaitForModeReady', 500)            
+            Eyelink('SendKeyButton', double('c'), 0, obj.KB_PRESS);
+            Eyelink('WaitForModeReady', 500);
             
-              
+            
             previousIndex = 1;
-            currentPosition = [];
-            previousMode = [];          
+            currentPosition = [Inf Inf];
+            previousMode = [];
             
             while ~obj.stopEvent.wasTriggered %&& (Eyelink('CurrentMode') == 10)
                 
@@ -149,27 +162,26 @@ classdef CalibrateEyelink < handle
                     end
                     previousMode = currentMode;
                 end
-                          
+                
                 
                 % move stimuli when position changes
                 [~, x, y] = Eyelink('targetcheck');
-                                                           
-                if ~isequal(currentPosition, [x y])                                                               
+                if norm(currentPosition - [x y]) > 1
                     set(obj.dot, 'XData', x, 'YData', y)
-                    obj.move_stimuli(x,y)
-
-                    % give reward if we are advancing to a new target
-                    [~, statusStr] = Eyelink('ReadFromTracker', 'calibration_status');                    
-                    status = strsplit(statusStr, ' ');         
-                    currentIndex = str2double(status{4});
-                    
-                    if (currentIndex > previousIndex) && (currentIndex > 1)
-                        DaqServer.Reward(obj.rewardDuration);                                                                                         
-                    end               
-                    previousIndex = currentIndex;
+                    obj.move_stimuli(x,y);
                     currentPosition = [x y];
-                    
-                end                
+                end
+                
+                % give reward if we are advancing to a new target
+                [~, statusStr] = Eyelink('ReadFromTracker', 'calibration_status');
+                status = strsplit(statusStr, ' ');
+                currentIndex = str2double(status{4});
+                
+                if ((currentIndex > previousIndex) && (currentIndex > 1)) ...
+                        || ( Eyelink('CalResult') == 0 ) % final target
+                    DaqServer.Reward(obj.rewardDuration);
+                end
+                previousIndex = currentIndex;
                 
                 pause(0.5);
             end
@@ -177,11 +189,9 @@ classdef CalibrateEyelink < handle
         end
         
         function move_stimuli(obj, x, y)
-            newPosition = [x-obj.eyelinkConfig.screen_pixel_coords(3)/2, ...
-                y-obj.eyelinkConfig.screen_pixel_coords(2)/2];
             groupStimuli('start')
             for iStimulus = 1:length(obj.stim)
-                set(obj.stim{iStimulus}, 'position', newPosition)                
+                set(obj.stim{iStimulus}, 'position', [x, y])
             end
             groupStimuli('end')
             
@@ -235,12 +245,14 @@ classdef CalibrateEyelink < handle
         
         
         function delete(obj)
+            Eyelink('Shutdown');
             cellfun(@(x) delete(x), obj.stim)
-            StimServer.Disconnect();
             delete(obj.stimServerProcess);
+            StimServer.delete();
             DaqServer.Disconnect();
             delete(obj.daqServerProcess);
             delete(obj.stopEvent);
+            
         end
     end
     

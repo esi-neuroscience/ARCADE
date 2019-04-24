@@ -1,5 +1,14 @@
 # Change Log of ARCADE
 
+## [2.5.0b2] - 2019-04-01
+### NEW
+*   EyeLinkServer v1.1.3.1: 
+        - Support for mixed-term biquadratatic transformations
+        - Support vor overlapping targets
+### FIXED
+*   NidaqServer v1.0.10.4: error in support for PCIe-6321
+
+
 ## [2.5.0b1] - 2019-03-13
 ### NEW
 *   All modules of ARCADE (EyeServer, DaqServer, StimServer, ControlScreen)
