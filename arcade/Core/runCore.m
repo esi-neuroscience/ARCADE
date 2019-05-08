@@ -41,6 +41,9 @@ end
 
 %% Configure session
 if nargin == 0
+
+    cd(fullfile(arcaderoot, 'Tasks'))
+
     % launch Main Screen
     MSgui = MainScreen.launch;
 
