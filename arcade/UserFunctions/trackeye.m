@@ -40,11 +40,10 @@ persistent eyeTargets
 
 if nargin == 1 && strcmp(position, 'reset')
     eyeTargets = {};
-%     for iTarget = 1:length(eyeTargets)
-%         delete(eyeTargets{iTarget})
-%         eyeTargets{iTarget} = '';
-%         pause(0.001)
-%     end
+
+    % wait for all targets to be fully destroyed 
+    % FIXME: do this with an event    
+    pause(0.5)
     return
 end
 
