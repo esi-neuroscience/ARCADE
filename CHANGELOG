@@ -1,6 +1,6 @@
 # Change Log of ARCADE
 
-## Unreleased
+## [2.5.0b3] - 2019-05-17
 ### NEW
 *   NidaqServer 1.0.10.6: support for PCIe-6323
 *   For testing a task script, the `simulate_trial` function will create all
