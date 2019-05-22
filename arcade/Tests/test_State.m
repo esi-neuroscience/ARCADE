@@ -1,16 +1,10 @@
+
+%%
 testEvent1 = IPCEvent('test1');
 testEvent2 = IPCEvent('test2');
 testEvent3 = IPCEvent('test3');
 
-
-%%
-testEvent1.trigger()
-
-
-%%
-clear classes
 eventNames = {'test1', 'test2', 'test3'};
-
 
 stimOn = State('stimOn');
 stimOn.waitEvents = eventNames;
@@ -30,8 +24,6 @@ cleanUp = State('cleanUp');
 cleanUp.duration = 1000;
 cleanUp.nextStateAfterTimeout = 'stimOn';
 cleanUp.onEntry = {@(x) disp('cleanUp')};
-
-
 
 %%
 stateArc = SGLStateArc.launch;

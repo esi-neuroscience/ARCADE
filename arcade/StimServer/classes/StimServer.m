@@ -1,23 +1,56 @@
 classdef (Sealed = true) StimServer < handle
-    % STIMSERVER - Matlab interface for communication with StimServer.exe via
-    % a named pipe.
+    % STIMSERVER - MATLAB interface for communication with StimServer.exe 
     %
-    % StimServer.exe must be started before using this class.
-    % Commands and stimuli can be passed after StimServer.Connect() was called.
+    % The StimServer process displays visual stimuli on screen. 
+    % Visual stimuli are controlled by sending commands via a  
+    % <a href="https://docs.microsoft.com/en-us/windows/desktop/ipc/named-pipes">Named Pipe</a>, for which this MATLAB class provides an interface.
+    %  
+    % USAGE
+    % -----
+    % StimServer.exe must be started before using this class. The Connect method
+    % must be called before any other commands can be sent. The methods 
+    % listed below are not meant for the user during session
+    % runtime. Instead, Stimulus classes (see help Stimuli) and the 
+    % corresponding functions in the UserFunctions folder should be used (see help UserFunctions).
     %
-    % See also Stimulus, MSMessagePipe
+    % METHODS (static)
+    % ----------------
+    %  Connect() : Open pipe to StimServer.exe for sending commands
+    %  Defer(deferred) : Enable (deferred=1) or disable (deferred=0) 
+    %                    grouping of following commands
+    %  Disconnect() : Disconnect from StimServer.exe
+    %  GetConnectionStatus() : Returns status of StimServer pipe connection.
+    %  GetFrameRate() : Returns current frame rate of StimServer screen
+    %  PDmode(mode) : Change mode of photo diode. 0=off, 1=on, 2=toggle, 3=flicker
+    %  PDposition(pos) : Change position of photo diode. 0=upper left, 1=lower left
+    %  PDshow(shown) : Enable (shown=1) or disable (shown=0) photo diode
+    %  SetBackgroundColor(color) : Set the full screen background color (24-bit RGB)
+    %  SetDefaultDrawColor(color) : Set the default draw color of Symbols and Shapes
+    %  SetDefaultFinalAction(mask) : Set default terminal action for Animations
+    %  ShowAll(visible) : Make all stimuli visible (1) or invisible (0).
+    %                     This doesn't update the Stimulus MATLAB objects.
+    %    
+    % For more information, see the accompanying StimServer documentation 
+    % (StimServer.pdf) and <a href="matlab:doc('arcade')">the ARCADE guide</a>.
+    %      
+    % See also Stimulus, backgroundColor, win_kernel32, groupStimuli,
+    %          photodiode, 
     
     properties (Constant, Access = private, Hidden = true)
         this = StimServer
     end
     
+    properties ( Constant, GetAccess = public, Hidden = true )
+        doneEventName = 'StimServerDone'
+    end
+
     properties (Access = private, Transient = true, Hidden = true)
         hPipe = libpointer;
     end
     
     methods (Access = private, Hidden=true)
         function obj = StimServer()
-            mlock;
+            % mlock;
         end
     end
     
@@ -27,22 +60,18 @@ classdef (Sealed = true) StimServer < handle
             % Connect to StimServer.exe pipe for issueing commands
             obj = StimServer.this;
             if ~obj.hPipe.isNull()
-                %                 warning('StimServer:Connect:failed', ...
-                %                     'StimServer connection was already established.');
                 return;
-            end;
+            end
             if ~libisloaded('kernel32')
                 loadlibrary('kernel32', @win_kernel32);
-            end;
-            %             [result] = ...
-            %                 calllib('kernel32', 'GetNamedPipeInfo', ...
-            %                 obj.hPipe, ...
-            %                 [], ...
-            %                 [], ...
-            %                 [], ...
-            %                 []);
-            %             if isequal(result, 0)
-            if isequal(nargin, 0); server='.'; else server = varargin{1}; end;
+            end
+  
+            if isequal(nargin, 0)
+                server='.'; 
+            else 
+                server = varargin{1}; 
+            end
+
             GENERIC_READ_WRITE = uint32(hex2dec('C0000000'));
             obj.hPipe = calllib('kernel32', 'CreateFileA', ...
                 uint8(['\\' server '\pipe\StimServerPipe']), ...
@@ -52,23 +81,8 @@ classdef (Sealed = true) StimServer < handle
                 3, ...  % OPEN_EXISTING
                 0, ...
                 []);
-            assert(~obj.hPipe.isNull());
-            result = calllib('kernel32', 'GetNamedPipeInfo', ...
-                obj.hPipe, ...
-                [], ...
-                [], ...
-                [], ...
-                []);
-            if isequal(result, 0)
-                obj.hPipe = libpointer;
-                ConstructorResult = calllib('kernel32', 'GetLastError');
-                if ~isequal(ConstructorResult, 0)
-                    ConstructorResult
-                end
-                error('StimServer:Constructor:failed', ...
-                    'Can''t connect to StimServer''s pipe. Is the server running ?');
-            end
-            %             disp('Connected to StimServer pipe');
+            assert(~obj.hPipe.isNull(), ...
+                'Can''t connect to StimServer''s pipe. Is the server running ?');                           
         end
         
         function Disconnect()
@@ -105,6 +119,11 @@ classdef (Sealed = true) StimServer < handle
             StimServer.Command(0, uint8([16 lit]));
         end
         
+        function PDposition(pos)
+            % Change position of photo diode. 0=upper left, 1=lower left
+            StimServer.Command(0, uint8([16 3 pos]));
+        end
+        
         function Defer(deferred)
             % Enable (1) or disable (0) grouping of following commands
             StimServer.Command(0, uint8([1 deferred]));
@@ -128,7 +147,16 @@ classdef (Sealed = true) StimServer < handle
             StimServer.Command(0, uint8([1 8]));
             frameRate = StimServer.read1single();
         end
-        
+
+        function isConnected = GetConnectionStatus()
+            % Retreive connection status with StimServer
+            obj = StimServer.this;
+            isConnected = ~obj.hPipe.isNull();
+        end
+
+        function waitResult = waitUntilDone(timeout)
+            waitResult = IPCEvent.wait_for_event(StimServer.doneEventName, timeout);
+        end
     end
     
     methods (Static, Hidden=true)

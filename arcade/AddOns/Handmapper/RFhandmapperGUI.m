@@ -321,10 +321,16 @@ classdef RFhandmapperGUI < handle
         
         %% figure callbacks
         function onClose(obj, varargin)
-            obj.eye.eyeTracking = 0;
+            % need catch in case the objectes were already deleted
+            try
+                obj.main.stopEvent.trigger();
+                disp('Stop event sent')
+            catch ME
+                warning(ME.message)
+            end
             pause(0.05)
-            obj.main.stopEvent.trigger();
-            delete(obj.fig);
+            delete(gcf);
+            disp('Closed figure')
         end
         
     end

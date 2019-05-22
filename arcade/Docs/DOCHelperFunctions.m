@@ -1,27 +1,42 @@
-%% Helper functions
-% ARCADE provides several helper functions that are useful for controlling
-% the experiment and storing additional behavioral data. See below for a
-% list.
-% 
-%% |eventmarker|
+%% User functions
+% ARCADE provides several <matlab:doc('UserFunctions') UserFunctions> 
+% that are useful for controlling  the experiment and storing additional 
+% behavioral data. See below for a
+% list. They are stored in the |ARCADE/arcade/UserFunctions| folder.
+
+%%
+help createTrial
+%%
 help eventmarker
-%% |groupStimuli|
+%%
+help getPreviousTrialData
+%%
 help groupStimuli
-
-%% |photodiode|
+%%
+help logmessage
+%%
 help photodiode
-
-%% |trialerror|
-help trialerror
-
-%% |reward|
-help reward
-
-%% |reactiontime|
+%%
 help reactiontime
-
-%% |storeUserVariables|
-help storeUserVariables
-
-%% |requestQuitSession|
+%%
+help readEvtFile
+%%
 help requestQuitSession
+%%
+help retrieveConfig
+%%
+help reward
+%%
+help setManualRewardDuration
+%%
+help storeUserVariables
+%%
+help totalRewardTime
+%%
+help trackdigitalinput
+%%
+help trackeye
+%%
+help trialerror
+%%
+help StateRuntimeVariable

@@ -23,17 +23,24 @@ classdef SGLTrialDataPipe < handle
     methods (Static)
         function Create()
             obj = SGLTrialDataPipe.this;
-            obj.pipe = MSMessagePipeServer('\\.\pipe\TrialData', [44 0], true);
+            waitForMessage = false;
+            obj.pipe = MSMessagePipeServer('\\.\pipe\TrialData', [44 44], waitForMessage);
         end
         
         function Open()
             obj = SGLTrialDataPipe.this;
-            obj.pipe = MSMessagePipeClient('\\.\pipe\TrialData', false);
+            waitForMessage = false;
+            obj.pipe = MSMessagePipeClient('\\.\pipe\TrialData', waitForMessage);
         end
         
         function Close()
             obj = SGLTrialDataPipe.this;
             obj.pipe.delete();
+        end
+        
+        function wasCreated = GetConnectionStatus()
+           obj = SGLTrialDataPipe.this; 
+           wasCreated = ~isempty(obj.pipe);
         end
         
         function WriteTrialData(current, trialdata)
@@ -48,16 +55,17 @@ classdef SGLTrialDataPipe < handle
         end
         
         function trialdata = ReadTrialData()
-            msg = SGLTrialDataPipe.this.pipe.readMessage();
-            if ~isempty(msg)
-                trialdata = [...
-                    double(typecast(msg(1:6),'uint16')),...
-                    double(typecast(msg(7:22),'single')), ...
-                    ];
-            else
-                trialdata = [];
-            end
-            
+            if SGLTrialDataPipe.GetConnectionStatus()
+                msg = SGLTrialDataPipe.this.pipe.readMessage();
+                if ~isempty(msg)
+                    trialdata = [...
+                        double(typecast(msg(1:6),'uint16')),...
+                        double(typecast(msg(7:22),'single')), ...
+                        ];
+                else
+                    trialdata = [];
+                end
+            end            
         end
         
         function delete()

@@ -1,9 +1,17 @@
 classdef Picture < Stimulus
-    % PICTURE - Class for image stimuli to be passed to the StimServer.
+    % PICTURE < Stimulus - Static image stimuli for ARCADE
     %
-    % Usage
+    % PROPERTIES
+    % -----------
+    %    
+    %   alpha : 8-bit alpha transparency value between 0 (transparent) and 255 (opaque)
+    %   angle : rotation angle (degree) of image, 0=horizontal, 90=vertical
+    % 
+    % USAGE
     % -----
     %   img = Picture(filename);
+    %
+    % For more information, see <a href="matlab:doc('arcade')">the ARCADE guide</a> and the superclasses.
     %
     % See also Stimulus, Animation
     

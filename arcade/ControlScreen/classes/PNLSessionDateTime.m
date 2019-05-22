@@ -13,7 +13,8 @@ classdef PNLSessionDateTime < handle
                 'txt_Date';...
                 'txt_StartTime';...
                 'txt_EndTime'};
-            htxt = cell2mat(AUXAuxMethods.mGetHandles(hfig,Tags));
+            htxt = AUXAuxMethods.mGetHandles(hfig,Tags);
+            htxt = [htxt{:}];
             this.mSetDate(htxt);
         end
     end

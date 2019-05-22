@@ -1,9 +1,8 @@
-classdef Petal < Stimulus
-    % PETAL - Class for petal stimuli
+classdef Petal < Shape
+    % PETAL < Shape < Stimulus - Petal-like shape for ARCADE
     %
-    % Petal-like shape based on two circles and a quadratic Bezier curve
+    % This stimulus is based on two circles and a quadratic Bezier curve
     % connecting the circles.
-    %
     %
     %                         _______
     %                        /       \
@@ -13,8 +12,18 @@ classdef Petal < Stimulus
     %        \______/       \          /
     %                        \________/
     %            ------ d ------
+    % 
+    % PROPERTIES
+    % -----------
+    %   r : radius of central/inner circle (pixel)
+    %   R : radius of outer circle (pixel)
+    %   d : distance between circle centers (pixel)
+    %   q : position of middle point of Bezier curve (normalized to distance
+    %       of circles). Default = golden ratio ~ 0.382
     %
-    % See also Stimulus
+    % For more information, see <a href="matlab:doc('arcade')">the ARCADE guide</a> and the superclasses.
+    %
+    % See also Shape, Stimulus
     
     properties ( SetAccess = public, GetAccess = public, Transient = true )
         r = 25; % radius of medial circle in px
@@ -22,23 +31,16 @@ classdef Petal < Stimulus
         d = 250; % distance between circles
         % position of middle point of Bezier curve (normalized to distance
         % of circles). Default = golden ratio ~ 0.382
-        q = 2-(1+sqrt(5))/2; 
-        drawMode = 1; % 1=face only, 2=edge only, 3=face and edge
-        lineWidth = 2; % width of outline in px
-        angle = 0; % counter-clockise rotation of rectangle in degrees, 0=horizontal
-        faceColor = [255 255 255 255]; % 24-bit [r g b alpha] value with alpha
-        lineColor = [0 0 0 255]; %  24-bit [r g b] value with alpha
+        q = 2-(1+sqrt(5))/2;        
     end
     
     methods
         function obj = Petal
             StimServer.Command(0, uint8(26));
-            obj = obj@Stimulus();                        
-            obj.angle = obj.angle;
-            obj.faceColor = obj.faceColor;
-            obj.lineColor = obj.lineColor;
-            obj.q = obj.q;
+            obj = obj@Shape();   
             
+            % set defaults (trigger set methods)
+            obj.set_all_properties();
         end
         
         function set.r(obj, r)
@@ -65,36 +67,7 @@ classdef Petal < Stimulus
             obj.q = q;
         end
         
-        function set.angle(obj, angle)
-            StimServer.Command(obj.key, [uint8(4), typecast(single(angle),'uint8')]);
-            obj.angle = angle;
-        end
-        
-        function set.drawMode(obj, mode)
-            StimServer.Command(obj.key, uint8([6 mode]));
-            obj.drawMode = mode;
-        end
-        
-        function set.lineWidth(obj, width)
-            StimServer.Command(obj.key, [uint8(10), typecast(single(width),'uint8')]);
-            obj.lineWidth = width;
-        end
-        
-        function set.faceColor(obj, color)
-            if numel(color) == 3
-                color = [color 255];
-            end
-            StimServer.Command(obj.key, [5, color]);
-            obj.faceColor = color;
-        end
-        
-        function set.lineColor(obj, color)
-            if numel(color) == 3
-                color = [color 255];
-            end
-            StimServer.Command(obj.key, [9, color]);
-            obj.lineColor = color;
-        end                
+      
         
         function delete(obj)
         end

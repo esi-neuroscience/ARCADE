@@ -1,19 +1,37 @@
 classdef (Abstract) Stimulus < hgsetget % will be matlab.mixin.SetGet after 2014b
-    % STIMULUS - Abstract base class for StimServer stimuli providing the
-    % general stimulus properties visible, position and animation. Stimulus
-    % properties can be changed either struct-like or using set:
+    % STIMULUS - Abstract base class for all ARCADE stimuli 
+    % 
+    % All ARCADE stimuli are child classes of this base class, i.e., all
+    % stimuli have at least the following properties and methods:
     %
+    % PROPERTIES
+    % -----------
+    %   position : [x y] center of stimulus on screen (pixel)
+    %   visible  : visibility of stimulus (true/false)
+    % 
+    % Stimulus properties can be changed either struct-like or using set:
     %   stim.position = [0 0];
     %   set(stim, 'position', [0 0])
+    % 
+    % METHODS
+    % -------
+    %  Stimulus.play_animation(Animation) : assign an animation to the stimulus
+    %  Stimulus.stop_animation()          : stop all playing animations
+    %  Stimulus.bring_to_front()          : bring the stimulus to the foremost
+    %                                       drawing layer
+    %  Stimulus.toggle_visibility()       : turn stimulus on if off and vice 
+    %                                       versa
+    % 
+    % For more information, see <a href="matlab:doc('arcade')">the ARCADE guide</a>.
     %
-    % The position property is retrieved from the StimServer and not stored
-    % locally.
+    % Stimuli are displayed by the StimServer process. The Stimulus objects in
+    % MATLAB are only handle classes, which send commands to the StimServer
+    % for managing stimulus properties.
     %
-    % See also Picture, Rectangle, Grating, PixelShader, Animation, MovingBar,
-    % ParticleStimulus, Animation, LinearMotion, GeneralMotion, StimServer
+    % See also Animation, StimServer
     
     properties ( SetAccess = public, GetAccess = public, Transient = true )
-        visible = false; % Visibilty of stimulus, true for on, false for off        
+        visible = false; % Visibilty of stimulus, true for on, false for off
     end
     
     properties ( Hidden = true, Access = public, Transient = true )
@@ -99,7 +117,14 @@ classdef (Abstract) Stimulus < hgsetget % will be matlab.mixin.SetGet after 2014
             assert(Key>0, 'Could not bring stimulus to front. See log window of StimServer.exe')
             obj.key = Key;
         end
-
+        
+        function obj = swap_order_with(obj, stim2)
+            key2 = stim2.key;
+            StimServer.Command(obj.key, [14 typecast(uint16(key2), 'uint8')]);
+            stim2.key = obj.key;
+            obj.key = key2;
+        end
+        
         function toggle_visibility(obj)
             if obj.visible
                 obj.visible = false;
@@ -120,6 +145,37 @@ classdef (Abstract) Stimulus < hgsetget % will be matlab.mixin.SetGet after 2014
                 end
                 StimServer.Command(obj.key, 0);
             end
-        end       
+        end
+    end
+    
+    methods ( Access = protected, Static = false )
+        function set_all_properties(obj)
+            % set all properties to current value / trigger set functions
+            props = properties(obj);
+            for iProp = 1:length(props)
+                obj.(props{iProp}) = obj.(props{iProp});
+            end
+            
+        end
+        
+        
+    end
+        
+    methods ( Access = protected, Static = true )
+        function color4 = handle_color_input(color, alpha)
+            if nargin == 1
+                alpha = 255;
+            end
+            switch numel(color)
+                case 3
+                    color4 = [color, alpha];
+                case 4
+                    color4 = color;
+                otherwise
+                    error('Invalid color input. Must be either [r g b] or [r g b alpha]')
+            end
+            
+        end
+        
     end
 end

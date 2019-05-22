@@ -10,12 +10,16 @@ cbuffer PS_ANIMATION : register (b1)
 
 cbuffer PS_CONSTANT_BUFFER : register (b0)
 {
+    // position and size
     float2 center        : packoffset(c0.x);
     float  width         : packoffset(c0.z);
     float  height        : packoffset(c0.w);    
-    float  spatialPeriod : packoffset(c1.x); // pixels per cycle
-    float  temporalPeriod: packoffset(c1.y); // frames per cycle
-    float  direction     : packoffset(c1.z); // 1: outward, -1:inward
+
+    // parameters
+    float  spatialPeriod : packoffset(c1.x); // 1: pixels per cycle
+    float  temporalFrequency : packoffset(c1.y); // 2: cycles per frame
+    float  aaWidth       : packoffset(c1.z); // 3: pixels
+    float  phaseOffset   : packoffset(c1.w); // 4: degrees
 };
 
 cbuffer PS_COLOR_BUFFER : register (b2)
@@ -29,13 +33,24 @@ cbuffer PS_COLOR_BUFFER : register (b2)
 
 float4 PSmain( float4 Pos : SV_POSITION ) : SV_Target
 {
-        
-    if (distance(center, Pos.xy) > width/2.0f) discard;    
+    
+    float r = distance(center, Pos.xy); 
+    float radius = width/2.0f;
+    if ( r > radius ) discard;    
+    float alpha = 1.0;
     static const float pi = 3.141592654;    
 
-    float r = sqrt((center.y-Pos.y)*(center.y-Pos.y) + (Pos.x-center.x)*(Pos.x-center.x));
-
-    float phase = 2.0f*pi*frame/temporalPeriod*direction*-1.0f;
+    float phase = 2.0f*pi * frame * temporalFrequency * -1.0f + radians(phaseOffset);
     float bright = (sin( 2.0f*pi/spatialPeriod * r + phase) + 1.0f)/2.0f;    
-    return color0*(float4)(1.0f-bright) + color1*(float4)(bright);
+
+    if ( aaWidth > 0 ) {
+         if (r >= (radius-aaWidth)) {
+            alpha = 1.0f - (r-(radius-aaWidth))/aaWidth;
+        }
+    }
+    float4 color = color0*(float4)(1.0f-bright) + color1*(float4)(bright);
+    color[3] = alpha;
+
+    return color;
+
 }

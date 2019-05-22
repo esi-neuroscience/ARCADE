@@ -36,7 +36,6 @@ classdef RFhandmapper < handle
         eye
         
         % processes
-        EyeServer = 'Eyelink' %'Eyelink' 'NationalInstruments' 'Test'
         stimServerProcess
         daqServerProcess
         eyeServerProcess
@@ -53,6 +52,7 @@ classdef RFhandmapper < handle
     
     methods
         function obj = RFhandmapper(screenDist, reward, fixPoint, customStim)
+            run(fullfile(fileparts(mfilename('fullpath')), '..', '..', 'add_arcade_to_path.m'))
             
             % setup
             if exist('screenDist', 'var') && ~isempty(screenDist)
@@ -75,11 +75,9 @@ classdef RFhandmapper < handle
             end
             
             % connect processes
-            obj.stopEvent = IPCEvent('StopRFhandmapper');
-            
-            obj.connectStimServer();
-            obj.connectNidaqServer();
-            obj.connectEyeServer();
+            obj.stopEvent = IPCEvent('StopRFhandmapper', true); % once triggered stays true forever
+
+            obj.connectProcesses();
 
             % setup eye tracking
             obj.calc_ppd();
@@ -90,85 +88,34 @@ classdef RFhandmapper < handle
             
             % start displaying
             obj.currstim = obj.stim{1};
-            obj.start();
+            
+            try
+                obj.start();
+            catch ME
+                obj.delete();
+                rethrow(ME)
+            end
             
             % close
             obj.delete();
             
         end
-        
-        function connectStimServer(obj)
-            % Connect to StimServer or start it if it's not running
-            tWait = tic;
-            success = false;
-            while ~success && toc(tWait) < 10
-                try
-                    StimServer.Connect();
-                    success = true;
-                catch me
-                    % start StimServer
-                    if isempty(obj.stimServerProcess)
-                        cmd = fullfile(arcaderoot, 'arcade', 'StimServer', 'StimServer.exe');
-                        obj.stimServerProcess = processManager('command', cmd);
-                    end
-                end
-                pause(0.5);
-            end
-            if ~success
-                rethrow(me)
-            end
+
+        function connectProcesses(obj)
             
-        end
-        
-        function connectNidaqServer(obj)
-            % Connect to NidaqServer or start it if it's not running
-            tWait = tic;
-            success = false;
-            while ~success && toc(tWait) < 10
-                try
-                    DaqServer.Connect();
-                    success = true;
-                catch me
-                    % start DaqServer
-                    if isempty(obj.daqServerProcess)
-                        cmd = fullfile(arcaderoot, 'arcade', 'DaqServer', 'NidaqServer.exe');
-                        obj.daqServerProcess = processManager('command', cmd);
-                    end
-                end
-                pause(0.5);
-            end
-            if ~success
-                rethrow(me)
-            end
-        end
-        
-        function connectEyeServer(obj)
-            % Connect to EyeServer or start it if it's not running
-            tWait = tic;
-            success = false;
-            while ~success && toc(tWait) < 10
-                try
-                    result = eyeServerReadyEvt.waitForTrigger(20000);
-                    assert(result==1, 'Wait for EyeServer failed')
-                    
-                    % connect to EyeServer
-                    SGLEyeServerPipe.Open();
-                    success = true;
-                catch me
-                    if isempty(obj.eyeServerProcess)
-                        cmd = fullfile(arcaderoot, 'arcade', 'EyeServer', ['EyeServer.bat ' obj.EyeServer]);
-                        eyeServerReadyEvt = IPCEvent('EyeServerReady', false);
-                        obj.eyeServerProcess = processManager('id', 'EyeServer', ...
-                            'command', cmd, ...
-                            'printStdout', false, ...
-                            'printStderr', false);
-                    end
-                end
-                pause(0.5);
-            end
-            if ~success
-                rethrow(me)
-            end
+            cfg = ArcadeConfig();
+            cfg.EyeServer = 'EyelinkServer.exe';
+            cfg.DaqServer = 'NidaqServer.exe';
+            cfg.StimServer = 'StimServer.exe';
+            cfg.ControlScreen = ''; % place holder for launch_processes
+
+            procs = launch_processes(cfg);
+            
+            
+            obj.eyeServerProcess = procs{1};
+            obj.daqServerProcess = procs{2};
+            obj.stimServerProcess = procs{3};
+
         end
 
         function ppd = calc_ppd(obj)
@@ -251,19 +198,19 @@ classdef RFhandmapper < handle
         
         function delete(obj)
             
+            delete(obj.currstim)
+            cellfun(@(x) delete(x), obj.stim)
+            
             StimServer.Disconnect();
             delete(obj.stimServerProcess);
             
             DaqServer.Disconnect();
             delete(obj.daqServerProcess);
             
-            SGLEyeServerPipe.Close();
-            stopEvent = IPCEvent('StopEyeServer');
-            stopEvent.trigger();
+			EyeServer.Stop();
+            EyeServer.Disconnect();
+            %EyeServer.delete();
             delete(obj.eyeServerProcess);
-            
-            delete(obj.currstim)
-            cellfun(@(x) delete(x), obj.stim)
             
             delete(timerfind)
             

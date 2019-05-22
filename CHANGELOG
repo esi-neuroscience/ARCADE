@@ -1,5 +1,102 @@
 # Change Log of ARCADE
 
+## [2.5.0b3] - 2019-05-17
+### NEW
+*   NidaqServer 1.0.10.6: support for PCIe-6323
+*   For testing a task script, the `simulate_trial` function will create all
+    editable variables from a _cfg.mat file in the MATLAB workspace as well as
+    a valid TrialData struct.
+
+### FIXED
+*   In configuration MainScreen, the starting folder was not the ARCADE\Tasks
+    folder.
+*   CalibrateEyelink:
+        - The last position of the Eyelink calibration and the first position
+          of a validation sequence was not rewarded.
+        - The CalibrateEyelink sets the screen_pixel_coords variable of
+          Eyelink to [-w/2 h/2-1 w/2-1 -h/2] with w and h being screen width
+          and height, respectively. It is recommended to the same in the
+          final.ini file on the Eyelink PC.
+
+## [2.5.0b2] - 2019-04-01
+### NEW
+*   EyeLinkServer v1.1.3.1: 
+        - Support for mixed-term biquadratatic transformations
+        - Support vor overlapping targets
+### FIXED
+*   NidaqServer v1.0.10.4: error in support for PCIe-6321
+
+
+## [2.5.0b1] - 2019-03-13
+### NEW
+*   All modules of ARCADE (EyeServer, DaqServer, StimServer, ControlScreen)
+    can now be enabled or disabled in the configuration (see ArcadeConfig).
+    The function arcade/Core/launch_processes handles their startup based on
+    the configuration and connects to the respective communication pipes.
+*   The configuration used for a particular session is now saved together with
+    the behavioral data in the corresponding sessionLog folder.
+*   ARCADE can now be started with the path to a _cfg.mat file as an input
+    argument skipping the MainScreen GUI for configuration. This makes it
+    possible to start a task for a subject via a shortcut that calls
+    start_arcade.bat <pathToCfg>
+*   Square wave grating with anti-aliased bands and circular mask
+*   StimServer v1.3.1.3:
+        - anti-aliased Ellipse and Rectangle stimuli with support for outlines
+        - support for swapping stimuli (drawing order)
+*   The new binary EyeLinkServer replaces the TestEyeServer and
+    EyelinkEyeServer. This adds several new features:
+        - A separate GUI for displaying the current eye position and the
+          monitored screen locations
+        - Speed: the EyeLinkServer can monitor many screen locations (~100)
+        - Simulation mode: When no Eyelink system is connected, the GUI will
+          act as a mouse simulation
+        - Extandable: Due to a flexible pipe command interface additional
+          features can be added in future releases (e.g. non-circular target
+          windows)
+*   Support for MATLAB > 2014a.
+*   NidaqServer v.1.0.10.2: support for PCIe-6251 and PCIe-6321
+
+### CHANGED
+*   All user-facing functions and classes have extensive documentation of all
+    relevant methods and properties.
+*   ControlScreen:
+        - The GUI has been made more compact and resizable such that other
+          windows can fit next to it.
+        - The trial error legend now displays the correct labels that were set
+          in MainScreen/configuration.
+*   ARCADE will now use the matlab.exe from the Windows PATH environmental
+    variable. This is usually the one that was installed last. Tested versions
+    are 2014a and 2018b Update 2
+*   Gammatron stimulus:
+        - The drift direction is now configure via the sign of the temporal
+          frequency
+        - A temporal frequency of 0 will create a static Gammatron.
+        - The phase offset can now be set in degree
+        - The edge of the circular mask is now anti-aliased
+
+### DEPRECATED
+*   The following stimulus properties are deprecated and should not be used
+    anymore:
+        - Rectangle.color (use Rectangle.faceColor instead)
+        - Rectangle.alpha (use Rectangle.faceAlpha instead)
+        - Circle.color (use Circle.faceColor instead)
+        - Circle.alpha (use Circle.faceAlpha instead)
+        - Gammatron.direction (use sign of Gammatron.temporalFrequency
+          instead)
+
+### REMOVED
+*   The SaccadeStart and SaccadeEnd events that were triggered by previous
+    EyeServers are currently not supported.
+*   The EyeLinkServer currently does not support overlapping target windows.
+
+## [2.4.0] - 2018-06-15
+### NEW
+*   A petal-like shape stimulus can now be created using the Petal class
+*   The total reward issued during a session can now be retreived using the
+    MATLAB function totalRewardtime
+*   Improved documentation for helper functions and stimuli
+
+
 ## [2.3.0] - 2018-05-17
 ### NEW
 *   MotionPicture stimuli trigger an event when playback has finished, with
@@ -58,7 +155,7 @@
 
 ### FIXED
 *   Editable variables where not removed from the configuration file when they
-    were removed from the GUI    
+    were removed from the GUI
 *   Manually adding files to backup in main GUI deleted existing files
 
 
@@ -87,9 +184,9 @@
 
 ## [2.1.4] - 2018-01-08
 ### FIXED
-*   StimServer 1.2.5.1: deleting PixelShader-based stimuli (gratings, gammatrons, 
-    gaussians, gabors)) without making them visible was crashing StimServer.exe 
-    in 1.2.4.0 and 1.2.5.0 (ARCADE 2.0.2-2.1.3)
+*   StimServer 1.2.5.1: deleting PixelShader-based stimuli (gratings,
+    gammatrons, gaussians, gabors)) without making them visible was crashing
+    StimServer.exe in 1.2.4.0 and 1.2.5.0 (ARCADE 2.0.2-2.1.3)
 
 ## [2.1.3] - 2017-12-18
 ### FIXED
@@ -108,13 +205,14 @@
 
 ## [2.1.1] - 2017-11-02
 ### FIXED
-*   NidaqServer.exe 1.0.8.0 sends sufficiently long and spaced eventmarkers for
-    TDT's RZ2 (40 microseconds)
+*   NidaqServer.exe 1.0.8.0 sends sufficiently long and spaced eventmarkers
+    for TDT's RZ2 (40 microseconds)
 
 ## [2.1.0] - 2017-10-30
 ### NEW
 *   Gabor stimulus
-*   NidaqServer can be configured to give out an event marker for manual rewards
+*   NidaqServer can be configured to give out an event marker for manual
+    rewards
 *   Added tutorial documentation for digital input/output
 
 ### CHANGED
@@ -192,64 +290,68 @@
 *   Added Gaussian stimulus
 
 ### CHANGED
-*   Enhanced condition/block selection functions: block selection is evaluated 
-    first and its result can be used in the condition selection function as 2nd 
-    argument.
+*   Enhanced condition/block selection functions: block selection is evaluated
+    first and its result can be used in the condition selection function as
+    2nd argument.
 *   Updated Grating stimulus to use new shader implementation
 
 ### FIXED
-*   Increased refresh rate of ControlScreen to enhance capturing of key presses 
+*   Increased refresh rate of ControlScreen to enhance capturing of key
+    presses
 
 
 ## [1.0.0b2] - 2017-06-12
 ### NEW
-*	Gammatron stimulus
-*	Pixel-shaded picture stimulus (not yet documented)
-* 	PictureWithGaussianPatch stimulus (not yet documented)
-*	Behavioral data from a session is now stored in a unique folder without
- 	subfolders for experiment and session.
-*	Temporal frequencies of several stimuli are now expressed in cycles per s
-*	ARCADE version is printed in log files if Git is installed
+*   Gammatron stimulus
+*   Pixel-shaded picture stimulus (not yet documented)
+*   PictureWithGaussianPatch stimulus (not yet documented)
+*   Behavioral data from a session is now stored in a unique folder without
+    subfolders for experiment and session.
+*   Temporal frequencies of several stimuli are now expressed in cycles per s
+*   ARCADE version is printed in log files if Git is installed
 
 ### FIXED
-*	Missing nanmax function in PLTReactionTime
-*	Month and day were swapped in date string
+*   Missing nanmax function in PLTReactionTime
+*   Month and day were swapped in date string
 
 
 ## [1.0.0b1] - 2017-05-31
 ### NEW
-* 	64-bit support: ARCADE runs on 64-bit MATLAB only (currently only 2014a). 
-	This allows for very long sessions (>9000 trials) and slightly improves 
-	performance.
-* 	Rewritten stimulus classes: stimulus definition has been simplified and
-	can now be easily tested outside a running session. This unfortunately means 
-	existing task scripts have to be adapted. See tutorial documentation for an 
-	overview.
-*	Documentation of all user-oriented functions and classes as well as tutorial
-	documentation as been added.
-*	New EyeServers: ARCADE provides now interfaces for eye tracking via 
-    (1) National Instruments Cards (SGLNiEyeServer), (2) ethernet from Eyelink 
-    SR 1000/2000 (SGLEylinkEyeServer) and (3) a test eye signal for debugging 
-    (SGLTestEyeServer). Currently this has to be configured by manually changing 
-    line 44 of SGLEyeServerProc.m
-*	Laptop mode: when no national instruments card can be detected, eventmarkers
-    and reward will not be send out.
-*	No MATLAB toolboxes are required to run ARCADE
-*	Store events to disk: timestamps of eventmarkers are recorded in separate 
-	.evt file. The file can be read with readEvtFile.m
-*	New file naming scheme: behavioral data files are now named according to 
-	the pattern subject_day_experiment_session
-*	In case of crashing, the behavioral .esi and .hdr files can be converted to
-    a MATLAB file using convertEsiFile.m
-*	Eye position is now shared among processes via kernel32 NamedSharedMemory
-*	Starting and stopping of data acquisition is now triggered via kernel32 Events 
-* 	The CoreControlScreenPipe was simplified and now only transfers the trial data
-*	Processes are now managed using the MATLAB Java Runtime with processManager.m
-*	SGLNiEyeServer now samples at a fixed rate
-*	user32 functionality has been removed
+*   64-bit support: ARCADE runs on 64-bit MATLAB only (currently only 2014a).
+    This allows for very long sessions (>9000 trials) and slightly improves
+    performance.
+*   Rewritten stimulus classes: stimulus definition has been simplified and
+    can now be easily tested outside a running session. This unfortunately
+    means existing task scripts have to be adapted. See tutorial documentation
+    for an overview.
+*   Documentation of all user-oriented functions and classes as well as
+    tutorial documentation as been added.
+*   New EyeServers: ARCADE provides now interfaces for eye tracking via (1)
+    National Instruments Cards (SGLNiEyeServer), (2) ethernet from Eyelink SR
+    1000/2000 (SGLEylinkEyeServer) and (3) a test eye signal for debugging
+    (SGLTestEyeServer). Currently this has to be configured by manually
+    changing line 44 of SGLEyeServerProc.m
+*   Laptop mode: when no national instruments card can be detected,
+    eventmarkers and reward will not be send out.
+*   No MATLAB toolboxes are required to run ARCADE
+*   Store events to disk: timestamps of eventmarkers are recorded in separate
+    .evt file. The file can be read with readEvtFile.m
+*   New file naming scheme: behavioral data files are now named according to
+    the pattern subject_day_experiment_session
+*   In case of crashing, the behavioral .esi and .hdr files can be converted
+    to a MATLAB file using convertEsiFile.m
+*   Eye position is now shared among processes via kernel32 NamedSharedMemory
+*   Starting and stopping of data acquisition is now triggered via kernel32
+    Events
+*   The CoreControlScreenPipe was simplified and now only transfers the trial
+    data
+*   Processes are now managed using the MATLAB Java Runtime with
+    processManager.m
+*   SGLNiEyeServer now samples at a fixed rate
+*   user32 functionality has been removed
 
 ### FIXED
-*	Occasional freezing of ARCADE should not happen anymore. On pipe write error, 
-    the Core process continued to write instead of raising an error. This may 
-    have cause the hangups.
-* 	Several minor bugs.
+*   Occasional freezing of ARCADE should not happen anymore. On pipe write
+    error, the Core process continued to write instead of raising an error.
+    This may have cause the hangups.
+*   Several minor bugs.

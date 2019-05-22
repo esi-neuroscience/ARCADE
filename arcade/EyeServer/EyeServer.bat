@@ -1,16 +1,21 @@
 @Echo OFF
 SETLOCAL
-:: 64-bit version of matlab 2014a
-SET PATH="C:\Program Files\MATLAB\R2014a\bin\";"C:\Program Files\MATLAB\R2014a\bin\win64";C:\Windows\system32;C:\Windows;%~dp0\..\StimServer\;%~dp0\..\External\EyelinkToolbox"
-SET EYESERVERDIR="%~dp0"\..
+
+SET EYESERVERDIR="%~dp0"
 
 if "%1"=="" (
-	SET EYESERVER="Test"
+	SET EYESERVER="BinaryEyelink"
 	) else (
 	SET EYESERVER="%1"
 	)
 TITLE "EyeServer"
 echo Running %EYESERVER% EyeServer
-SET RUNCMD=matlab -nodesktop -nosplash -minimize -wait -r "cd %EYESERVERDIR%; addpath(genpath(pwd)); runEyeServer('%EYESERVER%')";
+if %EYESERVER%=="BinaryEyelink" (
+	SET RUNCMD="%~dp0"\EyelinkServer.exe
+	) else (
+	echo Unknown EyeServer
+	pause
+	exit /b 2
+	)
 %RUNCMD%
 

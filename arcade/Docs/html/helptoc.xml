@@ -1,8 +1,12 @@
 <?xml version='1.0' encoding="utf-8"?>
 <toc version="2.0">
 
-    <tocitem target="ARCADE.html">ARCADE     
-	    <tocitem target="DOCDesigningTaskFiles.html">Designing task scripts </tocitem>
+    <tocitem target="ARCADE.html">ARCADE
+    	<tocitem target="DOCRunningArcade.html">Running ARCADE</tocitem>
+	    <tocitem target="DOCDesigningTaskFiles.html">Designing task scripts 
+		   <tocitem target="DOCExampleDetectTask.html">Example task script</tocitem>
+	    </tocitem>
+
 	    <tocitem target="DOCAvailableStimuli.html">Available stimuli </tocitem>
 	    <tocitem target="DOCDigitalInputOutput.html">Digital input and output </tocitem>
 	    <tocitem target="DOCEyetracking.html">Eye tracking</tocitem>

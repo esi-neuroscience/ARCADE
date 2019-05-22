@@ -5,7 +5,8 @@ classdef HandmapImage < HandmapStimulus
         hSelect
         
         % other
-        filename = fullfile(pwd, 'AddOns/Handmapper/monkey_face.jpg')
+        filename = fullfile(arcaderoot, 'arcade/AddOns/Handmapper/monkey_face.jpg')
+
     end
     
     

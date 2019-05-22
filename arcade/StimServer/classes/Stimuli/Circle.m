@@ -1,44 +1,43 @@
-classdef Circle < Stimulus               
-    % CIRCLE - Class for circle stimuli in StimServer
+classdef Circle < Ellipse 
+    % CIRCLE < ELLIPSE < Shape < Stimulus - Circle stimulus for ARCADE
     %
-    % See also Stimulus
+    % 
+    % PROPERTIES
+    % -----------
+    %   diameter : diameter of circle (pixel)     
+    %      
+    % USAGE
+    % -----
+    %   c = Circle();
+    %
+    % For more information, see <a href="matlab:doc('arcade')">the ARCADE guide</a> and the superclasses.
+    %
+    % See also Ellipse, Shape, Stimulus
 
-    properties ( SetAccess = immutable, GetAccess = public )
-        type
+    properties ( Access = public, Dependent = true, Transient = true )
+        diameter = 100;
     end
     
-    properties ( SetAccess = public, GetAccess = public, Transient = true )
-        diameter % diameter of stimulus in px
-        color = [255 255 255]; % color of circle as 24-bit [r g b] value
-        alpha = 255; % alpha transparency value
-    end       
         
     methods
-        function obj = Circle(symbolType)
-            if nargin == 0
-                symbolType = 1;
+        function obj = Circle(varargin)
+            obj = obj@Ellipse();            
+
+            % set defaults (trigger set methods)
+            % obj.set_all_properties()                    
+        end
+        
+        function set.diameter(obj, r)
+           obj.width = r;
+           obj.height = r;
+        end
+        
+        function r = get.diameter(obj)            
+            if abs(obj.width - obj.height) > eps
+                warning('Width and height of Circle object are not identical anymore.')
             end
-            symbolDiameter = 200;
-            StimServer.Command(0, [uint8([12, symbolType]), typecast(uint16(symbolDiameter),'uint8')]);                         
-            obj = obj@Stimulus();
-            obj.type = symbolType;
-            obj.diameter = symbolDiameter;                        
+            r = obj.width;
         end
         
-        function set.diameter(obj, diameter)
-               StimServer.Command(obj.key, [uint8([1,1]), typecast(uint16(diameter), 'uint8')]);
-               obj.diameter = diameter;
-        end
-        
-        function set.color(obj, color)
-            StimServer.Command(obj.key, [5, color, obj.alpha]); 
-            obj.color = color;
-        end
-        
-        function set.alpha(obj, alpha)
-            StimServer.Command(obj.key, [5, obj.color, alpha]); 
-            obj.alpha = alpha;
-        end
-         
     end
 end

@@ -1,5 +1,44 @@
 classdef DaqServer < handle
-    % DAQSERVER - Class for communicating with DaqServer
+    % DAQSERVER - MATLAB interface for communication with DaqServer process
+    % 
+    % The DaqServer process handles digital input and output, i.e.
+    % eventmarkers, reward, levers, etc. The communication between the Core
+    % process and the DaqServer happens via a <a href="https://docs.microsoft.com/en-us/windows/desktop/ipc/named-pipes">Named Pipe</a>,
+    % for which this MATLAB class provides an interface.
+    %
+    % Currently only one DaqServer is implemented (NidaqServer.exe), which 
+    % supports National Instruments devices (see the accompanying
+    % NidaqServer.pdf documentation). A different DaqServer should
+    % set up the same Named Pipe and respond to the commands implemented in
+    % this class.
+    %
+    % The methods listed below are not meant for the user during session
+    % runtime. Instead, the corresponding functions in the UserFunctions
+    % folder should be used (see help UserFunctions).
+    %
+    %
+    % METHODS (static)
+    % ----------------
+    %  Connect() : Open pipe to the DaqServer for sending commands
+    %  Disconnect() : Disconnect from pipe to DaqServer
+    %  AddLine(lineNumber, varargin) : 
+    %        Watch status of digital input line for either pulses
+    %               AddLine(lineNumber, pulseEventName)       
+    %        or on/off states
+    %               AddLine(lineNumber, onEventName, offEventName)
+    %        The function trackdigitalinput provides a convenient wrapper
+    %        for using this functionality.
+    %   Start() : Start tracking of digital input lines defined with AddLine
+    %   SetRewardTime() : Set reward duration (ms) for manual reward
+    %   Reward(duration) : Set reward line to on for specified duration (ms)
+    %   EventMarker(code) : Send out an eventmarker code
+    %   SetRewardCode(code) : Set the event marker code sent out with a manual reward
+    %   GetTotalRewardTime() : Retreive reward duration since last
+    %                          retreival. Calling this method resets the
+    %                          counter in the NidaqServer.
+    %
+    % See also eventmarker, reward, setManualRewardDuration,
+    %          totalRewardTime, trackdigitalinput
     
     properties (Constant, Access = private, Hidden = true)
         this = DaqServer
@@ -8,6 +47,10 @@ classdef DaqServer < handle
     properties (Access = private, Transient = true, Hidden = true)
         hPipe = libpointer;
         isConnected = false;
+    end
+    
+    properties ( Constant, GetAccess = public, Hidden = true )
+        doneEventName = 'DaqServerDone'
     end
     
     methods (Access = protected, Hidden=true)
@@ -24,17 +67,17 @@ classdef DaqServer < handle
                 warning('DaqServer:Connect:failed', ...
                     'DaqServer connection was already established.');
                 return;
-            end;
+            end
             if ~libisloaded('kernel32')
                 loadlibrary('kernel32', @win_kernel32);
-            end;
-            if isequal(nargin, 0); 
+            end
+            if isequal(nargin, 0)
                 server='.'; 
                 pipeName='\pipe\NidaqServerPipe';
             else                 
                 server = varargin{1}; 
                 pipeName = varargin{2}; 
-            end;
+            end
 
             GENERIC_READ_WRITE = uint32(hex2dec('C0000000'));
             obj.hPipe = calllib('kernel32', 'CreateFileA', ...
@@ -103,7 +146,10 @@ classdef DaqServer < handle
         
         function Start()
             % Start tracking of digital input lines defined with AddLine
+            event = IPCEvent('DaqServerDone');
+            event.reset();
             DaqServer.Write(uint8(3));
+            event.waitForTrigger(1000);
         end
         
         function SetRewardTime(timems)

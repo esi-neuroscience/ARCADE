@@ -1,11 +1,17 @@
 classdef (Sealed) SGLStateArc < handle
     % SGLStateArc - Singleton class for state machine managing the trial flow
     %
-    % Starting from the intitial state tateArc alwasy moves to the state that
-    % is returned when a state is run. The StateArc stops when a state returns
-    % 'final' as next state.
+    % The SGLStateArc holds all user-defined State objects and moves between
+    % them. Starting with the initial state, the SGLStateArc calls the 
+    % current state's State.run method, which returns the name of the next state.
+    % This becomes then the current state, is run and returns the next
+    % state and so forth, until a state returns 'final' as the name of the
+    % next state.
+    %
+    % The SGLStateArc should is not meant for the user. Instead, please use
+    % the createTrial function.
     % 
-    % See also State
+    % See also State, createTrial
     
     properties (AbortSet = false)
         states = []; % vector of states
@@ -50,6 +56,9 @@ classdef (Sealed) SGLStateArc < handle
                 error('No end point for state system defined.')
             end
             obj.states = states;   
+            if ~isempty(unique([obj.states.waitEvents]))
+                MultipleEvents.Init(obj.eventNames);
+            end  
         end
         
         function stateNames = get.stateNames(obj)
@@ -82,7 +91,7 @@ classdef (Sealed) SGLStateArc < handle
         end
         
         function delete(obj)   
-            
+            MultipleEvents.delete();
         end
     end
    
