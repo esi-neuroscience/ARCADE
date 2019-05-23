@@ -73,7 +73,14 @@ classdef (Sealed) SGLSessionArc
             % this function will be asked whether to quit the session or
             % not, after the task script has been run 
             requestQuitSession('init');
-                                   
+            
+            % send initialization event markers
+            eventmarker(0)
+            pause(0.1)
+            eventmarker(1)
+            pause(0.1)
+            eventmarker(0)
+            
             %** session is running, break point ***
             % startTrial
             % time the loop time, 
@@ -150,6 +157,16 @@ classdef (Sealed) SGLSessionArc
                     break;
                 end
             end
+            
+            % end end session event marker sequence
+            eventmarker(0)
+            pause(0.1)
+            eventmarker(1)
+            pause(0.1)
+            eventmarker(0)
+            EventServer.writeEvents();
+            
+            
         end
         % # get the hwnd to the GUI window 
         % function hwnd = mGetGUIWindow(this,winName)
