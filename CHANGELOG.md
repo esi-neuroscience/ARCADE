@@ -1,6 +1,12 @@
 # Change Log of ARCADE
 
-## Unreleased
+## [2.5.0] - 2019-05-23
+### NEW
+*   ARCADE sends a [0 1 0] eventmarker sequence at beginning and and of a
+    session. This can be used to synchronize different recording systems, e.g.
+    Eyelink and TDT Sys3.
+
+## [2.5.0b3] - 2019-05-17
 ### NEW
 *   NidaqServer 1.0.10.6: support for PCIe-6323
 *   For testing a task script, the `simulate_trial` function will create all
