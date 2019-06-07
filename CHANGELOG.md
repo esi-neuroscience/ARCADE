@@ -1,5 +1,17 @@
 # Change Log of ARCADE
 
+## [2.5.1] - 2019-06-07
+### NEW
+*   EyeLinkServer v1.1.6.0: When both eyes are tracked, the eye used for
+    monitoring regions can be selected from the EyeLinkServer GUI. If only one
+    eye is tracked, the selected eye is displayed.
+
+### FIXED
+*   EyeLinkServer v1.1.6.0: For binocular tracking, the current position was
+    sometimes switching between the two eyes at runtime, causing small eye
+    position jumps. This was fixed.
+
+
 ## [2.5.0] - 2019-05-23
 ### NEW
 *   ARCADE sends a [0 1 0] eventmarker sequence at beginning and and of a
@@ -8,7 +20,7 @@
 
 ## [2.5.0b3] - 2019-05-17
 ### NEW
-*   NidaqServer 1.0.10.6: support for PCIe-6323
+*   NidaqServer v1.0.10.6: support for PCIe-6323
 *   For testing a task script, the `simulate_trial` function will create all
     editable variables from a _cfg.mat file in the MATLAB workspace as well as
     a valid TrialData struct.

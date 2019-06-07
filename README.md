@@ -1,3 +1,6 @@
+![ARCADE Logo](/arcade/Docs/html/arcade.png)
+
+
 ARCADE
 ======
 
@@ -36,7 +39,8 @@ Currently ARCADE was only tested on
 * Windows 7 with Windows Platform Update and Windows 10 (v1803)
 * MATLAB 2014a (64-bit), MATLAB 2018b
 * Eyelink 1000/2000 eye tracker
-* National Instruments I/O devices PCI-6221, PCI-6503 and USB-6353
+* National Instruments I/O devices PCI-6221, PCI-6503, PCIe-6251, PCIe-6323,
+  PCIe-6321 and USB-6353
 
 
 Authors and contributors
