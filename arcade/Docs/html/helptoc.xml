@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding="utf-8"?>
 <toc version="2.0">
 
-    <tocitem target="ARCADE.html">ARCADE
+    <tocitem target="index.html">ARCADE
     	<tocitem target="DOCRunningArcade.html">Running ARCADE</tocitem>
 	    <tocitem target="DOCDesigningTaskFiles.html">Designing task scripts 
 		   <tocitem target="DOCExampleDetectTask.html">Example task script</tocitem>
