@@ -8,9 +8,6 @@ cfg.StimServer = [];
 procs = launch_processes(cfg);
 assert(length(procs) == 1)
 
-%% Test start
-EyeServer.Start('test.edf')
-
 %% Test trackeye
 fpEvents = trackeye([0,0], 50, 'fp');
 targetEvents = trackeye([300,300], 50, 'target');
