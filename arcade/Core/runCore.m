@@ -115,10 +115,6 @@ SESSArc.mStart;
 
 %% End session
 
-clear VARIABLES
-
-%% Exit MATLAB
-
 logmessage('Closing MATLAB in 5 s. Press CTRL+C to cancel or see log files');
 
 for seconds = 5:-1:0
@@ -126,7 +122,6 @@ for seconds = 5:-1:0
     pause(1)
     fprintf('\b')
 end
-exit
 
 end
 
