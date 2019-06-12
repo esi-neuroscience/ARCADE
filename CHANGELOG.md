@@ -1,5 +1,16 @@
 # Change Log of ARCADE
 
+## [2.5.2] - 2019-06-12
+### FIXED
+*   Using MATLAB 2014a with ARCADE 2.5.0-2.5.1, sessions were not terminated
+    properly such that the eye data was not received from Eyelink and the
+    behavioral data file was not closed. The error did not occur with MATLAB
+    2018b.
+
+### CHANGED
+*   EyeLinkServer v.1.1.6.1: speedup of start recording
+
+
 ## [2.5.1] - 2019-06-07
 ### NEW
 *   EyeLinkServer v1.1.6.0: When both eyes are tracked, the eye used for
