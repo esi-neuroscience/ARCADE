@@ -1,5 +1,16 @@
 # Change Log of ARCADE
 
+## [2.5.3] - 2019-06-14
+### FIXED
+*   StimServer v1.3.1.6: The LinearMotion animation could sometimes fully reach
+    the very final position. The MovingBar stimulus was also affected.
+*   EyeLinkServer v1.1.6.2: If the Eyelink system was offline at EyeLinkServer
+    startup, connecting to the Eyelink system via the GUI menu  did not work.
+    This was fixed.
+*   CalibrateEyelink: The startup of the StimServer and NidaqServer processes
+    could sometimes fail. This is fixed by switching to the new `launch_processes`
+    function for startup.
+
 ## [2.5.2] - 2019-06-12
 ### FIXED
 *   Using MATLAB 2014a with ARCADE 2.5.0-2.5.1, sessions were not terminated
