@@ -49,8 +49,7 @@ classdef CalibrateEyelink < handle
     end
     
     properties ( GetAccess=private, SetAccess=immutable )
-        stimServerProcess
-        daqServerProcess
+        procs
         stopEvent
         stimHandle
     end
@@ -99,11 +98,12 @@ classdef CalibrateEyelink < handle
                 'ENTER=forward, BACKSPACE=backward, ESC=exit/restart, R=reward, S=visibility'}, ...
                 'FontWeight', 'bold')
             
-            % Start and connect to StimServer
-            obj.stimServerProcess = obj.start_server('StimServer');
+            cfg = ArcadeConfig;
+            cfg.ControlScreen = [];
+            cfg.DaqServer = 'NidaqServer.exe';
+            cfg.StimServer = 'StimServer.exe';
+            obj.procs = launch_processes(cfg);
             
-            % Start and connect to DaqServer
-            obj.daqServerProcess = obj.start_server('DaqServer');
             
             if ~exist('stim', 'var')
                 obj.stim = CalibrationStimulusGaussian();
@@ -168,6 +168,7 @@ classdef CalibrateEyelink < handle
                 [~, x, y] = Eyelink('targetcheck');
                 if norm(currentPosition - [x y]) > 1
                     set(obj.dot, 'XData', x, 'YData', y)
+                    obj.stim = obj.stimHandle();
                     obj.move_stimuli(x,y);
                     currentPosition = [x y];
                 end
@@ -247,10 +248,9 @@ classdef CalibrateEyelink < handle
         function delete(obj)
             Eyelink('Shutdown');
             cellfun(@(x) delete(x), obj.stim)
-            delete(obj.stimServerProcess);
             StimServer.delete();
-            DaqServer.Disconnect();
-            delete(obj.daqServerProcess);
+            DaqServer.delete();
+            cellfun(@(x) delete(x), obj.procs)
             delete(obj.stopEvent);
             
         end
