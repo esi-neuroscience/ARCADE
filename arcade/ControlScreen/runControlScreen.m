@@ -56,7 +56,8 @@ controlScreenEvent = IPCEvent('ControlScreenDone');
 controlScreenEvent.trigger();
 
 % Wait for Core process to connect
-controlScreenEvent.waitForTrigger(5000);
+assert(controlScreenEvent.waitForTrigger(30000), ...
+    'Core process connect timed out')
 
 try
     eyeClient = EyeClient;
