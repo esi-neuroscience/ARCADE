@@ -151,6 +151,10 @@ classdef EyeServer < handle
             end
         end
                 
+        function Message(message)
+            EyeServer.Command(0, uint8([0 4 message 0]));
+        end
+        
     end
     
     methods (Static, Hidden=true)
