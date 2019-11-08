@@ -4,10 +4,8 @@ classdef Wedge < Shape
     % 
     % PROPERTIES
     % -----------
-    %   width  : width of ellipse (pixel) for rotation angle=0
-    %   height : heigth of ellipse (pixel) for rotation angle=0
-    %
-    %      
+    %   gamma  : opening angle of wedge (degree, >0, <=90)
+    %    
     % USAGE
     % -----
     %   w = Wedge();
@@ -17,7 +15,7 @@ classdef Wedge < Shape
     % See also Shape, Stimulus
 
     properties ( Access = public, Transient = true )
-        gamma = 9; % wedge's center angle (>0° <90°)
+        gamma = 9; % wedge's center angle (degree, >0° <90°)
     end       
         
     methods
