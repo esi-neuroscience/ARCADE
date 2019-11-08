@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Visual stimuli for ARCADE</title><meta name="generator" content="MATLAB 9.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2019-02-15"><meta name="DC.source" content="DOCAvailableStimuli.m"><style type="text/css">
+      --><title>Visual stimuli for ARCADE</title><meta name="generator" content="MATLAB 9.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2019-11-08"><meta name="DC.source" content="DOCAvailableStimuli.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -71,7 +71,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 </pre><p>or by using the <tt>set</tt> command, similar to how figures and axes can be manipulated in MATLAB, e.g.,</p><pre class="language-matlab">set(stim, <span class="string">'property'</span>, 3.14)
 </pre><p>Only the latter variant can be used in the <tt>onEntry</tt> and <tt>onExit</tt> functions of trial states. The former variant is useful for testing your stimuli. To see all properties of a stimulus, use   <tt>properties('MyStimulus')</tt>, e.g. <tt>properties('Rectangle')</tt></p><p>To ensure stable operation of ARCADE, all stimuli should be explicitly deleted at the end of a trial, e.g. in a <tt>cleanUp</tt> state by issuing</p><pre class="language-matlab">stim.delete()
 </pre><p>Documentation about a particular stimulus can be found via the MATLAB <tt>help</tt> (only stimulus-specific help) and <tt>doc</tt> (stimulus-specific and inhertied properties) commands, e.g.   help Circle   doc Circle</p><p><b>Testing stimuli</b></p><p>All stimuli can be tested from any open MATLAB if ARCADE is in the MATLAB search path and <tt>ARCADE/arcade/StimServer/StimServer.exe</tt> is running. The first command in such a test environment has to be</p><pre class="language-matlab">StimServer.Connect()
-</pre><p>This command is not necessary in the actual trial script.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">General stimulus properties</a></li><li><a href="#3">Circles</a></li><li><a href="#6">Pictures</a></li><li><a href="#9">Masked sinusoidal grating</a></li><li><a href="#13">Square-wave grating</a></li><li><a href="#16">Gabor</a></li><li><a href="#20">Rectangles</a></li><li><a href="#23">Animations</a></li><li><a href="#27">Moving Bars</a></li><li><a href="#30">Gammatron (annular grating)</a></li><li><a href="#33">Gaussian</a></li><li><a href="#36">Petal</a></li><li><a href="#39">Pixel shader</a></li></ul></div><h2 id="1">General stimulus properties</h2><p>All stimuli share a few properties. All stimuli can be made visible, repositioned, or animated (smoothly translated).</p><pre class="codeinput">help <span class="string">Stimulus</span>
+</pre><p>This command is not necessary in the actual trial script.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">General stimulus properties</a></li><li><a href="#3">Circles</a></li><li><a href="#6">Pictures</a></li><li><a href="#9">Masked sinusoidal grating</a></li><li><a href="#13">Square-wave grating</a></li><li><a href="#16">Gabor</a></li><li><a href="#20">Rectangles</a></li><li><a href="#23">Animations</a></li><li><a href="#27">Moving Bars</a></li><li><a href="#30">Gammatron (annular grating)</a></li><li><a href="#33">Gaussian</a></li><li><a href="#36">Petal</a></li><li><a href="#39">Ellipse</a></li><li><a href="#42">Wedge</a></li><li><a href="#45">Pixel shader</a></li></ul></div><h2 id="1">General stimulus properties</h2><p>All stimuli share a few properties. All stimuli can be made visible, repositioned, or animated (smoothly translated).</p><pre class="codeinput">help <span class="string">Stimulus</span>
 </pre><pre class="codeoutput">  STIMULUS - Abstract base class for all ARCADE stimuli 
   
   All ARCADE stimuli are child classes of this base class, i.e., all
@@ -164,7 +164,7 @@ clear <span class="string">circ*</span>
        doc Picture
 
 
-</pre><p><b>Example</b></p><pre class="codeinput">imgPath = <span class="string">'C:\Toolboxes\ARCADE\arcade\Docs'</span>;
+</pre><p><b>Example</b></p><pre class="codeinput">imgPath = pwd;
 img = Picture(fullfile(imgPath, <span class="string">'image.png'</span>));
 img.position = [0 0];
 img.alpha = 200;
@@ -545,7 +545,67 @@ p.drawMode = 3; <span class="comment">% 1=face only, 2=line only, 3=both</span>
 p.visible = true;
 pause(1)
 clear <span class="string">p</span>
-</pre><p><img vspace="5" hspace="5" src="examplePetal.png" alt=""> </p><h2 id="39">Pixel shader</h2><p><tt><a href="matlab:doc('PixelShader')">PixelShader</a></tt> are small programs that run on the graphics card and are written in a specific shader language, HLSL  (see <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb509561(v=vs.85).aspx">here</a> for more information). Using HLSL any stimulus that can be parameterized based on pixel location and time may be generated and rendered with high performance.</p><p>Programming in HLSL is not trivial, but offers great flexibility. As a starting point you may have a look at the gratings presented above. They are implemented in the file <tt>ARCADE\arcade\StimServer\classes\stimfiles\pixelShader\MaskedGrating.fx</tt>, which is loaded and controlled by the <tt>PixelShader</tt> class with the following properties and methods</p><pre class="codeinput">help <span class="string">PixelShader</span>
+</pre><p><img vspace="5" hspace="5" src="examplePetal.png" alt=""> </p><h2 id="39">Ellipse</h2><p>A filled and/or outlined ellipse can be created using the <tt><a href="matlab:doc('Ellipse')">Ellipse</a></tt> stimulus.</p><pre class="codeinput">help <span class="string">Ellipse</span>
+</pre><pre class="codeoutput">  ELLIPSE &lt; Shape &lt; Stimulus - Ellipse stimulus for ARCADE
+ 
+  
+  PROPERTIES
+  -----------
+    width  : width of ellipse (pixel) for rotation angle=0
+    height : heigth of ellipse (pixel) for rotation angle=0
+ 
+       
+  USAGE
+  -----
+    e = Ellipse();
+ 
+  For more information, see &lt;a href="matlab:doc('arcade')"&gt;the ARCADE guide&lt;/a&gt; and the superclasses.
+ 
+  See also Shape, Stimulus
+
+    Reference page in Doc Center
+       doc Ellipse
+
+
+</pre><p><b>Example</b></p><pre class="codeinput">e = Ellipse;
+e.visible = true;
+e.width = 300;
+e.angle = 42;
+e.drawMode = 3;
+e.lineColor = [0 0 255];
+e.lineWidth = 20;
+pause(1)
+clear <span class="string">e</span>
+</pre><p><img vspace="5" hspace="5" src="exampleEllipse.png" alt=""> </p><h2 id="42">Wedge</h2><p>A filled and/or outlined wedge with a speficied opening angle gamma can be created using the <tt><a href="matlab:doc('Wedge')">Wedge</a></tt> stimulus.</p><pre class="codeinput">help <span class="string">Wedge</span>
+</pre><pre class="codeoutput">  WEDGE &lt; Shape &lt; Stimulus - Wedge stimulus for ARCADE
+ 
+  
+  PROPERTIES
+  -----------
+    gamma  : opening angle of wedge (degree, &gt;0, &lt;=90)
+     
+  USAGE
+  -----
+    w = Wedge();
+ 
+  For more information, see &lt;a href="matlab:doc('arcade')"&gt;the ARCADE guide&lt;/a&gt; and the superclasses.
+ 
+  See also Shape, Stimulus
+
+    Reference page in Doc Center
+       doc Wedge
+
+
+</pre><p><b>Example</b></p><pre class="codeinput">w = Wedge;
+w.visible = true;
+w.angle = 42;
+w.drawMode = 3;
+w.lineColor = [0 0 0];
+w.lineWidth = 2;
+w.gamma = 13;
+pause(1)
+clear <span class="string">w</span>
+</pre><p><img vspace="5" hspace="5" src="exampleWedge.png" alt=""> </p><h2 id="45">Pixel shader</h2><p><tt><a href="matlab:doc('PixelShader')">PixelShader</a></tt> are small programs that run on the graphics card and are written in a specific shader language, HLSL  (see <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb509561(v=vs.85).aspx">here</a> for more information). Using HLSL any stimulus that can be parameterized based on pixel location and time may be generated and rendered with high performance.</p><p>Programming in HLSL is not trivial, but offers great flexibility. As a starting point you may have a look at the gratings presented above. They are implemented in the file <tt>ARCADE\arcade\StimServer\classes\stimfiles\pixelShader\MaskedGrating.fx</tt>, which is loaded and controlled by the <tt>PixelShader</tt> class with the following properties and methods</p><pre class="codeinput">help <span class="string">PixelShader</span>
 </pre><pre class="codeoutput">  Class for passing and controlling pixel shader programs in HLSL to the
   StimServer. Actual pixel shader shader implementations should be
   children of this class to implement parameter handling.
@@ -666,7 +726,7 @@ help Picture
 %%
 % *Example*
 %
-imgPath = 'C:\Toolboxes\ARCADE\arcade\Docs';
+imgPath = pwd;
 img = Picture(fullfile(imgPath, 'image.png'));
 img.position = [0 0];
 img.alpha = 200;
@@ -964,6 +1024,45 @@ clear p
 %
 % <<examplePetal.png>>
 
+
+%% Ellipse
+% A filled and/or outlined ellipse can be created using the 
+% |<matlab:doc('Ellipse') Ellipse>| stimulus.
+help Ellipse
+%%
+% *Example*
+e = Ellipse;
+e.visible = true;
+e.width = 300;
+e.angle = 42;
+e.drawMode = 3;
+e.lineColor = [0 0 255];
+e.lineWidth = 20;
+pause(1)
+clear e
+%%
+%
+% <<exampleEllipse.png>>
+
+%% Wedge
+% A filled and/or outlined wedge with a speficied opening angle gamma can be 
+% created using the |<matlab:doc('Wedge') Wedge>| stimulus.
+help Wedge
+%%
+% *Example*
+w = Wedge;
+w.visible = true;
+w.angle = 42;
+w.drawMode = 3;
+w.lineColor = [0 0 0];
+w.lineWidth = 2;
+w.gamma = 13;
+pause(1)
+clear w
+
+%%
+%
+% <<exampleWedge.png>>
 
 
 

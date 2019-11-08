@@ -1,5 +1,16 @@
 # Change Log of ARCADE
 
+## [2.5.4] - 2019-11-08
+## NEW
+*   StimServer v1.4.1.0:
+        - New Wedge stimulus
+        - Photodiode position can be set in Windows registry
+*   EyelinkServer v1.1.7.0: new 'Message' command for message to be stored
+    in EDF data file.
+
+### FIXED
+*   No timeout error in runControlScreen for connecting to the Core process.
+
 ## [2.5.3] - 2019-06-14
 ### FIXED
 *   StimServer v1.3.1.6: The LinearMotion animation could sometimes fully reach

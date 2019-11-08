@@ -82,19 +82,23 @@ classdef (Sealed = true) StimServer < handle
                 0, ...
                 []);
             assert(~obj.hPipe.isNull(), ...
-                'Can''t connect to StimServer''s pipe. Is the server running ?');                           
+                'StimServer: cannot connect to pipe. Is the server running ?');                           
         end
         
         function Disconnect()
             % Disconnect from StimServer.exe pipe
             temp = StimServer.this;
-            assert(~isequal(0, calllib('kernel32', 'CloseHandle', temp.hPipe)));
+            assert(~isequal(0, calllib('kernel32', 'CloseHandle', temp.hPipe)), ...
+                'StimServer: could not close pipe handle');
             temp.hPipe = libpointer;
             %             disp('Disconnected from StimServer pipe');
         end
         
         function delete()
-            StimServer.Disconnect();
+            try 
+                StimServer.Disconnect();
+            catch                
+            end
             munlock;
             clear StimServer;
         end
@@ -174,7 +178,7 @@ classdef (Sealed = true) StimServer < handle
                 result = calllib('kernel32', 'GetLastError');
                 assert(false);
             end
-            assert(nWritten == length(cmdMessage), 'Could not write message to StimServer pipe');
+            assert(nWritten == length(cmdMessage), 'StimServer: could not write message to pipe');
         end
         
         function Command(key, bytearr)
@@ -191,7 +195,7 @@ classdef (Sealed = true) StimServer < handle
                 2, ...
                 nRead, ...
                 []);
-            assert(nRead == 2, 'Could not read stimulus key from StimServer pipe');
+            assert(nRead == 2, 'StimServer: could not read stimulus key from pipe');
         end
         
         function result = read1single()
@@ -204,7 +208,7 @@ classdef (Sealed = true) StimServer < handle
                 4, ...
                 nRead, ...
                 []);
-            assert(nRead == 4, 'Could not read position from StimServer pipe');
+            assert(nRead == 4, 'StimServer: could not read 4 bytes from pipe');
 %            result = typecast(result, 'single');
         end
         
@@ -218,7 +222,7 @@ classdef (Sealed = true) StimServer < handle
                 8, ...
                 nRead, ...
                 []);
-            assert(nRead == 8, 'Could not read position from StimServer pipe');
+            assert(nRead == 8, 'StimServer: could not read 8 bytes from pipe');
             pos = typecast(pos, 'single');
         end
         

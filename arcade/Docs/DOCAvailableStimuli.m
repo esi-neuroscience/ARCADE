@@ -102,7 +102,7 @@ help Picture
 %%
 % *Example*
 %
-imgPath = 'C:\Toolboxes\ARCADE\arcade\Docs';
+imgPath = pwd;
 img = Picture(fullfile(imgPath, 'image.png'));
 img.position = [0 0];
 img.alpha = 200;
@@ -400,6 +400,45 @@ clear p
 %
 % <<examplePetal.png>>
 
+
+%% Ellipse
+% A filled and/or outlined ellipse can be created using the 
+% |<matlab:doc('Ellipse') Ellipse>| stimulus.
+help Ellipse
+%%
+% *Example*
+e = Ellipse;
+e.visible = true;
+e.width = 300;
+e.angle = 42;
+e.drawMode = 3;
+e.lineColor = [0 0 255];
+e.lineWidth = 20;
+pause(1)
+clear e
+%%
+%
+% <<exampleEllipse.png>>
+
+%% Wedge
+% A filled and/or outlined wedge with a speficied opening angle gamma can be 
+% created using the |<matlab:doc('Wedge') Wedge>| stimulus.
+help Wedge
+%%
+% *Example*
+w = Wedge;
+w.visible = true;
+w.angle = 42;
+w.drawMode = 3;
+w.lineColor = [0 0 0];
+w.lineWidth = 2;
+w.gamma = 13;
+pause(1)
+clear w
+
+%%
+%
+% <<exampleWedge.png>>
 
 
 
