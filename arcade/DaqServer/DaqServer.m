@@ -1,12 +1,12 @@
-classdef DaqServer < handle
+classdef DaqServer < ServerInterface
     % DAQSERVER - MATLAB interface for communication with DaqServer process
-    % 
+    %
     % The DaqServer process handles digital input and output, i.e.
     % eventmarkers, reward, levers, etc. The communication between the Core
     % process and the DaqServer happens via a <a href="https://docs.microsoft.com/en-us/windows/desktop/ipc/named-pipes">Named Pipe</a>,
     % for which this MATLAB class provides an interface.
     %
-    % Currently only one DaqServer is implemented (NidaqServer.exe), which 
+    % Currently only one DaqServer is implemented (NidaqServer.exe), which
     % supports National Instruments devices (see the accompanying
     % NidaqServer.pdf documentation). A different DaqServer should
     % set up the same Named Pipe and respond to the commands implemented in
@@ -21,9 +21,9 @@ classdef DaqServer < handle
     % ----------------
     %  Connect() : Open pipe to the DaqServer for sending commands
     %  Disconnect() : Disconnect from pipe to DaqServer
-    %  AddLine(lineNumber, varargin) : 
+    %  AddLine(lineNumber, varargin) :
     %        Watch status of digital input line for either pulses
-    %               AddLine(lineNumber, pulseEventName)       
+    %               AddLine(lineNumber, pulseEventName)
     %        or on/off states
     %               AddLine(lineNumber, onEventName, offEventName)
     %        The function trackdigitalinput provides a convenient wrapper
@@ -40,93 +40,58 @@ classdef DaqServer < handle
     % See also eventmarker, reward, setManualRewardDuration,
     %          totalRewardTime, trackdigitalinput
     
-    properties (Constant, Access = private, Hidden = true)
-        this = DaqServer
-    end
-    
-    properties (Access = private, Transient = true, Hidden = true)
-        hPipe = libpointer;
-        isConnected = false;
-    end
     
     properties ( Constant, GetAccess = public, Hidden = true )
         doneEventName = 'DaqServerDone'
+        pipeName= '\pipe\NidaqServerPipe';
     end
     
-    methods (Access = protected, Hidden=true)
-        function obj = DaqServer()
-            %            mlock;
+    methods ( Static, Access = protected )
+        
+        function out = SetGetHandle(value)
+            persistent hPipeDaqServer;
+            if nargin == 1
+                hPipeDaqServer = value;
+            end
+            if isempty(hPipeDaqServer)
+                hPipeDaqServer = libpointer;
+            end
+            out = hPipeDaqServer;
         end
     end
     
-    methods (Static)        
-        function Connect(varargin)
-            % Connect to DaqServer
-            obj = DaqServer.this;
-            if ~obj.hPipe.isNull()
+    methods ( Static, Access=public )
+        
+        function Connect()
+            hPipe =  DaqServer.SetGetHandle();
+            if ~hPipe.isNull()
                 warning('DaqServer:Connect:failed', ...
                     'DaqServer connection was already established.');
-                return;
+                return
             end
-            if ~libisloaded('kernel32')
-                loadlibrary('kernel32', @win_kernel32);
-            end
-            if isequal(nargin, 0)
-                server='.'; 
-                pipeName='\pipe\NidaqServerPipe';
-            else                 
-                server = varargin{1}; 
-                pipeName = varargin{2}; 
-            end
-
-            GENERIC_READ_WRITE = uint32(hex2dec('C0000000'));
-            obj.hPipe = calllib('kernel32', 'CreateFileA', ...
-                uint8(['\\' server pipeName 0]), ...
-                GENERIC_READ_WRITE, ...
-                0, ...  % no sharing
-                [], ...
-                3, ...  % OPEN_EXISTING
-                0, ...
-                []);
-            assert(~obj.hPipe.isNull());
-            result = calllib('kernel32', 'GetNamedPipeInfo', ...
-                obj.hPipe, ...
-                [], ...
-                [], ...
-                [], ...
-                []);
-            if isequal(result, 0)
-                obj.hPipe = libpointer;
-                ConstructorResult = calllib('kernel32', 'GetLastError');
-                if ~isequal(ConstructorResult, 0)
-                    ConstructorResult
-                end
-                error('DaqServer:Constructor:failed', ...
-                    'Can''t connect to DaqServer''s pipe. Is the server running ?');
-            end
-            obj.isConnected = true;
+            hPipe = ServerInterface.Connect(DaqServer.pipeName);
+            DaqServer.SetGetHandle(hPipe);
         end
         
         function Disconnect()
-            % Disconnect from DaqServer
-            temp = DaqServer.this;
-            if temp.isConnected
-                assert(~isequal(0, calllib('kernel32', 'CloseHandle', temp.hPipe)));
-                temp.hPipe = libpointer;
-                temp.isConnected = false;
+            hPipe = DaqServer.SetGetHandle();
+            try
+                ServerInterface.Disconnect(hPipe);
+            catch me
+                DaqServer.SetGetHandle([]);
+                rethrow(me)
             end
+            DaqServer.SetGetHandle([]);
         end
         
         function isConnected = GetConnectionStatus()
             % Retreive connection status with DaqServer
-            temp = DaqServer.this;
-            isConnected = temp.isConnected;
+            hPipe = DaqServer.SetGetHandle;
+            isConnected = ~hPipe.isNull();
         end
         
         function delete()
             DaqServer.Disconnect();
-            munlock;
-            clear DaqServer;
         end
         
         function AddLine(lineNumber, varargin)
@@ -146,7 +111,7 @@ classdef DaqServer < handle
         
         function Start()
             % Start tracking of digital input lines defined with AddLine
-            event = IPCEvent('DaqServerDone');
+            event = IPCEvent(DaqServer.doneEventName);
             event.reset();
             DaqServer.Write(uint8(3));
             event.waitForTrigger(1000);
@@ -174,41 +139,21 @@ classdef DaqServer < handle
         
         function totalTime = GetTotalRewardTime()
             % Retreive reward time since last retreival
-            DaqServer.Write(uint8(8));
-            totalTime = uint32(0);
-            nRead = uint32(0);
-            [result, ~, totalTime, nRead] = ...
-                calllib('kernel32', 'ReadFile', ...
-                DaqServer.this.hPipe, ...
-                totalTime, ...
-                4, ...
-                nRead, ...
-                []);
-            assert(nRead == 4, 'Could not read total reward time from DaqServer pipe');
+            ServerInterface.Write(DaqServer.SetGetHandle, uint8(8));
+            totalTime = read1single(hPipe);
+           
         end
     end
     
-    methods (Static, Hidden=true)
+    methods ( Static, Hidden=true )
         
         function Write(cmdMessage)
-            if isNull(DaqServer.this.hPipe)
-                error('DaqServer:Unconnected', ...
-                    'No connection to DaqServer.');
-            end
-            nWritten = uint32(0);
-            [result, ~, cmdMessage, nWritten] = ...
-                calllib('kernel32', 'WriteFile', ...
-                DaqServer.this.hPipe, ...
-                cmdMessage, ...
-                length(cmdMessage), ...
-                nWritten, ...
-                []);
-            if isequal(result, 0)
-                result = calllib('kernel32', 'GetLastError');
-                assert(false);
-            end
-            assert(nWritten == length(cmdMessage));
+            hPipe = DaqServer.SetGetHandle;
+            ServerInterface.Write(hPipe, cmdMessage)
         end
+        
     end
+    
 end
+
 

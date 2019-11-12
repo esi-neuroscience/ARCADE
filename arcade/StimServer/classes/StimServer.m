@@ -1,22 +1,22 @@
-classdef (Sealed = true) StimServer < handle
-    % STIMSERVER - MATLAB interface for communication with StimServer.exe 
+classdef (Sealed = true) StimServer < ServerInterface
+    % STIMSERVER - MATLAB interface for communication with StimServer.exe
     %
-    % The StimServer process displays visual stimuli on screen. 
-    % Visual stimuli are controlled by sending commands via a  
+    % The StimServer process displays visual stimuli on screen.
+    % Visual stimuli are controlled by sending commands via a
     % <a href="https://docs.microsoft.com/en-us/windows/desktop/ipc/named-pipes">Named Pipe</a>, for which this MATLAB class provides an interface.
-    %  
+    %
     % USAGE
     % -----
     % StimServer.exe must be started before using this class. The Connect method
-    % must be called before any other commands can be sent. The methods 
+    % must be called before any other commands can be sent. The methods
     % listed below are not meant for the user during session
-    % runtime. Instead, Stimulus classes (see help Stimuli) and the 
+    % runtime. Instead, Stimulus classes (see help Stimuli) and the
     % corresponding functions in the UserFunctions folder should be used (see help UserFunctions).
     %
     % METHODS (static)
     % ----------------
     %  Connect() : Open pipe to StimServer.exe for sending commands
-    %  Defer(deferred) : Enable (deferred=1) or disable (deferred=0) 
+    %  Defer(deferred) : Enable (deferred=1) or disable (deferred=0)
     %                    grouping of following commands
     %  Disconnect() : Disconnect from StimServer.exe
     %  GetConnectionStatus() : Returns status of StimServer pipe connection.
@@ -29,23 +29,17 @@ classdef (Sealed = true) StimServer < handle
     %  SetDefaultFinalAction(mask) : Set default terminal action for Animations
     %  ShowAll(visible) : Make all stimuli visible (1) or invisible (0).
     %                     This doesn't update the Stimulus MATLAB objects.
-    %    
-    % For more information, see the accompanying StimServer documentation 
+    %
+    % For more information, see the accompanying StimServer documentation
     % (StimServer.pdf) and <a href="matlab:doc('arcade')">the ARCADE guide</a>.
-    %      
+    %
     % See also Stimulus, backgroundColor, win_kernel32, groupStimuli,
-    %          photodiode, 
+    %          photodiode,
     
-    properties (Constant, Access = private, Hidden = true)
-        this = StimServer
-    end
     
     properties ( Constant, GetAccess = public, Hidden = true )
         doneEventName = 'StimServerDone'
-    end
-
-    properties (Access = private, Transient = true, Hidden = true)
-        hPipe = libpointer;
+        pipeName = '\pipe\StimServerPipe'
     end
     
     methods (Access = private, Hidden=true)
@@ -54,53 +48,52 @@ classdef (Sealed = true) StimServer < handle
         end
     end
     
+    methods ( Static, Access = protected )
+        function out = SetGetHandle(value)
+            persistent hPipeStimServer;
+            if nargin == 1
+                hPipeStimServer = value;
+            end
+            if isempty(hPipeStimServer)
+                hPipeStimServer = libpointer;
+            end
+            out = hPipeStimServer;
+        end
+    end
+    
+    
     methods (Static)
         
-        function Connect(varargin)
-            % Connect to StimServer.exe pipe for issueing commands
-            obj = StimServer.this;
-            if ~obj.hPipe.isNull()
-                return;
+        function Connect()
+            hPipe =  StimServer.SetGetHandle();
+            if ~hPipe.isNull()
+                warning('StimServer:Connect:failed', ...
+                    'StimServer connection was already established.');
+                return
             end
-            if ~libisloaded('kernel32')
-                loadlibrary('kernel32', @win_kernel32);
-            end
-  
-            if isequal(nargin, 0)
-                server='.'; 
-            else 
-                server = varargin{1}; 
-            end
-
-            GENERIC_READ_WRITE = uint32(hex2dec('C0000000'));
-            obj.hPipe = calllib('kernel32', 'CreateFileA', ...
-                uint8(['\\' server '\pipe\StimServerPipe']), ...
-                GENERIC_READ_WRITE, ...
-                0, ...  % no sharing
-                [], ...
-                3, ...  % OPEN_EXISTING
-                0, ...
-                []);
-            assert(~obj.hPipe.isNull(), ...
-                'StimServer: cannot connect to pipe. Is the server running ?');                           
+            hPipe = ServerInterface.Connect(StimServer.pipeName);
+            StimServer.SetGetHandle(hPipe);
         end
         
         function Disconnect()
-            % Disconnect from StimServer.exe pipe
-            temp = StimServer.this;
-            assert(~isequal(0, calllib('kernel32', 'CloseHandle', temp.hPipe)), ...
-                'StimServer: could not close pipe handle');
-            temp.hPipe = libpointer;
-            %             disp('Disconnected from StimServer pipe');
+            hPipe =  StimServer.SetGetHandle;
+            try
+                ServerInterface.Disconnect(hPipe);
+            catch me
+                StimServer.SetGetHandle([]);
+                rethrow(me)
+            end
+            StimServer.SetGetHandle([]);
+        end
+        
+        function isConnected = GetConnectionStatus()
+            % Retreive connection status with server
+            hPipe = StimServer.SetGetHandle;
+            isConnected = ~hPipe.isNull();
         end
         
         function delete()
-            try 
-                StimServer.Disconnect();
-            catch                
-            end
-            munlock;
-            clear StimServer;
+            StimServer.Disconnect();
         end
         
         function SetBackgroundColor(color)
@@ -151,13 +144,8 @@ classdef (Sealed = true) StimServer < handle
             StimServer.Command(0, uint8([1 8]));
             frameRate = StimServer.read1single();
         end
-
-        function isConnected = GetConnectionStatus()
-            % Retreive connection status with StimServer
-            obj = StimServer.this;
-            isConnected = ~obj.hPipe.isNull();
-        end
-
+        
+        
         function waitResult = waitUntilDone(timeout)
             waitResult = IPCEvent.wait_for_event(StimServer.doneEventName, timeout);
         end
@@ -166,19 +154,8 @@ classdef (Sealed = true) StimServer < handle
     methods (Static, Hidden=true)
         
         function Write(cmdMessage)
-            nWritten = uint32(0);
-            [result, ~, cmdMessage, nWritten] = ...
-                calllib('kernel32', 'WriteFile', ...
-                StimServer.this.hPipe, ...
-                cmdMessage, ...
-                length(cmdMessage), ...
-                nWritten, ...
-                []);
-            if isequal(result, 0)
-                result = calllib('kernel32', 'GetLastError');
-                assert(false);
-            end
-            assert(nWritten == length(cmdMessage), 'StimServer: could not write message to pipe');
+            hPipe = StimServer.SetGetHandle;
+            ServerInterface.Write(hPipe, cmdMessage)
         end
         
         function Command(key, bytearr)
@@ -186,44 +163,18 @@ classdef (Sealed = true) StimServer < handle
         end
         
         function key = ReadAck()
-            key = uint16(0);
-            nRead = uint32(0);
-            [result, ~, key, nRead] = ...
-                calllib('kernel32', 'ReadFile', ...
-                StimServer.this.hPipe, ...
-                key, ...
-                2, ...
-                nRead, ...
-                []);
-            assert(nRead == 2, 'StimServer: could not read stimulus key from pipe');
+            hPipe = StimServer.SetGetHandle;
+            key = ServerInterface.ReadAck(hPipe);
         end
         
         function result = read1single()
-            result = single(0);
-            nRead = uint32(0);
-            [~, ~, result, nRead] = ...
-                calllib('kernel32', 'ReadFile', ...
-                StimServer.this.hPipe, ...
-                result, ...
-                4, ...
-                nRead, ...
-                []);
-            assert(nRead == 4, 'StimServer: could not read 4 bytes from pipe');
-%            result = typecast(result, 'single');
+            hPipe = StimServer.SetGetHandle;
+            result = ServerInterface.read1single(hPipe);
         end
         
         function pos = read2single()
-            pos = uint64(0);
-            nRead = uint32(0);
-            [~, ~, pos, nRead] = ...
-                calllib('kernel32', 'ReadFile', ...
-                StimServer.this.hPipe, ...
-                pos, ...
-                8, ...
-                nRead, ...
-                []);
-            assert(nRead == 8, 'StimServer: could not read 8 bytes from pipe');
-            pos = typecast(pos, 'single');
+             hPipe = StimServer.SetGetHandle;
+             pos = ServerInterface.read2single(hPipe);
         end
         
     end
