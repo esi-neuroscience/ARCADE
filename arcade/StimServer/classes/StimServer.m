@@ -42,9 +42,10 @@ classdef (Sealed = true) StimServer < ServerInterface
         pipeName = '\pipe\StimServerPipe'
     end
     
-    methods (Access = private, Hidden=true)
+    methods (Access = public, Hidden=true)
         function obj = StimServer()
-            
+            error(['StimServer interface cannot be instantiated. Use its ' ...
+                'static methods for communication with the StimServer.'])
         end
     end
     
@@ -93,7 +94,10 @@ classdef (Sealed = true) StimServer < ServerInterface
         end
         
         function delete()
-            StimServer.Disconnect();
+            if StimServer.GetConnectionStatus
+                StimServer.Disconnect();
+            end
+            clear StimServer.SetGetHandle
         end
         
         function SetBackgroundColor(color)
@@ -173,8 +177,8 @@ classdef (Sealed = true) StimServer < ServerInterface
         end
         
         function pos = read2single()
-             hPipe = StimServer.SetGetHandle;
-             pos = ServerInterface.read2single(hPipe);
+            hPipe = StimServer.SetGetHandle;
+            pos = ServerInterface.read2single(hPipe);
         end
         
     end

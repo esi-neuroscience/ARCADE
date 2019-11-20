@@ -46,6 +46,14 @@ classdef DaqServer < ServerInterface
         pipeName= '\pipe\NidaqServerPipe';
     end
     
+    methods
+        function obj = DaqServer()
+            error(['DaqServer interface cannot be instantiated. Use its ' ...
+                'static methods for communication with the DaqServer.'])
+        end
+        
+    end
+    
     methods ( Static, Access = protected )
         
         function out = SetGetHandle(value)
@@ -91,7 +99,10 @@ classdef DaqServer < ServerInterface
         end
         
         function delete()
-            DaqServer.Disconnect();
+            if DaqServer.GetConnectionStatus
+                DaqServer.Disconnect();
+            end
+            clear DaqServer.SetGetHandle
         end
         
         function AddLine(lineNumber, varargin)
@@ -140,8 +151,8 @@ classdef DaqServer < ServerInterface
         function totalTime = GetTotalRewardTime()
             % Retreive reward time since last retreival
             ServerInterface.Write(DaqServer.SetGetHandle, uint8(8));
-            totalTime = read1single(hPipe);
-           
+            totalTime = DaqServer.read1single(DaqServer.SetGetHandle);
+            totalTime = typecast(totalTime, 'uint32');
         end
     end
     

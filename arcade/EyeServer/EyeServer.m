@@ -39,8 +39,10 @@ classdef EyeServer < ServerInterface
         doneEventName = 'EyeServerDone'
     end
     
-    methods (Access = protected, Hidden=true)
+    methods 
         function obj = EyeServer()           
+            error(['EyeServer interface cannot be instantiated. Use its ' ...
+                'static methods for communication with the EyeServer.'])
         end                
     end
     
@@ -88,9 +90,10 @@ classdef EyeServer < ServerInterface
         end
         
         function delete()
-            EyeServer.Disconnect();
-            munlock;
-            clear EyeServer;
+            if EyeServer.GetConnectionStatus
+                EyeServer.Disconnect();
+            end
+            clear EyeServer.SetGetHandle
         end
         
         function SetScreenSize(width, height)

@@ -10,7 +10,7 @@ classdef ( Abstract ) ServerInterface < handle
         handle = SetGetHandle(value)
     end
     
-    methods ( Abstract, Static, Access=public) 
+    methods ( Abstract, Static, Access=public)
         isConnected = GetConnectionStatus()
     end
     
@@ -29,7 +29,7 @@ classdef ( Abstract ) ServerInterface < handle
             
             % https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilea
             hPipe = calllib('kernel32', 'CreateFileA', ...
-                uint8(['\\' server pipeName]), ...
+                uint8(['\\' server pipeName 0]), ...
                 GENERIC_READ_WRITE, ...
                 0, ...  % no sharing
                 [], ...
@@ -45,7 +45,7 @@ classdef ( Abstract ) ServerInterface < handle
                 [], ...
                 [], ...
                 []);
-            if ~isequal(result, 0)
+            if isequal(result, 0)
                 ConstructorResult = calllib('kernel32', 'GetLastError');
                 if ~isequal(ConstructorResult, 0)
                     disp(ConstructorResult)
@@ -53,7 +53,6 @@ classdef ( Abstract ) ServerInterface < handle
                 error('ARCADE:ServerInterface:Connect:failed', ...
                     'Can''t connect to pipe. Is the server running?');
             end
-            
             
         end
         

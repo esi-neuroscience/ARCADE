@@ -38,7 +38,7 @@ eventmarker(4444)
 %% Test digital input
 eventNames = {'testLineOn', 'testLineOff'};
 logmessage('Track digital input line port2/line4')
-trackdigitalinput(7, eventNames);
+trackdigitalinput(4, eventNames);
 trackdigitalinput('start')
 pause(1)
 assert(IPCEvent.wait_for_event(eventNames{2}, 2000));
