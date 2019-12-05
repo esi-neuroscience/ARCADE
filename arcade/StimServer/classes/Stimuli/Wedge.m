@@ -4,8 +4,7 @@ classdef Wedge < Shape
     % 
     % PROPERTIES
     % -----------
-    %   width  : width of ellipse (pixel) for rotation angle=0
-    %   height : heigth of ellipse (pixel) for rotation angle=0
+    %   gamma   : wedge's center angle (>0° <90°)
     %
     %      
     % USAGE
