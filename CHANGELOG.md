@@ -1,5 +1,11 @@
 # Change Log of ARCADE
 
+## [2.5.5] - 2019-12-10
+## NEW
+*   StimServer v1.4.1.1: the Wedge stimulus can now be rotated via
+    a LinearRange animation.
+*   NidaqServer v1.0.17.1: added support for PCIe-6351
+
 ## [2.5.4] - 2019-11-08
 ## NEW
 *   StimServer v1.4.1.0:
