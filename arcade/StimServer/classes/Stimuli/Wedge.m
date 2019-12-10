@@ -4,8 +4,9 @@ classdef Wedge < Shape
     % 
     % PROPERTIES
     % -----------
-    %   gamma  : opening angle of wedge (degree, >0, <=90)
-    %    
+    %   gamma   : wedge's center angle (>0° <90°)
+    %
+    %      
     % USAGE
     % -----
     %   w = Wedge();
