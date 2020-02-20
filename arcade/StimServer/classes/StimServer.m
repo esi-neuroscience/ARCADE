@@ -151,6 +151,11 @@ classdef (Sealed = true) StimServer < handle
             StimServer.Command(0, uint8([1 8]));
             frameRate = StimServer.read1single();
         end
+        
+        function InvertGammaCorrection(gamma)
+            assert(gamma > 0, 'Inverse gamma correction value must be larger than 0')
+            StimServer.Command(0, uint8([1 10 typecast(single(gamma), 'uint8')]))
+        end
 
         function isConnected = GetConnectionStatus()
             % Retreive connection status with StimServer
