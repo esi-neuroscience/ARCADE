@@ -1,5 +1,14 @@
 # Change Log of ARCADE
 
+## [2.5.6] - 2020-03-02
+## NEW
+*   StimServer v1.4.2: support for Gamma correction
+*   measure_screen_gamma.m: new script for measuring the screen gamma value
+
+## CHANGED
+*   EyeLinkServer 1.2.0.0: In and Out events are now mutually exclusive
+
+
 ## [2.5.5] - 2019-12-10
 ## NEW
 *   StimServer v1.4.1.1: the Wedge stimulus can now be rotated via
