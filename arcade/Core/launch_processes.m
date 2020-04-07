@@ -75,8 +75,9 @@ if ~isempty(cfg.StimServer)
 end
 
 
-IPCEvent.wait_for_event(StimServer.doneEventName, 1000);
-pause(0.1)
+assert(IPCEvent.wait_for_event(StimServer.doneEventName, 10000), ...
+       'StimServer startup failed')
+
 
 % connect to StimServer
 if ~isempty(cfg.StimServer)
