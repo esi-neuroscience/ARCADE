@@ -1,8 +1,18 @@
 # Change Log of ARCADE
 
+## [2.5.7] - 2020-04-07
+## CHANGED
+*  StimServer v1.4.2.1: The window size of the StimServer stimulus screen in
+   windowed mode is now 800x600 pixels. This prevents accidental switches to 
+   go unnoticed. Timing and performance in windowed mode are not reliable.
+
+## FIXED
+*   A bug process synchronization could prevent successful startup of ARCADE
+
+
 ## [2.5.6] - 2020-03-02
 ## NEW
-*   StimServer v1.4.2: support for Gamma correction
+*   StimServer v1.4.2.0: support for Gamma correction
 *   measure_screen_gamma.m: new script for measuring the screen gamma value
 
 ## CHANGED
