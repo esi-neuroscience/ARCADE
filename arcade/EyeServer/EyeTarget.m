@@ -35,7 +35,11 @@ classdef (Abstract) EyeTarget < hgsetget
             if ~isequal(obj.key, 0)
                 EyeServer.Command(obj.key, 0);
             end
-        end       
+        end
+        
+        function SetFlags(flagBits)
+            EyeServer.Command(obj.key, uint8([3 flagBits]));
+        end
     end
 
 end

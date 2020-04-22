@@ -3,10 +3,11 @@ function groupStimuli(setmode)
 % 
 % INPUT
 % -----
-% 	mode :  'start' or 'end'
+% 	mode :  'start' ('begin'), 'end' or 'cancel'
 % 
 % All changes made to stimuli following a groupStimuli('start') call
 % will be applied simulataneously once groupStimuli('end') is called.
+% groupStimuli('cancel') will end the grouping without applying any changes.
 % 
 % EXAMPLE
 % -------
@@ -28,6 +29,8 @@ switch lower(setmode)
         StimServer.Defer(1); % begin deferred mode
     case 'end'
         StimServer.Defer(0); % end deferred mode
+    case 'cancel'
+        StimServer.Defer(2); % cancel deferred mode
 end
 
 end

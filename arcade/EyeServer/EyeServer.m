@@ -30,6 +30,8 @@ classdef EyeServer < handle
     %       Transform()					remove transformation
 	%       Transform([x0 y0 x1 y1])	linear transformation
     %	    Transform([x0 y0 x1 y1 x2 y2]) quadratic transformation
+    %  Message(message) : Write a message to the EDF file
+    %  SetSampleMode()  : Force server to operate in "sample mode"
     %
     % See also trackeye, EyeTarget, IPCEvent
     
@@ -153,6 +155,10 @@ classdef EyeServer < handle
                 
         function Message(message)
             EyeServer.Command(0, uint8([0 4 message 0]));
+        end
+        
+        function SetSampleMode()
+            EyeServer.Command(0, uint8([0 1 5]));
         end
         
     end
