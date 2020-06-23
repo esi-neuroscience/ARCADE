@@ -158,7 +158,15 @@ classdef EyeServer < handle
         end
         
         function SetSampleMode()
-            EyeServer.Command(0, uint8([0 1 5]));
+            EyeServer.Command(0, uint8([0 5]));
+        end
+        
+        function EnableSaccade()
+            EyeServer.Command(0, uint8([0 6]));
+        end
+        
+        function SignalSaccade()
+            EyeServer.Command(0, uint8([0 7]));
         end
         
     end
