@@ -129,8 +129,9 @@ classdef (Sealed = true) StimServer < handle
         end
         
         function Defer(deferred)
-            % Enable (1) or disable (0) grouping of following commands
-            StimServer.Command(0, uint8([1 deferred]));
+            % Enable (1), disable (0) or cancel (2) command grouping
+            if deferred == 2; mode = 11; else; mode = deferred; end
+            StimServer.Command(0, uint8([1 mode]));
         end
         
         function RemoveAll()
