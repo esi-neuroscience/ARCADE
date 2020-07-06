@@ -83,6 +83,7 @@ assert(IPCEvent.wait_for_event(StimServer.doneEventName, 10000), ...
 if ~isempty(cfg.StimServer)
     logmessage('Connect to StimServer')
     StimServer.Connect();
+    logmessage(sprintf('FrameRate = %3.0f', StimServer.GetFrameRate));
 end
 
 % connect to DaqServer
