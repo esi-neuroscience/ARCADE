@@ -1,8 +1,8 @@
 # Change Log of ARCADE
 
 ## Unreleased
-## CHANGED
-*  StimServer v1.4.2.3:  The deferred mode (`groupStimuli`) can now e canceled 
+## NEW
+*  StimServer v1.4.2.3:  The deferred mode (`groupStimuli`) can now be canceled 
    by using new cancel command or the `StimServerEndDeferredMode` event.
 *  EyeLinkServer v1.2.3.0: Support to receive samples for speed up, 
    support for `EndDeferredMode` events
