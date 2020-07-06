@@ -52,6 +52,7 @@ of ARCADE:
 * Joscha Schmiedt (joscha.schmiedt@esi-frankfurt.de)
 * Katharine Shapcott (katharine.shapcott@esi-frankfurt.de)
 * Michael Stephan (michael.stephan@esi-frankfurt.de)
+* Yufeng Zhang (yufeng.zhang@esi-frankfurt.de)
 
 The ARCADE software is free but copyrighted software, distributed
 under the terms of the GNU General Public Licence as published by
