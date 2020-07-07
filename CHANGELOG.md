@@ -6,6 +6,8 @@
    by using new cancel command or the `StimServerEndDeferredMode` event.
 *  EyeLinkServer v1.2.3.0: Support to receive samples for speed up, 
    support for `EndDeferredMode` events
+*  The new add-on `EditableVariableEditor` contributed by Yufeng Zhang can be
+   used to edit the editable variables in an existing configuration file (`*_cfg.mat`)
 
 
 ## [2.5.7] - 2020-04-07
