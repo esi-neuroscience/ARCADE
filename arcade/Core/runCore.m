@@ -72,7 +72,7 @@ else
     end
 end
 if isempty(cfg.rng)
-    cfg.rng = rng(now, 'twister');
+    cfg.rng = rng('shuffle', 'twister');
 else
     logmessage(...
         sprintf('Using predefined random number generator (method=%s, seed=%d)', ...
