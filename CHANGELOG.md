@@ -9,6 +9,10 @@
 *  The new add-on `EditableVariableEditor` contributed by Yufeng Zhang can be
    used to edit the editable variables in an existing configuration file (`*_cfg.mat`)
 
+## FIXED
+*  A bug in the ARCADE startup caused the seeds of the random number generator
+   to be identical on a given day leading to identical random sequences.
+
 
 ## [2.5.7] - 2020-04-07
 ## CHANGED
