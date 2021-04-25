@@ -79,7 +79,7 @@ classdef (Sealed) PauseScreen < AUXEditableVariables & SPCGUIDefinition
             % get table for Editable Variables 
             controlObject = findobj(this.hfig,'Tag','tbl_EditableVariables');
             
-            % -- add propertiesand set them -- 
+            % -- add properties and set them -- 
             % UITABLE ONLY
             addProp(controlObject, 'selectedIndices', []); 
             

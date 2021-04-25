@@ -184,7 +184,7 @@ classdef (Sealed) SGLSessionArc
             while 1
                 PauseGui = PauseScreen.launch(BHVstore.cfg); % launch Pause Screen
                 quitSess = PauseGui.userQuitRequest;         % get user quit request
-                if quitSess, break; end;
+                if quitSess, break; end
                 % only modify cfg if user selected resume 
                 BHVstore.cfg = PauseGui.cfg;% retreive the cfg
                 break;

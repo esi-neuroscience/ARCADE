@@ -32,6 +32,7 @@ classdef EyeServer < handle
     %	    Transform([x0 y0 x1 y1 x2 y2]) quadratic transformation
     %  Message(message) : Write a message to the EDF file
     %  SetSampleMode()  : Force server to operate in "sample mode"
+    %  SendToUDP(number): Send int32 to UDP port (iRec only)
     %
     % See also trackeye, EyeTarget, IPCEvent
     
@@ -168,7 +169,11 @@ classdef EyeServer < handle
         function SignalSaccade()
             EyeServer.Command(0, uint8([0 7]));
         end
-        
+     
+        function SendToUDP(number)  % iRec only
+            EyeServer.Command(0, uint8([0 8 typecast(int32(number), 'uint8')]));
+        end
+
     end
     
     methods (Static, Hidden=true)

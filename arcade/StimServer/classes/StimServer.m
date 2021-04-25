@@ -21,6 +21,7 @@ classdef (Sealed = true) StimServer < handle
     %  Disconnect() : Disconnect from StimServer.exe
     %  GetConnectionStatus() : Returns status of StimServer pipe connection.
     %  GetFrameRate() : Returns current frame rate of StimServer screen
+    %  GetScreenSize() : Returns (pixel-) size of StimServer screen
     %  PDmode(mode) : Change mode of photo diode. 0=off, 1=on, 2=toggle, 3=flicker
     %  PDposition(pos) : Change position of photo diode. 0=upper left, 1=lower left
     %  PDshow(shown) : Enable (shown=1) or disable (shown=0) photo diode
@@ -153,6 +154,11 @@ classdef (Sealed = true) StimServer < handle
             frameRate = StimServer.read1single();
         end
         
+        function screenSize = GetScreenSize
+            StimServer.Command(0, uint8([1 12]));
+            screenSize = StimServer.read2uint16();
+        end
+        
         function InvertGammaCorrection(gamma)
             assert(gamma > 0, 'Inverse gamma correction value must be larger than 0')
             StimServer.Command(0, uint8([1 10 typecast(single(gamma), 'uint8')]))
@@ -230,6 +236,20 @@ classdef (Sealed = true) StimServer < handle
                 []);
             assert(nRead == 8, 'StimServer: could not read 8 bytes from pipe');
             pos = typecast(pos, 'single');
+        end
+        
+        function pos = read2uint16()
+            pos = uint32(0);
+            nRead = uint32(0);
+            [~, ~, pos, nRead] = ...
+                calllib('kernel32', 'ReadFile', ...
+                StimServer.this.hPipe, ...
+                pos, ...
+                4, ...
+                nRead, ...
+                []);
+            assert(nRead == 4, 'StimServer: could not read 4 bytes from pipe');
+            pos = typecast(pos, 'uint16');
         end
         
     end

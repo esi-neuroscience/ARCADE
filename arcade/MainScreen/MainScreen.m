@@ -21,7 +21,7 @@ classdef (Sealed) MainScreen < MSJavaObjects & MSConfig & MSEditableVariables & 
     
     % MSJavaObjects       -> adds java objects (JSpinners, etc) to the GUI
     % MSConfig            -> handles all cfg related functions 
-    % MSEditableVariables -> handle the editables variables porition of the GUI
+    % MSEditableVariables -> handle the editables variables portion of the GUI
     % AUXCopyAndBackup    -> handle the copy and backup files portion of the GUI 
     % SPCGUIDefinition    -> a super class that defines some GUI related functions 
     
@@ -394,7 +394,7 @@ classdef (Sealed) MainScreen < MSJavaObjects & MSConfig & MSEditableVariables & 
             
             % ppd = mPixelsPerDegree(dist2screen,diagScreen,scrnPixels,dec)
             ppd = AUXPixels2Degrees.mPixelsPerDegree(dist2screen,monDiagSize,[w,h],dec);
-            if isnan(ppd), ppd=0; end; % prevent Nan
+            if isnan(ppd), ppd=0; end % prevent Nan
             
             set(ppdObj,'String',num2str(ppd));
             this.cfg.PixelsPerDegree = ppd;    % perhaps a quick fix

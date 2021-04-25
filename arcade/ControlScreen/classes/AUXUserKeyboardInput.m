@@ -5,6 +5,7 @@ classdef AUXUserKeyboardInput < handle
     %---------------------------------------------%
     % unknown   - Jarrod, wrote class
     % 21.4.2016 - Jarrod, added some documentation/notes
+    % 24.8.2020 - Michael, removed (unused) mUserPauseScreen
     
     properties %(SetAccess = private)
         keyPressed  = false;
@@ -48,7 +49,10 @@ classdef AUXUserKeyboardInput < handle
             end
         end
         
-        
+        %++
+        % Michael removed the (unused) mUserPauseScreen method.
+        % For now it's uncommented (just in case).
+        %{
         function quitSess = mUserPauseScreen(this,BHVstore)
             % get the cfg from the Behavioural Store,
             % and pass working copy of CFG
@@ -72,7 +76,8 @@ classdef AUXUserKeyboardInput < handle
             % so the pause figure is destroyed before resuming
             java.lang.Thread.sleep(20);
         end
-        
+        %}
+        %--
 
         
         %# WindowKeyPressCallback

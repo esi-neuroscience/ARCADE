@@ -29,13 +29,16 @@ classdef DaqServer < handle
     %        The function trackdigitalinput provides a convenient wrapper
     %        for using this functionality.
     %   Start() : Start tracking of digital input lines defined with AddLine
-    %   SetRewardTime() : Set reward duration (ms) for manual reward
+    %   SetRewardTime(time) : Set reward duration (ms) for manual reward
+    %   SetPulseTime(line, time) : Set pulse duration (ms) for a line
     %   Reward(duration) : Set reward line to on for specified duration (ms)
     %   EventMarker(code) : Send out an eventmarker code
     %   SetRewardCode(code) : Set the event marker code sent out with a manual reward
     %   GetTotalRewardTime() : Retreive reward duration since last
     %                          retreival. Calling this method resets the
     %                          counter in the NidaqServer.
+    %   OutPulseLine(lineNumber, name) : define a line to output a pulse
+    %                                    when the "name" event is signaled
     %
     % See also eventmarker, reward, setManualRewardDuration,
     %          totalRewardTime, trackdigitalinput
@@ -157,6 +160,11 @@ classdef DaqServer < handle
             DaqServer.Write(uint8([4 typecast(uint16(timems), 'uint8')]));
         end
         
+        function SetPulseTime(line, timems)
+            % Set pulse duration for event-triggered pulse line  in ms
+            DaqServer.Write(uint8([4 line typecast(uint16(timems), 'uint8')]));
+        end
+        
         function Reward(times)
             % Send reward duration times in ms
             DaqServer.Write(uint8([5 typecast(uint16(times), 'uint8')]));
@@ -186,6 +194,13 @@ classdef DaqServer < handle
                 []);
             assert(nRead == 4, 'Could not read total reward time from DaqServer pipe');
         end
+        
+        function OutPulseLine(lineNumber, name)
+            % Define line for output pulses
+            %   OutPulseLine(lineNumber, pulseEventName)
+            DaqServer.Write(uint8([9 lineNumber name 0]));
+        end
+        
     end
     
     methods (Static, Hidden=true)

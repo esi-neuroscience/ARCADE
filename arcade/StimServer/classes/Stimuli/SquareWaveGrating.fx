@@ -85,6 +85,6 @@ float4 PSmain( float4 Pos : SV_POSITION ) : SV_Target
         }
     };
     float4 color = color0*(float4)(bright) + color1*(float4)(1.0f-bright);
-    color[3] = alpha;
+    color[3] *= alpha;
     return color;
 }
