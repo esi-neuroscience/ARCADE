@@ -7,10 +7,11 @@ classdef EyeServer < handle
     % the screen. Communication between the Core process and the EyeServer 
     % happens via a <a href="https://docs.microsoft.com/en-us/windows/desktop/ipc/named-pipes">Named Pipe</a>, for which this MATLAB class provides an interface.
     %
-    % Currently only one EyeServer is implemented (EyeLinkServer.exe), which 
-    % supports Eyelink 1000/2000 devices. A different EyeServer should
-    % set up the same Named Pipe and respond to the commands implemented in
-    % this class. 
+    % Currently two server applications are implemented:
+    % EyeLinkServer.exe) which supports Eyelink 1000/2000 devices and
+    % iRecServer.exe which supports iRec eyetrackers.
+    % Additional server applications should set up the same Named Pipe and
+    % respond to the commands implemented in this class. 
     %
     % The methods listed below are not meant for the user during session
     % runtime. Instead, the corresponding functions in the UserFunctions

@@ -1,5 +1,5 @@
 classdef Flicker < Animation
-    % Flash - Class for displaying a stimulus for a given number of frames.
+    % Flicker - Class for displaying a stimulus for a given number of frames.
     %
     % Usage
     % -----
