@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Visual stimuli for ARCADE</title><meta name="generator" content="MATLAB 9.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2019-11-08"><meta name="DC.source" content="DOCAvailableStimuli.m"><style type="text/css">
+      --><title>Visual stimuli for ARCADE</title><meta name="generator" content="MATLAB 9.7"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2021-05-26"><meta name="DC.source" content="DOCAvailableStimuli.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -103,7 +103,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
  
   See also Animation, StimServer
 
-    Reference page in Doc Center
+    Documentation for Stimulus
        doc Stimulus
 
 
@@ -123,7 +123,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
  
   See also Ellipse, Shape, Stimulus
 
-    Reference page in Doc Center
+    Documentation for Circle
        doc Circle
 
 
@@ -160,7 +160,7 @@ clear <span class="string">circ*</span>
  
   See also Stimulus, Animation
 
-    Reference page in Doc Center
+    Documentation for Picture
        doc Picture
 
 
@@ -205,7 +205,7 @@ clear <span class="string">img</span> <span class="string">img2</span>
   
   See also PixelShader, Stimulus
 
-    Reference page in Doc Center
+    Documentation for Grating
        doc Grating
 
 
@@ -255,7 +255,7 @@ clear <span class="string">grat1</span> <span class="string">grat2</span>
   
   See also PixelShader, Stimulus
 
-    Reference page in Doc Center
+    Documentation for SquareWaveGrating
        doc SquareWaveGrating
 
 
@@ -296,7 +296,7 @@ clear <span class="string">swg</span>
   
   See also PixelShader, Stimulus
 
-    Reference page in Doc Center
+    Documentation for Gabor
        doc Gabor
 
 
@@ -338,7 +338,7 @@ clear <span class="string">gabor*</span>
  
   See also Shape, Stimulus
 
-    Reference page in Doc Center
+    Documentation for Rectangle
        doc Rectangle
 
 
@@ -357,7 +357,7 @@ r2.faceAlpha = 100;
 r2.visible = true;
 pause(1)
 clear <span class="string">r1</span> <span class="string">r2</span>
-</pre><p><img vspace="5" hspace="5" src="exampleRectangle.png" alt=""> </p><h2 id="23">Animations</h2><p>ARCADE allows several kinds of <tt><a href="matlab:doc('Animation')">animations</a></tt>. All stimulus types can be smoothly translated around on the screen. To animate a stimulus, an animation has to be created first and then assigned to a stimulus by using the <tt>play_animation</tt> method of a stimulus.</p><p>Currently there are five types of animation</p><div><ol><li><tt><a href="matlab:doc('LinearMotion')">LinearMotion</a></tt>: Move a stimulus along a polygon.</li><li><tt><a href="matlab:doc('GeneralMotion')">GeneralMotion</a></tt>: This moves the stimulus along an arbitrary path defined in a file. <b>NOT FULLY TESTED YET</b></li><li><tt><a href="matlab:doc('LinearRange')">LinearRange</a></tt>: Change certain scalar stimulus properties linearily from a starting value to an end value within a specified duration</li><li><tt><a href="matlab:doc('Flash')">Flash</a></tt>: Flash (turn on) a stimulus for a defined number of frames</li><li><tt><a href="matlab:doc('ExternalPositionControl')">ExternalPositionControl</a></tt>: Couple the position of a stimulus to a position in a shared memory, e.g. the eye position.</li></ol></div><p>To start an animation is has to be passed to the <tt>play_animation</tt> method of a stimulus. Animations start immediatly when the stimulus is visible or when it becomes visible. An animation can be stopped by using the <tt>stop_animation</tt> method of the animated stimulus.</p><p>When an animation ends several actions can be triggered, which is controlled via the <tt>terminalAction</tt> property of the animation.</p><pre class="codeinput">help <span class="string">Animation.terminalAction</span>
+</pre><p><img vspace="5" hspace="5" src="exampleRectangle.png" alt=""> </p><h2 id="23">Animations</h2><p>ARCADE allows several kinds of <tt><a href="matlab:doc('Animation')">animations</a></tt>. All stimulus types can be smoothly translated around on the screen. To animate a stimulus, an animation has to be created first and then assigned to a stimulus by using the <tt>play_animation</tt> method of a stimulus.</p><p>Currently there are six types of animation</p><div><ol><li><tt><a href="matlab:doc('LinearMotion')">LinearMotion</a></tt>: Move a stimulus along a polygon.</li><li><tt><a href="matlab:doc('GeneralMotion')">GeneralMotion</a></tt>: This moves the stimulus along an arbitrary path defined in a file. <b>NOT FULLY TESTED YET</b></li><li><tt><a href="matlab:doc('LinearRange')">LinearRange</a></tt>: Change certain scalar stimulus properties linearily from a starting value to an end value within a specified duration</li><li><tt><a href="matlab:doc('Flash')">Flash</a></tt>: Flash (turn on) a stimulus for a defined number of frames</li><li><tt><a href="matlab:doc('Flicker')">Flicker</a></tt>: Flicker repeatedly(turn on and off) a stimulus for a defined number of frames</li><li><tt><a href="matlab:doc('ExternalPositionControl')">ExternalPositionControl</a></tt>: Couple the position of a stimulus to a position in a shared memory, e.g. the eye position.</li></ol></div><p>To start an animation is has to be passed to the <tt>play_animation</tt> method of a stimulus. Animations start immediatly when the stimulus is visible or when it becomes visible. An animation can be stopped by using the <tt>stop_animation</tt> method of the animated stimulus.</p><p>When an animation ends several actions can be triggered, which is controlled via the <tt>terminalAction</tt> property of the animation.</p><pre class="codeinput">help <span class="string">Animation.terminalAction</span>
 </pre><pre class="codeoutput">  8-bit mask as string to define actions after the end of the animation.
   The bits have the following meaning:
     1 disable the assigned stimulus
@@ -421,7 +421,7 @@ clear <span class="string">r</span> <span class="string">a</span>
   
   See also Rectangle, Shape, Stimulus, Animation, LinearMotion
 
-    Reference page in Doc Center
+    Documentation for MovingBar
        doc MovingBar
 
 
@@ -458,7 +458,7 @@ clear <span class="string">mb</span>
   
   See also PixelShader, Stimulus
 
-    Reference page in Doc Center
+    Documentation for Gammatron
        doc Gammatron
 
 
@@ -489,7 +489,7 @@ clear <span class="string">g</span>
  
   See also PixelShader, Stimulus
 
-    Reference page in Doc Center
+    Documentation for Gaussian
        doc Gaussian
 
 
@@ -533,7 +533,7 @@ clear <span class="string">g1</span> <span class="string">g2</span> <span class=
  
   See also Shape, Stimulus
 
-    Reference page in Doc Center
+    Documentation for Petal
        doc Petal
 
 
@@ -563,7 +563,7 @@ clear <span class="string">p</span>
  
   See also Shape, Stimulus
 
-    Reference page in Doc Center
+    Documentation for Ellipse
        doc Ellipse
 
 
@@ -582,8 +582,9 @@ clear <span class="string">e</span>
   
   PROPERTIES
   -----------
-    gamma  : opening angle of wedge (degree, &gt;0, &lt;=90)
-     
+    gamma   : wedge's center angle (&gt;0&deg; &lt;90&deg;)
+ 
+       
   USAGE
   -----
     w = Wedge();
@@ -592,7 +593,7 @@ clear <span class="string">e</span>
  
   See also Shape, Stimulus
 
-    Reference page in Doc Center
+    Documentation for Wedge
        doc Wedge
 
 
@@ -616,11 +617,11 @@ clear <span class="string">w</span>
  
   See also Stimulus
 
-    Reference page in Doc Center
+    Documentation for PixelShader
        doc PixelShader
 
 
-</pre><p>Pixel shaders can currently use up to 4 RGB-Alpha colors and 12 parameters that are passed to the shader using the <tt>setColor</tt> and <tt>setParameter</tt> methods.</p><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2018b</a><br></p></div><!--
+</pre><p>Pixel shaders can currently use up to 4 RGB-Alpha colors and 12 parameters that are passed to the shader using the <tt>setColor</tt> and <tt>setParameter</tt> methods.</p><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2019b</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 %% Visual stimuli for ARCADE
 % |<matlab:doc('Stimulus') Stimuli>| are created invisibly in the task script before the creation of the trial
@@ -898,7 +899,7 @@ clear r1 r2
 % stimulus, an animation has to be created first and then assigned to a
 % stimulus by using the |play_animation| method of a stimulus.
 % 
-% Currently there are five types of animation
+% Currently there are six types of animation
 % 
 % # |<matlab:doc('LinearMotion') LinearMotion>|: Move a stimulus along a polygon.
 % # |<matlab:doc('GeneralMotion') GeneralMotion>|: This moves the stimulus along an arbitrary path
@@ -906,6 +907,7 @@ clear r1 r2
 % # |<matlab:doc('LinearRange') LinearRange>|: Change certain scalar stimulus properties linearily from a
 % starting value to an end value within a specified duration 
 % # |<matlab:doc('Flash') Flash>|: Flash (turn on) a stimulus for a defined number of frames
+% # |<matlab:doc('Flicker') Flicker>|: Flicker repeatedly(turn on and off) a stimulus for a defined number of frames
 % # |<matlab:doc('ExternalPositionControl') ExternalPositionControl>|: Couple the position of a stimulus to a
 % position in a shared memory, e.g. the eye position.
 % 
