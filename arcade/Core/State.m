@@ -109,7 +109,7 @@ classdef State < handle
             % Timed pause required
             elseif  obj.duration > 0
               
-              sleep( obj.duration )
+              sleep( obj.duration ) % MEX wrapper for Sleep( )
               
             end % wait for events
             
