@@ -113,12 +113,17 @@ classdef State < handle
               
             end % wait for events
             
+            % Something went wrong with System call to
+            % WaitForMultipleObjects( ) in WaitForEvents( ).
             assert(result ~= State.WAIT_FAILED, 'Wait for events failed');
-                        
+            
+            % Handle outcome of wait
             if obj.runNumber >= obj.maxRepetitions
                 nextState = obj.nextStateAfterMaxRepetitions;
             elseif result == State.WAIT_TIMEOUT
                 nextState = obj.nextStateAfterTimeout;
+                
+            % WaitForEvents detected an event other than timeout
             elseif result >= 1
                 nextState = obj.nextStateAfterEvent{result};
             end
