@@ -1,5 +1,17 @@
 # Change Log of ARCADE
 
+## [?.?.?] - 2021-12-09
+## NEW
+*  Added sleep.* and timeBEPeriod.* to arcade\Core. sleep( ) is a wrapper
+   for Windows system call Sleep( ). timeBEPeriod enables/disables higher-
+   precision multi-media timers via the timeBeginPeriod( ) and
+   timeEndPeriod( ) system call.
+## FIXED
+*  Issue 21 of esi-neuroscience/ARCADE https://github.com/esi-neuroscience/ARCADE/issues/21
+   Done by finding Matlab timers that were created by processManager and
+   stopping them. NOTE that now command line output from sub-processes is
+   no longer accessible without reading the ASCII log files.
+
 ## Unreleased
 ## NEW
 *  StimServer v1.4.2.3:  The deferred mode (`groupStimuli`) can now be canceled 
