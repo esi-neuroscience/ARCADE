@@ -110,3 +110,8 @@ if ~isempty(cfg.ControlScreen)
     IPCEvent.set_event('ControlScreenDone')
 end
 
+% At this point, we have opened up all sub-processes. Now find and disable
+% all Matlab timers that were set up by processManager, because these lead
+% to a ~10% increase in the duration of any timer e.g. when calling
+% WaitForEvents with a positive timeout value.
+arrayfun( @( a ) stop( a ) , timerfindall ) ;
