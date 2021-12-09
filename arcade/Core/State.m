@@ -61,7 +61,7 @@ classdef State < handle
         nextStateAfterMaxRepetitions = 'final'; % name of next state after maximal iterations
         onEntry = {}; % cell array of anonymous functions to be executed during state entry
         onExit = {}; % cell array of anonymous functions to be executed during state exit
-        duration = 0; % tiemout for wait in ms
+        duration = 0; % timeout for wait in ms
         maxRepetitions = Inf; % number of maximal iterations of state
     end
     properties ( GetAccess = public, SetAccess = private)
@@ -97,17 +97,22 @@ classdef State < handle
             obj.runNumber = obj.runNumber+1;
             obj.evalFunctions(obj.onEntry)            
                     
+            % Default outcome when there are no events to wait for
             result = State.WAIT_TIMEOUT;
-            % FIXME: this workaround was introduced because MATLAB waited
-            % ca. 10% longer than specified in the wait duration.
-            while (toc(obj.startTic) < obj.duration/1000) && result == State.WAIT_TIMEOUT                
-                if ~isempty(obj.waitEvents)
-                    result = WaitForEvents(1, ...
-                        obj.waitEvents, ...
-                        obj.waitForAllEvents, ...
-                        0);
-                end
-            end  
+            
+            % Call a timed wait for events
+            if  ~ isempty( obj.waitEvents )
+              
+              result = WaitForEvents( 1 , obj.waitEvents , ...
+                obj.waitForAllEvents , obj.duration ) ;
+              
+            % Timed pause required
+            elseif  obj.duration > 0
+              
+              sleep( obj.duration )
+              
+            end % wait for events
+            
             assert(result ~= State.WAIT_FAILED, 'Wait for events failed');
                         
             if obj.runNumber >= obj.maxRepetitions
