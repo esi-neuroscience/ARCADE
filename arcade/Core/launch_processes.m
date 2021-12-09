@@ -15,7 +15,8 @@ readyEvents = {};
 for iExe = 1:length(cfg.OtherExecutables)
     cmd = cfg.OtherExecutables{iExe};
     logmessage(sprintf('Starting %s', cmd))
-    procs{end+1} =  processManager('id', cmd, 'command',  cmd);
+    procs{end+1} =  processManager('id', cmd, 'command',  cmd , ...
+      'printStdout' , false , 'printStderr' , false );
 end
 
 % launch control screen process
@@ -38,7 +39,8 @@ if ~isempty(cfg.EyeServer)
     eyeServerExePath = fullfile(arcaderoot, 'arcade', ...
         'EyeServer', cfg.EyeServer);
     procs{end+1} = processManager('id', 'EyeServer', ...
-        'command', eyeServerExePath);
+        'command', eyeServerExePath, 'printStdout' , false , ...
+        'printStderr' , false);
     readyEvents{end+1} = EyeServer.doneEventName;
 end
 
@@ -48,7 +50,8 @@ if ~isempty(cfg.DaqServer)
     daqServerExePath = fullfile(arcaderoot, 'arcade', ...
         'DaqServer', cfg.DaqServer);
     procs{end+1} = processManager('id', 'DaqServer', ...
-        'command', daqServerExePath);
+        'command', daqServerExePath , 'printStdout' , false , ...
+        'printStderr' , false);
     readyEvents{end+1} = DaqServer.doneEventName;
 end
 
@@ -71,7 +74,8 @@ if ~isempty(cfg.StimServer)
     stimServerExePath = fullfile(arcaderoot, 'arcade', ...
         'StimServer', cfg.StimServer);
     procs{end+1} = processManager('id', 'StimServer', ...
-        'command',  stimServerExePath);    
+        'command',  stimServerExePath , 'printStdout' , false , ...
+        'printStderr' , false);    
 end
 
 
