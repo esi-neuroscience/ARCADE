@@ -114,4 +114,8 @@ end
 % all Matlab timers that were set up by processManager, because these lead
 % to a ~10% increase in the duration of any timer e.g. when calling
 % WaitForEvents with a positive timeout value.
-arrayfun( @( a ) stop( a ) , timerfindall ) ;
+for  t = cellfun( @( p ) p.pollTimer , procs )
+  if  isvalid( t )
+    stop( t )
+  end
+end
