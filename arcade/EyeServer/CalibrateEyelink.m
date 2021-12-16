@@ -176,7 +176,12 @@ classdef CalibrateEyelink < handle
                 % give reward if we are advancing to a new target
                 [~, statusStr] = Eyelink('ReadFromTracker', 'calibration_status');
                 status = strsplit(statusStr, ' ');
-                currentIndex = str2double(status{4});
+                
+                try
+                    currentIndex = str2double(status{4});
+                catch
+                    continue
+                end
                 
                 if ((currentIndex > previousIndex) && (currentIndex > 1)) ...
                         || ( Eyelink('CalResult') == 0 ) % final target
