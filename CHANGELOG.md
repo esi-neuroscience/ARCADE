@@ -6,6 +6,7 @@
    for Windows system call Sleep( ). timeBEPeriod enables/disables higher-
    precision multi-media timers via the timeBeginPeriod( ) and
    timeEndPeriod( ) system call.
+*  Added priority.* for managing the priority class of ARCADE processes.
 ## FIXED
 *  Issue 21 of esi-neuroscience/ARCADE https://github.com/esi-neuroscience/ARCADE/issues/21
    Done by finding Matlab timers that were created by processManager and
