@@ -7,7 +7,10 @@ if nargin == 1
 elseif nargin == 2
     cfgPath = varargin{1};
 end
-    
+
+% Accumulate executable file names for critical ARCADE processes in this.
+% Empty string is a reference to the calling, Core process.
+critical = { '' } ;
 
 procs = {};
 readyEvents = {};
@@ -42,6 +45,8 @@ if ~isempty(cfg.EyeServer)
         'command', eyeServerExePath, 'printStdout' , false , ...
         'printStderr' , false);
     readyEvents{end+1} = EyeServer.doneEventName;
+    [ ~ , exe.name , exe.ext ] = fileparts ( eyeServerExePath ) ;
+    critical{ end + 1 } = [ exe.name , exe.ext ] ;
 end
 
 % launch DaqServer process
@@ -53,6 +58,8 @@ if ~isempty(cfg.DaqServer)
         'command', daqServerExePath , 'printStdout' , false , ...
         'printStderr' , false);
     readyEvents{end+1} = DaqServer.doneEventName;
+    [ ~ , exe.name , exe.ext ] = fileparts ( daqServerExePath ) ;
+    critical{ end + 1 } = [ exe.name , exe.ext ] ;
 end
 
 
@@ -75,7 +82,9 @@ if ~isempty(cfg.StimServer)
         'StimServer', cfg.StimServer);
     procs{end+1} = processManager('id', 'StimServer', ...
         'command',  stimServerExePath , 'printStdout' , false , ...
-        'printStderr' , false);    
+        'printStderr' , false);
+    [ ~ , exe.name , exe.ext ] = fileparts ( stimServerExePath ) ;
+    critical{ end + 1 } = [ exe.name , exe.ext ] ;
 end
 
 
@@ -119,3 +128,6 @@ for  t = cellfun( @( p ) p.pollTimer , procs )
     stop( t )
   end
 end
+
+% Find process identifiers of critical ARCADE processes
+apriority ( 'initialisation' , critical )
