@@ -7,6 +7,9 @@
    precision multi-media timers via the timeBeginPeriod( ) and
    timeEndPeriod( ) system call.
 *  Added priority.* for managing the priority class of ARCADE processes.
+   apriority.m simplifies the interface in ARCADE core functions. Essential
+   ARCADE processes flipped in and out of high-priority state during the
+   critical period of a running trial.
 ## FIXED
 *  Issue 21 of esi-neuroscience/ARCADE https://github.com/esi-neuroscience/ARCADE/issues/21
    Done by finding Matlab timers that were created by processManager and
