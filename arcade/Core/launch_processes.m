@@ -109,6 +109,16 @@ end
 if ~isempty(cfg.EyeServer)
     logmessage('Connect to EyeServer')
     EyeServer.Connect();
+    
+    % Quick and dirty way for the user to optionally enable sample mode.
+    % User must create an empty text file in the same folder as the task
+    % file, and rename it EyeServer_SetSampleMode.arcade.
+    if  exist( fullfile( fileparts( cfg.taskFile ) , ...
+          'EyeServer_SetSampleMode.arcade' ) , 'file' )
+      logmessage( 'Enabling EyeServer Sample Mode' )
+      EyeServer.SetSampleMode( ) ;
+    end
+    
     EyeServer.Start('tmp.edf')
 end
 

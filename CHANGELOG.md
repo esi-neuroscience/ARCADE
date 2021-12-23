@@ -10,6 +10,9 @@
    apriority.m simplifies the interface in ARCADE core functions. Essential
    ARCADE processes flipped in and out of high-priority state during the
    critical period of a running trial.
+*  User can add empty file called EyeServer_SetSampleMode.arcade to same
+   folder as task file in order to optionally enable EyeServer's sample
+   mode.
 ## FIXED
 *  Issue 21 of esi-neuroscience/ARCADE https://github.com/esi-neuroscience/ARCADE/issues/21
    Done by finding Matlab timers that were created by processManager and
