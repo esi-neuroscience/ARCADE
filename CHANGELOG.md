@@ -15,6 +15,7 @@
    Done by finding Matlab timers that were created by processManager and
    stopping them. NOTE that now command line output from sub-processes is
    no longer accessible without reading the ASCII log files.
+*  Issue 6. Gammatron radius sets properly.
 
 ## Unreleased
 ## NEW
