@@ -1,35 +1,32 @@
 # Change Log of ARCADE
 
-## [?.?.?] - 2021-12-09
+## [2.6.0] - 2022-03-15
 ## NEW
-*  Added sleep.* and timeBEPeriod.* to arcade\Core. sleep( ) is a wrapper
-   for Windows system call Sleep( ). timeBEPeriod enables/disables higher-
-   precision multi-media timers via the timeBeginPeriod( ) and
-   timeEndPeriod( ) system call.
-*  Added priority.* for managing the priority class of ARCADE processes.
-   apriority.m simplifies the interface in ARCADE core functions. Essential
+*  Added `sleep.*` and `timeBEPeriod.*` to arcade\Core. `sleep( )` is a wrapper
+   for Windows system call `Sleep( )`. `timeBEPeriod` enables/disables higher-
+   precision multi-media timers via the `timeBeginPeriod( )` and
+   `timeEndPeriod( )` system call.
+*  Added `priority.*` for managing the priority class of ARCADE processes.
+   `apriority.m` simplifies the interface in ARCADE core functions. Essential
    ARCADE processes flipped in and out of high-priority state during the
    critical period of a running trial.
-*  User can add empty file called EyeServer_SetSampleMode.arcade to same
+*  User can add empty file called `EyeServer_SetSampleMode.arcade` to same
    folder as task file in order to optionally enable EyeServer's sample
    mode.
-## FIXED
-*  Issue 21 of esi-neuroscience/ARCADE https://github.com/esi-neuroscience/ARCADE/issues/21
-   Done by finding Matlab timers that were created by processManager and
-   stopping them. NOTE that now command line output from sub-processes is
-   no longer accessible without reading the ASCII log files.
-*  Issue 6. Gammatron radius sets properly.
-
-## Unreleased
-## NEW
-*  StimServer v1.4.2.3:  The deferred mode (`groupStimuli`) can now be canceled 
+*  StimServer v1.4.2.3:  The deferred mode (`groupStimuli`) can now be canceled
    by using new cancel command or the `StimServerEndDeferredMode` event.
-*  EyeLinkServer v1.2.3.0: Support to receive samples for speed up, 
+*  EyeLinkServer v1.2.3.0: Support to receive samples for speed up,
    support for `EndDeferredMode` events
 *  The new add-on `EditableVariableEditor` contributed by Yufeng Zhang can be
    used to edit the editable variables in an existing configuration file (`*_cfg.mat`)
 
 ## FIXED
+*  [Issue 21](https://github.com/esi-neuroscience/ARCADE/issues/21)
+   Done by finding Matlab timers that were created by `processManager` and
+   stopping them. NOTE that now command line output from sub-processes is
+   no longer accessible without reading the ASCII log files.
+*  [Issue 6](https://github.com/esi-neuroscience/ARCADE/issues/6). Gammatron
+   radius sets properly.
 *  A bug in the ARCADE startup caused the seeds of the random number generator
    to be identical on a given day leading to identical random sequences.
 
@@ -37,7 +34,7 @@
 ## [2.5.7] - 2020-04-07
 ## CHANGED
 *  StimServer v1.4.2.1: The window size of the StimServer stimulus screen in
-   windowed mode is now 800x600 pixels. This prevents accidental switches to 
+   windowed mode is now 800x600 pixels. This prevents accidental switches to
    go unnoticed. Timing and performance in windowed mode are not reliable.
 
 ## FIXED
@@ -130,7 +127,7 @@
 
 ## [2.5.0b2] - 2019-04-01
 ### NEW
-*   EyeLinkServer v1.1.3.1: 
+*   EyeLinkServer v1.1.3.1:
         - Support for mixed-term biquadratatic transformations
         - Support vor overlapping targets
 ### FIXED
@@ -361,7 +358,7 @@
 ### CHANGED
 *   Eventmarkers are now controlled via NidaqServer.exe (port 0-1, strobe on
     port2/line7 (PCI-6221) or port2/line0 (PCI-6503)
-  
+
 ### FIXED
 *   Bugs in EyelinkEyeServer
 

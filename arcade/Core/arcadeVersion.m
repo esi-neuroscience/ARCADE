@@ -1,8 +1,9 @@
 function version = arcadeVersion
+releaseVersion = '2.6';
 gitCMD = 'git.exe';
 [result, version] =  system([gitCMD ' -C ' arcaderoot ' describe']);
 if ~result == 0
-% 	warning('Could not find git.exe')
-	version = 'unknown (could not find git.exe)';
+	version = [releaseVersion, ' (zip-release)'];
+else
+	version = [strrep(version, char(10), ''), ' (git)'];
 end
-version = strrep(version, char(10), '');

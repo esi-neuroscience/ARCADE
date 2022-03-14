@@ -24,11 +24,11 @@ Getting started
 ---------------
 To get started add the ARCADE/arcade folder and its subfolders to your MATLAB
 path. The tutorial documentation can then be found by opening the MATLAB help
-browser under Supplemental Software or using the command 
+browser under Supplemental Software or using the command
 
 	doc arcade
 
-Alternatively, open the file arcade/Docs/html/ARCADE.html in a browser.
+Alternatively, open the file arcade/Docs/html/index.html in a browser.
 
 To start arcade, use arcade/start_arcade.bat
 
@@ -51,6 +51,7 @@ of ARCADE:
 * Jarrod Dowdall (jarrod.dowdall@esi-frankfurt.de)
 * Joscha Schmiedt (joscha.schmiedt@esi-frankfurt.de)
 * Katharine Shapcott (katharine.shapcott@esi-frankfurt.de)
+* Jackson Smith (jackson.smith@esi-frankfurt.de)
 * Michael Stephan (michael.stephan@esi-frankfurt.de)
 * Yufeng Zhang (yufeng.zhang@esi-frankfurt.de)
 
