@@ -109,7 +109,7 @@ while ~controlScreenEvent.wasTriggered && ishghandle(CntlScreen.hfig)
         trialData = SGLTrialDataPipe.ReadTrialData();
     end
     
-    java.lang.Thread.sleep(5); % pause a bit
+    sleep( 1000 / 20 ) ; % pause a bit, max refresh rate 20Hz
 end
 logmessage('Exiting loop');
 quit

@@ -1,5 +1,25 @@
 # Change Log of ARCADE
 
+## [?.?.?] - 2021-12-09
+## NEW
+*  Added sleep.* and timeBEPeriod.* to arcade\Core. sleep( ) is a wrapper
+   for Windows system call Sleep( ). timeBEPeriod enables/disables higher-
+   precision multi-media timers via the timeBeginPeriod( ) and
+   timeEndPeriod( ) system call.
+*  Added priority.* for managing the priority class of ARCADE processes.
+   apriority.m simplifies the interface in ARCADE core functions. Essential
+   ARCADE processes flipped in and out of high-priority state during the
+   critical period of a running trial.
+*  User can add empty file called EyeServer_SetSampleMode.arcade to same
+   folder as task file in order to optionally enable EyeServer's sample
+   mode.
+## FIXED
+*  Issue 21 of esi-neuroscience/ARCADE https://github.com/esi-neuroscience/ARCADE/issues/21
+   Done by finding Matlab timers that were created by processManager and
+   stopping them. NOTE that now command line output from sub-processes is
+   no longer accessible without reading the ASCII log files.
+*  Issue 6. Gammatron radius sets properly.
+
 ## Unreleased
 ## NEW
 *  StimServer v1.4.2.3:  The deferred mode (`groupStimuli`) can now be canceled 

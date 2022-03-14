@@ -77,8 +77,8 @@ classdef Gammatron < PixelShader
         end
         
         function set.radius(obj, radius)
-            obj.shaderWidth = radius;
-            obj.shaderHeight = radius;
+            obj.shaderWidth = 2 * radius;
+            obj.shaderHeight = 2 * radius;
         end
         
                 

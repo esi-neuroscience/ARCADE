@@ -106,6 +106,15 @@ classdef (Sealed) SGLSessionArc
                 TaskFile     = BHVstore.cfg.taskFile;
                 this.mEvalTrialScript(EditableVars,TrialData,TaskFile)
                 % return from User's Workspace
+                
+                % Request higher-precision multi-media timers from Windows
+                % kernel using timeBeginPeriod at a maximum resolution of
+                % 1ms
+                timeBEPeriod( 'b' , 1 ) ;
+                
+                % We are now entering a critical period. Flip essential
+                % ARCADE processes into a high-priority state.
+                apriority ( 'change' , 'high' )
 
                 trialerror_tic('start'); % Start trial
                 try
@@ -119,6 +128,13 @@ classdef (Sealed) SGLSessionArc
                 % delete state arc, i.e. stimuli stored in anonymous functions
                 delete(stateArc); % delete StateArc
                 clear stateArc
+                
+                % We are no longer in a critical period. Return essential
+                % ARCADE processes to initialised priority state.
+                apriority ( 'change' , 'reset' )
+                
+                % Release higher-precision multi-media timers
+                timeBEPeriod( 'e' , 1 ) ;
 
                 EventServer.writeEvents();
 
@@ -130,7 +146,7 @@ classdef (Sealed) SGLSessionArc
                 
                 % -- Pause Requested? --
                 % also allows the user to quit the current session
-                if PauseEvent.wasTriggered;
+                if PauseEvent.wasTriggered
                     % launch pause GUI 
                     eventmarker(eventPause);      % send enter Pause marker event 
                     StimBckgrnd.setPauseScreen;
