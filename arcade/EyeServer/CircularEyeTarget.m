@@ -17,6 +17,12 @@ classdef CircularEyeTarget < EyeTarget
             obj.radius = r;
             obj.name = name;
         end
+        
+        function SetSize(obj,Radius)
+            EyeServer.Command(obj.key, uint8([4, typecast(single(Radius), 'uint8')]));
+            obj.radius = Radius;
+        end
+
     end
     
 end

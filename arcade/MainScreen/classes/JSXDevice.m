@@ -47,7 +47,9 @@ classdef JSXDevice < handle
             % for this specific device 
             thisDev = find(this.jDeviceID==devID); %#ok<*EFIND>
             if isempty(thisDev)
-                error('Device not found.');
+%%%                error('Device not found.');
+            deviceModes = '';
+            return
             end
 
             switch devMode

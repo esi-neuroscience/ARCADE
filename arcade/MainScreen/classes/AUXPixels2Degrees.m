@@ -27,7 +27,7 @@ classdef AUXPixels2Degrees < handle
         %# calculate pixels per degree
         function ppd = mCalculatePixelsPerDeg(pix,deg,dec)
             ppd = pix/deg; 
-            if ~isempty(dec), ppd = AUXPixels2Degrees.mSetDecimalPlaces(ppd,dec); end; 
+            if ~isempty(dec), ppd = AUXPixels2Degrees.mSetDecimalPlaces(ppd,dec); end
         end
         
         %# calculate degrees of visual angle 

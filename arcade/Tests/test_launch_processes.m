@@ -6,7 +6,7 @@ cfg = ArcadeConfig;
 cfg.EyeServer = 'EyelinkServer.exe';
 cfg.DaqServer = 'NidaqServer.exe';
 cfg.ControlScreen = 'MatlabControlScreen.bat';
-cfg.StimServer = 'StimServer.exe';
+cfg.StimServer = [];
 cfg.OtherExecutables = {'C:\Windows\notepad.exe'};
 
 

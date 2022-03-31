@@ -53,11 +53,11 @@ classdef State < handle
     %     
      
     properties ( SetAccess = public, GetAccess = public )
-        name@char % name of this state
+        name % name of this state
         waitEvents = {}; % cell array of event names to wait for
         waitForAllEvents = false; % flag whether to wait for all events
         nextStateAfterEvent = {}; % cell aray of next state names corresponding to events in waitEvents
-        nextStateAfterTimeout@char = 'final'; % name of next state after timeout
+        nextStateAfterTimeout = 'final'; % name of next state after timeout
         nextStateAfterMaxRepetitions = 'final'; % name of next state after maximal iterations
         onEntry = {}; % cell array of anonymous functions to be executed during state entry
         onExit = {}; % cell array of anonymous functions to be executed during state exit

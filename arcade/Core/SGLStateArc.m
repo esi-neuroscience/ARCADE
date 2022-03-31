@@ -8,7 +8,7 @@ classdef (Sealed) SGLStateArc < handle
     % state and so forth, until a state returns 'final' as the name of the
     % next state.
     %
-    % The SGLStateArc should is not meant for the user. Instead, please use
+    % The SGLStateArc is not meant for the user. Instead, please use
     % the createTrial function.
     % 
     % See also State, createTrial
