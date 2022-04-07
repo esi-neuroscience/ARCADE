@@ -170,9 +170,10 @@ classdef (Sealed = true) StimServer < handle
             isConnected = ~obj.hPipe.isNull();
         end
 
-        function waitResult = waitUntilDone(timeout)
-            waitResult = IPCEvent.wait_for_event(StimServer.doneEventName, timeout);
-        end
+% This function is not called at all.
+%         function waitResult = waitUntilDone(timeout)
+%             waitResult = IPCEvent.wait_for_event(StimServer.doneEventName, timeout);
+%         end
     end
     
     methods (Static, Hidden=true)

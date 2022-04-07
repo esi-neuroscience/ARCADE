@@ -181,7 +181,7 @@ classdef DaqServer < handle
         end
         
         function totalTime = GetTotalRewardTime()
-            % Retreive reward time since last retreival
+            % Retrieve reward time since last retrieval
             DaqServer.Write(uint8(8));
             totalTime = uint32(0);
             nRead = uint32(0);

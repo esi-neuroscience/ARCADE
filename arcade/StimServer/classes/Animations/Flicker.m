@@ -1,5 +1,5 @@
 classdef Flicker < Animation
-    % Flicker - Class for displaying a stimulus for a given number of frames.
+    % Flicker - Class for flickering a stimulus (repeatedly turning it on and off for a given number of frames).
     %
     % Usage
     % -----
@@ -33,6 +33,7 @@ classdef Flicker < Animation
         end
         
         function SetFrames(obj, nOn, nOff)
+            % Set the number of frames for the 'On' and 'Off' periods
             StimServer.Command(obj.key, [uint8(2), typecast(uint16([nOn nOff]),'uint8')])
             obj.nOnFrames = nOn;
             obj.nOffFrames = nOn;

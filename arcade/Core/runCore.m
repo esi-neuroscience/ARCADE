@@ -149,7 +149,7 @@ if ~isempty(cfg.StimServer)
     StimServer.delete()
 end
 
-% Close StimServer pipe
+% Close DaqServer pipe
 if ~isempty(cfg.DaqServer)
     DaqServer.delete();
 end

@@ -35,7 +35,7 @@ classdef (Abstract) Animation < hgsetget
         %   1 disable the assigned stimulus
         %   2
         %   4 toggle the photodiode signal1
-        %   8 signal StimServerAnimatioNDone event
+        %   8 signal StimServerAnimationDone event
         %   16 restart animation (cyclic execution)
         %   32 
         %   64 

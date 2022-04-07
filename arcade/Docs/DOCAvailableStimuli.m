@@ -243,7 +243,7 @@ clear gabor*
 %
 
 %% Rectangles
-% |<matlab:doc('Rectangle') Rectangles>| are always filled and have the following properties:
+% |<matlab:doc('Rectangle') Rectangles>| rectangular filled and/or outlined shapes
 help Rectangle
 %%
 % *Example*
@@ -256,13 +256,20 @@ r1.faceAlpha = 100;
 r1.visible = true;
 
 r2 = Rectangle;
+pause(1);
 r2.faceColor = [128 255 255];
 r2.height = 200;
 r2.angle = 180;
 r2.faceAlpha = 100;
 r2.visible = true;
+
+r3 = Rectangle;
+r3.width = 200;
+r2.height = 50;
+r3.drawMode = 2;
+r3.visible = true;
 pause(1)
-clear r1 r2
+clear r1 r2 r3
 %%
 %
 % <<exampleRectangle.png>>
@@ -274,7 +281,7 @@ clear r1 r2
 % stimulus, an animation has to be created first and then assigned to a
 % stimulus by using the |play_animation| method of a stimulus.
 % 
-% Currently there are five types of animation
+% Currently there are six types of animation
 % 
 % # |<matlab:doc('LinearMotion') LinearMotion>|: Move a stimulus along a polygon.
 % # |<matlab:doc('GeneralMotion') GeneralMotion>|: This moves the stimulus along an arbitrary path
@@ -282,6 +289,7 @@ clear r1 r2
 % # |<matlab:doc('LinearRange') LinearRange>|: Change certain scalar stimulus properties linearily from a
 % starting value to an end value within a specified duration 
 % # |<matlab:doc('Flash') Flash>|: Flash (turn on) a stimulus for a defined number of frames
+% # |<matlab:doc('Flicker') Flicker>|: Flicker repeatedly(turn on and off) a stimulus for a defined number of frames
 % # |<matlab:doc('ExternalPositionControl') ExternalPositionControl>|: Couple the position of a stimulus to a
 % position in a shared memory, e.g. the eye position.
 % 

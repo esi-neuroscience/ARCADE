@@ -32,7 +32,7 @@ classdef MSJavaObjects < handle
             this.mCreateJavaColorSelectors;
             
             % detect current secondary monitor settings
-            this.mDetectScreen;
+%%%            this.mDetectScreen;
             
         end
         
@@ -123,7 +123,7 @@ classdef MSJavaObjects < handle
             this.jsxDevice = jsxDevice;
             
             % get the current settings for the secondary monitor
-            curSettings = jsxDevice.mGetScreenDeviceSettings(1,'current');
+%%%            curSettings = jsxDevice.mGetScreenDeviceSettings(1,'current');
             % curSettings = jsxDevice.mGetScreenDeviceSettings(0,'current'); %specific to lab209, we don't understand why this change was necessary
             
             mMakeString = @(num) int2str(num);
