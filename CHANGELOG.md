@@ -1,6 +1,6 @@
 # Change Log of ARCADE
 
-## [2.6.0] - 2022-03-15
+## [2.6.0] - 2022-04-07
 ## NEW
 *  Added `sleep.*` and `timeBEPeriod.*` to arcade\Core. `sleep( )` is a wrapper
    for Windows system call `Sleep( )`. `timeBEPeriod` enables/disables higher-
@@ -19,6 +19,7 @@
    support for `EndDeferredMode` events
 *  The new add-on `EditableVariableEditor` contributed by Yufeng Zhang can be
    used to edit the editable variables in an existing configuration file (`*_cfg.mat`)
+*  NidaqServer 1.0.11.2 supports PCIe-6259
 
 ## FIXED
 *  [Issue 21](https://github.com/esi-neuroscience/ARCADE/issues/21)
