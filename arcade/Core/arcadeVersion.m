@@ -1,7 +1,7 @@
 function version = arcadeVersion
 releaseVersion = '2.6';
 gitCMD = 'git.exe';
-[result, version] =  system([gitCMD ' -C ' arcaderoot ' describe']);
+[result, version] =  system([gitCMD ' -C ' arcaderoot ' describe --tags']);
 if ~result == 0
 	version = [releaseVersion, ' (zip-release)'];
 else
