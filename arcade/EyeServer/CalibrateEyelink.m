@@ -256,40 +256,44 @@ classdef CalibrateEyelink < handle
         end
     end
     
-    methods ( Static = true )
-        
-        function process = start_server(server)
-            switch server
-                case 'StimServer'
-                    cmd = fullfile(arcaderoot, 'arcade', 'StimServer', 'StimServer.exe');
-                case 'DaqServer'
-                    cmd = fullfile(arcaderoot, 'arcade', 'DaqServer', 'NidaqServer.exe');
-            end
-            
-            process = processManager('command', cmd);
-            
-            tWait = tic;
-            success = false;
-            while ~success && toc(tWait) < 10
-                try
-                    switch server
-                        case 'StimServer'
-                            StimServer.Connect();
-                        case 'DaqServer'
-                            DaqServer.Connect();
-                    end
-                    success = true;
-                catch me
-                end
-                pause(0.5);
-            end
-            if ~success
-                rethrow(me)
-            end
-        end
-        
-        
-    end
+% The start_server method is not called anymore.
+% launch_processes is used instead.
+%   MSt Jun 2023
+%
+%     methods ( Static = true )
+%         
+%         function process = start_server(server)
+%             switch server
+%                 case 'StimServer'
+%                     cmd = fullfile(arcaderoot, 'arcade', 'StimServer', 'StimServer.exe');
+%                 case 'DaqServer'
+%                     cmd = fullfile(arcaderoot, 'arcade', 'DaqServer', 'NidaqServer.exe');
+%             end
+%             
+%             process = processManager('command', cmd);
+%             
+%             tWait = tic;
+%             success = false;
+%             while ~success && toc(tWait) < 10
+%                 try
+%                     switch server
+%                         case 'StimServer'
+%                             StimServer.Connect();
+%                         case 'DaqServer'
+%                             DaqServer.Connect();
+%                     end
+%                     success = true;
+%                 catch me
+%                 end
+%                 pause(0.5);
+%             end
+%             if ~success
+%                 rethrow(me)
+%             end
+%         end
+%         
+%         
+%     end
     
     
 end
