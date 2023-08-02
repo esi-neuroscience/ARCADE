@@ -7,17 +7,19 @@ classdef PLTEyePosition < ABSPlotDefinition & AUXGridDisplay
     %---------------------------------------------%
     % unknown   - Jarrod, wrote class
     % 21.4.2016 - Jarrod, added some documentation/notes
+    % 15.6.2023 - Michael
+    %               removed undocumented syntax to restrict property values
     
     properties (SetAccess = immutable)
         parent % handle to parent axis
     end
     
     properties (AbortSet = true)
-        linestyle@char           = '-';
-        linewidth@double scalar  = 0.5;
-        linecolor@double vector  = [0.3098,0.7333,1.000];
-        markersize@double scalar = 17;
-        marker@char              = '.';
+        linestyle  = '-';
+        linewidth  = 0.5;
+        linecolor  = [0.3098,0.7333,1.000];
+        markersize = 17;
+        marker     = '.';
     end
     
     methods (Static)

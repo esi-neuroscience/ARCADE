@@ -5,15 +5,17 @@ classdef AUXGridDisplay < handle
     %---------------------------------------------%
     % unknown   - Jarrod, wrote class
     % 21.4.2016 - Jarrod, added some documentation/notes
+    % 15.6.2023 - Michael
+    %               removed undocumented syntax to restrict property values
     
     
     % User editable 
     properties (AbortSet = true)
-        gridtype@char    = 'circle';         % 'circle', 'square', 'cartesian','none'
-        %gridtype@char    = 'cartesian';
-        fixtype@char     = 'both';           % 'xcross','+cross','both','none'
-        fixcolor@double  = [0.70,0.70,0.70]; % color of center fix
-        gridcolor@double = [0.70,0.70,0.70]; % color of grid 
+        gridtype    = 'circle';         % 'circle', 'square', 'cartesian','none'
+        %gridtype    = 'cartesian';
+        fixtype     = 'both';           % 'xcross','+cross','both','none'
+        fixcolor  = [0.70,0.70,0.70]; % color of center fix
+        gridcolor = [0.70,0.70,0.70]; % color of grid 
         
         % add special eccentricty 
         % 3*ppd, + 1*ppd

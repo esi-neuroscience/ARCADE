@@ -6,6 +6,8 @@ classdef PLTTrialErrorHist < ABSPlotDefinition & AUXFastHistogram
     %---------------------------------------------%
     % unknown   - Jarrod, wrote class
     % 21.4.2016 - Jarrod, added some documentation/notes
+    % 15.6.2023 - Michael
+    %               removed undocumented syntax to restrict property values
     
     properties (SetAccess = immutable)
         parent % handle to parent axis
@@ -13,9 +15,9 @@ classdef PLTTrialErrorHist < ABSPlotDefinition & AUXFastHistogram
     end
     
     properties (AbortSet = true)
-        nbins@double scalar     = 100;             % number of bins
-        edgecolor@double vector = [0 0 0];         % patch edge color
-        linewidth@double scalar = 1;               % edge line width
+        nbins     = 100;             % number of bins
+        edgecolor = [0 0 0];         % patch edge color
+        linewidth = 1;               % edge line width
     end
     
     properties (...

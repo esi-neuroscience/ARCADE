@@ -5,6 +5,8 @@ classdef PLTPerformanceBars < ABSPlotDefinition & AUXFastHistogram
     %---------------------------------------------%
     % unknown   - Jarrod, wrote class
     % 21.4.2016 - Jarrod, added some documentation/notes
+    % 15.6.2023 - Michael
+    %               removed undocumented syntax to restrict property values
     
     properties (SetAccess = immutable)
         parent % handle to parent axis
@@ -12,8 +14,8 @@ classdef PLTPerformanceBars < ABSPlotDefinition & AUXFastHistogram
     end
     
     properties (AbortSet = true)
-        edgecolor@double vector = [0 0 0]; % patch edge color
-        linewidth@double scalar = 1;       % edge line width
+        edgecolor = [0 0 0]; % patch edge color
+        linewidth = 1;       % edge line width
     end
     
     properties (...
@@ -59,22 +61,21 @@ classdef PLTPerformanceBars < ABSPlotDefinition & AUXFastHistogram
         end
         
         function mCreate(this,xdata,ydata,cdata)
-            parent = this.parent;%#ok<PROP>
             xlim = [0.5 3.5]; % depends on bar pos 
             ylim = [0 100];
             
             %# setup axis
-            this.mSetAxis(parent,this.cmap,...
-                xlim,ylim,'bottom'); %#ok<PROP>
+            this.mSetAxis(this.parent,this.cmap,...
+                xlim,ylim,'bottom'); 
             
             % create histogram patch
             this.hgpatch = this.mCreatePatch(...
-                parent,...
+                this.parent,...
                 xdata,...
                 ydata,...
                 cdata,...
                 this.edgecolor,...
-                this.linewidth); %#ok<PROP>
+                this.linewidth); 
 
         end
     end

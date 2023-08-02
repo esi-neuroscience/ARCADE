@@ -12,6 +12,8 @@ classdef PLTReactionTime < ABSPlotDefinition & AUXFastHistogram
     % unknown   - Jarrod, wrote class
     % 14.1.2015 - Jarrod added comments, change access, & class names 
     % 21.4.2016 - Jarrod, added some documentation/notes
+    % 15.6.2023 - Michael
+    %               removed undocumented syntax to restrict property values
     
     properties (SetAccess = immutable)
         parent % handle to parent axis
@@ -24,13 +26,13 @@ classdef PLTReactionTime < ABSPlotDefinition & AUXFastHistogram
     
     % Theoretically user editable 
     properties (AbortSet = true)
-        nbins@double scalar     = 50;              % number of bins
-        fillcolor@double vector = [86 56 255]/255; % patch fill color
-        edgecolor@double vector = [0 0 0];         % patch edge color
-        linewidth@double scalar = 1;               % edge line width
-        xbuf@double scalar      = 100;             % buffer xaxis
+        nbins     = 50;              % number of bins
+        fillcolor = [86 56 255]/255; % patch fill color
+        edgecolor = [0 0 0];         % patch edge color
+        linewidth = 1;               % edge line width
+        xbuf      = 100;             % buffer xaxis
         
-        %norm@double scalar = 1; % norm to hist data to max bin
+        %norm = 1; % norm to hist data to max bin
     end
  
     methods (Static = true)
@@ -50,7 +52,7 @@ classdef PLTReactionTime < ABSPlotDefinition & AUXFastHistogram
             %* if last data point is a nan, don't update
             % don't waste time updating if, isnan, or isempty
             %if isempty(data),    return; end;
-            if isnan(data(end)), return; end;
+            if isnan(data(end)), return; end
             
             % compute new x-axis lims 
             xblim_ = [0 nanmax([data,1])+this.xbuf];
@@ -90,33 +92,32 @@ classdef PLTReactionTime < ABSPlotDefinition & AUXFastHistogram
         function mCreate(this,xdata,ydata,xmax)
             %set_axis(parent,cmap)
             %hp = createPatch(parent,xdata,ydata,cdata,cEdge,lw)
-            parent    = this.parent;   %#ok<PROP>
-            linewidth = this.linewidth; %#ok<PROP>
+            Parent    = this.parent;   
             ylim      = [0 1];
             xlim      = [0 xmax];
             
             %# setup axis
-            this.mSetAxis(parent,[],...
-                xlim,ylim,'top'); %#ok<PROP>
+            this.mSetAxis(Parent,[],...
+                xlim,ylim,'top'); 
             
             %# create background patch
             % edge/color set to that of the parent axis
             this.hgback = this.mCreatePatch(...
-                parent,...
+                Parent,...
                 [0; 0; xmax; xmax],...  % xdata
                 [0; 1; 1; 0],...        % ydata
-                get(parent,'Color'),... % fillcolor
-                get(parent,'Color'),... % edgecolor
-                linewidth); %#ok<PROP>
+                get(Parent,'Color'),... % fillcolor
+                get(Parent,'Color'),... % edgecolor
+                this.linewidth); 
             
             % create histogram patch
             this.hgpatch = this.mCreatePatch(...
-                parent,...
+                Parent,...
                 xdata,...
                 ydata,...
                 this.fillcolor,...
                 this.edgecolor,...
-                linewidth);%#ok<PROP>
+                this.linewidth);
             
         end
     end

@@ -11,6 +11,8 @@ classdef PLTSessionPerformance < ABSPlotDefinition
     %---------------------------------------------%
     % unknown   - Jarrod, wrote class
     % 21.4.2016 - Jarrod, added some documentation/notes
+    % 15.6.2023 - Michael
+    %               removed undocumented syntax to restrict property values
     
     properties (SetAccess = immutable)
         parent % handle to parent axis
@@ -23,8 +25,8 @@ classdef PLTSessionPerformance < ABSPlotDefinition
     
     % Theoretically user editable 
     properties (AbortSet = true)
-        linestyle@char          = '-';
-        linewidth@double scalar = 2;
+        linestyle = '-';
+        linewidth = 2;
     end
     
     methods (Static = true)
