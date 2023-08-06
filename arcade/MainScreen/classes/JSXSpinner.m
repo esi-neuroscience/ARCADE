@@ -37,10 +37,10 @@ classdef JSXSpinner < SPCJavaObjectDefinition
     
     properties (AbortSet = true)
         % set by user 
-        value@double      scalar = 10;
-        minValue@double   scalar = 0;
-        maxValue@double   scalar = 1000;
-        step@double       scalar = 1;
+        value = 10;
+        minValue = 0;
+        maxValue = 1000;
+        step = 1;
     end
 
     methods (Static)

@@ -1,3 +1,5 @@
+% 2/Aug/2023 MSt Removed change of processes' priority
+
 classdef (Sealed) SGLSessionArc
     % [SINGLETON CLASS] STATE ARC
     %   Loop through trials
@@ -22,6 +24,8 @@ classdef (Sealed) SGLSessionArc
     % - (JSXSpinner is a number already)
     % 13.8.2015 - Jarrod, added SGLBackground class
     % 21.4.2016 - Jarrod, added some documentation/notes
+    %  2.8.2023 - Michael, removed change of processes' priority
+
 
     properties (SetAccess = private)
         isRunning  = false;
@@ -110,11 +114,11 @@ classdef (Sealed) SGLSessionArc
                 % Request higher-precision multi-media timers from Windows
                 % kernel using timeBeginPeriod at a maximum resolution of
                 % 1ms
-                timeBEPeriod( 'b' , 1 ) ;
+                % timeBEPeriod( 'b' , 1 ) ;
                 
                 % We are now entering a critical period. Flip essential
                 % ARCADE processes into a high-priority state.
-                apriority ( 'change' , 'high' )
+                % apriority ( 'change' , 'high' )
 
                 trialerror_tic('start'); % Start trial
                 try
@@ -131,10 +135,10 @@ classdef (Sealed) SGLSessionArc
                 
                 % We are no longer in a critical period. Return essential
                 % ARCADE processes to initialised priority state.
-                apriority ( 'change' , 'reset' )
+                % apriority ( 'change' , 'reset' )
                 
                 % Release higher-precision multi-media timers
-                timeBEPeriod( 'e' , 1 ) ;
+%                timeBEPeriod( 'e' , 1 ) ;
 
                 EventServer.writeEvents();
 

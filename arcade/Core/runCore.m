@@ -172,8 +172,8 @@ eventServer = SGLEventMarkerServer.launch();
 delete(eventServer)
 
 % Make sure that multi-media timers released
-[ BE , ms ] = timeBEPeriod ;
-if  BE == 'b' , timeBEPeriod( 'e' , ms ) ; end
+%[ BE , ms ] = timeBEPeriod ;
+%if  BE == 'b' , timeBEPeriod( 'e' , ms ) ; end
 
 logmessage('Quitting session');
 
