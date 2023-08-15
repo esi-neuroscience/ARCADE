@@ -35,7 +35,6 @@ classdef (Sealed) PersistentStimuli < handle
         function stim = get()
             temp = PersistentStimuli.this;
             stim = temp.stimuli;
-            
         end
         
         function delete()
